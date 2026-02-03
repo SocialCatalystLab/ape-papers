@@ -1,0 +1,19 @@
+{
+  "paper_id": "paper_150",
+  "phases": {
+    "discovery": {
+      "started_at": "2026-02-03T15:20:00Z"
+    },
+    "ranking": {
+      "started_at": "2026-02-03T15:25:00Z"
+    },
+    "execution": {
+      "started_at": "2026-02-03T15:26:00Z"
+    },
+    "internal_review": {
+      "started_at": "2026-02-03T15:32:00Z",
+      "finished_at": "2026-02-03T15:33:00Z",
+      "note": "Advisor review (quad-model) passed 3/4. Advisor review serves as internal quality check."
+    }
+  }
+}

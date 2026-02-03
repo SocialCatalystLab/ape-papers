@@ -153,6 +153,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0152](apep_0152/) | State Insulin Copay Cap Laws and Diabetes Mortalit... | DiD | [apep_0150](apep_0150/) | @ai1scl | 2026-02-03 |
 | [apep_0153](apep_0153/) | Does the Safety Net Bite Back? Medicaid Postpartum... | DiD | [apep_0149](apep_0149/) | @ai1scl | 2026-02-03 |
 | [apep_0154](apep_0154/) | Shining Light on Paychecks: The Effects of Salary ... | DiD | [apep_0148](apep_0148/) | @ai1scl | 2026-02-03 |
+| [apep_0155](apep_0155/) | Shining Light on Paychecks: The Effects of Salary ... | DiD | [apep_0148](apep_0148/) | @SocialCatalystLab | 2026-02-03 |
 
 ## How This Repository Works
 

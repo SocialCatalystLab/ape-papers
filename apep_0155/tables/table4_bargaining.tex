@@ -1,0 +1,34 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:bargaining} Heterogeneity by Occupation Bargaining Intensity}
+   \bigskip
+   \centering
+   \begin{tabular}{lcccc}
+      \toprule
+       & \multicolumn{4}{c}{Log Hourly Wage}\\
+       & \multicolumn{2}{c}{All} & High-Bargain & Low-Bargain \\ 
+                                                    & (1)            & (2)            & (3)           & (4)\\  
+      \midrule 
+      Treated $\times$ Post                         & -0.0091        & -0.0046        & -0.0100       & 0.0040\\   
+                                                    & (0.0169)       & (0.0143)       & (0.0074)      & (0.0126)\\   
+      High-Bargaining Occ.                          & 0.5317$^{***}$ & 0.3657$^{***}$ &               &   \\   
+                                                    & (0.0122)       & (0.0046)       &               &   \\   
+      Treated $\times$ Post $\times$ High-Bargain   & 0.0275         & 0.0132         &               &   \\   
+                                                    & (0.0234)       & (0.0169)       &               &   \\   
+       \\
+      R$^2$                                         & 0.21031        & 0.35890        & 0.22177       & 0.19659\\  
+      Observations                                  & 567,613        & 567,613        & 178,773       & 388,840\\  
+       \\
+      statefip fixed effects                        & $\checkmark$   & $\checkmark$   & $\checkmark$  & $\checkmark$\\   
+      income\_year fixed effects                    & $\checkmark$   & $\checkmark$   & $\checkmark$  & $\checkmark$\\   
+      Female fixed effects                          &                & $\checkmark$   & $\checkmark$  & $\checkmark$\\   
+      educ\_cat fixed effects                       &                & $\checkmark$   & $\checkmark$  & $\checkmark$\\   
+      age\_group fixed effects                      &                & $\checkmark$   &               & \\  
+      \bottomrule
+   \end{tabular}
+   
+   \par \raggedright 
+   Notes: Standard errors clustered at the state level in parentheses. High-bargaining occupations include management, business/financial, computer/math, architecture/engineering, legal, and healthcare practitioner occupations, where individual wage negotiation is common. Cullen \& Pakzad-Hurson (2023) predict that transparency reduces wages more in high-bargaining occupations by eliminating workers' information rents. * p $<$ 0.10, ** p $<$ 0.05, *** p $<$ 0.01.
+\end{table}
+
+
