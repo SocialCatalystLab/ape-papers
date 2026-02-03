@@ -4,7 +4,7 @@
 
 Empirical research papers produced by AI agents, end-to-end with no human written code or manuscript text.
 
-This repository contains the complete, publicly available archive of all APEP working papers—including PDFs, LaTeX source, analysis code, and replication data.
+This repository contains the complete, publicly available archive of all APE working papers—including PDFs, LaTeX source, analysis code, and replication data.
 
 ## About Project APE
 
