@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\begin{tabular}{lccc}
+\toprule
+ & Medicaid ATT & SE & WCB $p$ \\
+\midrule
+Main result (CS-DiD, all PP) & -0.0050 & 0.0069 & 0.329 \\
+Low-income PP ($<$200\% FPL) & 0.0007 & 0.0175 & --- \\
+Triple-difference (DDD) & -0.0107 & 0.0121 & --- \\
+Post-PHE only (2017--19 + 2023--24) & -0.0218 & 0.0076 & 0.306 \\
+Late adopters (2024, TWFE) & 0.0254 & 0.0312 & --- \\
+\midrule
+\multicolumn{4}{l}{\textit{Placebo Tests}} \\
+High-income PP ($>$400\% FPL) & -0.0136 & 0.0066 & --- \\
+Non-PP low-income women & -0.0092 & 0.0055 & --- \\
+Excluding PHE period (2020--2022) & -0.0218 & 0.0073 & --- \\
+\midrule
+\multicolumn{4}{l}{\textit{HonestDiD Sensitivity (Rambachan-Roth)}} \\
+$\bar{M} = 0.5$: [-0.0251, 0.0197] & & & \\
+$\bar{M} = 1$: [-0.0421, 0.0367] & & & \\
+$\bar{M} = 2$: [-0.0789, 0.0733] & & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} All CS-DiD estimates use the Callaway \& Sant'Anna (2021) estimator with never/not-yet-treated control group.
+DDD uses TWFE with state$\times$postpartum and year$\times$postpartum FE.
+WCB $p$: wild cluster bootstrap $p$-value (Rademacher weights, 9,999 replications).
+HonestDiD: Rambachan \& Roth (2023) robust confidence intervals under relative magnitudes assumption.
+$\bar{M}$ bounds the ratio of post-treatment trend deviations to the maximum pre-treatment deviation.
+\end{tablenotes}
+\end{table}
+

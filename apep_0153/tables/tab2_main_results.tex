@@ -1,0 +1,46 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of Postpartum Medicaid Extensions on Insurance Coverage}
+\label{tab:main_results}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{3}{c}{All Postpartum Women} & \multicolumn{2}{c}{Low-Income ($<$200\% FPL)} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-6}
+ & Medicaid & Uninsured & Employer & Medicaid & Uninsured \\
+ & (1) & (2) & (3) & (4) & (5) \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: CS-DiD (Full Sample, 2017--2024)}} \\
+ATT & -0.0050 & 0.0257 & -0.0117 & 0.0007 & 0.0333 \\
+ & (0.0069) & (0.0038) & (0.0072) & (0.0175) & (0.0087) \\
+[0.5em]
+\multicolumn{6}{l}{\textit{Panel B: TWFE (biased benchmark)}} \\
+Treated & -0.0092 & 0.0099 & 0.0013 & & \\
+ & (0.0075) & (0.0079) & (0.0058) & & \\
+[0.5em]
+\multicolumn{6}{l}{\textit{Panel C: Triple-Difference (DDD, Low-Income)}} \\
+Treated $\times$ Postpartum & -0.0107 & 0.0097 & 0.0035 & & \\
+ & (0.0121) & (0.0153) & (0.0086) & & \\
+[0.5em]
+\multicolumn{6}{l}{\textit{Panel D: Post-PHE Only (2017--2019 + 2023--2024)}} \\
+ATT & -0.0218 & 0.0358 & 0.0043 & & \\
+ & (0.0076) & (0.0088) & (0.0107) & & \\
+\midrule
+State FE & Yes & Yes & Yes & Yes & Yes \\
+Year FE & Yes & Yes & Yes & Yes & Yes \\
+Observations ($N$) & 237,365 & 237,365 & 237,365 & 86,991 & 86,991 \\
+State clusters & 51 & 51 & 51 & 51 & 51 \\
+State-years & 357 & 357 & 357 & 357 & 357 \\
+Treated jurisdictions & 47 & 47 & 47 & 47 & 47 \\
+Control jurisdictions & 4 & 4 & 4 & 4 & 4 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Panel A reports CS-DiD ATT (Callaway \& Sant'Anna 2021) using the full 2017--2024 sample.
+Panel B reports biased TWFE for comparison.
+Panel C reports DDD estimates (treated $\times$ postpartum indicator) with state$\times$postpartum and year$\times$postpartum FE, using low-income women.
+Panel D restricts to the clean post-PHE specification (2017--2019 pre-period + 2023--2024 post-period, excluding PHE years).
+Standard errors in parentheses, clustered at the state level.
+\end{tablenotes}
+\end{table}
+

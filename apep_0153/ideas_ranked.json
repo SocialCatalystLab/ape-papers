@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-02-03T18:32:46.621749",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2588,
+    "output_tokens": 6125,
+    "total_tokens": 8713
+  },
+  "ideas_file": "output/paper_137/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "State Medicaid Postpartum Coverage Extensions and Maternal Health (Idea 3)",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "primary outcomes = ACS insurance/coverage continuity for women with birth in last 12 months",
+        "careful exposure timing using interview month or lagging treatment",
+        "do not lead with maternal mortality unless you aggregate multi-year/age-specific or use Bayesian/Poisson shrinkage",
+        "pre-specify power"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "State Paid Sick Leave Mandates and Influenza Mortality (Idea 5)",
+      "score": 62,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "age-restricted outcomes",
+        "ideally 18\u201364",
+        "exclude or separately model 2020\u20132021",
+        "treat adoption year as partial exposure",
+        "incorporate controls for flu severity/vaccine uptake proxies",
+        "test sensitivity to excluding severe flu seasons"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Paid Sick Leave Mandates and Preventive Healthcare Utilization (Idea 1)",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "State E-Cigarette Indoor Air Laws and Youth Vaping Prevalence (Idea 2)",
+      "score": 38,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 5,
+      "title": "State Minimum Wage Increases and Preventive Healthcare Utilization (Idea 4)",
+      "score": 32,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "State Medicaid Postpartum Coverage Extensions and Maternal Health (Idea 3)",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "primary outcomes = ACS insurance/coverage continuity for women with birth in last 12 months",
+        "careful exposure timing using interview month or lagging treatment",
+        "do not lead with maternal mortality unless you aggregate multi-year/age-specific or use Bayesian/Poisson shrinkage",
+        "pre-specify power"
+      ]
+    },
+    {
+      "idea": "State Paid Sick Leave Mandates and Influenza Mortality (Idea 5)",
+      "rank": 2,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "age-restricted outcomes",
+        "ideally 18\u201364",
+        "exclude or separately model 2020\u20132021",
+        "treat adoption year as partial exposure",
+        "incorporate controls for flu severity/vaccine uptake proxies",
+        "test sensitivity to excluding severe flu seasons"
+      ]
+    }
+  ]
+}

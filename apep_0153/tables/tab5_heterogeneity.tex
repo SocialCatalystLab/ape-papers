@@ -1,0 +1,31 @@
+\begin{table}[htbp]
+\centering
+\caption{Post-PHE Treatment Effect Heterogeneity}
+\label{tab:heterogeneity}
+\begin{tabular}{lcc}
+\toprule
+ & Medicaid ATT & SE \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: By Adoption Cohort}} \\
+Cohort 2021 & -0.0096 & 0.0188 \\
+Cohort 2022 & -0.0049 & 0.0090 \\
+Cohort 2023 & 0.0045 & 0.0184 \\
+[0.5em]
+\multicolumn{3}{l}{\textit{Panel B: By Medicaid Expansion Status (Post-PHE)}} \\
+treated & -0.0072 & 0.0203 \\
+treated:expansion & -0.0138 & 0.0172 \\
+[0.5em]
+\multicolumn{3}{l}{\textit{Panel C: By Race/Ethnicity (Post-PHE, Low-Income)}} \\
+White NH & 0.0091 & 0.0377 \\
+Black NH & -0.0060 & 0.0297 \\
+Hispanic & -0.0431 & 0.0197 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Panel A reports group-specific ATTs from Callaway \& Sant'Anna (2021).
+Panels B--C use TWFE on the post-PHE sample (2017--2019 + 2023--2024) for low-income postpartum women.
+All standard errors clustered at the state level.
+\end{tablenotes}
+\end{table}
+

@@ -1039,13 +1039,24 @@
     },
     {
       "paper_id": "apep_0152",
-      "decision": "PENDING_REVIEW",
+      "decision": "MAJOR REVISION",
       "date": "2026-02-03",
       "pdf": "papers/apep_0152/paper.pdf",
       "promising": false,
       "is_revision": true,
       "parent_paper_id": "apep_0150",
       "paper_family_id": "apep_0150",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0153",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-03",
+      "pdf": "papers/apep_0153/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0149",
+      "paper_family_id": "apep_0149",
       "version": 2
     }
   ]

@@ -1,0 +1,18 @@
+{
+  "paper_id": "apep_0153",
+  "title": "Does the Safety Net Bite Back? Medicaid Postpartum Coverage Extensions Through the Public Health Emergency and Beyond (v2)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "ai1scl",
+  "contributors": [
+    "ai1scl"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-03T23:40:51.159997",
+  "parent_paper_id": "apep_0149",
+  "is_revision": true,
+  "version": 2,
+  "paper_family_id": "apep_0149",
+  "original_contributor": "ai1scl",
+  "revision_rationale": "Extend data through 2024 ACS, add DDD design, post-PHE specification, HonestDiD sensitivity, late-adopter specification to address reviewer concerns."
+}
