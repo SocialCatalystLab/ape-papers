@@ -1,0 +1,31 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of EERS on Electricity Consumption and Prices}
+\label{tab:main_results}
+\begin{tabular}{lccccc}
+\toprule
+ & (1) & (2) & (3) & (4) & (5) \\
+\midrule
+Outcome: & \multicolumn{3}{c}{Log Res. Elec. PC} & Log Total PC & Log Price \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6}
+\addlinespace
+EERS & -0.0415*** & -0.0260 & -0.0238 & -0.0904*** & 0.0345 \\
+ & (0.0102) & (0.0176) & (0.0155) & (0.0105) & (0.0217) \\
+ & [-0.0615, -0.0216] & [-0.0606, 0.0085] & [-0.0542, 0.0065] & [-0.1108, -0.0699] & [-0.0080, 0.0771] \\
+\addlinespace
+\midrule
+Estimator & CS-DiD & TWFE & CS-DiD & CS-DiD & CS-DiD \\
+Control Group & Never & --- & Not-yet & Never & Never \\
+State FE & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Year FE & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Observations & 1479 & 1479 & 1479 & 1479 & 1479 \\
+Treated States & 28 & 28 & 28 & 28 & 28 \\
+Control States & 23 & --- & varies & 23 & 23 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$. Standard errors clustered at the state level in parentheses; 95\% confidence intervals in brackets. CS-DiD refers to the Callaway and Sant'Anna (2021) doubly-robust estimator. Column (1) is the preferred specification using never-treated states as the comparison group. Column (2) reports conventional TWFE for comparison. Columns (3)--(5) show robustness to alternative control groups and outcome variables. All outcomes are in logs, so coefficients approximate percentage changes.
+\end{tablenotes}
+\end{table}
+

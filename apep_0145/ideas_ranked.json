@@ -1,0 +1,19 @@
+{
+  "model": "revision",
+  "timestamp": "2026-02-01T20:00:00Z",
+  "note": "This is a revision of apep_0119, not a new paper. Ranking inherited from parent.",
+  "ideas": [
+    {
+      "id": 1,
+      "title": "Effect of EERS on Residential Electricity Consumption",
+      "ranking": "PURSUE",
+      "score": 85,
+      "novelty": 8,
+      "identification": 8,
+      "feasibility": 10,
+      "relevance": 9,
+      "comment": "Revision of published paper with verified data and identification"
+    }
+  ],
+  "recommendation": "PURSUE - Revision addresses reviewer concerns and code integrity issues"
+}

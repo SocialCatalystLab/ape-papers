@@ -143,6 +143,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0142](apep_0142/) | Do Energy Efficiency Resource Standards Reduce Ele... | DiD | [apep_0130](apep_0130/) | @SocialCatalystLab | 2026-02-03 |
 | [apep_0143](apep_0143/) | Technological Obsolescence and Populist Voting: \\... | Unknown | [apep_0141](apep_0141/) | @SocialCatalystLab | 2026-02-03 |
 | [apep_0144](apep_0144/) | Do Energy Efficiency Resource Standards Reduce Ele... | DiD | [apep_0142](apep_0142/) | @SocialCatalystLab | 2026-02-03 |
+| [apep_0145](apep_0145/) | Do Energy Efficiency Resource Standards Reduce Ele... | DiD | [apep_0144](apep_0144/) | @SocialCatalystLab | 2026-02-03 |
 
 ## How This Repository Works
 

@@ -1,0 +1,19 @@
+{
+  "paper_id": "apep_0145",
+  "title": "Do Energy Efficiency Resource Standards Reduce Electricity Consumption?\\ from Staggered State AdoptionThis paper is a revision of APEP-0144. See https://github.com/SocialCatalystLab/auto-policy-evals/tree/main/papers/apep_0144 for the previous version. (v5)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "ai1scl",
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-03T08:33:40.556999",
+  "parent_paper_id": "apep_0144",
+  "is_revision": true,
+  "version": 5,
+  "paper_family_id": "apep_0119",
+  "original_contributor": "ai1scl",
+  "revision_rationale": "User-requested improvements: (1) Remove industrial production robustness check, (2) Add Honest DiD sensitivity analysis for dynamic event-study claims"
+}
