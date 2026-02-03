@@ -1,0 +1,31 @@
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& TWFE & TWFE + COVID & CS-DiD & Sun-Abraham \\
+\midrule
+Insulin copay cap & $-$0.312 & $-$0.287 & $-$0.418 & $-$0.356 \\
+& (0.684) & (0.701) & (0.892) & (0.748) \\
+& [$-$1.653, 1.029] & [$-$1.661, 1.087] & [$-$2.166, 1.330] & [$-$1.822, 1.110] \\
+\\
+COVID death rate & & $-$0.00003 & & \\
+& & (0.00008) & & \\
+COVID year & & 1.247 & & \\
+& & (0.889) & & \\
+\\
+State FE & Yes & Yes & --- & Yes \\
+Year FE & Yes & Yes & --- & Yes \\
+Estimator & TWFE & TWFE & CS-DiD (DR) & IW \\
+Control group & --- & --- & Never-treated & Never-treated \\
+\\
+States & 46 & 46 & 46 & 46 \\
+Observations & 1,002 & 1,002 & 1,002 & 1,002 \\
+Pre-trends Wald $\chi^2$ & & & 8.42 & \\
+Pre-trends p-value & & & 0.587 & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Dependent variable is age-adjusted diabetes mortality rate (ICD-10 E10--E14) per 100,000 population. Standard errors clustered at the state level in parentheses; 95\% confidence intervals in brackets. Column (1): two-way fixed effects with state and year fixed effects. Column (2): TWFE with COVID-19 death rate and year controls. Column (3): Callaway-Sant'Anna (2021) doubly robust estimator with never-treated control group, universal base period, and 1,000 bootstrap replications. Column (4): Sun-Abraham (2021) interaction-weighted estimator. Pre-trends test in column (3) reports the Wald statistic for joint significance of all pre-treatment event-study coefficients. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}

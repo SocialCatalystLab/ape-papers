@@ -1,0 +1,20 @@
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+Cap Category & States & ATT & SE & 95\% CI & p-value \\
+\midrule
+Low (\$25--30) & 7 & $-$0.587 & 0.943 & [$-$2.435, 1.261] & 0.534 \\
+Medium (\$35--50) & 9 & $-$0.392 & 1.012 & [$-$2.376, 1.592] & 0.699 \\
+High (\$100) & 10 & $-$0.218 & 0.876 & [$-$1.935, 1.499] & 0.804 \\
+\\
+All treated (pooled) & 26 & $-$0.312 & 0.684 & [$-$1.653, 1.029] & 0.648 \\
+\midrule
+\multicolumn{6}{l}{\textit{Test: Low = High}} \\
+Difference (Low $-$ High) & & $-$0.369 & 1.287 & [$-$2.892, 2.154] & 0.774 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Table reports TWFE estimates of the insulin copay cap effect on diabetes mortality, separately by cap generosity. Low = \$25--\$30/month (NM, UT, TX, CT, NH, OK, KY). Medium = \$35--\$50/month (ME, VA, MN, WI, GA, MT, OH, NC, IN). High = \$100/month (CO, WV, IL, NY, WA, DE, VT, WY, NE, LA). Each specification includes state and year fixed effects, with never-treated states as the comparison group. Standard errors clustered at the state level. The difference test examines whether the low-cap effect significantly exceeds the high-cap effect. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}

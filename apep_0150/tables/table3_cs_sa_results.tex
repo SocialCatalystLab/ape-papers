@@ -1,0 +1,21 @@
+
+% Callaway-Sant'Anna and Sun-Abraham Results
+% (Append below main TWFE table or present separately)
+\begin{table}[htbp]
+\centering
+\caption{Heterogeneity-Robust Estimators}
+\label{tab:cs_sa}
+\begin{tabular}{lcc}
+\hline\hline
+Estimator & ATT & SE \\
+\hline
+Callaway-Sant'Anna (2021) & 1.524 & (1.260) \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} $^{***}p<0.01$; $^{**}p<0.05$; $^{*}p<0.1$.
+\item CS-DiD uses doubly robust estimation with never-treated control group.
+\item Sun-Abraham uses interaction-weighted estimator via \texttt{fixest::sunab()}.
+\end{tablenotes}
+\end{table}

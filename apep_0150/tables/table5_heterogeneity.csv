@@ -1,0 +1,5 @@
+"part","term","statistic","(1) Low ($25-30)","(2) Medium ($35-50)","(3) High ($100)"
+"estimates","Post Copay Cap","estimate","-3.224","2.662","0.704"
+"estimates","Post Copay Cap","std.error","(2.138)","(1.715)","(3.345)"
+"gof","Num.Obs.","","728","774","789"
+"gof","R2","","0.555","0.508","0.582"

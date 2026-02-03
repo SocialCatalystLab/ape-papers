@@ -1,0 +1,26 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Heterogeneous Effects by Copay Cap Amount},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Standard errors clustered at state level in parentheses.},
+note{  }={Each column restricts treated states to those with caps in the specified range.},
+note{   }={Control group: never-treated states (same across columns).},
+note{    }={Outcome: diabetes mortality rate per 100,000 (all ages, age-adjusted).},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]},
+hline{2}={1-4}{solid, black, 0.05em},
+hline{4}={1-4}{solid, black, 0.05em},
+hline{1}={1-4}{solid, black, 0.1em},
+hline{6}={1-4}{solid, black, 0.1em},
+column{2-4}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) Low (\$25-30) & (2) Medium (\$35-50) & (3) High (\$100) \\
+Post Copay Cap & \num{-3.224} & \num{2.662} & \num{0.704} \\
+& (\num{2.138}) & (\num{1.715}) & (\num{3.345}) \\
+Num.Obs. & \num{728} & \num{774} & \num{789} \\
+R2 & \num{0.555} & \num{0.508} & \num{0.582} \\
+\end{talltblr}
+\end{table}

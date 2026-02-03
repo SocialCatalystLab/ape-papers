@@ -1,0 +1,35 @@
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & Estimator & ATT & SE & 95\% CI \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Baseline}} \\
+Primary (levels) & CS-DiD & $-$0.418 & 0.892 & [$-$2.166, 1.330] \\
+Primary (levels) & TWFE & $-$0.312 & 0.684 & [$-$1.653, 1.029] \\
+\\
+\multicolumn{5}{l}{\textit{Panel B: COVID Sensitivity}} \\
+Exclude 2020--2021 & CS-DiD & $-$0.253 & 1.104 & [$-$2.417, 1.911] \\
+Exclude 2020--2021 & TWFE & $-$0.198 & 0.856 & [$-$1.876, 1.480] \\
+COVID death rate control & TWFE & $-$0.287 & 0.701 & [$-$1.661, 1.087] \\
+COVID year dummies & TWFE & $-$0.295 & 0.712 & [$-$1.691, 1.101] \\
+\\
+\multicolumn{5}{l}{\textit{Panel C: Alternative Specifications}} \\
+Log mortality rate & CS-DiD & $-$0.014 & 0.038 & [$-$0.089, 0.061] \\
+State linear trends & TWFE & $-$0.274 & 0.753 & [$-$1.750, 1.202] \\
+\\
+\multicolumn{5}{l}{\textit{Panel D: Inference}} \\
+Cluster-robust (default) & TWFE & $-$0.312 & 0.684 & [$-$1.653, 1.029] \\
+Small-sample correction & TWFE & $-$0.312 & 0.741 & [$-$1.764, 1.140] \\
+\\
+\multicolumn{5}{l}{\textit{Panel E: Placebo Outcomes (1999--2017)}} \\
+Cancer mortality & TWFE & 0.087 & 0.412 & [$-$0.721, 0.895] \\
+Heart disease mortality & TWFE & $-$0.154 & 0.623 & [$-$1.375, 1.067] \\
+Cancer mortality & CS-DiD & 0.142 & 0.538 & [$-$0.913, 1.197] \\
+Heart disease mortality & CS-DiD & $-$0.089 & 0.714 & [$-$1.489, 1.311] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Table reports treatment effect estimates from alternative specifications. ATT is the estimated average treatment effect on the treated. Standard errors clustered at the state level. CS-DiD uses the Callaway-Sant'Anna (2021) doubly robust estimator with never-treated control group. TWFE uses two-way fixed effects with state and year fixed effects. Log specification reports the coefficient on the log mortality rate; implied percentage change = $(e^{ATT} - 1) \times 100 \approx -1.4\%$. Placebo outcomes should show no effect of insulin copay caps; null results support the identification strategy. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}

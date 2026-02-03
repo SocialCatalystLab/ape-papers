@@ -1019,6 +1019,13 @@
       "date": "2026-02-03",
       "pdf": "papers/apep_0149/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0150",
+      "decision": "PENDING_REVIEW",
+      "date": "2026-02-03",
+      "pdf": "papers/apep_0150/paper.pdf",
+      "promising": false
     }
   ]
 }

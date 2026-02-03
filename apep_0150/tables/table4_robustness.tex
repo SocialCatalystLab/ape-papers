@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks and Placebo Tests}
+\label{tab:robustness}
+\begin{tabular}{lccc}
+\hline\hline
+Specification & ATT & SE & 95\% CI \\
+\hline
+\multicolumn{4}{l}{\textit{Panel A: Alternative Specifications}} \\
+TWFE excl. 2020-2021 & -0.407 & 1.590 & [-3.524, 2.710] \\
+TWFE + COVID death rate & 0.274 & 1.929 & [-3.507, 4.055] \\
+CS-DiD excl. 2020-2021 & 0.337 & 1.351 & [-2.311, 2.984] \\
+CS-DiD (log mortality) & 0.071 & 0.096 & [-0.117, 0.259] \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Standard errors clustered at state level. Wild bootstrap uses Webb (6-point) weights with 9,999 replications.
+\item Placebo tests use outcomes that should not be affected by insulin copay caps: heart disease mortality (unrelated cause) and cancer mortality for all ages, age-adjusted (unrelated cause). Placebo data covers 1999--2017.
+\end{tablenotes}
+\end{table}

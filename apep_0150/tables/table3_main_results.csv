@@ -1,0 +1,7 @@
+"part","term","statistic","(1) TWFE","(2) + COVID Controls","(3) Log Rate","(4) + State Trends"
+"estimates","Post Copay Cap","estimate","-0.242","0.274","0.050","1.208"
+"estimates","Post Copay Cap","std.error","(1.963)","(1.929)","(0.098)","(1.365)"
+"estimates","COVID Death Rate","estimate","","0.000**","",""
+"estimates","COVID Death Rate","std.error","","(0.000)","",""
+"gof","Num.Obs.","","1157","1157","1157","1157"
+"gof","R2","","0.613","0.634","0.440","0.786"

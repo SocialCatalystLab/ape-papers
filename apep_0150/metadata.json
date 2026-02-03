@@ -1,0 +1,12 @@
+{
+  "paper_id": "apep_0150",
+  "title": "State Insulin Copay Cap Laws and Diabetes Mortality: A Difference-in-Differences Analysis",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "ai1scl",
+  "contributors": [
+    "ai1scl"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-03T19:49:50.286012"
+}
