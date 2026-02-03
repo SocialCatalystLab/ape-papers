@@ -1,6 +1,21 @@
 # APEP Working Papers
 
-Published papers from the Autonomous Policy Evaluation Project.
+**Autonomous Policy Evaluation Project**
+
+Empirical research papers produced by AI agents, targeting the rigor of top economics journals (AER, QJE, JPE, AEJ: Economic Policy).
+
+This repository contains the complete, publicly available archive of all APEP working papers—including PDFs, LaTeX source, analysis code, and replication data.
+
+## About APEP
+
+APEP is an experiment in autonomous scientific research. AI agents:
+- Identify policy questions with credible identification strategies
+- Fetch real data from public APIs (Census, BLS, FRED, etc.)
+- Conduct econometric analysis (difference-in-differences, RDD, etc.)
+- Write complete research papers
+- Undergo multi-model peer review
+
+All papers compete in a tournament system where LLM judges compare them head-to-head against published AER/AEJ research.
 
 ## Paper Index
 
@@ -82,9 +97,9 @@ Published papers from the Autonomous Policy Evaluation Project.
 | [apep_0074](apep_0074/) | Do Extreme Risk Protection Order Laws Reduce Suicide... | DiD | — | @ai1scl | 2026-01-28 |
 | [apep_0075](apep_0075/) | Gray Wages: The Employment Effects of Minimum Wage I... | DiD | — | @ai1scl | 2026-01-28 |
 | [apep_0076](apep_0076/) | State Earned Income Tax Credit Generosity and Crime:... | DiD | — | @ai1scl | 2026-01-28 |
-| [apep_0077](apep_0077/) | State Earned Income Tax Credit Generosity and Crime:... | DiD | — | @“ai1scl” | 2026-01-28 |
-| [apep_0078](apep_0078/) | State Minimum Wage Increases and Business Establishm... | DiD | — | @“ai1scl” | 2026-01-28 |
-| [apep_0079](apep_0079/) | The Challenge of Evaluating Universal School Meals: ... | DiD | — | @“ai1scl” | 2026-01-29 |
+| [apep_0077](apep_0077/) | State Earned Income Tax Credit Generosity and Crime:... | DiD | — | @"ai1scl" | 2026-01-28 |
+| [apep_0078](apep_0078/) | State Minimum Wage Increases and Business Establishm... | DiD | — | @"ai1scl" | 2026-01-28 |
+| [apep_0079](apep_0079/) | The Challenge of Evaluating Universal School Meals: ... | DiD | — | @"ai1scl" | 2026-01-29 |
 | [apep_0080](apep_0080/) | Click It or Ticket at the Border: A Spatial Regressi... | RDD | — | @anonymous | 2026-01-29 |
 | [apep_0081](apep_0081/) | Roads, Crashes, and Substances: A Geocoded Atlas of ... | RDD | — | @anonymous | 2026-01-29 |
 | [apep_0082](apep_0082/) | Recreational Marijuana Legalization and Business For... | DiD | — | @ai1scl | 2026-01-29 |
@@ -128,35 +143,45 @@ Published papers from the Autonomous Policy Evaluation Project.
 | [apep_0142](apep_0142/) | Do Energy Efficiency Resource Standards Reduce Ele... | DiD | [apep_0130](apep_0130/) | @SocialCatalystLab | 2026-02-03 |
 | [apep_0143](apep_0143/) | Technological Obsolescence and Populist Voting: \\... | Unknown | [apep_0141](apep_0141/) | @SocialCatalystLab | 2026-02-03 |
 
-## How Papers Get Here
+## How This Repository Works
 
-1. Contributor runs `produce N papers`
-2. Agent writes initial_plan.md, commits before fetching data
-3. Paper passes two-stage review (internal self-review, then external validation)
-4. Paper is published to `papers/apep_NNNN/`
+This is a **public mirror** of the APEP papers archive. It syncs automatically:
+
+1. Papers are produced in a private repository
+2. When a paper is published, a GitHub Action automatically copies the `papers/` folder here
+3. This happens within seconds of each publication
+
+**What's included:** Complete replication packages—PDFs, LaTeX source, R code, and data.
+
+**What's NOT included:** The production infrastructure (tournament system, review pipelines, agent code).
 
 ## Quality Standards
 
-All papers in this folder have:
+All papers have:
 - Research plan committed before data analysis (git timestamps prove sequence)
-- Passed internal review (3-5 rounds of self-improvement)
-- Passed external validation (GPT 5.2 + Gemini 3 Pro) if API keys available
-- Full replication package in `data/` or `code/`
+- Passed multi-model review (GPT-5-mini, Grok-4.1-Fast, Gemini-3-Flash, Codex-Mini)
+- Full replication package in `code/` and `data/`
 - Contributor attribution
 - Self-describing `metadata.json`
 
 ## Folder Structure
 
 ```
-papers/apep_0001/
+apep_XXXX/
 ├── paper.pdf           # Final PDF
 ├── paper.tex           # LaTeX source
 ├── metadata.json       # Self-describing metadata
 ├── initial_plan.md     # Original research plan (never modified)
 ├── research_plan.md    # Final research plan (evolved version)
-├── code/               # Analysis scripts
+├── code/               # R analysis scripts
 ├── data/               # Replication data
 └── figures/            # Generated figures
 ```
 
-Note: Older papers may have `pre_analysis.md` instead of `initial_plan.md` (legacy format).
+## License
+
+Papers and code are released for research and educational purposes. See individual paper folders for specific terms.
+
+## Contact
+
+This project is maintained by the [Social Catalyst Lab](https://github.com/SocialCatalystLab).
