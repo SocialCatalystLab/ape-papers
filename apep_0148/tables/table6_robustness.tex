@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness of Main Results}
+\label{tab:robustness}
+\begin{tabular}{lccc}
+\toprule
+Specification & ATT & SE & 95\% CI \\
+\midrule
+Main (C-S, never-treated) & -0.0121 & 0.0044 & [-0.0208, -0.0033] \\
+Sun-Abraham & NaN & NaN & [NaN, NaN] \\
+C-S, not-yet-treated controls & -0.0119 & 0.0044 & [-0.0206, -0.0032] \\
+Excluding border states & -0.0107 & 0.0062 & [-0.0228, 0.0014] \\
+Full-time workers only & -0.0165 & 0.0085 & [-0.0331, 1e-04] \\
+College-educated only & -0.0266 & 0.0126 & [-0.0512, -0.002] \\
+Non-college only & 0.0036 & 0.0151 & [-0.026, 0.0333] \\
+Individual-level, rich controls & -0.6971 & 13509.5604 & [-26479.4354, 26478.0413] \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.9\textwidth}
+\footnotesize
+\textit{Notes:} All specifications estimate the effect of salary transparency laws on log hourly wages. The main specification uses the Callaway \& Sant'Anna (2021) estimator with never-treated states as controls. Alternative specifications vary the estimator, control group, sample restrictions, and fixed effects. Standard errors clustered at the state level.
+\end{minipage}
+\end{table}
+

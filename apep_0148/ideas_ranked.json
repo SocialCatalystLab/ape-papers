@@ -1,0 +1,14 @@
+{
+  "ideas": [
+    {
+      "id": 1,
+      "title": "Effect of Salary Transparency Laws on Wages and Gender Gap",
+      "score": 85,
+      "recommendation": "PURSUE",
+      "rationale": "Inherited from parent paper APEP-0146. Strong identification from staggered state adoption, novel policy intervention (job-posting transparency vs. weaker alternatives), clear theoretical predictions from Cullen & Pakzad-Hurson (2023)."
+    }
+  ],
+  "summary": "This is a revision of APEP-0146. The research idea was previously vetted and executed. This ranking reflects inherited scores.",
+  "timestamp": "2026-02-03T09:30:00Z",
+  "revision_of": "apep_0146"
+}

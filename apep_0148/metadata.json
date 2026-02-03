@@ -1,0 +1,19 @@
+{
+  "paper_id": "apep_0148",
+  "title": "Shining Light on Paychecks: The Effects of Salary Transparency Laws on Wages and the Gender Pay Gap (v3)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "olafdrw",
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-03T09:52:44.060141",
+  "parent_paper_id": "apep_0146",
+  "is_revision": true,
+  "version": 3,
+  "paper_family_id": "apep_0054",
+  "original_contributor": "olafdrw",
+  "revision_rationale": "Fix critical code bugs identified in integrity scan + sharpen economic contribution + tighten prose"
+}

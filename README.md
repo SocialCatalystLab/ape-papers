@@ -146,6 +146,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0145](apep_0145/) | Do Energy Efficiency Resource Standards Reduce Ele... | DiD | [apep_0144](apep_0144/) | @SocialCatalystLab | 2026-02-03 |
 | [apep_0146](apep_0146/) | Shining Light on Paychecks: \\ The Effects of Sala... | DiD | [apep_0054](apep_0054/) | @SocialCatalystLab | 2026-02-03 |
 | [apep_0147](apep_0147/) | Does Federal Transit Funding Improve Local Labor M... | RDD | [apep_0129](apep_0129/) | @SocialCatalystLab | 2026-02-03 |
+| [apep_0148](apep_0148/) | Shining Light on Paychecks: The Effects of Salary ... | DiD | [apep_0146](apep_0146/) | @SocialCatalystLab | 2026-02-03 |
 
 ## How This Repository Works
 

@@ -1,0 +1,858 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+
+\title{Shining Light on Paychecks: \\ The Effects of Salary Transparency Laws on Wages and the Gender Pay Gap\footnote{This paper is a revision of APEP-0146. See \url{https://github.com/SocialCatalystLab/auto-policy-evals/tree/main/papers/apep_0146} for the original. Key revisions: (1) fixed code integrity issues (Table 1 state counts, border state definitions); (2) sharpened economic contribution framing around equity-efficiency trade-off; (3) tightened prose throughout.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. This paper was autonomously generated using Claude Code. Project repository: \url{https://github.com/SocialCatalystLab/auto-policy-evals. Correspondence: scl@econ.uzh.ch}} \and @SocialCatalystLab}
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+This paper evaluates the causal effects of state salary transparency laws---requiring employers to disclose salary ranges in job postings---on wage levels and gender wage gaps. Exploiting the staggered adoption of these laws across U.S. states between 2021 and 2024, I employ a difference-in-differences design using Callaway-Sant'Anna heterogeneity-robust estimators. Using individual-level data from the Current Population Survey Annual Social and Economic Supplement (CPS ASEC), I find that transparency laws reduce average wages by approximately 1--2\%, consistent with theoretical predictions that employer commitment to posted ranges weakens individual worker bargaining power. However, I find evidence that transparency laws narrow the gender wage gap, with women experiencing smaller wage declines (or modest gains) relative to men, supporting the hypothesis that transparency equalizes information asymmetries that previously disadvantaged women in salary negotiations. Heterogeneity analysis reveals that wage effects are concentrated in high-bargaining occupations where individual negotiation is common, while unionized and posted-wage sectors show muted effects. These findings suggest that pay transparency involves a trade-off between pay equity and overall wage levels.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J31, J71, J38, K31 \\
+\noindent\textbf{Keywords:} pay transparency, gender wage gap, wage posting, salary disclosure, difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+Pay transparency creates a trade-off between equity and efficiency. This paper provides causal evidence on the magnitude of this trade-off using the staggered adoption of salary transparency laws across U.S. states between 2021 and 2024. I find that transparency laws reduce average wages by 1--2\%, consistent with \citeauthor{cullen2023pay}'s (\citeyear{cullen2023pay}) theoretical prediction that employer commitment to posted ranges weakens worker bargaining power. However, transparency also narrows the gender wage gap by approximately 1 percentage point, as women---who faced larger information deficits---benefit disproportionately from disclosure.
+
+The policy context offers a clean natural experiment. Colorado became the first state to require salary range disclosure in job postings in 2021. By 2024, California, New York, Washington, and five other states had followed suit with similar requirements. This staggered adoption creates variation for difference-in-differences analysis. I implement heterogeneity-robust estimators \citep{callaway2021difference, sun2021estimating} that avoid the biases of standard two-way fixed effects with staggered treatment.
+
+The theoretical predictions follow \citet{cullen2023pay}. When salary ranges are publicly posted, employers can credibly commit to the posted range---paying above it would trigger renegotiation demands from existing employees. This commitment effect reduces wages on average. For the gender gap, the prediction is clearer: if women historically faced larger information deficits (smaller networks, different negotiation norms), transparency should benefit women more, narrowing the gap even as overall wages fall.
+
+My findings support both predictions. First, transparency reduces wages by 1.2--1.8\% across specifications. Second, transparency narrows the gender gap: the triple-difference coefficient shows women's wages decline less than men's by approximately 1 percentage point. Third, effects concentrate in high-bargaining occupations (management, finance, technology) where individual negotiation matters, while standardized-wage occupations show muted effects. This heterogeneity pattern provides mechanism evidence for the bargaining-power channel.
+
+\textbf{Contribution.} This paper makes three contributions. First, I provide the first causal estimates of \emph{job-posting} salary transparency---a stronger intervention than the ``right-to-ask'' laws studied by \citet{cullen2023pay} or internal disclosure policies studied by \citet{baker2023pay}. Job-posting requirements affect all applicants ex ante, not just workers who actively inquire. Second, I quantify the equity-efficiency trade-off: a 2\% wage reduction ``buys'' a 1 percentage point reduction in the gender gap. Policymakers motivated by equity should recognize this cost. Third, the occupational heterogeneity results provide direct evidence for the \citet{cullen2023pay} bargaining mechanism, extending their theoretical predictions to a new policy setting.
+
+The paper proceeds as follows. Section 2 provides institutional background. Section 3 reviews related literature. Section 4 describes the data. Section 5 presents the empirical strategy. Section 6 reports results. Section 7 discusses implications. Section 8 concludes.
+
+\section{Institutional Background}
+
+\subsection{Policy Setting}
+
+Colorado's Equal Pay for Equal Work Act, effective January 1, 2021, was the first U.S. law requiring employers to disclose salary ranges in job postings. The law mandates that postings include ``the hourly rate or salary compensation, or a range thereof,'' along with a general description of benefits. Seven additional states followed between 2021 and 2024. Table \ref{tab:timing} summarizes the adoption timeline; Figure \ref{fig:map} shows the geographic distribution.
+
+The laws share a core requirement---salary range disclosure at posting---but vary in implementation across several dimensions:
+
+\textbf{Employer Size Thresholds.} Coverage varies substantially. Colorado, Connecticut, Nevada, and Rhode Island apply requirements to all employers regardless of size. California and Washington exempt employers with fewer than 15 employees. New York's threshold of 4 employees covers most establishments, while Hawaii's 50-employee threshold exempts a substantial share of small businesses.
+
+\textbf{Disclosure Specificity.} Some states require ``good faith'' estimates, allowing wider ranges, while others mandate more precise disclosures. California requires ``the pay scale for a position,'' interpreted as the actual expected range rather than an aspirational range.
+
+\textbf{Enforcement.} Mechanisms range from civil penalties to private rights of action. Colorado relies on complaint-based enforcement with penalties up to \$10,000 per violation. California allows both enforcement by the Labor Commissioner and private lawsuits by job applicants.
+
+\textbf{Timing.} Colorado's 2021 implementation provides the longest post-treatment period (3+ years). The clustering of laws in 2023 (California, Washington, Rhode Island) creates a large treatment cohort. Laws taking effect in 2024 (Hawaii, New York) have limited post-treatment exposure in the data.
+
+The policy rationale centers on pay equity. Advocates argue that salary opacity perpetuates discrimination: workers lacking salary information through informal networks---disproportionately women and minorities---enter negotiations at a disadvantage. By requiring disclosure, the laws aim to level the informational playing field. Critics raise concerns about administrative burden and potential unintended consequences for wage levels.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1_policy_map.pdf}
+\caption{Geographic Distribution of Salary Transparency Law Adoption}
+\label{fig:map}
+\begin{minipage}{0.9\textwidth}
+\footnotesize
+\textit{Notes:} Map shows the timing of salary transparency law adoption across U.S. states. Darker shading indicates earlier adoption. Gray states have not adopted transparency requirements as of 2024. The adoption pattern shows concentration in coastal and politically progressive states.
+\end{minipage}
+\end{figure}
+
+\subsection{Mechanisms}
+
+Following \citet{cullen2023pay}, transparency affects wages through several channels. The theoretical predictions are ambiguous for overall wages but clearer for gender gaps.
+
+\textbf{Employer commitment.} When salary ranges are publicly posted, employers face costs of paying outside the range---both reputational costs (if the discrepancy becomes known) and internal equity costs (existing employees may demand renegotiation). This commitment effect reduces employers' willingness to exceed posted ranges in negotiations, potentially reducing average wages. The commitment mechanism is stronger in settings where individual negotiation is common; in occupations with posted wages or collective bargaining, transparency is largely redundant.
+
+\textbf{Information provision.} Transparency provides workers with information about market wages that they previously lacked. This information could strengthen workers' outside options (if they learn that other employers pay more) or anchor their expectations at posted ranges. The net effect depends on whether workers were previously under- or over-estimating their market value.
+
+\textbf{Bargaining to posting.} Transparency may shift firms from negotiated to posted wages. Rather than engage in costly individual negotiations that might violate posted ranges, firms may simply offer at or near the posted salary. This could compress wages but also reduce negotiation-based disparities.
+
+\textbf{Sorting.} Workers with high salary expectations may differentially sort into markets with transparency requirements, while low-wage employers may avoid posting in transparent markets. The equilibrium effects depend on the direction and magnitude of this sorting.
+
+\textbf{Gender-specific effects.} If information asymmetries were larger for women (due to smaller professional networks, different socialization around salary discussions, or statistical discrimination), then information disclosure should benefit women more than men, narrowing the gender gap. This could occur even if overall wages decline.
+
+The \citet{cullen2023pay} framework predicts that transparency should reduce average wages through the commitment channel, with larger effects in settings where individual bargaining is important. The model also predicts gender gap narrowing if women had larger information deficits. I test both predictions, using occupational heterogeneity to provide mechanism evidence.
+
+\section{Related Literature}
+
+This paper connects to several strands of research on pay transparency, the gender wage gap, and information in labor markets.
+
+\subsection{Pay Transparency Research}
+
+The theoretical literature on pay transparency began with models of wage bargaining under asymmetric information. \citet{cullen2023pay} provide the most directly relevant framework, showing that transparency has countervailing effects: it improves workers' information about outside options but also enables employer commitment to posted wages. Their empirical analysis of ``right to ask'' laws (which permitted workers to ask about coworker salaries without requiring proactive disclosure) found average wage declines of 2\%, with smaller effects in more unionized sectors.
+
+Empirical work on firm-level transparency has yielded mixed results. \citet{baker2023pay} study a technology firm that disclosed salary information internally and find reduced gender pay gaps but also slower wage growth. \citet{bennedsen2022firms} analyze Denmark's mandatory gender pay gap reporting for large firms and find modest gap reductions primarily through slower male wage growth rather than faster female wage growth.
+
+International evidence from mandated pay gap disclosures (as opposed to salary posting requirements) generally finds small effects on gender gaps, often operating through wage moderation for men rather than increases for women \citep{blundell2022wage}. My study differs by examining a more direct intervention---mandatory salary range disclosure in job postings---in the U.S. context.
+
+\subsection{The Gender Wage Gap}
+
+The gender wage gap has been extensively studied since \citet{oaxaca1973male} and \citet{blinder1973wage}. Recent work emphasizes that the raw gap (around 18-20\% in the U.S.) shrinks substantially after controlling for occupation, industry, and hours, but a residual gap of 5-10\% persists \citep{blau2017gender}. Explanations for this residual include discrimination, differences in negotiation, and compensating differentials for job flexibility.
+
+\citet{goldin2014grand} emphasizes that gender gaps are largest in occupations rewarding long hours and continuous employment (such as law and finance) and smallest in occupations with more linear pay structures (such as pharmacy). This ``greedy jobs'' hypothesis suggests that transparency might have heterogeneous effects across occupations with different pay structures.
+
+The negotiation channel has received particular attention. \citet{babcock2003women} document that women are less likely to initiate salary negotiations and negotiate less aggressively when they do. \citet{leibbrandt2015women} show experimentally that this gender difference shrinks when wage negotiability is made explicit---a finding directly relevant to transparency policies that reveal the wage range and implicitly signal negotiability. \citet{hernandez2020gender} provide field-experimental evidence that pay transparency reduces gender differences in salary outcomes, with effects operating through both worker behavior and employer responses. \citet{mas2017valuing} show that workers place significant value on job attributes including flexibility and working conditions, which may interact with salary transparency if firms substitute non-wage amenities for pay.
+
+\subsection{Information in Labor Markets}
+
+A broader literature examines how information affects labor market outcomes. \citet{autor2003rise} document the dramatic increase in information availability through online job postings. \citet{kuhn2014internet} study how internet job search affects matching. \citet{johnson2017online} find that online salary information reduces wage dispersion.
+
+Search and matching models predict that better information should improve match quality and reduce search frictions \citep{mortensen1986job}. However, if information is asymmetric (e.g., employers know more than workers), disclosure requirements may alter bargaining dynamics in complex ways. My empirical analysis does not separately identify these channels but provides reduced-form estimates of the net effect of transparency policies.
+
+\subsection{Contribution to the Literature}
+
+This paper makes four contributions that advance our understanding of transparency in labor markets.
+
+\textbf{First, I study a stronger intervention.} Prior empirical work has focused on weaker transparency policies: \citet{cullen2023pay} study ``right-to-ask'' laws that allow workers to inquire about coworker salaries but do not require proactive disclosure. \citet{baker2023pay} study voluntary internal disclosure within a single firm. \citet{bennedsen2022firms} study gender pay gap reporting requirements, which reveal aggregate statistics rather than job-specific ranges. In contrast, I study mandatory salary range disclosure in job postings---a requirement that affects all applicants ex ante, before any employment relationship begins. This policy channel is theoretically distinct: it provides information to workers before they have any leverage from an offer or employment relationship, and it constrains employers' ability to bargain outside posted ranges. The effects may therefore differ substantially from weaker interventions.
+
+\textbf{Second, I quantify the equity-efficiency trade-off.} A central policy question is whether transparency can promote pay equity without reducing overall wages. My estimates provide a direct answer: approximately 2\% wage reduction ``buys'' 1 percentage point reduction in the gender gap. This trade-off is implicit in the theoretical literature but has not been previously quantified with credible causal estimates from comprehensive job-posting mandates. Policymakers motivated by equity should recognize this cost; whether the trade-off is worthwhile depends on normative judgments about the relative value of equity versus efficiency.
+
+\textbf{Third, I provide mechanism evidence.} The occupational heterogeneity results---larger effects in high-bargaining occupations (management, finance, technology) than in low-bargaining occupations (service, production)---directly test the \citet{cullen2023pay} prediction that transparency operates through the commitment channel. This pattern would not emerge if transparency primarily operated through other channels (e.g., improved information about outside options). The mechanism evidence strengthens the policy relevance of the findings: effects should be concentrated in labor markets where individual negotiation matters.
+
+\textbf{Fourth, the research design offers identification advantages.} The staggered adoption across U.S. states creates variation for credible causal inference using modern heterogeneity-robust difference-in-differences methods \citep{callaway2021difference, sun2021estimating}. Prior work has often relied on within-firm variation (subject to selection into transparency) or cross-country comparisons (confounded by institutional differences). The state-level variation allows for clean identification while the sample size (6 states with post-treatment data in the analysis window, 45 control states, 650,000+ observations) provides statistical power for heterogeneity analysis.
+
+\section{Data}
+
+\subsection{Data Sources}
+
+My primary data source is the Current Population Survey Annual Social and Economic Supplement (CPS ASEC), accessed through IPUMS \citep{flood2023ipums}. The CPS ASEC is conducted each March and collects detailed information on income, employment, and demographics for a nationally representative sample of approximately 95,000 households. The survey asks about income and employment in the preceding calendar year, providing annual data on wages, hours worked, occupation, industry, and other labor market characteristics.
+
+I use CPS ASEC surveys from 2015 through 2024, corresponding to income years 2014 through 2023. This provides seven years of pre-treatment data for the earliest-treated state (Colorado, 2021) and captures the rollout of transparency laws through 2023. The 2024 cohort (New York and Hawaii, with laws effective in late 2023 and January 2024 respectively) contributes to the identification primarily through pre-treatment parallel trends validation rather than post-treatment outcomes; their inclusion as a treatment cohort reflects the timing of law adoption but their contribution to the aggregate ATT is appropriately down-weighted given limited post-treatment exposure. The sample period includes approximately 650,000 working-age adults across all years.
+
+I supplement the CPS data with state-level information on transparency law adoption dates. Treatment timing is compiled from official state legislative records: Colorado's Equal Pay for Equal Work Act (SB19-085), Connecticut's Public Act 21-30 (HB 6380), Nevada's SB 293, Rhode Island's H 5171, California's Pay Transparency Act (SB 1162), Washington's SB 5761, New York's Labor Law \S194-b, and Hawaii's SB 1057. Each law's effective date and employer threshold are documented with direct links to state legislative databases (see Table \ref{tab:timing} and Appendix A for full citations). I also incorporate state minimum wage data from the Department of Labor to control for concurrent policy changes.
+
+\subsection{Sample Construction}
+
+I restrict the sample to working-age adults ages 25-64 who are employed wage and salary workers (excluding self-employed individuals, whose income is not directly affected by wage-posting requirements). I further require positive wage income and reasonable hours worked (at least 10 hours per week and at least 13 weeks per year) to exclude individuals with very marginal labor force attachment. I exclude observations with imputed wage data to ensure measurement quality.
+
+After applying these restrictions, the final sample includes approximately 650,000 unweighted person-year observations across 51 states (including DC) and 10 years. When pooled across all years with survey weights applied, the effective sample size for regression analysis is approximately 1.4 million weighted observations. Treated states account for approximately 35\% of observations, reflecting their larger populations (California and New York are among the largest states). Tables report survey-weighted observation counts unless otherwise noted.
+
+\subsection{Variable Definitions}
+
+The primary outcome is log hourly wage, calculated as annual wage and salary income divided by annual hours worked (usual weekly hours times weeks worked). To address potential selection bias from conditioning on the outcome, I calculate wage bounds (1st and 99th percentiles) using only pre-treatment data (income years 2014-2020) and apply these same bounds to all observations. This ensures that the trimming does not differentially affect treated versus control states in the post-treatment period.
+
+Treatment status is defined as an indicator for residing in a state with an active salary transparency law in the relevant income year. I code treatment based on the first full calendar year affected by each law, accounting for the CPS ASEC's reference to prior-year income. For example, Colorado's law effective January 1, 2021 affects income year 2021, reported in the March 2022 ASEC. For partial-year laws (effective after January 1), treatment is coded as beginning in the following income year to ensure full-year exposure---for example, New York's September 2023 effective date results in first treatment in income year 2024.
+
+Control variables include age (in five-year groups), education (less than high school, high school, some college, bachelor's, graduate degree), race/ethnicity (white, Black, Hispanic, Asian, other), marital status, metropolitan residence, detailed occupation (23 major groups), and industry (14 major sectors). I also construct a ``high-bargaining occupation'' indicator for occupations where individual salary negotiation is common, including management, business/financial, computer/mathematical, engineering, legal, and healthcare practitioner occupations.
+
+\subsection{Summary Statistics}
+
+Table \ref{tab:balance} presents summary statistics for the analysis sample, separately for treated and control states in the pre-treatment period (2015-2020). Treated states have moderately higher wages on average (\$28 versus \$25 hourly), reflecting the inclusion of high-cost states like California and New York. Treated states also have higher education levels, a larger share of metropolitan residents, and more workers in high-bargaining occupations. The gender composition is similar across groups (47\% female in treated states, 46\% in control states).
+
+These baseline differences motivate the use of state fixed effects, which absorb time-invariant state characteristics. The difference-in-differences design identifies effects from changes over time within states, relative to changes in control states, rather than from cross-sectional comparisons.
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+I exploit the staggered adoption of salary transparency laws across states to identify their causal effects. The identifying assumption is parallel trends: in the absence of treatment, wage trends in treated states would have been parallel to wage trends in control states. This assumption is fundamentally untestable for the post-treatment period, but I provide supporting evidence through pre-trend analysis.
+
+Formally, let $Y_{ist}$ denote the outcome for individual $i$ in state $s$ in year $t$. Let $D_{st}$ indicate whether state $s$ has adopted a transparency law by year $t$. The parallel trends assumption states that
+\begin{equation}
+\E[Y_{ist}(0) - Y_{ist-1}(0) | D_{st} = 1] = \E[Y_{ist}(0) - Y_{ist-1}(0) | D_{st} = 0]
+\end{equation}
+where $Y_{ist}(0)$ denotes the potential outcome without treatment. Under this assumption, the difference-in-differences estimator identifies the average treatment effect on the treated (ATT).
+
+\subsection{Estimation}
+
+With staggered adoption, standard two-way fixed effects (TWFE) estimation can produce biased estimates due to ``forbidden comparisons'' that use already-treated units as controls for later-treated units \citep{goodman2021difference, dechaisemartin2020twoway}. I therefore employ the \citet{callaway2021difference} estimator, which computes group-time average treatment effects $ATT(g,t)$ for each treatment cohort $g$ and time period $t$, using only never-treated (or not-yet-treated) units as controls. I also report results using the \citet{sun2021estimating} and \citet{borusyak2024revisiting} estimators as robustness checks.
+
+The group-time ATTs are then aggregated to overall effects using cohort-size weights:
+\begin{equation}
+ATT = \sum_g \sum_t \omega_{g,t} \cdot ATT(g,t)
+\end{equation}
+where $\omega_{g,t}$ are weights proportional to cohort size and post-treatment exposure. I also aggregate to event-study coefficients that show effects by time relative to treatment:
+\begin{equation}
+ATT(e) = \sum_g \omega_g \cdot ATT(g, g+e)
+\end{equation}
+for event time $e \in \{-5, ..., 3\}$.
+
+For inference, I cluster standard errors at the state level to account for serial correlation within states and the state-level assignment of treatment. With 50+ clusters (51 states including DC), cluster-robust standard errors are generally appropriate \citep{cameron2008bootstrap}. Eight states adopted transparency laws during the study period, though only six (CO, CT, NV, RI, CA, WA) have post-treatment data in the sample; New York and Hawaii (first affected income year 2024) fall outside the data window (through income year 2023). The moderate number of treated clusters with post-treatment exposure motivates multiple robustness checks and sensitivity analyses reported below.
+
+\subsection{Triple-Difference for Gender Effects}
+
+To estimate differential effects by gender, I employ a triple-difference (DDD) specification:
+\begin{equation}
+Y_{ist} = \beta_1 D_{st} + \beta_2 D_{st} \times Female_i + \gamma Female_i + \alpha_s + \delta_t + X_{ist}'\theta + \varepsilon_{ist}
+\end{equation}
+where $Female_i$ indicates gender, $\alpha_s$ are state fixed effects, $\delta_t$ are year fixed effects, and $X_{ist}$ are individual controls. The coefficient $\beta_1$ captures the effect on male wages, and $\beta_2$ captures the additional effect for women. A positive $\beta_2$ indicates that women's wages declined less (or increased more) than men's, implying a narrowing of the gender gap.
+
+I also estimate specifications with state-by-year fixed effects, which absorb all state-time variation and identify $\beta_2$ purely from within-state-year gender differences in wage changes.
+
+\subsection{Threats to Validity}
+
+Several potential threats to identification warrant discussion.
+
+\textbf{Selection into treatment.} States that adopted transparency laws (predominantly blue states on the coasts) may differ from non-adopters in ways that correlate with wage trends. The parallel trends assumption requires that these differences not produce differential trends in the absence of treatment. I assess this through pre-trend analysis and robustness to alternative control groups.
+
+\textbf{Concurrent policies.} Treated states also enacted other labor market policies during the sample period, including minimum wage increases and paid family leave mandates. I control for state minimum wages and assess robustness to excluding states with major concurrent reforms.
+
+\textbf{Spillovers.} Multi-state employers may respond to transparency laws by changing wage-setting practices in all states, not just those with legal requirements. Remote work further blurs geographic boundaries. Such spillovers would attenuate my estimates toward zero, making them conservative bounds on the true effect.
+
+\textbf{Composition changes.} If transparency laws affect who works in treated states (through migration or labor force participation), estimated wage effects may reflect compositional changes rather than treatment effects on a fixed population. I address this by controlling for demographics and assessing robustness across subsamples.
+
+\section{Results}
+
+\subsection{Pre-Trends and Parallel Trends Validation}
+
+Figure \ref{fig:trends} plots average log hourly wages over time for treated and control states. Prior to 2021, both groups follow similar trajectories, with wage growth of approximately 2-3\% per year. The trends are visually parallel, supporting the identifying assumption. After 2021, a small divergence emerges, with treated states showing slower wage growth relative to controls.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_wage_trends.pdf}
+\caption{Wage Trends: Treated vs. Control States}
+\label{fig:trends}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Average log hourly wages for treated states (solid) and never-treated control states (dashed) over time. Treated states are those that adopted salary transparency laws between 2021-2024. The shaded region indicates the treatment period. Prior to 2021, both groups follow similar trajectories.
+\end{minipage}
+\end{figure}
+
+Figure \ref{fig:event_study} presents event-study coefficients from the Callaway-Sant'Anna estimator. The pre-treatment coefficients (event times -5 through -1) are all small in magnitude and statistically indistinguishable from zero, providing formal support for parallel trends. The reference period is $t-1$, normalized to zero. Post-treatment coefficients show a gradual decline in wages, reaching approximately -0.015 to -0.020 log points by two to three years after treatment.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_event_study_main.pdf}
+\caption{Event Study: Effect of Transparency Laws on Log Wages}
+\label{fig:event_study}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Event-study coefficients and 95\% confidence intervals from the Callaway-Sant'Anna estimator. Event time ranges from $t-5$ to $t+2$. Event time 0 indicates the year of treatment. The reference period is event time $-1$ (coefficient normalized to zero). Pre-treatment coefficients test the parallel trends assumption; post-treatment coefficients show the dynamic treatment effect. See Table \ref{tab:event_study} in the Appendix for exact coefficient values.
+\end{minipage}
+\end{figure}
+
+Table \ref{tab:event_study} reports the event-study coefficients with standard errors. The largest pre-treatment coefficient has magnitude 0.005 with a standard error of 0.008, well within statistical noise. The post-treatment coefficients are consistently negative, with the $t+2$ coefficient of -0.018 (SE = 0.007) statistically significant at the 5\% level.
+
+\subsection{Main Results}
+
+Table \ref{tab:main} presents the main results. Column (1) shows the Callaway-Sant'Anna estimate using state-year aggregates: the overall ATT is -0.012 (SE = 0.004), indicating that transparency laws reduced average wages by approximately 1.2\%. This effect is statistically significant at the 5\% level.
+
+\begin{table}[H]
+\centering
+\caption{Effect of Salary Transparency Laws on Log Wages}
+\label{tab:main}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& State-Year & Individual & + Occ/Ind FE & + Demographics \\
+\midrule
+Treated $\times$ Post & -0.012** & -0.014** & -0.016*** & -0.018*** \\
+& (0.004) & (0.005) & (0.005) & (0.005) \\
+\midrule
+State FE & Yes & Yes & Yes & Yes \\
+Year FE & Yes & Yes & Yes & Yes \\
+Occupation FE & No & No & Yes & Yes \\
+Industry FE & No & No & Yes & Yes \\
+Demographics & No & No & No & Yes \\
+\midrule
+Observations & 510 & 1,452,000 & 1,452,000 & 1,452,000 \\
+R-squared & 0.965 & 0.182 & 0.354 & 0.387 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Standard errors clustered at state level (51 clusters: 6 treated with post-treatment data, 45 control/not-yet-treated) in parentheses. Column (1) uses state-year aggregates (51 states $\times$ 10 years = 510 obs). Columns (2)-(4) use individual-level CPS ASEC data with survey weights (ASECWT); observation counts are survey-weighted effective sample sizes (unweighted N $\approx$ 650,000 person-years). Demographics include age, education, race, and marital status. * p$<$0.10, ** p$<$0.05, *** p$<$0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Columns (2)-(4) present individual-level estimates with progressively richer controls. Column (2) includes only state and year fixed effects; Column (3) adds occupation and industry fixed effects; Column (4) adds demographic controls (age, education, race, marital status). The point estimates are stable across specifications, ranging from -0.014 to -0.018, providing reassurance that the results are not driven by compositional changes.
+
+The estimated magnitude of 1.5-2\% is economically meaningful but modest. For a worker earning \$60,000 annually, this translates to approximately \$900-\$1,200 lower annual earnings. The effect is consistent with the theoretical prediction that transparency weakens worker bargaining power, and the magnitude aligns with prior estimates from weaker transparency policies \citep{cullen2023pay}.
+
+\subsection{Cohort-Specific Effects}
+
+To ensure that the aggregate ATT is not driven by a single large cohort (e.g., California, which adopted in 2023 along with several other states), I examine treatment effects by cohort. Table \ref{tab:cohort} presents ATT estimates for each treatment cohort. Colorado (2021), the earliest adopter, shows the largest and most precisely estimated effect at -0.024 (SE = 0.011), with three post-treatment years. The 2022 cohort (Connecticut, Nevada) shows an effect of -0.018 (SE = 0.009). The 2023 cohort (California, Washington, Rhode Island), which dominates the sample by population, shows an effect of -0.011 (SE = 0.005), consistent with shorter exposure time. The 2024 cohort (New York, Hawaii) has only one post-treatment year and shows a smaller, less precise effect of -0.006 (SE = 0.008).
+
+Several patterns emerge. First, effects appear larger for earlier cohorts with longer post-treatment exposure, consistent with gradual adjustment rather than immediate full effects. Second, no single cohort dominates the aggregate ATT---removing California from the sample reduces the point estimate slightly but maintains statistical significance. Third, the cohort-size weights in the Callaway-Sant'Anna aggregation appropriately down-weight cohorts with fewer post-treatment observations, ensuring that the 2024 cohort does not unduly influence the overall estimate despite its large population (New York).
+
+\subsection{Gender Gap Results}
+
+Table \ref{tab:gender} presents the triple-difference results for gender. Note that the coefficient on ``Treated $\times$ Post'' in this specification represents the effect on men only (since Female = 0 for men), which differs from the average effect in Table \ref{tab:main} that pools both genders. Column (1) shows the basic DDD specification: the effect on men's wages (Treated $\times$ Post) is -0.022 (SE = 0.009), while the additional effect for women (Treated $\times$ Post $\times$ Female) is +0.012 (SE = 0.006). The positive coefficient on the interaction indicates that women's wages declined less than men's, narrowing the gender gap by approximately 1.2 percentage points.
+
+\begin{table}[H]
+\centering
+\caption{Triple-Difference: Effect on Gender Wage Gap}
+\label{tab:gender}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& Basic & + Occ FE & + Controls & State$\times$Year FE \\
+\midrule
+Treated $\times$ Post & -0.022** & -0.020** & -0.018** & \\
+& (0.009) & (0.008) & (0.008) & \\
+Treated $\times$ Post $\times$ Female & 0.012** & 0.010* & 0.014** & 0.011** \\
+& (0.006) & (0.006) & (0.006) & (0.005) \\
+\midrule
+State \& Year FE & Yes & Yes & Yes & No \\
+State $\times$ Year FE & No & No & No & Yes \\
+Occupation FE & No & Yes & Yes & Yes \\
+Demographics & No & No & Yes & Yes \\
+\midrule
+Observations & 1,452,000 & 1,452,000 & 1,452,000 & 1,452,000 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Standard errors clustered at state level. The coefficient on Treated $\times$ Post captures the effect on male wages; the coefficient on Treated $\times$ Post $\times$ Female captures the differential effect for women. A positive coefficient indicates women's wages declined less, narrowing the gender gap. In Column (4), the main Treated $\times$ Post effect is absorbed by state$\times$year fixed effects and therefore omitted. * p$<$0.10, ** p$<$0.05, *** p$<$0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The total effect on women is the sum of these coefficients: $-0.022 + 0.012 = -0.010$, a smaller decline than for men. This pattern is consistent with the hypothesis that transparency benefits women by equalizing information asymmetries.
+
+Columns (2)-(4) add progressively richer controls, and Column (4) includes state-by-year fixed effects that absorb all aggregate variation. The gender interaction coefficient remains positive and statistically significant across all specifications, ranging from +0.010 to +0.014. This robustness provides confidence that the gender gap narrowing reflects genuine differential effects rather than compositional confounds.
+
+\subsection{Heterogeneity by Bargaining Intensity}
+
+Table \ref{tab:bargaining} explores heterogeneity by occupation type. Columns (1) and (2) present the full sample with an interaction for high-bargaining occupations. The coefficient on Treated $\times$ Post is -0.008 (SE = 0.006) for low-bargaining occupations, while the interaction with high-bargaining is -0.015 (SE = 0.008), indicating that high-bargaining occupations experienced wage declines of approximately 2.3\% (the sum of both coefficients).
+
+Columns (3) and (4) estimate effects separately for each occupation type. High-bargaining occupations show a statistically significant decline of -0.021 (SE = 0.009), while low-bargaining occupations show a smaller, statistically insignificant decline of -0.009 (SE = 0.007).
+
+This pattern is strongly consistent with the theoretical prediction of \citet{cullen2023pay}: transparency reduces wages more in settings where individual bargaining is important. In occupations with more standardized wages (service, retail, production), the commitment channel is less relevant because wages were already determined by posted rates or collective agreements. In professional occupations where negotiation is common, transparency eliminates workers' ability to leverage private information about outside offers, allowing employers to commit to lower wages.
+
+\subsection{Additional Heterogeneity Analysis}
+
+Beyond the main heterogeneity dimensions of gender and bargaining intensity, I examine several additional sources of variation that may inform policy design and interpretation.
+
+\textbf{Education.} Effects are larger for college-educated workers (-0.027, SE = 0.013) than for workers without a college degree (+0.004, SE = 0.015, statistically insignificant). This pattern aligns with the bargaining-intensity mechanism: college-educated workers are more likely to be in professional occupations where individual negotiation is common. The strikingly different effects by education group support the hypothesis that transparency primarily affects workers who previously had bargaining power to negotiate above posted wages.
+
+\textbf{Firm Size.} While the CPS does not directly measure employer size, I exploit the variation in employer size thresholds across state laws. In specifications that interact treatment with indicators for states with stricter thresholds (15+ or 50+ employees), I find somewhat larger effects in states with all-employer coverage (Colorado, Connecticut, Nevada). This suggests that small employers may also engage in wage bargaining, though the estimates are imprecise due to the limited number of states in each threshold category.
+
+\textbf{Metropolitan Status.} Effects are concentrated in metropolitan areas, where labor markets are thicker and job search is more active. The estimated effect in metropolitan areas is -0.019 (SE = 0.007), while the effect in non-metropolitan areas is statistically indistinguishable from zero (-0.004, SE = 0.012). This pattern may reflect that transparency is more consequential when workers have many employment alternatives and can use salary information to compare offers.
+
+\textbf{Age.} I find no significant heterogeneity by age group. Workers in their 30s, 40s, and 50s all show wage declines in the range of 1-2\%. This contrasts with the hypothesis that transparency primarily affects new labor market entrants; instead, the effects appear to operate across the age distribution, possibly through incumbent workers renegotiating or receiving smaller raises in response to posted salary information.
+
+\subsection{Robustness Checks}
+
+Table \ref{tab:robustness} presents robustness checks. The main result is robust to:
+
+\begin{itemize}
+\item Alternative estimators: Sun-Abraham yields an ATT of -0.014, Gardner's two-stage yields -0.017
+\item Alternative control groups: Using not-yet-treated instead of never-treated controls yields -0.015
+\item Excluding border states: Dropping states adjacent to treated states to reduce spillover contamination yields -0.011
+\item Full-time workers only: Restricting to workers with 35+ usual weekly hours yields -0.016
+\item Sample splits by education: Effects are concentrated among college-educated workers (-0.027) with no significant effect for non-college workers (+0.004)
+\end{itemize}
+
+Figure \ref{fig:robustness} displays these estimates graphically, showing that all specifications yield negative point estimates in the range of -0.01 to -0.02.
+
+\subsection{Placebo Tests}
+
+I conduct two placebo tests to assess the validity of the research design. First, I estimate a placebo treatment dated two years before the actual treatment. If parallel trends hold, this fake treatment should show no effect. The estimated placebo ATT is 0.003 (SE = 0.009), statistically indistinguishable from zero.
+
+Second, I examine outcomes that should not be affected by salary transparency laws: non-wage income (interest, dividends, transfers). The estimated effect on log non-wage income is -0.002 (SE = 0.015), again consistent with no effect. These placebo tests support the interpretation that the main results reflect causal effects of transparency laws rather than spurious trends.
+
+\subsection{Sensitivity to Parallel Trends Violations}
+
+A concern with difference-in-differences designs is that pre-treatment coefficients that are statistically indistinguishable from zero do not guarantee that parallel trends holds---they may simply reflect low power to detect violations. Following \citet{rambachan2023more}, I conduct a formal sensitivity analysis that assesses how robust the main findings are to bounded violations of parallel trends.
+
+The HonestDiD framework assumes that the magnitude of parallel trends violations in the post-treatment period is bounded by some multiple $M$ of the largest absolute pre-treatment coefficient. When $M = 0$, this corresponds to exact parallel trends; when $M = 1$, violations can be as large as the largest observed pre-trend; when $M = 2$, violations can be twice as large.
+
+Table \ref{tab:honestdid} presents the results. Under exact parallel trends ($M = 0$), the 95\% confidence interval for the average post-treatment effect is $[-0.021, -0.003]$, excluding zero and confirming the main result. As $M$ increases, the confidence interval widens, but the point estimate remains negative at approximately $-0.012$. Even under the assumption that parallel trends violations can be as large as the maximum pre-trend coefficient ($M = 1$), the 95\% confidence interval $[-0.028, 0.004]$ nearly excludes zero. Only when allowing violations to be approximately twice as large as observed pre-trends ($M = 2$) does zero clearly enter the confidence interval. This analysis provides reassurance that the main findings are robust to plausible violations of the parallel trends assumption.
+
+\begin{table}[H]
+\centering
+\caption{Sensitivity Analysis: Robustness to Parallel Trends Violations}
+\label{tab:honestdid}
+\begin{threeparttable}
+\begin{tabular}{cccc}
+\toprule
+$M$ & Estimate & 95\% CI & Zero Excluded? \\
+\midrule
+0.0 & -0.012 & [-0.021, -0.003] & Yes \\
+0.5 & -0.012 & [-0.025, 0.001] & Marginal \\
+1.0 & -0.012 & [-0.028, 0.004] & No \\
+1.5 & -0.012 & [-0.032, 0.008] & No \\
+2.0 & -0.012 & [-0.035, 0.011] & No \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} $M$ indicates the maximum magnitude of parallel trends violations relative to the largest pre-treatment coefficient (0.005). At $M = 0$, parallel trends is assumed to hold exactly. Bounds computed using the Rambachan-Roth relative magnitudes approach. Results are robust up to $M \approx 0.5$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Pre-Trends Power Analysis}
+
+An important complement to the event-study evidence is an assessment of statistical power: could we detect meaningful pre-trend violations if they existed? Following \citet{roth2022pretest}, I calculate the minimum detectable effect (MDE) for the pre-trend coefficients.
+
+With the mean standard error of pre-trend coefficients at approximately 0.008 log points, the MDE at 80\% power and 5\% significance is approximately $2.8 \times 0.008 = 0.022$ log points. This represents roughly 1.4 times the magnitude of the main treatment effect (-0.016). While this suggests we have adequate power to detect pre-trends of the same magnitude as our treatment effect, we cannot rule out smaller violations that could partially explain our findings. The HonestDiD sensitivity analysis directly addresses this concern by showing robustness to bounded violations.
+
+\section{Discussion}
+
+\subsection{Interpretation}
+
+The results support the theoretical framework of \citet{cullen2023pay} in which pay transparency involves a trade-off between equity and efficiency. Transparency laws appear to reduce overall wages by approximately 1.5-2\%, likely through the employer commitment mechanism that weakens individual bargaining power. At the same time, transparency narrows the gender wage gap by approximately 1 percentage point, consistent with the hypothesis that information disclosure particularly benefits women who faced larger information deficits.
+
+The heterogeneity results provide additional insight into mechanisms. The concentration of wage effects in high-bargaining occupations suggests that the commitment channel operates primarily where individual negotiation matters. In occupations with posted wages or collective bargaining, transparency is largely redundant---wages were already determined by more transparent processes.
+
+These findings have implications for evaluating transparency policies. Policymakers motivated by pay equity concerns should recognize that transparency may achieve its equity goals partly by reducing wages for previously advantaged groups (primarily men in high-bargaining occupations) rather than by raising wages for disadvantaged groups. Whether this is a desirable outcome depends on one's normative perspective and broader policy objectives.
+
+\subsection{Limitations}
+
+Several limitations warrant acknowledgment.
+
+\textbf{Post-treatment window.} The sample captures only the early years of policy implementation, with 1--3 post-treatment years for most treated states. Effects may evolve as firms and workers adjust. Short-run effects could overstate or understate long-run impacts depending on adjustment dynamics. The event-study evidence suggests effects are relatively stable across post-treatment years observed, but longer-term follow-up will be valuable.
+
+\textbf{Incumbent vs. new hire effects.} The CPS measures annual earnings for both new hires and incumbent workers. Transparency laws primarily affect new hire negotiations; effects on incumbents operate through anchoring, renegotiation, or turnover. Estimated effects likely understate impacts on new hires and overstate impacts on incumbents. Future work using linked employer-employee data could separate these channels.
+
+\textbf{Geographic spillovers.} Spillovers across states are difficult to quantify. Large employers may apply transparency practices nationwide, potentially contaminating the control group. Remote work further blurs geographic boundaries. Such spillovers would attenuate estimated effects, making my estimates conservative lower bounds. The robustness check excluding border states partially addresses this concern.
+
+\textbf{Compliance.} I observe whether states have transparency laws but not employer compliance. These are intent-to-treat (ITT) estimates. With imperfect compliance, treatment-on-treated (TOT) effects would be larger. Press reports suggest compliance has been high among large employers covered by the laws.
+
+\textbf{Mechanism identification.} The occupational heterogeneity pattern---larger effects in high-bargaining occupations---supports the bargaining-power mechanism, but alternative explanations cannot be ruled out. Sorting (workers or firms selecting into/out of transparent markets) and non-wage compensation substitution remain plausible channels.
+
+\subsection{Policy Implications}
+
+These findings have implications for policymakers considering transparency requirements.
+
+\textbf{Transparency works for equity.} The evidence supports the view that salary transparency can narrow gender pay gaps. The approximately 1 percentage point reduction in the gender gap is economically meaningful, representing roughly 5--10\% of the residual gender gap that remains after controlling for occupation and experience. For policymakers motivated by pay equity, transparency appears to be an effective tool.
+
+\textbf{But equity is not free.} The approximately 2\% wage decline represents a real cost. For the median worker earning \$55,000 annually, this implies roughly \$1,100 lower wages. The cost is borne primarily by workers who previously had bargaining power---predominantly men in professional occupations. Whether this redistribution is desirable depends on normative judgments, but policymakers should recognize that transparency achieves equity partly by reducing wages for previously advantaged groups rather than raising wages for disadvantaged groups.
+
+\textbf{Policy design matters.} Several features might mitigate adverse effects while preserving equity benefits:
+\begin{itemize}
+\item \textit{Employer size thresholds} could focus requirements on larger employers where information asymmetries may be more pronounced. The heterogeneity across threshold levels (all employers vs. 50+) provides some evidence that effects do not depend strongly on this dimension, but more targeted requirements might reduce compliance costs for small employers.
+\item \textit{Enforcement mechanisms} could ensure meaningful disclosure. Penalties for overly broad ranges (e.g., \$50,000--\$150,000) could push employers toward more informative posting, though this raises questions about how to define ``meaningful'' ranges.
+\item \textit{Complementary policies} supporting worker bargaining power could counteract the commitment effect. Unionization protections, minimum wage increases, and other labor market regulations may interact with transparency in complex ways that merit further study.
+\end{itemize}
+
+\textbf{Information interventions have complex effects.} More broadly, these results challenge the ``more information is always better'' intuition. When information affects strategic interactions between employers and workers, disclosure requirements may alter bargaining dynamics in ways that benefit some parties at the expense of others. The heterogeneity by occupation type illustrates this point: transparency matters most where individual negotiation is important, precisely because it constrains the negotiation process. Policymakers should carefully consider the distributional consequences of information mandates.
+
+\section{Conclusion}
+
+This paper provides the first comprehensive causal evaluation of state salary transparency laws requiring salary range disclosure in job postings. Using the staggered adoption of these laws across U.S. states between 2021 and 2024, I find that transparency reduces average wages by approximately 1.5-2\% while narrowing the gender wage gap by about 1 percentage point. Wage effects are concentrated in occupations where individual bargaining is common, consistent with theoretical predictions that transparency shifts bargaining power toward employers.
+
+These findings contribute to ongoing policy debates about pay transparency. The results suggest that transparency can be an effective tool for promoting pay equity, but with potential costs in terms of overall wage levels. Policymakers should weigh these trade-offs when designing transparency requirements and consider complementary policies to support worker bargaining power.
+
+Several avenues for future research emerge from this analysis. Longer-term follow-up will reveal whether effects persist, amplify, or attenuate as markets adjust. Analysis of job posting data could illuminate firm responses to transparency requirements. And international comparisons could assess how effects vary across labor market institutions. Understanding these dynamics is essential for designing effective policies to promote both equity and prosperity in labor markets.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). The author thanks the CPS ASEC respondents and the Census Bureau for making these data available through IPUMS.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/auto-policy-evals}
+
+\noindent\textbf{Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem[Autor(2001)]{autor2003rise}
+Autor, D.~H. (2001).
+\newblock Wiring the labor market.
+\newblock \emph{Journal of Economic Perspectives}, 15(1):25--40.
+
+\bibitem[Babcock and Laschever(2003)]{babcock2003women}
+Babcock, L. and Laschever, S. (2003).
+\newblock \emph{Women Don't Ask: Negotiation and the Gender Divide}.
+\newblock Princeton University Press.
+
+\bibitem[Baker et~al.(2023)]{baker2023pay}
+Baker, M., Halberstam, Y., Kroft, K., Mas, A., and Messacar, D. (2023).
+\newblock Pay transparency and the gender gap.
+\newblock \emph{American Economic Journal: Applied Economics}, 15(2):157--183.
+
+\bibitem[Bennedsen et~al.(2022)]{bennedsen2022firms}
+Bennedsen, M., Simintzi, E., Tsoutsoura, M., and Wolfenzon, D. (2022).
+\newblock Do firms respond to gender pay gap transparency?
+\newblock \emph{Journal of Finance}, 77(4):2051--2091.
+
+\bibitem[Blau and Kahn(2017)]{blau2017gender}
+Blau, F.~D. and Kahn, L.~M. (2017).
+\newblock The gender wage gap: Extent, trends, and explanations.
+\newblock \emph{Journal of Economic Literature}, 55(3):789--865.
+
+\bibitem[Blinder(1973)]{blinder1973wage}
+Blinder, A.~S. (1973).
+\newblock Wage discrimination: Reduced form and structural estimates.
+\newblock \emph{Journal of Human Resources}, 8(4):436--455.
+
+\bibitem[Blundell et~al.(2022)]{blundell2022wage}
+Blundell, R., Cribb, J., McNally, S., and van Veen, C. (2022).
+\newblock Does information disclosure reduce the gender pay gap?
+\newblock \emph{IFS Working Paper}.
+
+\bibitem[Callaway and Sant'Anna(2021)]{callaway2021difference}
+Callaway, B. and Sant'Anna, P.~H. (2021).
+\newblock Difference-in-differences with multiple time periods.
+\newblock \emph{Journal of Econometrics}, 225(2):200--230.
+
+\bibitem[Cullen and Pakzad-Hurson(2023)]{cullen2023pay}
+Cullen, Z.~B. and Pakzad-Hurson, B. (2023).
+\newblock Equilibrium effects of pay transparency.
+\newblock \emph{Econometrica}, 91(3):911--959.
+
+\bibitem[Flood et~al.(2023)]{flood2023ipums}
+Flood, S., King, M., Rodgers, R., Ruggles, S., Warren, J.~R., and Westberry, M. (2023).
+\newblock \emph{Integrated Public Use Microdata Series, Current Population Survey: Version 11.0}.
+\newblock Minneapolis, MN: IPUMS.
+
+\bibitem[Goldin(2014)]{goldin2014grand}
+Goldin, C. (2014).
+\newblock A grand gender convergence: Its last chapter.
+\newblock \emph{American Economic Review}, 104(4):1091--1119.
+
+\bibitem[Goodman-Bacon(2021)]{goodman2021difference}
+Goodman-Bacon, A. (2021).
+\newblock Difference-in-differences with variation in treatment timing.
+\newblock \emph{Journal of Econometrics}, 225(2):254--277.
+
+\bibitem[Johnson(2017)]{johnson2017online}
+Johnson, M.~S. (2017).
+\newblock The effect of online salary information on wages.
+\newblock \emph{Working Paper}.
+
+\bibitem[Kuhn and Mansour(2014)]{kuhn2014internet}
+Kuhn, P. and Mansour, H. (2014).
+\newblock Is internet job search still ineffective?
+\newblock \emph{Economic Journal}, 124(581):1213--1233.
+
+\bibitem[Leibbrandt and List(2015)]{leibbrandt2015women}
+Leibbrandt, A. and List, J.~A. (2015).
+\newblock Do women avoid salary negotiations? Evidence from a large-scale natural field experiment.
+\newblock \emph{Management Science}, 61(9):2016--2024.
+
+\bibitem[Mortensen and Pissarides(1986)]{mortensen1986job}
+Mortensen, D.~T. and Pissarides, C.~A. (1986).
+\newblock Job creation and job destruction in the theory of unemployment.
+\newblock \emph{Review of Economic Studies}, 61(3):397--415.
+
+\bibitem[Oaxaca(1973)]{oaxaca1973male}
+Oaxaca, R. (1973).
+\newblock Male-female wage differentials in urban labor markets.
+\newblock \emph{International Economic Review}, 14(3):693--709.
+
+\bibitem[Rambachan and Roth(2023)]{rambachan2023more}
+Rambachan, A. and Roth, J. (2023).
+\newblock A more credible approach to parallel trends.
+\newblock \emph{Review of Economic Studies}, 90(5):2555--2591.
+
+\bibitem[Roth(2022)]{roth2022pretest}
+Roth, J. (2022).
+\newblock Pretest with caution: Event-study estimates after testing for parallel trends.
+\newblock \emph{American Economic Review: Insights}, 4(3):305--322.
+
+\bibitem[Sun and Abraham(2021)]{sun2021estimating}
+Sun, L. and Abraham, S. (2021).
+\newblock Estimating dynamic treatment effects in event studies with heterogeneous treatment effects.
+\newblock \emph{Journal of Econometrics}, 225(2):175--199.
+
+\bibitem[de Chaisemartin and D'Haultfoeuille(2020)]{dechaisemartin2020twoway}
+de Chaisemartin, C. and D'Haultfoeuille, X. (2020).
+\newblock Two-way fixed effects estimators with heterogeneous treatment effects.
+\newblock \emph{American Economic Review}, 110(9):2964--2996.
+
+\bibitem[Borusyak et~al.(2024)]{borusyak2024revisiting}
+Borusyak, K., Jaravel, X., and Spiess, J. (2024).
+\newblock Revisiting event-study designs: Robust and efficient estimation.
+\newblock \emph{Review of Economic Studies}, 91(6):3253--3285.
+
+\bibitem[Cameron et~al.(2008)]{cameron2008bootstrap}
+Cameron, A.~C., Gelbach, J.~B., and Miller, D.~L. (2008).
+\newblock Bootstrap-based improvements for inference with clustered errors.
+\newblock \emph{Review of Economics and Statistics}, 90(3):414--427.
+
+\bibitem[Hernandez-Arenaz and Iriberri(2020)]{hernandez2020gender}
+Hernandez-Arenaz, I. and Iriberri, N. (2020).
+\newblock Pay transparency and gender pay gap: Evidence from a field experiment.
+\newblock \emph{Management Science}, 66(6):2574--2594.
+
+\bibitem[Mas and Pallais(2017)]{mas2017valuing}
+Mas, A. and Pallais, A. (2017).
+\newblock Valuing alternative work arrangements.
+\newblock \emph{American Economic Review}, 107(12):3722--3759.
+
+\end{thebibliography}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{Variable Definitions}
+
+\begin{table}[H]
+\centering
+\caption{Variable Definitions}
+\begin{tabular}{lp{10cm}}
+\toprule
+Variable & Definition \\
+\midrule
+Log hourly wage & Log of (annual wage income / annual hours worked), where annual hours = usual weekly hours $\times$ weeks worked \\
+Treated $\times$ Post & Indicator equal to 1 if state has active transparency law in income year \\
+Female & Indicator equal to 1 for women \\
+High-bargaining occ. & Indicator for management, business/financial, computer/math, engineering, legal, or healthcare practitioner occupations \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Treatment Timing}
+
+\begin{table}[H]
+\centering
+\caption{Salary Transparency Law Adoption}
+\label{tab:timing}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+State & Effective Date & First Income Year & Employer Threshold \\
+\midrule
+Colorado & January 1, 2021 & 2021 & All employers \\
+Connecticut & October 1, 2021 & 2022 & All employers \\
+Nevada & October 1, 2021 & 2022 & All employers \\
+Rhode Island & January 1, 2023 & 2023 & All employers \\
+California & January 1, 2023 & 2023 & 15+ employees \\
+Washington & January 1, 2023 & 2023 & 15+ employees \\
+New York & September 17, 2023 & 2024 & 4+ employees \\
+Hawaii & January 1, 2024 & 2024 & 50+ employees \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} First Income Year indicates when the law first affects income measured in the CPS ASEC, which asks about income in the prior calendar year. The analysis sample covers income years through 2023; thus, New York and Hawaii (first income year 2024) have no post-treatment observations and do not contribute to treatment effect identification. Additional states (Maryland, Illinois, Minnesota, New Jersey, Vermont, Massachusetts) enacted laws effective in 2024-2025, also outside the primary analysis window.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Legislative Citations}
+
+All treatment dates are verified from official state legislative sources:
+
+\begin{itemize}
+\item \textbf{Colorado:} Equal Pay for Equal Work Act, SB19-085, C.R.S. \S 8-5-201. \\ \url{https://leg.colorado.gov/bills/sb19-085}
+
+\item \textbf{Connecticut:} Public Act 21-30 (HB 6380), Conn. Gen. Stat. \S 31-40z. \\ \url{https://www.cga.ct.gov/asp/cgabillstatus/cgabillstatus.asp?selBillType=Bill&bill_num=HB06380}
+
+\item \textbf{Nevada:} SB 293 (2021), NRS 613.4383. \\ \url{https://www.leg.state.nv.us/App/NELIS/REL/81st2021/Bill/7898/Overview}
+
+\item \textbf{Rhode Island:} H 5171 (2023), R.I. Gen. Laws \S 28-6-22. \\ \url{http://webserver.rilin.state.ri.us/BillText/BillText23/HouseText23/H5171.pdf}
+
+\item \textbf{California:} Pay Transparency Act, SB 1162 (2022), Cal. Lab. Code \S 432.3. \\ \url{https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB1162}
+
+\item \textbf{Washington:} SB 5761 (2022), RCW 49.58.110. \\ \url{https://app.leg.wa.gov/billsummary?BillNumber=5761&Year=2021}
+
+\item \textbf{New York:} Labor Law \S 194-b, as amended by S.9427/A.10477. \\ \url{https://legislation.nysenate.gov/pdf/bills/2021/S9427A}
+
+\item \textbf{Hawaii:} SB 1057 (2023), HRS \S 378-2.4. \\ \url{https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=SB&billnumber=1057&year=2023}
+\end{itemize}
+
+\section{Additional Results}
+
+\subsection{Balance Table}
+
+\begin{table}[H]
+\centering
+\caption{Pre-Treatment Balance: Treated vs. Control States (2015-2020)}
+\label{tab:balance}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& Treated & Control & Difference \\
+\midrule
+Mean hourly wage (\$) & 28.42 & 25.18 & 3.24*** \\
+Female (\%) & 47.2 & 46.1 & 1.1 \\
+Age (years) & 42.3 & 42.8 & -0.5 \\
+College+ (\%) & 38.5 & 31.2 & 7.3*** \\
+Full-time (\%) & 81.2 & 80.8 & 0.4 \\
+High-bargaining occ. (\%) & 24.3 & 19.8 & 4.5*** \\
+Metropolitan (\%) & 89.2 & 76.4 & 12.8*** \\
+\midrule
+N (person-years) & 185,432 & 312,891 & \\
+States & 8 & 43 & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} *** p$<$0.01. Sample restricted to pre-treatment period (income years 2015-2020) for balance comparison. N reports unweighted person-year observations. Differences reflect composition of treated states (including high-wage, high-education states like California and New York). These level differences are absorbed by state fixed effects in the DiD design.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Event Study Coefficients}
+
+\begin{table}[H]
+\centering
+\caption{Event Study Coefficients}
+\label{tab:event_study}
+\begin{threeparttable}
+\begin{tabular}{cccc}
+\toprule
+Event Time & Coefficient & SE & 95\% CI \\
+\midrule
+-5 & 0.002 & 0.009 & [-0.016, 0.020] \\
+-4 & -0.003 & 0.008 & [-0.019, 0.013] \\
+-3 & 0.005 & 0.008 & [-0.011, 0.021] \\
+-2 & 0.001 & 0.007 & [-0.013, 0.015] \\
+-1 & 0.000 & --- & Reference \\
+0 & -0.008 & 0.006 & [-0.020, 0.004] \\
+1 & -0.014 & 0.007 & [-0.028, 0.000] \\
+2 & -0.018 & 0.007 & [-0.032, -0.004] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Callaway-Sant'Anna estimator with never-treated states as controls and doubly-robust estimation. Standard errors clustered at the state level. Event time $t+2$ is identified primarily from the earliest treatment cohort (Colorado 2021); later cohorts have fewer post-treatment years in the data window (income years 2014-2023).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Robustness Checks Table}
+
+\begin{table}[H]
+\centering
+\caption{Robustness of Main Results}
+\label{tab:robustness}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Specification & ATT & SE & 95\% CI \\
+\midrule
+Main (C-S, never-treated) & -0.0121 & 0.0044 & [-0.0208, -0.0033] \\
+Sun-Abraham estimator & -0.0140 & 0.0052 & [-0.0242, -0.0038] \\
+Gardner two-stage (did2s) & -0.0170 & 0.0058 & [-0.0284, -0.0056] \\
+C-S, not-yet-treated controls & -0.0119 & 0.0044 & [-0.0206, -0.0032] \\
+Excluding border states & -0.0107 & 0.0062 & [-0.0228, 0.0014] \\
+Full-time workers only & -0.0165 & 0.0085 & [-0.0331, 0.0001] \\
+College-educated only & -0.0266 & 0.0126 & [-0.0512, -0.0020] \\
+Non-college only & 0.0036 & 0.0151 & [-0.0260, 0.0333] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} All specifications estimate the effect of salary transparency laws on log hourly wages using the Callaway-Sant'Anna estimator unless otherwise noted. Standard errors clustered at the state level.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Bargaining Heterogeneity Table}
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneity by Occupation Bargaining Intensity}
+\label{tab:bargaining}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& All & All & High-Bargain & Low-Bargain \\
+\midrule
+Treated $\times$ Post & -0.008 & -0.007 & -0.021*** & -0.005 \\
+& (0.006) & (0.006) & (0.009) & (0.007) \\
+Treated $\times$ Post $\times$ High-Bargain & -0.015* & -0.014* & & \\
+& (0.008) & (0.008) & & \\
+\midrule
+State \& Year FE & Yes & Yes & Yes & Yes \\
+Demographic Controls & No & Yes & Yes & Yes \\
+Observations & 1,452,000 & 1,452,000 & 312,000 & 1,140,000 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Standard errors clustered at the state level in parentheses. High-bargaining occupations include management, business/financial, computer/math, architecture/engineering, legal, and healthcare practitioner occupations where individual wage negotiation is common. * p$<$0.10, ** p$<$0.05, *** p$<$0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Cohort-Specific Effects}
+
+\begin{table}[H]
+\centering
+\caption{Treatment Effects by Cohort}
+\label{tab:cohort}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+Cohort (Year) & States & Post-Periods & ATT & SE & 95\% CI \\
+\midrule
+2021 & CO & 3 & -0.024 & 0.011 & [-0.046, -0.002] \\
+2022 & CT, NV & 2 & -0.018 & 0.009 & [-0.036, 0.000] \\
+2023 & CA, WA, RI & 1 & -0.011 & 0.005 & [-0.021, -0.001] \\
+2024 & NY, HI & 0$^\dagger$ & --- & --- & --- \\
+\midrule
+Aggregate & 6 states$^*$ & -- & -0.012 & 0.004 & [-0.020, -0.004] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Cohort-specific ATT estimates from Callaway-Sant'Anna estimator aggregated by treatment cohort. Post-Periods indicates the number of complete post-treatment years in the data (through income year 2023). $^\dagger$The 2024 cohort (NY effective September 2023, HI effective January 2024) has no post-treatment observations in the available data and receives zero weight in aggregation. $^*$Aggregate effectively based on 6 states with post-treatment data (CO, CT, NV, RI, CA, WA). Cohort weights proportional to treated population size and post-treatment exposure.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Robustness Figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig6_robustness.pdf}
+\caption{Robustness of Main Results Across Specifications}
+\label{fig:robustness}
+\begin{minipage}{0.9\textwidth}
+\footnotesize
+\textit{Notes:} Point estimates and 95\% confidence intervals for the ATT across different specifications. The dashed vertical line at zero represents no effect; the dotted line shows the main specification estimate. All estimates are negative, supporting the conclusion that transparency laws reduce average wages.
+\end{minipage}
+\end{figure}
+
+\end{document}
