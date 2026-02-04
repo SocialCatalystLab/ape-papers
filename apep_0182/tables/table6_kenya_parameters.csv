@@ -1,0 +1,9 @@
+Parameter,Value,Source
+VAT rate (standard),16%,Kenya Revenue Authority
+Effective income tax (formal sector),18.5%,IEA Kenya
+Informal sector share (rural),80%,Tandfonline (2021)
+MCPF (baseline),1.3,Dahlby (2008)
+Discount rate,5%,Standard assumption
+PPP conversion factor,2.515,World Bank ICP
+Transfer amount,"$1,000 USD",GiveDirectly
+Admin cost rate,15%,GiveDirectly financials

@@ -1,0 +1,17 @@
+Component,Value,Notes
+Panel A: Willingness to Pay,,
+  Direct transfer (net of admin),$850,Transfer × (1 - 0.15 admin rate)
+  Spillover WTP (per recipient),$49,Non-recipient consumption gain × ratio
+  Total WTP,$899,Sum of direct + spillover
+,,
+Panel B: Net Government Cost,,
+  Gross transfer,"$1,000",GiveDirectly transfer amount
+  Less: VAT revenue (PV),-$11,16% VAT × consumption gain × 50% coverage × 3 years
+  Less: Income tax (PV),-$12,18.5% × earnings gain × 20% formal × 5 years
+  Net cost (no MCPF),$977,Gross - fiscal externalities
+  Net cost (MCPF = 1.3),$1270,Net cost × MCPF
+,,
+Panel C: MVPF,,
+  Direct WTP / Net cost,0.87,Baseline specification
+  Total WTP / Net cost,0.92,Including GE spillovers
+  Direct WTP / Net cost (MCPF),0.67,Government financing adjustment

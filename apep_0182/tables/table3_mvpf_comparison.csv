@@ -1,0 +1,5 @@
+Policy,Category,Target,Country,MVPF
+EITC expansion (adults),Tax credits,Adults,United States,0.92
+Kenya UCT (GiveDirectly),Cash transfers,Adults,Kenya,0.87
+Food stamps (SNAP),In-kind transfers,Adults,United States,0.76
+TANF (cash welfare),Cash transfers,Adults,United States,0.65

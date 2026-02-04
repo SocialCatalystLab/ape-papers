@@ -1,0 +1,18 @@
+{
+  "paper_id": "apep_0182",
+  "title": "The Marginal Value of Public Funds for Unconditional Cash Transfers in a Developing Country: Evidence from Kenya (v2)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-04T00:42:27.486359",
+  "parent_paper_id": "apep_0180",
+  "is_revision": true,
+  "version": 2,
+  "paper_family_id": "apep_0180",
+  "original_contributor": "SocialCatalystLab",
+  "revision_rationale": "User requested implementation of referee suggestions with focus on AER-quality prose"
+}

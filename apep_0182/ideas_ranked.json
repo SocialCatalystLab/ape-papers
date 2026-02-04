@@ -1,0 +1,90 @@
+{
+  "timestamp": "2026-02-03T23:42:55.025529",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3259,
+    "output_tokens": 1678,
+    "total_tokens": 4937
+  },
+  "ideas_file": "/Users/dyanag/auto-policy-evals/output/paper_164/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "The MVPF of Unconditional Cash Transfers in a Developing Country: Evidence from Kenya's GiveDirectly Program",
+      "score": 76,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "transparent financing/tax-incidence assumptions",
+        "sensitivity analysis on persistence",
+        "GE/WTP mapping",
+        "clear separation of private vs. social surplus to avoid double counting"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "The MVPF of Nurse-Family Partnership in the United States",
+      "score": 64,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "demonstrating what MVPF adds beyond existing cost-benefit work",
+        "pre-specifying valuation choices for non-market outcomes",
+        "assembling consistent lifetime fiscal/benefit streams across trials"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "The MVPF of Denmark's \"Start Aid\" Refugee Integration Policy",
+      "score": 56,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "secured register access",
+        "strong no-manipulation/continuity diagnostics",
+        "explicit accounting for any coincident reforms",
+        "compositional shifts"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "The MVPF of Finland's Universal Basic Income Experiment",
+      "score": 46,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "The MVPF of Unconditional Cash Transfers in a Developing Country: Evidence from Kenya's GiveDirectly Program",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "transparent financing/tax-incidence assumptions",
+        "sensitivity analysis on persistence",
+        "GE/WTP mapping",
+        "clear separation of private vs. social surplus to avoid double counting"
+      ]
+    },
+    {
+      "idea": "The MVPF of Nurse-Family Partnership in the United States",
+      "rank": 2,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "demonstrating what MVPF adds beyond existing cost-benefit work",
+        "pre-specifying valuation choices for non-market outcomes",
+        "assembling consistent lifetime fiscal/benefit streams across trials"
+      ]
+    },
+    {
+      "idea": "The MVPF of Denmark's \"Start Aid\" Refugee Integration Policy",
+      "rank": 3,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "secured register access",
+        "strong no-manipulation/continuity diagnostics",
+        "explicit accounting for any coincident reforms",
+        "compositional shifts"
+      ]
+    }
+  ]
+}

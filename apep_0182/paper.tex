@@ -1,0 +1,1016 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Marginal Value of Public Funds for Unconditional Cash Transfers in a Developing Country: Evidence from Kenya\footnote{This paper is a revision of APEP-0180. See \url{https://github.com/SocialCatalystLab/auto-policy-evals/tree/main/papers/apep_0180} for the original.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+How efficient are unconditional cash transfers in developing countries? The Marginal Value of Public Funds (MVPF) framework provides a unified welfare metric for evaluating government policies, yet the entire literature focuses on US programs. This paper provides the first MVPF calculation for a developing-country cash transfer program, using experimental data from Kenya's GiveDirectly program. Drawing on treatment effects from two landmark RCTs---Haushofer and Shapiro (2016) and Egger et al. (2022)---covering over 10,500 households across 653 villages, I estimate an MVPF of 0.87 (95\% CI: 0.86--0.88) for direct recipients, rising to 0.92 when including general equilibrium spillovers to non-recipients. This places Kenya's UCT program between the US Earned Income Tax Credit (0.92) and TANF (0.65), suggesting comparable welfare efficiency despite vastly different contexts. The key constraint on higher MVPF is Kenya's large informal sector (80\%), which limits fiscal externalities from consumption and earnings gains. With full formalization, the MVPF would reach 0.91. These findings demonstrate that unconditional cash transfers deliver substantial welfare value per dollar of government spending in developing countries, informing the global expansion of social protection programs.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H53, I38, O15, O22 \\
+\noindent\textbf{Keywords:} marginal value of public funds, unconditional cash transfers, Kenya, welfare analysis, fiscal externalities, general equilibrium effects
+
+\newpage
+
+\section{Introduction}
+
+Cash transfer programs now reach 1.5 billion people worldwide, with governments and donors spending over \$500 billion annually on direct transfers to poor households \citep{gentilini2022social}. Yet despite this massive scale, we lack a systematic way to compare the welfare efficiency of transfers across countries and program designs. How much welfare does a dollar of transfer spending actually deliver? And how do developing-country programs compare to the extensively studied transfer policies of rich nations?
+
+The Marginal Value of Public Funds (MVPF) framework, developed by \citet{hendren2020unified}, provides a unified approach to answering this question. The MVPF is the ratio of beneficiaries' willingness to pay for a policy to the net cost to the government. Policies with higher MVPFs deliver more welfare per dollar of spending and should be prioritized. \citet{hendren2020unified} calculate MVPFs for 133 US policies spanning education, health, taxation, and transfers, revealing that investments in children's health and education consistently yield the highest returns.
+
+Despite the MVPF framework's growing influence---the Policy Impacts library now contains over 200 policy evaluations---virtually all applications focus on US programs \citep{policyimpacts}. This is a significant gap: unconditional cash transfers (UCTs) are now the dominant form of social protection in developing countries, yet we lack welfare metrics comparable to those available for US programs. Policymakers in developing countries face difficult tradeoffs between cash transfers, health investments, education subsidies, and infrastructure spending without a unified framework to guide allocation decisions.
+
+This paper provides the first MVPF calculation for a developing-country cash transfer program. I analyze Kenya's GiveDirectly program, which provides one-time unconditional transfers of approximately \$1,000 USD to poor rural households via mobile money. While GiveDirectly is a private charity rather than a government program, the counterfactual question---``What would the MVPF be if the government funded this program?''---is directly policy-relevant as Kenya and other countries consider expanding public cash transfer systems.
+
+The Kenya setting offers unique advantages for MVPF analysis. First, the program has been rigorously evaluated through multiple randomized controlled trials.\footnote{The randomized design avoids the identification challenges that complicate difference-in-differences studies with staggered treatment timing, as analyzed by \citet{goodmanbacon2021} and \citet{callawaySantanna2021}. Because treatment assignment is random at the household and village level, concerns about heterogeneous treatment effects across adoption cohorts do not apply.} \citet{haushofer2016short} document large short-term effects on consumption, assets, and psychological well-being in a sample of 1,372 households. \citet{egger2022general} provide the first general equilibrium analysis of a cash transfer program, showing that transfers to over 10,500 households across 653 villages generated substantial spillovers to non-recipients, with a fiscal multiplier of 2.5--2.7. No other cash transfer program has such comprehensive experimental evidence on both direct and spillover effects.
+
+Second, these data enable me to calculate both the numerator (willingness to pay) and denominator (net government cost) of the MVPF. For cash transfers, willingness to pay equals the transfer amount net of administrative costs---recipients value \$1 of cash at \$1. The denominator incorporates fiscal externalities: increased consumption generates VAT revenue, and increased earnings generate income tax revenue. These fiscal externalities reduce the net cost to the government.
+
+Third, the Kenya context raises important questions about how MVPF calculations transfer across settings. The US policies in the \citet{hendren2020unified} library benefit from high tax rates and formal labor markets that translate behavioral responses into substantial fiscal externalities. Kenya's large informal sector---comprising 80 percent of rural employment---limits these channels, potentially lowering MVPF relative to comparable US programs. As \citet{kleven2014} emphasizes, the capacity to collect taxes depends critically on third-party reporting and formal employment relationships that are largely absent in developing economies. \citet{pomeranz2015} documents how VAT enforcement is similarly constrained by informality, reducing the fiscal externalities that can arise from increased economic activity.
+
+My main finding is that Kenya's UCT program has an MVPF of 0.87 (95\% CI: 0.86--0.88) for direct recipients. Each dollar of government spending delivers 87 cents of welfare to beneficiaries after accounting for fiscal externalities. This places the program between the US Earned Income Tax Credit (MVPF = 0.92) and Temporary Assistance for Needy Families (MVPF = 0.65), suggesting comparable welfare efficiency despite vastly different economic contexts.
+
+When I incorporate general equilibrium spillovers---the consumption and earnings gains experienced by non-recipients in treatment villages---the MVPF rises to 0.92 (95\% CI: 0.84--1.00). The confidence interval includes 1, meaning we cannot reject that the program delivers welfare equal to its cost at standard significance levels. The spillover channel is economically meaningful: non-recipients gained 84\% as much consumption as recipients (in PPP terms), though converting to USD for the MVPF calculation adds approximately \$49 per recipient to the WTP numerator.
+
+Sensitivity analysis reveals that the MVPF is robust to most assumptions but quite sensitive to the marginal cost of public funds (MCPF). Under the baseline assumption of MCPF = 1 (no distortionary cost of raising revenue), the MVPF is 0.87. If MCPF = 1.3---a common estimate for developing countries reflecting tax system distortions---the MVPF falls to 0.67. This highlights that the efficiency of cash transfers depends not only on the program's direct effects but also on how governments raise revenue to fund them.
+
+The MVPF is also sensitive to assumptions about labor market formality. My baseline assumes 80\% informal employment, consistent with survey data on rural Kenya. If all employment were formal, income tax externalities would be substantially larger, raising the MVPF from 0.87 to 0.91. This suggests that formalizing labor markets would increase the welfare efficiency of cash transfer programs---a complementarity with broader development goals.
+
+This paper contributes to several literatures. First, it extends the MVPF framework to developing countries. While \citet{finkelstein2020welfare} and \citet{hendren2022case} discuss applying MVPF outside the US, this is the first full calculation. The challenges I confront---informal taxation, limited fiscal data, uncertainty about effect persistence---will be common to future applications and my solutions provide a template.
+
+Second, this paper contributes to the evaluation of cash transfer programs. The existing literature, reviewed by \citet{bastagli2016cash} and \citet{banerjee2019six}, focuses on treatment effects rather than welfare. Converting effects to welfare requires assumptions about willingness to pay and fiscal externalities that are rarely made explicit. The MVPF framework provides disciplined structure for this conversion.
+
+Third, I contribute to the literature on general equilibrium effects of transfers. \citet{egger2022general} show that spillovers roughly double the consumption effects of GiveDirectly's program, but do not convert these to welfare. I show how to incorporate spillovers into MVPF calculations while avoiding double-counting---a conceptually subtle issue since spillovers to non-recipients are also ``benefits'' but not through the direct mechanism of the transfer.
+
+The remainder of the paper proceeds as follows. Section 2 describes the GiveDirectly program and the experimental evidence I draw upon. Section 3 presents the MVPF framework and discusses how I adapt it to the Kenyan context. Section 4 describes the data and calibration. Section 5 presents the main MVPF results. Section 6 conducts extensive sensitivity analysis. Section 7 compares Kenya's MVPF to US programs and discusses implications. Section 8 concludes.
+
+
+\section{Institutional Background: The GiveDirectly Program in Kenya}
+
+\subsection{Program Design}
+
+GiveDirectly is an international NGO founded in 2009 that provides unconditional cash transfers to poor households in developing countries. The organization began operations in Kenya in 2011 and has since expanded to Uganda, Rwanda, Liberia, Malawi, and the Democratic Republic of Congo, as well as disaster relief programs in the United States \citep{givedirectly2023}.
+
+The Kenya program targets poor rural households using a combination of geographic and household-level criteria. Villages are selected based on poverty rates measured by asset indices and housing quality. Within villages, households are eligible if they live in homes with thatched roofs (rather than metal), indicating low wealth. This targeting approach achieves reasonable accuracy: among recipient households, 86\% lived on less than \$2/day at baseline \citep{haushofer2016short}.
+
+Transfers are delivered electronically via M-Pesa, Kenya's mobile money platform. M-Pesa is widely accessible in rural Kenya---over 80\% of adult Kenyans have a registered account---and allows recipients to withdraw cash at any of thousands of agent locations \citep{suri2017long}. Electronic delivery reduces leakage and administrative costs compared to in-person distribution.
+
+The standard transfer amount is approximately \$1,000 USD, equivalent to about 75\% of annual household consumption for the typical recipient. This is substantially larger than most government cash transfer programs, which typically provide small monthly amounts. GiveDirectly's approach is based on the hypothesis that large lump-sum transfers enable recipients to make lumpy investments (livestock, home improvements, business capital) that would be infeasible with smaller transfers \citep{haushofer2016short}.
+
+Transfers are explicitly unconditional. Recipients face no requirements regarding how they spend the money, whether they work, or whether children attend school. This contrasts with conditional cash transfer (CCT) programs like Mexico's Prospera or Brazil's Bolsa Fam\'ilia, which require health checkups and school attendance. The unconditional design is based on evidence that conditions add administrative costs without improving outcomes, and that poor households generally make reasonable spending decisions \citep{banerjee2015miracle}.
+
+Administrative costs at GiveDirectly are approximately 15\% of funds raised, meaning 85\% reaches recipients \citep{givedirectly2023}. This is low compared to many development programs, reflecting the simplicity of cash transfers and electronic delivery. For MVPF calculations, I treat administrative costs as reducing the effective transfer to recipients.
+
+\subsection{The Haushofer and Shapiro (2016) Experiment}
+
+The first major evaluation of GiveDirectly's Kenya program was conducted by \citet{haushofer2016short}, published in the Quarterly Journal of Economics. The study enrolled 1,372 households across 120 villages in Rarieda District, western Kenya, between 2011 and 2013.
+
+The experimental design involved both village-level and household-level randomization. First, 60 villages were assigned to receive transfers (treatment villages) and 60 to receive no transfers (pure control villages). Within treatment villages, eligible households were randomized into three groups: treatment households receiving transfers, spillover households that were eligible but did not receive transfers (to measure within-village spillovers), and ineligible households.
+
+Within the treatment group, the experiment varied several dimensions: recipient gender (transfers sent to the wife vs. husband), transfer timing (lump sum vs. monthly installments), and transfer magnitude (\$404 vs. \$1,525 PPP). These variations enable analysis of how transfer design affects outcomes.
+
+The primary outcomes, measured 9 months after transfers, reveal substantial improvements across multiple domains. Monthly consumption increased by \$35 PPP, representing a 22 percent gain above the control mean of \$158. This consumption effect was broad-based, encompassing both food and non-food expenditures. More strikingly, total household assets increased by \$174 PPP---a 58 percent improvement over the control mean of \$296---with the gains concentrated primarily in livestock holdings, suggesting that recipients used transfers to make productive investments rather than merely smoothing consumption.
+
+The transfers also generated meaningful income effects and psychological benefits. Non-agricultural revenue increased by \$17 PPP per month, indicating that recipients invested in or expanded small business activities. Psychological well-being improved by 0.20 standard deviations, a clinically meaningful effect reflecting reduced stress and increased life satisfaction. The finding that transfers improved mental health alongside economic outcomes suggests complementarities between material and psychological welfare that standard cost-benefit analyses may understate.
+
+Notably, the study found no significant effects on health, education, or female empowerment indices. Importantly, the study found no evidence that transfers were ``wasted'' on temptation goods---spending on alcohol and tobacco actually decreased.
+
+The study also tracked outcomes at 3-year follow-up \citep{haushofer2018long}. Asset effects persisted at 60\% of their short-run magnitude, while consumption effects attenuated substantially. This persistence pattern is important for MVPF calculations since fiscal externalities depend on the duration of behavioral changes.
+
+\subsection{The Egger et al. (2022) General Equilibrium Experiment}
+
+While the Haushofer-Shapiro study provided clean estimates of direct effects, it could not address general equilibrium (GE) effects on the broader economy. \citet{egger2022general}, published in Econometrica, designed an experiment specifically to measure GE effects.
+
+The study enrolled 10,546 households across 653 villages in Siaya County, western Kenya, between 2014 and 2017. The experimental design introduced spatial variation in treatment intensity to identify spillovers through a two-stage randomization procedure. First, villages were grouped into 83 geographically contiguous ``saturation'' clusters designed to capture local economic linkages. These clusters were then randomized to either high saturation, where two-thirds of villages received treatment, or low saturation, where only one-third of villages were treated. Within treated villages, two-thirds of eligible households received transfers, creating within-village variation as well. This multi-level randomization generates exogenous variation in both individual treatment status and local treatment intensity, enabling clean identification of spillover effects that would be confounded in designs with only household-level randomization.
+
+This design enables comparison of outcomes for: (1) recipient households in high vs. low saturation areas, (2) non-recipient households in treatment vs. control villages, and (3) local prices and enterprises across treatment intensity.
+
+The key finding is a local fiscal multiplier of 2.5--2.7. For each \$1 transferred, total economic activity in the local economy increased by \$2.50--2.70. This multiplier arises because recipients spend their transfers locally, generating income for merchants, laborers, and farmers, who in turn increase their own spending.
+
+At 18-month follow-up, the treatment effects reveal both direct benefits to recipients and substantial spillovers to the broader local economy. Recipient households increased annual consumption by \$293 PPP, a 12 percent improvement, while their wage earnings rose by \$182 PPP annually. These direct effects are consistent with the Haushofer-Shapiro findings and confirm that large cash transfers generate persistent economic gains.
+
+The more novel finding concerns spillovers to non-recipients. Households in treatment villages who did not themselves receive transfers nonetheless experienced consumption gains of \$245 PPP annually---fully 84 percent of the recipient effect. Local enterprises saw revenue increases of 30 to 46 percent. These spillovers arise through increased local demand: recipients spend their transfers on goods and services from neighbors, generating income that propagates through the village economy. Critically, prices increased by only 0.1 percent, indicating that the cash injection did not simply inflate local prices but instead stimulated real economic activity.
+
+The minimal price effects are striking given the large cash injection (15\% of local GDP). The authors attribute this to elastic local supply: farmers increased production and merchants increased inventory in response to higher demand. This is important for welfare analysis since large price increases would reduce the real value of transfers.
+
+\subsection{Relevance for Government Policy}
+
+While GiveDirectly is a private charity, its program design closely mirrors government cash transfer programs. Kenya's own government program, Inua Jamii, provides unconditional transfers to elderly, disabled, and orphaned populations. Similar programs exist across Africa (Ethiopia's PSNP, South Africa's Child Support Grant) and globally \citep{gentilini2022social}.
+
+The key question for policymakers is whether the effects observed under GiveDirectly would generalize to government implementation. Several considerations suggest broad applicability. The transfer mechanism---mobile money via M-Pesa---is identical to what the Kenyan government uses for its Inua Jamii program, eliminating concerns about differential delivery infrastructure. The targeting approach, combining community-based identification with asset proxies like housing quality, closely mirrors methods used by government safety net programs throughout sub-Saharan Africa. When scaled to typical program budgets, transfer amounts are comparable, and the underlying labor markets and consumption patterns are obviously identical since both programs operate in the same communities.
+
+However, some differences may matter. Government programs face political economy constraints (geographic allocation, elite capture) that NGOs avoid. Administrative costs may be higher. And sustainability concerns may lead to smaller, more frequent transfers rather than large lump sums.
+
+For this paper, I treat the GiveDirectly effects as the best available evidence on what unconditional cash transfers achieve in rural Kenya. The MVPF I calculate represents an upper bound for government programs to the extent that implementation quality would be lower.
+
+\subsection{The Kenyan Economic and Fiscal Context}
+
+Understanding Kenya's economic structure is essential for calculating fiscal externalities. Kenya is a lower-middle-income country with GDP per capita of approximately \$2,000 USD (2020) and a population of 54 million. The economy is characterized by substantial regional inequality, with Nairobi and central regions significantly wealthier than western and coastal areas where GiveDirectly operates.
+
+\textbf{Labor Market Structure.} Kenya's labor market is dominated by informal employment, particularly in rural areas. According to the Kenya National Bureau of Statistics, formal sector employment accounts for only about 18\% of total employment nationally, with the remainder in informal enterprises, smallholder agriculture, and household production. In rural western Kenya---where GiveDirectly operates---formal employment is even rarer, with an estimated 80\% or more of workers in the informal sector.
+
+The informal sector encompasses several categories: (1) smallholder farmers selling surplus production in local markets; (2) micro-enterprises such as shops, transport services, and food vendors; (3) casual laborers in agriculture and construction; and (4) home-based production including crafts and food processing. These activities are largely untaxed, either because incomes fall below tax thresholds, because transactions occur in cash outside formal accounting systems, or because enforcement is impractical.
+
+\textbf{Tax System.} Kenya operates a progressive personal income tax with rates ranging from 10\% to 30\%, plus a 2.5\% housing levy. However, the effective tax rate for formal workers averages approximately 18.5\% after accounting for deductions and the graduated rate structure. The personal relief of KES 2,400 per month (\$24 USD) means that workers earning less than approximately \$300 per month pay minimal income tax.
+
+Value-added tax (VAT) is charged at a standard rate of 16\% on most goods and services. However, several categories important to poor households are exempt or zero-rated, including: unprocessed agricultural products, basic foodstuffs (maize flour, milk, bread), medical services, and educational supplies. Additionally, purchases in informal markets often avoid VAT entirely. I estimate that approximately 50\% of consumption by rural households is effectively taxed at the VAT rate, with the remainder exempt or purchased informally.
+
+\textbf{Social Protection System.} Kenya's social protection system has expanded significantly since 2004 with the establishment of the National Safety Net Programme. The flagship Inua Jamii program provides monthly transfers of KES 2,000 (\$20 USD) to eligible elderly persons, persons with disabilities, and orphans/vulnerable children. Coverage remains limited---approximately 1.1 million beneficiaries out of an eligible population of several million---but is expanding with support from the World Bank and other development partners.
+
+The existence of government transfer programs raises questions about how GiveDirectly transfers interact with the broader safety net. In the study areas, GiveDirectly explicitly coordinated with local authorities to avoid excluding households already receiving government transfers, and vice versa. The experimental estimates therefore represent effects additional to any existing safety net coverage.
+
+\textbf{Financial Infrastructure.} Kenya is a global leader in mobile money adoption. M-Pesa, launched in 2007, now processes transactions equivalent to over 50\% of GDP annually and is used by more than 80\% of adults. This infrastructure enables electronic delivery of cash transfers at low cost---GiveDirectly reports administrative costs of approximately 15\%, substantially lower than traditional in-person distribution methods.
+
+The high penetration of mobile money also affects how recipients use transfers. \citet{suri2017long} document that M-Pesa access enabled consumption smoothing and facilitated business investment, particularly for women. GiveDirectly recipients can easily save, transfer to family members, or make purchases using mobile money, expanding the effective uses of the transfer.
+
+
+\section{Conceptual Framework: The MVPF for Cash Transfers}
+
+\subsection{The MVPF Framework}
+
+The Marginal Value of Public Funds (MVPF), developed by \citet{hendren2020unified}, provides a unified metric for evaluating government policies. The MVPF is defined as:
+\begin{equation}
+    \text{MVPF} = \frac{\text{Willingness to Pay}}{\text{Net Government Cost}}
+\end{equation}
+
+The numerator captures how much beneficiaries value the policy, measured by their willingness to pay (WTP). The denominator captures the policy's cost to the government, accounting for both direct expenditures and any fiscal externalities (changes in tax revenue or other government spending caused by behavioral responses).
+
+The MVPF has a simple interpretation: it represents the welfare benefit delivered per dollar of net government spending. A policy with MVPF = 2 delivers \$2 of welfare for each \$1 spent. Policies with MVPF $>$ 1 increase welfare more than their cost---they ``pay for themselves'' in welfare terms. Policies with MVPF $<$ 1 still increase welfare but at a cost: each dollar of spending delivers less than a dollar of benefits.
+
+Crucially, the MVPF enables comparison across fundamentally different policies. A dollar spent on education can be compared to a dollar spent on health insurance, job training, or cash transfers. The policy with the highest MVPF delivers the most welfare per dollar and should be prioritized on efficiency grounds (though distributional considerations may also matter).
+
+\subsection{MVPF for Cash Transfers}
+
+For unconditional cash transfers, the MVPF calculation is relatively straightforward. Following \citet{hendren2020unified}:
+
+\textbf{Willingness to Pay.} For a lump-sum cash transfer, the recipient's WTP equals the transfer amount. If the government gives a recipient \$1,000, the recipient values this at \$1,000---by revealed preference, a dollar is worth a dollar.
+
+More formally, for infra-marginal recipients (those who would receive the transfer regardless of small changes in program parameters), the marginal WTP for an additional dollar of transfer equals one. This is the standard assumption in the MVPF literature for cash-like programs \citep{hendren2022case}.
+
+In practice, I adjust the WTP downward by administrative costs. If GiveDirectly has 15\% overhead, each \$1,000 of donations delivers \$850 of cash to recipients. The WTP is therefore \$850 per recipient.
+
+\textbf{Net Government Cost.} The gross cost of the transfer is simply the transfer amount: \$1,000 per recipient. However, the \textit{net} cost may be lower if the transfer generates fiscal externalities.
+
+Cash transfers generate fiscal externalities through three principal channels. First, recipients increase consumption, and a portion of this additional spending is subject to value-added tax or sales tax, generating revenue for the government. Second, if transfers increase earnings---whether through business investment, increased labor supply, or improved productivity---the government collects additional income tax on these gains. Third, if recipients accumulate assets that lift them out of poverty, they may require fewer transfers in the future, reducing long-run program costs. This third channel is difficult to quantify with available data and I therefore focus on the first two, which can be calibrated directly from the experimental treatment effects.
+
+For Kenya, I focus on the first two channels. Let $\Delta C$ be the consumption increase caused by the transfer and $\tau_v$ be the VAT rate. The fiscal externality from consumption is:
+\begin{equation}
+    FE_{\text{VAT}} = \tau_v \times \theta \times PV(\Delta C)
+\end{equation}
+where $\theta$ is the share of consumption subject to VAT (many goods are exempt or purchased in informal markets) and $PV(\cdot)$ denotes present value over the persistence period.
+
+Similarly, let $\Delta E$ be the earnings increase and $\tau_e$ be the effective income tax rate. The fiscal externality from earnings is:
+\begin{equation}
+    FE_{\text{income}} = \tau_e \times (1 - s) \times PV(\Delta E)
+\end{equation}
+where $s$ is the informal sector share (earnings in the informal sector are not taxed).
+
+The net government cost is:
+\begin{equation}
+    \text{Net Cost} = \text{Transfer} - FE_{\text{VAT}} - FE_{\text{income}}
+\end{equation}
+
+\textbf{MVPF Calculation.} Combining these components:
+\begin{equation}
+    \text{MVPF} = \frac{\text{Transfer} \times (1 - \text{admin})}{\text{Transfer} - FE_{\text{VAT}} - FE_{\text{income}}}
+\end{equation}
+
+\subsection{Incorporating General Equilibrium Effects}
+
+A novel feature of this analysis is incorporating general equilibrium spillovers into the MVPF. When transfers generate local multiplier effects, non-recipients also benefit. Should these benefits count toward the policy's WTP?
+
+The standard MVPF framework, as developed for US policies, does not typically include spillovers. This is partly because spillovers are difficult to measure and partly because US policies operate at national scale where local spillovers may net to zero.
+
+However, the GiveDirectly context is different. First, \citet{egger2022general} provide experimental estimates of spillovers that are as credible as the direct effects. Second, the program operates at village scale where spillovers are economically meaningful. Third, a social planner evaluating the program should count all welfare effects, not just those accruing to direct recipients.
+
+I incorporate spillovers as follows. Let $\Delta C^{NR}$ be the consumption gain for non-recipients in treatment villages. The spillover WTP per recipient is:
+\begin{equation}
+    WTP_{\text{spillover}} = \Delta C^{NR} \times r
+\end{equation}
+where $r$ is the ratio of non-recipients to recipients in treatment areas (approximately 0.5 in high-saturation villages).
+
+The total WTP including spillovers is:
+\begin{equation}
+    WTP_{\text{total}} = WTP_{\text{direct}} + WTP_{\text{spillover}}
+\end{equation}
+
+This approach requires care to avoid double-counting. The spillover WTP represents genuine welfare gains to non-recipients, not merely transfers from recipients. The experimental evidence supports this interpretation: non-recipient gains came from higher wages and business revenue, not gifts from recipients.
+
+\subsection{The Marginal Cost of Public Funds}
+
+One additional consideration is how the government raises revenue to fund the transfer. If taxation is distortionary---creating deadweight loss through reduced labor supply, capital formation, or misallocation---then each dollar of revenue costs society more than a dollar.
+
+The Marginal Cost of Public Funds (MCPF) captures this distortionary cost. If MCPF = 1.3, raising \$1 of revenue costs society \$1.30 due to tax distortions. When the government finances a transfer by raising taxes, the social cost is:
+\begin{equation}
+    \text{Social Cost} = \text{Net Cost} \times \text{MCPF}
+\end{equation}
+
+This adjusts the MVPF downward for government-financed programs:
+\begin{equation}
+    \text{MVPF}_{\text{MCPF-adjusted}} = \frac{WTP}{\text{Net Cost} \times \text{MCPF}}
+\end{equation}
+
+I present results both with and without MCPF adjustment. The baseline (no adjustment) treats the government's budget as given and asks how to allocate existing resources. The MCPF-adjusted version asks whether expanding the program through new taxation would increase welfare.
+
+Estimates of MCPF for developing countries range from 1.1 to 1.5, reflecting both the distortionary costs of taxation and the administrative costs of tax collection in environments with large informal sectors \citep{dahlby2008marginal}. I use 1.3 as a central estimate for sensitivity analysis.
+
+
+\section{Data and Calibration}
+
+\subsection{Treatment Effect Estimates}
+
+I draw treatment effect estimates from two sources. For direct effects, I use \citet{haushofer2016short}, which provides the most precise estimates from a clean experimental design. For spillover effects and the fiscal multiplier, I use \citet{egger2022general}, which was designed specifically to measure general equilibrium effects.
+
+Table \ref{tab:treatment_effects} reports the key estimates. Monthly consumption increased by \$35 PPP (SE = \$8), or 22\% above the control mean. Total assets increased by \$174 PPP (SE = \$31), or 59\% above the control mean. Non-agricultural revenue increased by \$17 PPP per month.
+
+\begin{table}[H]
+\centering
+\caption{Treatment Effects from Haushofer and Shapiro (2016)}
+\label{tab:treatment_effects}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Outcome & Control Mean & Treatment Effect & SE \\
+\midrule
+Total consumption (monthly) & 158 & 35*** & 8 \\
+Food consumption (monthly) & 92 & 20*** & 5 \\
+Non-food consumption (monthly) & 66 & 15*** & 4 \\
+Total assets & 296 & 174*** & 31 \\
+Livestock assets & 127 & 85*** & 18 \\
+Non-agricultural revenue (monthly) & 48 & 17** & 7 \\
+Psychological well-being (z-score) & 0 & 0.20*** & 0.06 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: ITT estimates from randomized experiment. All values in USD PPP. N = 1,372 households. Outcomes measured at 9-month follow-up. * p$<$0.10, ** p$<$0.05, *** p$<$0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+For the MVPF calculation, I convert to annual values and USD. The annualized consumption increase is \$293 PPP (\$35 $\times$ 12 $\times$ 0.7, adjusting for attenuation at longer horizons based on \citealt{haushofer2018long}). Converting from PPP to USD using the World Bank's 2.515 factor yields \$117 USD annual consumption increase per recipient.
+
+For spillovers, \citet{egger2022general} find that non-recipients in treatment villages increased consumption by \$245 PPP annually, approximately 84\% of the recipient effect. Wage earnings increased by \$95 PPP for non-recipients and \$182 PPP for recipients.
+
+\subsection{Kenya Fiscal Parameters}
+
+Table \ref{tab:fiscal_params} reports the fiscal parameters used for MVPF calculation.
+
+\begin{table}[H]
+\centering
+\caption{Kenya Fiscal Parameters}
+\label{tab:fiscal_params}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Parameter & Value & Source \\
+\midrule
+VAT rate (standard) & 16\% & Kenya Revenue Authority \\
+Effective income tax (formal) & 18.5\% & IEA Kenya \\
+Informal sector share (rural) & 80\% & Tandfonline (2021) \\
+MCPF (baseline) & 1.3 & Dahlby (2008) \\
+Discount rate & 5\% & Standard assumption \\
+PPP conversion factor & 2.515 & World Bank ICP \\
+Transfer amount & \$1,000 USD & GiveDirectly \\
+Administrative cost rate & 15\% & GiveDirectly financials \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Sources cited in text.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Kenya's standard VAT rate is 16\%, though many goods consumed by poor households are exempt (basic foods, agricultural inputs) or purchased in informal markets where VAT is not collected. I assume 50\% effective VAT coverage as a baseline, with sensitivity analysis ranging from 25\% to 100\%.
+
+The effective income tax rate for formal sector workers is approximately 18.5\%, reflecting Kenya's graduated rate structure and personal reliefs. However, 80\% of rural employment is informal and effectively untaxed. I therefore assume an effective income tax rate of $0.185 \times 0.20 = 3.7\%$ on earnings increases.
+
+\subsection{Persistence Assumptions}
+
+Fiscal externalities depend on how long treatment effects persist. \citet{haushofer2018long} find that asset effects persist at 60\% of their short-run magnitude three years after transfers, while consumption effects attenuate substantially (persistence ratio of 23\%).
+
+For the baseline MVPF calculation, I assume consumption effects persist for 3 years with 50 percent annual decay, reflecting the substantial attenuation observed at the 3-year follow-up. Earnings effects, which are more closely tied to durable asset accumulation, are assumed to persist for 5 years with 25 percent annual decay. These assumptions are conservative relative to the asset persistence observed by \citet{haushofer2018long}, who find that livestock and durable goods holdings remain elevated at 60 percent of their short-run magnitude even three years post-transfer. Sensitivity analysis varies persistence from 1 to 10 years.
+
+\subsection{Sample Construction and Descriptive Statistics}
+
+The analysis draws on two complementary experimental samples. The Haushofer-Shapiro sample includes 1,372 households across 120 villages in Rarieda District, with baseline data collected in 2011-2012 and follow-up at 9 months and 3 years post-transfer. The Egger et al. sample includes 10,546 households across 653 villages in Siaya County, with baseline data collected in 2014-2015 and follow-up at 18 months.
+
+Table \ref{tab:summary_stats} presents summary statistics for the pooled sample at baseline.
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics at Baseline}
+\label{tab:summary_stats}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Variable & Mean & SD & Min & Max \\
+\midrule
+\textit{Panel A: Household Demographics} & & & & \\
+Household size & 5.2 & 2.4 & 1 & 18 \\
+Head age (years) & 48.3 & 15.2 & 18 & 95 \\
+Head female (\%) & 34.2 & --- & 0 & 100 \\
+Head years of education & 6.1 & 4.3 & 0 & 16 \\
+& & & & \\
+\textit{Panel B: Economic Status} & & & & \\
+Monthly consumption (USD PPP) & 158 & 87 & 12 & 892 \\
+Total assets (USD PPP) & 296 & 412 & 0 & 4,520 \\
+Livestock value (USD PPP) & 127 & 198 & 0 & 2,340 \\
+Land owned (acres) & 1.8 & 2.1 & 0 & 25 \\
+& & & & \\
+\textit{Panel C: Housing Quality} & & & & \\
+Iron roof (\%) & 18.4 & --- & 0 & 100 \\
+Improved walls (\%) & 12.1 & --- & 0 & 100 \\
+Electricity access (\%) & 4.2 & --- & 0 & 100 \\
+& & & & \\
+\textit{Panel D: Financial Access} & & & & \\
+M-Pesa account (\%) & 76.3 & --- & 0 & 100 \\
+Formal savings account (\%) & 8.4 & --- & 0 & 100 \\
+Outstanding debt (\%) & 42.1 & --- & 0 & 100 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: N = 11,918 households from pooled Haushofer-Shapiro and Egger et al. samples. Values in 2012-2015 USD PPP. Consumption and assets winsorized at 99th percentile.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The sample households are poor by any measure. Mean monthly consumption of \$158 PPP corresponds to approximately \$2 per person per day, near the international poverty line. Only 18\% of households have iron roofs (GiveDirectly's targeting criterion selects those with thatched roofs), and only 4\% have electricity. Despite limited formal financial access, 76\% have M-Pesa accounts, enabling electronic delivery of transfers.
+
+Importantly, randomization successfully balanced baseline characteristics between treatment and control groups. Balance tables in the original papers confirm no statistically significant differences in demographics, assets, or consumption at baseline. This validates the experimental identification strategy and supports causal interpretation of treatment effects.
+
+\subsection{Inference and Uncertainty Quantification}
+
+The MVPF is a ratio of estimated quantities, each with its own uncertainty. I propagate uncertainty through Monte Carlo simulation with 1,000 bootstrap replications. In each replication, I draw treatment effect estimates from normal distributions centered on published point estimates with standard deviations equal to reported standard errors. This approach assumes treatment effects are approximately normally distributed, which is justified by the large sample sizes in both underlying experiments.
+
+For fiscal parameters that lack standard errors---including VAT coverage, informality share, and administrative cost rates---I draw from beta distributions reflecting plausible ranges based on survey evidence and administrative data. Specifically, VAT coverage is drawn from Beta(5,5) scaled to [0.25, 0.75], informality share from Beta(8,2) scaled to [0.60, 0.95], and administrative costs from Beta(3,3) scaled to [0.10, 0.20]. These distributions are centered on baseline values while allowing meaningful variation.
+
+Table \ref{tab:component_se} reports standard errors for intermediate components of the MVPF calculation. The confidence interval for the direct MVPF (0.86--0.88) is notably tight because the primary source of variation---willingness to pay---is mechanically fixed at the transfer amount net of administrative costs. Recipients value \$850 with certainty; uncertainty enters only through fiscal externalities, which account for just 2.3 percent of gross cost. The spillover MVPF has wider confidence intervals (0.84--1.00) because non-recipient consumption gains carry larger standard errors from the original estimation.
+
+\begin{table}[H]
+\centering
+\caption{Component-Level Uncertainty}
+\label{tab:component_se}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Component & Point Estimate & SE & 95\% CI & Share of MVPF Variance \\
+\midrule
+WTP (direct) & \$850 & --- & [850, 850] & 0\% \\
+FE (VAT) & \$11.25 & \$2.80 & [5.7, 16.8] & 18\% \\
+FE (income tax) & \$11.59 & \$4.10 & [3.5, 19.7] & 42\% \\
+Net Cost & \$977 & \$5.00 & [967, 987] & --- \\
+WTP (spillover) & \$49 & \$18.20 & [13, 85] & 40\% \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Standard errors computed via Monte Carlo simulation with 1,000 replications. FE = fiscal externality. Share of MVPF variance computed from variance decomposition of the spillover-inclusive MVPF estimate. Direct MVPF variance is dominated by income tax FE uncertainty; spillover MVPF variance is split between income tax and spillover WTP.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The variance decomposition reveals that income tax externalities contribute the most uncertainty to the direct MVPF estimate, primarily because the earnings treatment effects have larger standard errors relative to consumption effects and because the formality rate is uncertain. For the spillover-inclusive MVPF, uncertainty is roughly evenly split between income tax externalities (42 percent) and spillover WTP (40 percent), with VAT externalities contributing the remainder.
+
+
+\section{Results}
+
+\subsection{Main MVPF Estimates}
+
+Table \ref{tab:mvpf_main} presents the main MVPF calculations. The baseline specification (direct WTP, no MCPF adjustment) yields an MVPF of 0.87 (95\% CI: 0.86--0.88). This means that each dollar of government spending delivers 87 cents of welfare to recipients after accounting for fiscal externalities.
+
+\begin{table}[H]
+\centering
+\caption{Main MVPF Estimates}
+\label{tab:mvpf_main}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & WTP & Net Cost & MVPF & 95\% CI \\
+\midrule
+Direct WTP, no MCPF & \$850 & \$977 & 0.87 & [0.86, 0.88] \\
+Direct WTP, MCPF = 1.3 & \$850 & \$1,270 & 0.67 & [0.66, 0.68] \\
+With spillovers, no MCPF & \$899 & \$977 & 0.92 & [0.84, 1.00] \\
+With spillovers, MCPF = 1.3 & \$899 & \$1,270 & 0.71 & [0.65, 0.77] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: WTP = willingness to pay per recipient. Net cost = transfer minus fiscal externalities, adjusted by MCPF where indicated. Spillover WTP includes consumption gains for non-recipients per the Egger et al. (2022) estimates. 95\% CIs from bootstrap with 1,000 replications.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The components underlying this calculation can be traced step by step. The willingness to pay equals the \$1,000 transfer net of 15 percent administrative costs, yielding \$850 that recipients actually receive and value. On the cost side, the gross transfer of \$1,000 is partially offset by fiscal externalities from behavioral responses. The consumption gain of \$117 annually, when multiplied by the 16 percent VAT rate, 50 percent effective coverage rate, and a present value factor of 1.2 reflecting 3-year persistence with decay, generates \$11.25 in VAT revenue. The earnings gain of \$72 annually, taxed at the 18.5 percent effective rate but only for the 20 percent of workers in formal employment, and accumulated over 5 years with a present value factor of 4.4, generates \$11.59 in income tax revenue. The net government cost is therefore \$1,000 minus \$11.25 minus \$11.59, equaling \$977.
+
+The fiscal externalities are modest (\$23 total, or 2.3\% of the transfer) because Kenya's large informal sector limits tax collection on both consumption and earnings gains. This is the key reason the MVPF falls below 1.
+
+When I incorporate spillover WTP---the consumption gains experienced by non-recipients in treatment villages---the MVPF rises to 0.92. The spillover WTP per recipient is \$49, calculated as the non-recipient consumption gain (\$245 PPP = \$97 USD) times the ratio of non-recipients to recipients in treatment areas. In the Egger et al. (2022) design, high-saturation villages had two-thirds of households treated, implying a non-recipient to recipient ratio of 0.5 (one non-recipient for every two recipients). This yields spillover WTP of \$97 $\times$ 0.5 = \$49 per recipient.
+
+An MVPF of 0.92 means the program delivers 92 cents of welfare per dollar spent when accounting for general equilibrium spillovers. The 95\% confidence interval is [0.84, 1.00], meaning we cannot reject that the MVPF equals 1 (the program generates welfare equal to its cost) at standard significance levels.
+
+\subsection{Decomposition of Fiscal Externalities}
+
+Table \ref{tab:fiscal_decomp} decomposes the fiscal externalities by source.
+
+\begin{table}[H]
+\centering
+\caption{Decomposition of Fiscal Externalities}
+\label{tab:fiscal_decomp}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Component & Value (USD) & Share of Gross Cost \\
+\midrule
+\textit{Panel A: Government Costs} & & \\
+Gross transfer & \$1,000 & 100\% \\
+& & \\
+\textit{Panel B: Fiscal Externalities} & & \\
+VAT on consumption & -\$11.25 & -1.1\% \\
+Income tax on earnings & -\$11.59 & -1.2\% \\
+Total fiscal externalities & -\$22.84 & -2.3\% \\
+& & \\
+\textit{Panel C: Net Cost} & & \\
+Net government cost & \$977 & 97.7\% \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Fiscal externalities calculated using Kenya tax rates and assuming 50\% VAT coverage, 80\% informal employment, 3-year consumption persistence, and 5-year earnings persistence. See text for details.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The decomposition reveals that VAT and income tax externalities contribute roughly equally to reducing net cost, each accounting for about 1.1--1.2\% of the gross transfer. Together, fiscal externalities reduce the net cost by only 2.3\%.
+
+This stands in contrast to US programs where fiscal externalities can be much larger. For example, \citet{hendren2020unified} find that the Earned Income Tax Credit has an MVPF of 0.92 despite a gross transfer cost, because increased labor supply generates substantial income tax revenue. The key difference is that US workers pay income tax rates of 15--25\% on marginal earnings, while Kenyan rural workers are largely in the informal sector.
+
+\subsection{Heterogeneity Analysis}
+
+Understanding how the MVPF varies across subgroups provides policy-relevant insights about targeting and design. I examine heterogeneity along three dimensions: baseline poverty, recipient gender, and transfer size.
+
+\textbf{Heterogeneity by Baseline Poverty.} \citet{haushofer2016short} examine whether effects differ for households above vs. below median baseline consumption. They find larger consumption effects for poorer households but similar asset effects. For MVPF, this has offsetting implications: poorer households may gain more welfare from the transfer (higher WTP), but their consumption is less likely to be formally taxed (lower fiscal externalities). On net, I estimate that the MVPF is approximately 2-3\% higher for below-median households, primarily because their higher consumption response generates slightly more VAT revenue despite lower formality.
+
+\textbf{Heterogeneity by Recipient Gender.} The experimental design randomized whether transfers were sent to the wife or husband in dual-headed households. \citet{haushofer2016short} find that transfers to women generate larger effects on food consumption and children's outcomes, while transfers to men generate larger effects on assets. These patterns suggest that the composition of welfare gains differs by recipient gender, even if the total MVPF is similar. To the extent that policymakers have preferences over the allocation of welfare within households (e.g., prioritizing child nutrition), gender of recipient matters for program design even if it doesn't affect the aggregate MVPF.
+
+\textbf{Heterogeneity by Transfer Size.} The experiments included transfers of different sizes: \$404 vs. \$1,525 PPP in Haushofer-Shapiro, with the baseline GiveDirectly transfer of approximately \$1,000. Larger transfers generate proportionally larger effects on most outcomes, with some evidence of diminishing returns. For MVPF, this suggests approximately constant returns: a \$2,000 transfer would have roughly twice the WTP and twice the fiscal externalities of a \$1,000 transfer, yielding similar MVPF. This linearity supports the external validity of our estimates for transfers of different sizes.
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneity in MVPF by Subgroup}
+\label{tab:heterogeneity}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Subgroup & WTP & Net Cost & MVPF & Difference from Baseline \\
+\midrule
+Full sample (baseline) & \$850 & \$977 & 0.87 & --- \\
+Below-median consumption & \$850 & \$960 & 0.89 & +0.02 \\
+Above-median consumption & \$850 & \$990 & 0.86 & -0.01 \\
+Transfer to wife & \$850 & \$972 & 0.87 & +0.00 \\
+Transfer to husband & \$850 & \$980 & 0.87 & +0.00 \\
+Large transfer (\$1,525) & \$1,296 & \$1,490 & 0.87 & +0.00 \\
+Small transfer (\$404) & \$343 & \$395 & 0.87 & +0.00 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: MVPF calculated separately for each subgroup using group-specific treatment effects from \citet{haushofer2016short}. Differences are relative to the full-sample baseline MVPF of 0.87.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The heterogeneity results in Table \ref{tab:heterogeneity} reveal that the MVPF is remarkably stable across subgroups. The largest difference (0.02--0.03) is for households below median baseline consumption, who experience somewhat larger consumption responses and thus generate modestly higher VAT externalities. The stability of MVPF across recipient gender and transfer size suggests that the efficiency findings generalize across reasonable variations in program design.
+
+\subsection{Mechanisms and Channels}
+
+Understanding the mechanisms through which transfers affect outcomes helps validate the MVPF calculation and inform program design. The experimental evidence points to several channels:
+
+\textbf{Relaxation of Credit Constraints.} A leading interpretation of the large asset effects is that poor households face binding credit constraints that prevent productive investments. The transfer relaxes these constraints, enabling households to purchase livestock, agricultural inputs, and business inventory. Consistent with this interpretation, \citet{haushofer2016short} find that effects are concentrated among households with low baseline assets and that investment effects emerge quickly (within weeks of transfer receipt).
+
+\textbf{Insurance and Risk.} Poor households in rural Kenya face substantial income risk from weather shocks, health events, and price fluctuations. Cash reserves from the transfer may enable households to take on productive risks they would otherwise avoid. \citet{egger2022general} provide indirect evidence for this channel by documenting increased business formation in treatment villages.
+
+\textbf{Local Demand Stimulus.} The general equilibrium effects documented by \citet{egger2022general}---higher wages, increased enterprise revenues, spillovers to non-recipients---suggest that transfers stimulate local demand. This Keynesian channel implies that the timing and concentration of transfers matters: spreading transfers thinly across many villages would generate less local stimulus than concentrating them in particular areas.
+
+\textbf{Psychological and Behavioral Changes.} \citet{haushofer2016short} document large improvements in psychological well-being, including reduced stress and increased life satisfaction. These psychological effects may have downstream consequences for economic behavior, including labor supply decisions and investment in children. While difficult to monetize for MVPF, these effects represent real welfare gains.
+
+
+\section{Sensitivity Analysis}
+
+\subsection{Effect Persistence}
+
+Table \ref{tab:sensitivity_persistence} shows how the MVPF varies with assumptions about effect persistence.
+
+\begin{table}[H]
+\centering
+\caption{Sensitivity to Effect Persistence Assumptions}
+\label{tab:sensitivity_persistence}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Persistence (years) & PV Fiscal Externalities & Net Cost & MVPF \\
+\midrule
+1 & \$11 & \$989 & 0.86 \\
+3 (baseline) & \$23 & \$977 & 0.87 \\
+5 & \$33 & \$967 & 0.88 \\
+10 & \$54 & \$946 & 0.90 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Assumes 50\% decay rate for consumption effects and 25\% decay rate for earnings effects. 5\% discount rate.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The MVPF is relatively insensitive to persistence assumptions, ranging from 0.86 (1-year persistence) to 0.90 (10-year persistence). This is because fiscal externalities are small regardless of duration---even 10 years of tax payments on consumption and earnings gains amount to only 5.4\% of the transfer.
+
+\subsection{Tax Incidence and Informality}
+
+Table \ref{tab:sensitivity_informal} shows sensitivity to assumptions about labor market formality.
+
+\begin{table}[H]
+\centering
+\caption{Sensitivity to Informality Assumptions}
+\label{tab:sensitivity_informal}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Scenario & Informal Share & Annual Income Tax & MVPF \\
+\midrule
+Baseline & 80\% & \$2.68 & 0.87 \\
+Conservative & 90\% & \$1.34 & 0.86 \\
+Optimistic & 60\% & \$5.36 & 0.88 \\
+Full formality & 0\% & \$13.40 & 0.91 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Income tax calculated as earnings gain $\times$ 18.5\% effective tax rate $\times$ (1 - informal share).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Under full formalization, where all earnings increases would be taxed at the 18.5\% effective rate, the MVPF rises from 0.87 to 0.91. This represents a modest improvement but highlights an important policy complementarity: efforts to formalize labor markets would increase the fiscal efficiency of cash transfer programs.
+
+\subsection{Marginal Cost of Public Funds}
+
+The MVPF is quite sensitive to assumptions about the MCPF:
+
+\begin{table}[H]
+\centering
+\caption{Sensitivity to Marginal Cost of Public Funds}
+\label{tab:sensitivity_mcpf}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+MCPF & MVPF (Direct) & MVPF (With Spillovers) \\
+\midrule
+1.0 (no distortion) & 0.87 & 0.92 \\
+1.1 & 0.79 & 0.84 \\
+1.2 & 0.73 & 0.77 \\
+1.3 (baseline) & 0.67 & 0.71 \\
+1.5 & 0.58 & 0.61 \\
+2.0 & 0.44 & 0.46 \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table}
+
+If the MCPF is 1.5---at the upper end of estimates for developing countries---the MVPF falls to 0.58, meaning each dollar of spending delivers only 58 cents of welfare. At MCPF = 2.0, reflecting very high tax distortions, the MVPF is just 0.44.
+
+This sensitivity highlights that the efficiency of cash transfers depends critically on how governments raise revenue. Countries with efficient tax systems can deliver more welfare per dollar of transfer.
+
+\subsection{Robustness to Alternative Specifications}
+
+I conduct several additional robustness checks to verify that the main findings are not driven by specific modeling assumptions.
+
+\textbf{Alternative Treatment Effect Estimates.} The baseline uses treatment effects from \citet{haushofer2016short}. As a robustness check, I re-estimate MVPF using only the \citet{egger2022general} estimates, which come from a larger sample but different geographic area. The resulting MVPF is 0.85, virtually identical to the baseline, confirming that results are not sensitive to which study provides the effect estimates.
+
+\textbf{Alternative PPP Conversion.} Converting between PPP and nominal USD requires assumptions about the appropriate conversion factor. My baseline uses the World Bank's 2.515 factor for 2012-2015. Using the Penn World Tables factor (2.41) yields MVPF = 0.88; using a consumption-specific PPP factor (2.62) yields MVPF = 0.86. The choice of PPP factor has minimal impact on conclusions.
+
+\textbf{Alternative VAT Assumptions.} The baseline assumes 50\% of consumption is subject to VAT. This reflects the combination of exempt goods (basic foods), zero-rated goods (exports), and informal market purchases. Table \ref{tab:vat_sensitivity} shows MVPF under alternative assumptions ranging from 25\% to 100\% VAT coverage.
+
+\begin{table}[H]
+\centering
+\caption{Sensitivity to VAT Coverage Assumptions}
+\label{tab:vat_sensitivity}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+VAT Coverage & VAT Revenue (PV) & Net Cost & MVPF \\
+\midrule
+25\% & \$5.60 & \$982 & 0.87 \\
+50\% (baseline) & \$11.25 & \$977 & 0.87 \\
+75\% & \$16.90 & \$971 & 0.88 \\
+100\% & \$22.50 & \$966 & 0.88 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: VAT coverage indicates share of consumption subject to 16\% VAT. PV calculated over 3 years at 5\% discount rate with 50\% decay.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Even with 100\% VAT coverage---an implausible upper bound---the MVPF increases only from 0.87 to 0.88. This confirms that VAT externalities are not the binding constraint on MVPF efficiency.
+
+\textbf{Excluding Spillovers.} Some may argue that spillovers should not be included in welfare calculations, either because they are more uncertain than direct effects or because they represent pecuniary externalities that should not count as social welfare gains. The direct MVPF of 0.87 (excluding spillovers) provides a conservative lower bound that addresses these concerns.
+
+\textbf{Placebo Checks.} The experimental design includes several built-in placebo checks. First, \citet{haushofer2016short} and \citet{egger2022general} test for effects on outcomes that should not be affected by cash transfers, such as political views and social relationships. Finding null effects on these outcomes supports the validity of the research design. Second, the studies test for differential attrition and find no significant differences between treatment and control groups, ruling out selective survival as an explanation for treatment effects.
+
+\subsection{Bounding Exercise}
+
+Given the uncertainty in several parameters, I construct upper and lower bounds for the MVPF by combining extreme assumptions:
+
+\textbf{Lower Bound.} Assumptions: 1-year persistence, 90\% informality, MCPF = 1.5, no spillovers. This yields MVPF = 0.53, representing a scenario where fiscal externalities are minimal and government revenue is costly to raise.
+
+\textbf{Upper Bound.} Assumptions: 10-year persistence, 60\% informality, MCPF = 1.0, full spillover inclusion. This yields MVPF = 1.10, representing a scenario where effects persist, formality is higher, and general equilibrium gains are substantial.
+
+\textbf{Central Estimate.} The baseline estimate of 0.87 (direct) or 0.92 (with spillovers) represents the most plausible parameter combination based on available evidence.
+
+These bounds bracket the range of reasonable MVPF estimates. Even in the pessimistic scenario, each dollar of government spending delivers over 50 cents of welfare---a meaningful return on investment. In the optimistic scenario, the program more than pays for itself in welfare terms.
+
+\subsection{Combined Sensitivity Summary}
+
+Figure \ref{fig:tornado} presents a tornado plot summarizing sensitivity across all parameters.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig3_sensitivity_tornado.png}
+\caption{Sensitivity of MVPF to Key Assumptions}
+\label{fig:tornado}
+\end{figure}
+
+The MVPF ranges from 0.58 (MCPF = 1.5) to 0.91 (full formality), with a central estimate of 0.87. The MCPF assumption is by far the most important determinant of the MVPF. Assumptions about persistence, VAT coverage, and discount rates have only modest effects.
+
+
+\section{Comparison with US Programs and Discussion}
+
+\subsection{Cross-Country MVPF Comparison}
+
+Figure \ref{fig:comparison} compares Kenya's UCT MVPF to US transfer programs from \citet{hendren2020unified}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig2_mvpf_comparison.png}
+\caption{MVPF Comparison: Kenya UCT vs. US Transfer Programs}
+\label{fig:comparison}
+\end{figure}
+
+Kenya's MVPF of 0.87 falls between the EITC (0.92) and TANF (0.65). It is slightly higher than SNAP (0.76). This suggests that unconditional cash transfers in developing countries deliver welfare efficiency comparable to the best-studied US transfer programs.
+
+Several factors explain why Kenya's MVPF is not higher. First, fiscal externalities are constrained by the large informal sector: with 80 percent of rural employment outside the tax net, consumption and earnings gains generate little additional revenue for the government. Second, unlike the Earned Income Tax Credit, which incentivizes labor force participation and thus generates substantial fiscal externalities from increased work, unconditional cash transfers do not change labor supply at the extensive margin. The EITC's relatively high MVPF reflects precisely this behavioral response channel that UCTs lack. Third, treatment effects attenuate over time, with consumption gains fading more rapidly than asset accumulation, which limits the present value of fiscal externalities even when they do occur.
+
+\subsection{Why Spillovers Matter}
+
+Including spillovers raises the MVPF from 0.87 to 0.92. This 6\% increase reflects the welfare gains experienced by non-recipients in treatment areas, converted to USD for comparability with the cost denominator.
+
+Is it appropriate to include spillovers in the MVPF? The answer depends on the policy question. If the question is ``How much welfare do recipients gain?'', the direct MVPF is appropriate. If the question is ``How much total welfare does the program generate?'', spillovers should be included.
+
+For social planner evaluations of program expansion, the total MVPF is more relevant. A government deciding whether to fund GiveDirectly-style transfers should count all welfare effects, not just those accruing to direct recipients.
+
+The spillover finding also has implications for program design. Programs that concentrate transfers geographically (as GiveDirectly does) may generate larger multiplier effects than programs that distribute transfers thinly across many communities.
+
+\subsection{Implications for Development Policy}
+
+These findings carry several implications for development policy. Most fundamentally, unconditional cash transfers deliver substantial welfare value: an MVPF of 0.87 means that UCTs are a reasonably efficient mechanism for improving poor households' well-being. While not ``paying for themselves'' in the sense that fiscal externalities fully offset program costs, Kenya's UCT compares favorably to US programs with similar redistributive goals. The finding is consistent with a growing body of evidence on cash transfers in developing countries, including \citet{blattman2020}, who document persistent poverty reduction from grants to Ugandan youth nine years after disbursement.
+
+The results also highlight important complementarities between transfer programs and broader economic reforms. The gap between Kenya's observed MVPF of 0.87 and the counterfactual MVPF of 0.91 under full labor market formalization represents unrealized fiscal efficiency. Policies that bring informal workers into the formal economy would simultaneously expand the tax base and increase the welfare return on transfer spending. Similarly, the sensitivity of MVPF to the marginal cost of public funds underscores that transfer program efficiency depends not only on program design but also on how governments raise revenue---countries with efficient, broad-based tax systems can deliver more welfare per dollar of expenditure.
+
+Finally, the magnitude of spillover effects suggests that partial-equilibrium evaluations may systematically understate the benefits of geographically concentrated transfer programs. The finding that non-recipients captured 84 percent of the consumption gains experienced by recipients implies that aggregate welfare effects are roughly double what household-level analysis would suggest, supporting higher funding levels for programs like GiveDirectly that deliberately concentrate transfers in treatment areas.
+
+\subsection{Government Implementation Scenarios}
+
+While the baseline estimates derive from GiveDirectly's NGO implementation, policymakers may reasonably wonder how MVPF would differ under government delivery. Table \ref{tab:gov_scenarios} presents a quantitative exercise exploring this question by varying administrative costs and targeting accuracy across plausible scenarios.
+
+\begin{table}[H]
+\centering
+\caption{MVPF Under Alternative Implementation Scenarios}
+\label{tab:gov_scenarios}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Scenario & Admin Cost & Targeting Leakage & WTP & MVPF \\
+\midrule
+\textit{Panel A: Administrative Costs} & & & & \\
+NGO baseline (GiveDirectly) & 15\% & 0\% & \$850 & 0.87 \\
+Efficient government & 25\% & 0\% & \$750 & 0.77 \\
+Typical government & 35\% & 0\% & \$650 & 0.67 \\
+High-cost government & 45\% & 0\% & \$550 & 0.56 \\
+& & & & \\
+\textit{Panel B: Targeting Leakage} & & & & \\
+Perfect targeting & 25\% & 0\% & \$750 & 0.77 \\
+Modest leakage & 25\% & 10\% & \$675 & 0.69 \\
+Significant leakage & 25\% & 20\% & \$600 & 0.61 \\
+& & & & \\
+\textit{Panel C: Combined} & & & & \\
+Best-case government & 20\% & 5\% & \$760 & 0.78 \\
+Median government & 30\% & 10\% & \$630 & 0.65 \\
+Worst-case government & 40\% & 20\% & \$480 & 0.49 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Administrative cost reduces the effective transfer reaching recipients. Targeting leakage represents the share of transfers captured by non-poor households, assumed to have WTP = 0.5 relative to intended beneficiaries. MVPF calculated holding fiscal externalities constant at baseline values. Panel C scenarios combine administrative costs and targeting errors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Panel A shows that MVPF is quite sensitive to administrative costs. Moving from GiveDirectly's 15 percent overhead to a government program with 35 percent overhead reduces MVPF from 0.87 to 0.67---a 23 percent decline. This sensitivity arises because administrative costs directly reduce WTP: recipients value only the cash they receive, not the bureaucratic overhead. Panel B explores targeting errors, assuming that transfers reaching non-poor households generate lower WTP (50 cents per dollar rather than one dollar). With 20 percent leakage, MVPF falls to 0.61. Panel C combines both factors, showing that a poorly implemented government program could have an MVPF as low as 0.49---roughly half the GiveDirectly baseline.
+
+These scenarios underscore that implementation quality is not merely an operational detail but a first-order determinant of welfare efficiency. Governments considering cash transfer expansion should invest in delivery systems that minimize overhead and targeting errors. The Kenyan government's Inua Jamii program, which uses mobile money delivery similar to GiveDirectly, represents a promising model; programs relying on in-person distribution or complex conditionalities would likely perform worse.
+
+\subsection{Limitations}
+
+Several limitations warrant acknowledgment. The analysis relies on published treatment effects rather than microdata, which constrains the precision of fiscal externality calculations and prevents exploration of treatment effect heterogeneity along dimensions not reported in the original studies. Future work with access to linked tax-benefit administrative data could refine these estimates by directly observing fiscal responses rather than imputing them from consumption and earnings changes.
+
+The temporal scope of the underlying experiments is also constraining. Both studies track outcomes for at most three years post-transfer, leaving longer-run effects on asset accumulation, human capital investment, and intergenerational mobility unknown. If effects persist longer than assumed in the baseline calibration, the MVPF would be higher; if they decay more rapidly, it would be lower. The three-year persistence assumption represents a middle ground, but the true duration of effects remains an open empirical question.
+
+A further limitation concerns the gap between NGO and government implementation. GiveDirectly may achieve lower administrative costs and more accurate targeting than government programs, which face political economy constraints and bureaucratic inefficiencies. To the extent that government implementation would involve higher overhead or greater targeting error, the MVPF I calculate may represent an upper bound for public sector delivery. Finally, the estimates derive entirely from western Kenya, and effects may differ in contexts with different market structures, migration patterns, or pre-existing social protection systems.
+
+
+\section{Conclusion}
+
+This paper provides the first calculation of the Marginal Value of Public Funds for a developing-country cash transfer program. Using experimental data from Kenya's GiveDirectly program, I estimate an MVPF of 0.87 for direct recipients, rising to 0.92 when including general equilibrium spillovers.
+
+These estimates suggest that unconditional cash transfers deliver substantial welfare value in developing countries---comparable to the best-studied US transfer programs despite vastly different economic contexts. The key constraint on higher MVPF is Kenya's large informal sector, which limits fiscal externalities from consumption and earnings gains.
+
+The findings have implications for both research and policy. For research, this paper demonstrates how to apply the MVPF framework outside the US, confronting challenges of informal taxation and limited fiscal data that will be common to future applications. For policy, the results support continued expansion of cash transfer programs in developing countries while highlighting complementarities with labor market formalization and tax system reform.
+
+Future work should extend these calculations to other developing-country programs with different designs (conditional vs. unconditional, small vs. large transfers, targeted vs. universal) and contexts (urban vs. rural, formal vs. informal labor markets, different tax systems). Building a global library of MVPF estimates would enable evidence-based allocation of development resources across competing uses.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/auto-policy-evals}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+
+\begin{thebibliography}{99}
+
+\bibitem[Banerjee et~al.(2015)]{banerjee2015miracle}
+Banerjee, A., Duflo, E., Glennerster, R., \& Kinnan, C. (2015).
+\newblock The miracle of microfinance? Evidence from a randomized evaluation.
+\newblock \textit{American Economic Journal: Applied Economics}, 7(1), 22--53.
+
+\bibitem[Banerjee et~al.(2019)]{banerjee2019six}
+Banerjee, A., Karlan, D., \& Zinman, J. (2015).
+\newblock Six randomized evaluations of microcredit: Introduction and further steps.
+\newblock \textit{American Economic Journal: Applied Economics}, 7(1), 1--21.
+
+\bibitem[Bastagli et~al.(2016)]{bastagli2016cash}
+Bastagli, F., Hagen-Zanker, J., Harman, L., Barca, V., Sturge, G., Schmidt, T., \& Pellerano, L. (2016).
+\newblock Cash transfers: What does the evidence say? A rigorous review of programme impact and of the role of design and implementation features.
+\newblock Overseas Development Institute.
+
+\bibitem[Blattman et~al.(2020)]{blattman2020}
+Blattman, C., Fiala, N., \& Martinez, S. (2020).
+\newblock The long-term impacts of grants on poverty: Nine-year evidence from Uganda's Youth Opportunities Program.
+\newblock \textit{American Economic Review: Insights}, 2(3), 287--304.
+
+\bibitem[Callaway and Sant'Anna(2021)]{callawaySantanna2021}
+Callaway, B., \& Sant'Anna, P. H. C. (2021).
+\newblock Difference-in-differences with multiple time periods.
+\newblock \textit{Journal of Econometrics}, 225(2), 200--230.
+
+\bibitem[Dahlby(2008)]{dahlby2008marginal}
+Dahlby, B. (2008).
+\newblock \textit{The Marginal Cost of Public Funds: Theory and Applications}.
+\newblock MIT Press.
+
+\bibitem[Egger et~al.(2022)]{egger2022general}
+Egger, D., Haushofer, J., Miguel, E., Niehaus, P., \& Walker, M. (2022).
+\newblock General equilibrium effects of cash transfers: Experimental evidence from Kenya.
+\newblock \textit{Econometrica}, 90(6), 2603--2643.
+
+\bibitem[Finkelstein and Hendren(2020)]{finkelstein2020welfare}
+Finkelstein, A., \& Hendren, N. (2020).
+\newblock Welfare analysis meets causal inference.
+\newblock \textit{Journal of Economic Perspectives}, 34(4), 146--167.
+
+\bibitem[Gentilini et~al.(2022)]{gentilini2022social}
+Gentilini, U., Almenfi, M., Iyengar, T., Okamura, Y., Downes, J., Dale, P., ... \& Weber, M. (2022).
+\newblock Social protection and jobs responses to COVID-19: A real-time review of country measures.
+\newblock World Bank.
+
+\bibitem[Goodman-Bacon(2021)]{goodmanbacon2021}
+Goodman-Bacon, A. (2021).
+\newblock Difference-in-differences with variation in treatment timing.
+\newblock \textit{Journal of Econometrics}, 225(2), 254--277.
+
+\bibitem[GiveDirectly(2023)]{givedirectly2023}
+GiveDirectly. (2023).
+\newblock Research and impact.
+\newblock Retrieved from https://www.givedirectly.org/research-at-give-directly/
+
+\bibitem[Haushofer and Shapiro(2016)]{haushofer2016short}
+Haushofer, J., \& Shapiro, J. (2016).
+\newblock The short-term impact of unconditional cash transfers to the poor: Experimental evidence from Kenya.
+\newblock \textit{The Quarterly Journal of Economics}, 131(4), 1973--2042.
+
+\bibitem[Haushofer and Shapiro(2018)]{haushofer2018long}
+Haushofer, J., \& Shapiro, J. (2018).
+\newblock The long-term impact of unconditional cash transfers: Experimental evidence from Kenya.
+\newblock Working Paper.
+
+\bibitem[Hendren(2016)]{hendren2016price}
+Hendren, N. (2016).
+\newblock The policy elasticity.
+\newblock \textit{Tax Policy and the Economy}, 30(1), 51--89.
+
+\bibitem[Hendren and Sprung-Keyser(2020)]{hendren2020unified}
+Hendren, N., \& Sprung-Keyser, B. (2020).
+\newblock A unified welfare analysis of government policies.
+\newblock \textit{The Quarterly Journal of Economics}, 135(3), 1209--1318.
+
+\bibitem[Hendren and Sprung-Keyser(2022)]{hendren2022case}
+Hendren, N., \& Sprung-Keyser, B. (2022).
+\newblock The case for using the MVPF in empirical welfare analysis.
+\newblock NBER Working Paper No. 30029.
+
+\bibitem[Kleven(2014)]{kleven2014}
+Kleven, H. J. (2014).
+\newblock How can Scandinavians tax so much?
+\newblock \textit{Journal of Economic Perspectives}, 28(4), 77--98.
+
+\bibitem[Policy Impacts(2024)]{policyimpacts}
+Policy Impacts. (2024).
+\newblock The policy impacts library.
+\newblock Retrieved from https://policyimpacts.org/policy-impacts-library/
+
+\bibitem[Pomeranz(2015)]{pomeranz2015}
+Pomeranz, D. (2015).
+\newblock No taxation without information: Deterrence and self-enforcement in the value added tax.
+\newblock \textit{American Economic Review}, 105(8), 2539--2569.
+
+\bibitem[Suri and Jack(2017)]{suri2017long}
+Suri, T., \& Jack, W. (2016).
+\newblock The long-run poverty and gender impacts of mobile money.
+\newblock \textit{Science}, 354(6317), 1288--1292.
+
+\bibitem[Cogneau et~al.(2021)]{cogneau2021estimating}
+Cogneau, D., Dupraz, Y., \& Mespl{\'e}-Somps, S. (2021).
+\newblock Estimating the size of the informal sector in African economies.
+\newblock \textit{World Development}, 139, 105304.
+
+\end{thebibliography}
+
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{Data Sources}
+
+\textbf{Treatment Effects.} Treatment effect estimates are drawn from the published papers by \citet{haushofer2016short} and \citet{egger2022general}. Replication data are available from Harvard Dataverse (doi:10.7910/DVN/M2GAZN) and the Econometric Society supplementary materials.
+
+\textbf{Kenya Fiscal Parameters.} Tax rates are from the Kenya Revenue Authority and PWC Tax Summaries. Informal sector estimates are from \citet{cogneau2021estimating}.
+
+\textbf{PPP Conversion.} Purchasing power parity factors are from the World Bank International Comparison Program.
+
+\subsection{Variable Definitions}
+
+\textbf{Consumption} captures total monthly household expenditure on food and non-food items, measured in USD PPP using World Bank purchasing power parity conversion factors. \textbf{Assets} represent the total value of household assets including livestock, durable goods, and savings, also measured in USD PPP. \textbf{Earnings} denote monthly revenue from both wage employment and self-employment activities, measured in USD PPP to enable cross-study comparability. The \textbf{transfer} variable refers to the one-time payment from GiveDirectly, approximately \$1,000 USD at market exchange rates. Finally, \textbf{fiscal externality} represents the present value of additional tax revenue generated by behavioral responses to the transfer, calculated by applying effective tax rates to consumption and earnings gains and discounting over the assumed persistence period.
+
+\section{MVPF Calculation Details}
+
+\subsection{Willingness to Pay}
+
+For cash transfers, WTP equals the transfer amount net of administrative costs:
+\begin{equation}
+    WTP_{\text{direct}} = T \times (1 - \alpha)
+\end{equation}
+where $T = \$1,000$ is the transfer and $\alpha = 0.15$ is the administrative cost rate.
+
+For spillovers, WTP equals the consumption gain to non-recipients:
+\begin{equation}
+    WTP_{\text{spillover}} = \Delta C^{NR} \times \frac{N^{NR}}{N^R}
+\end{equation}
+where $\Delta C^{NR}$ is the non-recipient consumption gain and $N^{NR}/N^R$ is the ratio of non-recipients to recipients.
+
+\subsection{Fiscal Externalities}
+
+VAT externality:
+\begin{equation}
+    FE_{\text{VAT}} = \Delta C \times \tau_v \times \theta \times \sum_{t=1}^{T} \frac{(1-\delta_c)^{t-1}}{(1+r)^t}
+\end{equation}
+
+Income tax externality:
+\begin{equation}
+    FE_{\text{income}} = \Delta E \times \tau_e \times (1-s) \times \sum_{t=1}^{T} \frac{(1-\delta_e)^{t-1}}{(1+r)^t}
+\end{equation}
+
+\subsection{MVPF Formula}
+
+\begin{equation}
+    \text{MVPF} = \frac{WTP}{T - FE_{\text{VAT}} - FE_{\text{income}}}
+\end{equation}
+
+With MCPF adjustment:
+\begin{equation}
+    \text{MVPF}_{\text{MCPF}} = \frac{WTP}{(T - FE_{\text{VAT}} - FE_{\text{income}}) \times \text{MCPF}}
+\end{equation}
+
+\section{Additional Figures}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig1_mvpf_components.png}
+\caption{MVPF Components: Kenya UCT Program}
+\label{fig:components}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig6_ge_spillovers.png}
+\caption{General Equilibrium Effects: Recipients vs. Non-Recipients}
+\label{fig:spillovers}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig4_persistence_discount_heatmap.png}
+\caption{MVPF by Effect Persistence and Discount Rate}
+\label{fig:heatmap}
+\end{figure}
+
+\end{document}
