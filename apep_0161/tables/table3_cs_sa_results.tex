@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\caption{Heterogeneity-Robust Estimators (Working-Age 25--64)}
+\label{tab:cs_sa}
+\begin{tabular}{lcc}
+\hline\hline
+Estimator & ATT & SE \\
+\hline
+Callaway-Sant'Anna (2021) & 0.922 & (0.744) \\
+Sun-Abraham (2021) & 1.052 & (0.786) \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} $^{***}p<0.01$; $^{**}p<0.05$; $^{*}p<0.1$.
+\item CS-DiD uses doubly robust estimation with never-treated control group.
+\item Sun-Abraham uses interaction-weighted estimator via \texttt{fixest::sunab()}.
+\item N = 1142 state-year observations. Clusters = 50 states.
+\item Outcome: working-age (25--64) diabetes mortality per 100,000.
+\end{tablenotes}
+\end{table}

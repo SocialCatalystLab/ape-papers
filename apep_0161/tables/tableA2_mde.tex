@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\caption{Minimum Detectable Effects (Working-Age 25--64)}
+\label{tab:mde}
+\begin{tabular}{llccc}
+\hline\hline
+Estimator & Power & SE & MDE & MDE (\% of Mean) \\
+\hline
+TWFE & 80\% & 1.115 & 3.12 & 22.6\% \\
+TWFE & 90\% & 1.115 & 3.61 & 26.1\% \\
+CS-DiD & 80\% & 0.744 & 2.08 & 15.1\% \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} MDE = $(z_{\alpha/2} + z_{\beta}) \times \text{SE}$.
+\item Two-sided test at 5\% significance. SE from actual estimator variance.
+\item Working-age (25--64) panel. Vermont excluded.
+\end{tablenotes}
+\end{table}

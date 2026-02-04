@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks and Placebo Tests (Working-Age 25--64)}
+\label{tab:robustness}
+\begin{tabular}{lccc}
+\hline\hline
+Specification & ATT & SE & 95\% CI \\
+\hline
+\multicolumn{4}{l}{\textit{Panel A: Alternative Specifications}} \\
+CS-DiD (baseline, 25-64) & 0.922 & 0.744 & [-0.536, 2.380] \\
+TWFE excl. 2020-2021 & -0.157 & 0.895 & [-1.912, 1.598] \\
+TWFE + COVID death rate & 0.173 & 1.095 & [-1.973, 2.320] \\
+TWFE + COVID year dummies & -0.117 & 1.115 & [-2.302, 2.069] \\
+CS-DiD excl. 2020-2021 & 0.295 & 0.779 & [-1.232, 1.821] \\
+CS-DiD (log mortality) & 0.074 & 0.095 & [-0.112, 0.260] \\
+Wild cluster bootstrap$^{\dagger}$ & -0.117 & --- & [-2.365, 2.164] \\
+TWFE (all ages) & -0.202 & 1.933 & [-3.990, 3.586] \\
+CS-DiD (all ages) & 1.598 & 1.251 & [-0.854, 4.050] \\
+\hline
+\multicolumn{4}{l}{\textit{Panel B: Placebo Tests}} \\
+Placebo: Heart Disease (TWFE) & -5.658 & 6.872 & [-19.128, 7.812] \\
+Placebo: Cancer (TWFE) & 0.515 & 5.376 & [-10.022, 11.053] \\
+Placebo: Heart (CS-DiD, Full) & 3.072 & 4.385 & [-5.522, 11.666] \\
+Placebo: Cancer (CS-DiD, Full) & 1.639 & 3.197 & [-4.626, 7.905] \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} $^{***}p<0.01$; $^{**}p<0.05$; $^{*}p<0.1$. Standard errors clustered at state level.
+\item Primary outcome: working-age (25--64) diabetes mortality per 100,000.
+\item $^{\dagger}$Wild bootstrap uses Webb (6-point) weights with 9,999 replications; does not produce a traditional SE (inference via bootstrap $p$-value and CI).
+\item All-ages specifications shown for comparison (outcome dilution expected).
+\item Placebo tests examine causes of death unrelated to insulin copay caps. All placebo estimates are statistically insignificant ($p > 0.10$). Sign differences across TWFE and CS-DiD estimators for placebo outcomes are expected under the null hypothesis of no effect, given the large standard errors relative to point estimates.
+\end{tablenotes}
+\end{table}

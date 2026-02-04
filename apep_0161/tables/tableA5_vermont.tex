@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Vermont Sensitivity Analysis}
+\label{tab:vermont}
+\begin{tabular}{lcc}
+\hline\hline
+Specification & ATT & SE \\
+\hline
+Vermont excluded & -0.117 & (1.115) \\
+Vermont as treated & -0.157 & (1.100) \\
+Vermont as control & -0.094 & (1.110) \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} $^{***}p<0.01$; $^{**}p<0.05$; $^{*}p<0.1$.
+\item TWFE specifications with state and year FE, clustered at state level.
+\item Vermont (2022 copay cap) has suppressed working-age diabetes mortality data.
+\item Primary specification excludes Vermont entirely.
+\item ``Vermont as treated'' includes VT in treated group (limited post-treatment data).
+\item ``Vermont as control'' reclassifies VT as never-treated.
+\end{tablenotes}
+\end{table}

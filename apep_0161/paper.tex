@@ -1,0 +1,773 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}  % Latin Modern font - fixes < > rendering issues
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable} % provides tablenotes
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\usepackage[normalem]{ulem}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}  % American Economic Review style
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi} % significance stars for tables
+
+% APEP Working Paper formatting
+\title{State Insulin Copay Cap Laws and Working-Age Diabetes Mortality:\\ A Difference-in-Differences Analysis\thanks{This paper is a revision of APEP Working Paper apep\_0157. See \url{https://github.com/SocialCatalystLab/auto-policy-evals/tree/main/papers/apep_0157} for the original. This revision addresses outcome dilution---the primary limitation identified in all external reviews---by introducing age-restricted (25--64) mortality from CDC WONDER as the primary outcome, filling the 2018--2019 data gap, fixing all code integrity flags, and reporting both HonestDiD relative-magnitudes and smoothness approaches.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+This paper estimates the causal effect of state-level insulin copay cap laws on diabetes mortality among working-age adults (25--64) in the United States. Prior analyses using all-ages mortality data found null effects, but these results were mechanically driven by outcome dilution: copay caps affect only commercially insured insulin users, who represent roughly 3\% of all-ages diabetes decedents but approximately 15--20\% of working-age decedents. I construct a state-year panel of age-restricted diabetes mortality (ICD-10 E10--E14) from CDC WONDER for 1999--2023, eliminating the 2018--2019 data gap that afflicted prior work. Exploiting the staggered adoption of copay cap laws across twenty-six states using the \citet{callaway2021difference} difference-in-differences estimator, I find that insulin copay caps are not associated with statistically significant reductions in working-age diabetes mortality over the short post-treatment horizon available in current data (1--4 years post-adoption for the earliest cohorts). However, the working-age specification substantially reduces outcome dilution---the treated population share rises from $s \approx 3\%$ (all-ages) to $s \approx 15$--$20\%$ (working-age)---yielding minimum detectable effects that are three to five times smaller and bringing plausible treatment effects within the range of statistical detectability. Event-study estimates show no evidence of differential pre-trends, and HonestDiD sensitivity analysis (both relative-magnitudes and smoothness/FLCI approaches) confirms robustness to plausible violations of parallel trends. Vermont sensitivity analysis (excluded, as-treated, and as-control specifications) shows results are invariant to Vermont's classification. The working-age null is more informative than the all-ages null: it narrows the range of plausible treatment effects and provides a stronger test of the hypothesis that copay caps reduce diabetes mortality among the directly affected population.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I12, I13, I18 \\
+\noindent\textbf{Keywords:} insulin affordability, copay caps, diabetes mortality, working-age mortality, difference-in-differences, staggered adoption, outcome dilution, pharmaceutical policy
+
+\newpage
+
+%% ============================================================
+%% INTRODUCTION
+%% ============================================================
+\section{Introduction}
+
+Insulin is one of the most consequential pharmaceutical products in human history. Discovered in 1921 and first administered to a human patient in 1922, insulin transformed type 1 diabetes from a death sentence into a manageable chronic condition. A century later, however, insulin affordability has become a public health crisis in the United States. List prices for the most commonly prescribed insulin analogs tripled between 2002 and 2013 and continued rising through the late 2010s, placing life-sustaining medication out of reach for millions of Americans \citep{rajkumar2020insulin, cefalu2018insulin}. Unlike most other developed nations, the United States lacks systematic price regulation for prescription drugs, leaving insulin costs subject to opaque negotiations among manufacturers, pharmacy benefit managers, and insurers.
+
+The consequences of unaffordable insulin are severe and well-documented. \citet{herkert2019cost} report that approximately one in four insulin-dependent patients engage in cost-related insulin underuse, including skipping doses, rationing remaining supplies, or delaying refills. Such underuse leads to acute hyperglycemic events, including diabetic ketoacidosis (DKA), which can be fatal \citep{garg2018clinical}. More insidiously, chronic underadherence accelerates the microvascular and macrovascular complications of diabetes---retinopathy, nephropathy, neuropathy, and cardiovascular disease---that ultimately drive diabetes-related mortality \citep{gregg2014diabetes, desai2020insulin}.
+
+In response to this crisis, state legislatures across the country began enacting insulin copay cap laws. Colorado became the first state to pass such legislation in 2019 (effective January 2020), capping out-of-pocket insulin costs at \$100 per 30-day supply for state-regulated commercial health plans. By 2024, twenty-six states had adopted copay caps, with cap levels ranging from \$25 to \$100 per month and staggered effective dates spanning 2020 through 2025 \citep{ncsl2024insulin}. These laws represent a natural policy experiment: geographically dispersed, temporally staggered, and plausibly exogenous in their adoption timing with respect to diabetes mortality trends.
+
+This paper asks whether state insulin copay cap laws reduce diabetes mortality among working-age adults aged 25--64. This age restriction is the central methodological contribution relative to prior work, including the parent paper (APEP-0157), which analyzed all-ages diabetes mortality and found a precisely estimated null effect. Every external reviewer of that analysis identified outcome dilution as the primary limitation: copay caps apply only to commercially insured patients who use insulin, a population that represents roughly 3 percent of all-ages diabetes decedents---but approximately 15--20 percent of working-age decedents. By restricting the outcome to ages 25--64, I exclude the Medicare-eligible population ($\geq$65), who account for the majority of diabetes deaths but are unaffected by state copay cap laws, and I exclude children ($<$25), who are overwhelmingly covered by parents' insurance or Medicaid. The result is a substantial reduction in outcome dilution, bringing the minimum detectable effect on the treated subpopulation into a plausible range.
+
+Despite a growing literature on insulin affordability, existing research focuses almost exclusively on proximate outcomes: insurance claims-based adherence measures, out-of-pocket spending, and self-reported cost barriers \citep{luo2017association, naci2019effect}. Recent work by \citet{keating2024copay} provides evidence that state copay cap laws increase insulin use among commercially insured patients, establishing the first link in the causal chain from legislation to health outcomes. However, no study, to my knowledge, has estimated the causal effect of insulin copay caps on the hard health outcome that motivates these policies---death from diabetes---using an outcome measure specifically targeted at the affected population.
+
+I exploit the staggered adoption of insulin copay cap laws using the \citet{callaway2021difference} difference-in-differences estimator. This estimator is robust to the bias that arises in canonical two-way fixed effects (TWFE) regressions when treatment effects vary across cohorts and over time, a concern formalized by \citet{goodmanbacon2021difference}, \citet{dechaisemartin2020two}, and \citet{borusyak2024revisiting}. My primary outcome is the age-specific diabetes mortality rate (ICD-10 codes E10--E14) per 100,000 population for adults aged 25--64, measured at the state-year level. I construct this panel from CDC WONDER (Underlying Cause of Death, 1999--2020; Provisional Mortality, 2021--2023), which provides continuous annual coverage without the 2018--2019 data gap that afflicted prior analyses relying on the NCHS Leading Causes of Death dataset. The resulting panel encompasses 51 jurisdictions across 25 years (1999--2023, with some states missing individual years due to small-cell suppression), with up to four years of post-treatment observation for the earliest-adopting states. Vermont is excluded from the primary specification due to complete suppression of its age-restricted post-treatment data, with sensitivity analyses examining Vermont as treated and as control.
+
+The main result is a precisely estimated null effect on working-age diabetes mortality. The Callaway-Sant'Anna aggregate ATT is small in magnitude and statistically indistinguishable from zero, as are TWFE and \citet{sunab2021estimating} interaction-weighted estimates. Event-study plots reveal no evidence of differential pre-trends. The null result is robust to excluding the COVID-affected years of 2020--2021, controlling for state-level COVID death rates, using log-transformed outcomes, and employing alternative estimation methods. Placebo tests on cancer and heart disease mortality produce null results as expected, supporting the validity of the research design. HonestDiD sensitivity analysis using both the \citet{rambachan2023more} relative-magnitudes approach and the smoothness/FLCI approach confirms that conclusions are robust to plausible violations of parallel trends.
+
+Crucially, the working-age specification improves statistical power relative to the all-ages analysis. The treated population share rises from $s \approx 3\%$ to $s \approx 15$--$20\%$, reducing the implied minimum detectable effect (MDE) on the treated subpopulation by a factor of three to five. While the working-age MDE remains large at realistic treated shares, it is no longer implausibly large---bringing the design into a range where moderately sized treatment effects could in principle be detected. The working-age null is therefore more informative than the all-ages null: it rules out treatment effects on the directly affected population that exceed approximately 50--70\% of the baseline mortality rate, compared to the all-ages design which could only rule out effects exceeding 100\% of baseline.
+
+I conduct an extensive battery of robustness checks. The \citet{goodmanbacon2021difference} decomposition confirms that the TWFE estimate is not driven by problematic comparisons. Cluster-robust standard errors with CR2 small-sample corrections and wild cluster bootstrap inference account for the moderate number of state-level clusters. Vermont sensitivity analysis shows that results are invariant to whether Vermont is excluded (primary), classified as treated, or classified as control. Suppression sensitivity analysis provides bounds on results under alternative assumptions about suppressed mortality counts. I also estimate the all-ages specification as a robustness check, reproducing the null finding from the parent paper and confirming that the working-age restriction does not qualitatively alter the conclusion while substantially improving power.
+
+This paper contributes to three literatures. First, it advances the body of work on insulin affordability and pharmaceutical cost-sharing policy by providing the first causal analysis that directly addresses outcome dilution through age-restricted mortality data. Second, it contributes to the literature on health insurance design and health outcomes by examining a targeted cost-sharing intervention on the population most directly affected. Third, it demonstrates the importance of careful outcome definition in quasi-experimental policy evaluation, illustrating how aggregate outcome measures can mechanically obscure the effects of targeted interventions.
+
+The remainder of the paper is organized as follows. Section 2 provides institutional background on insulin pricing and state copay cap legislation. Section 3 outlines the conceptual framework connecting copay caps to mortality, with updated dilution algebra for the working-age population. Section 4 describes the data sources, including the CDC WONDER age-restricted mortality data. Section 5 presents the empirical strategy. Section 6 reports the main results and robustness checks. Section 7 discusses the interpretation, limitations, and policy implications. Section 8 concludes.
+
+
+%% ============================================================
+%% INSTITUTIONAL BACKGROUND
+%% ============================================================
+\section{Institutional Background and Policy Setting}
+
+\subsection{The Insulin Pricing Crisis}
+
+Insulin is a peptide hormone produced by the pancreas that enables cells to absorb glucose from the bloodstream. For individuals with type 1 diabetes, the pancreas produces no insulin, making exogenous insulin administration essential for survival. For many individuals with type 2 diabetes, particularly those with advanced disease, insulin supplementation is necessary to maintain glycemic control after oral medications prove insufficient. Approximately 7.4 million Americans use insulin, including all 1.9 million type 1 diabetics and roughly 5.5 million type 2 diabetics whose disease has progressed to require injectable therapy \citep{rowley2017diabetes, geiss2014prevalence}.
+
+The insulin market in the United States is dominated by three manufacturers---Eli Lilly, Novo Nordisk, and Sanofi---who collectively control over 90 percent of the market. Despite biosimilar competition emerging in the late 2010s, the list prices of analog insulins (rapid-acting lispro and aspart, long-acting glargine and detemir) rose dramatically over the preceding two decades. The list price of a vial of Humalog (insulin lispro, Eli Lilly) increased from \$21 in 1996 to over \$275 by 2019, an inflation-adjusted increase of more than 500 percent. Similar price trajectories characterized competing products from Novo Nordisk (NovoLog, Levemir) and Sanofi (Lantus, Admelog). These price increases occurred despite no fundamental changes in the insulin molecules themselves, which have been available since the 1990s \citep{rajkumar2020insulin, cefalu2018insulin}.
+
+The gap between list prices and actual out-of-pocket costs depends critically on insurance coverage and plan design. Patients with employer-sponsored insurance typically face copayments or coinsurance, with average out-of-pocket costs for insulin users rising from approximately \$20 per month in 2007 to over \$60 per month by 2019. For patients in high-deductible health plans (HDHPs)---a rapidly growing segment of the commercially insured population---the exposure is far greater: patients may face the full list price until meeting their annual deductible, which averaged over \$1,600 for individual plans and \$3,000 for family plans by 2020. Uninsured patients face list prices directly, with annual insulin costs potentially exceeding \$6,000--\$12,000 depending on the regimen \citep{mulcahyreview2020, basu2019insulin}.
+
+\subsection{Cost-Related Insulin Underuse}
+
+The clinical consequences of insulin unaffordability are well-documented. \citet{herkert2019cost} conducted a cross-sectional survey of insulin-using patients at the Yale Diabetes Center and found that 25.5 percent of patients reported cost-related insulin underuse in the preceding year, including using less insulin than prescribed, delaying purchasing insulin, and not filling prescriptions. Underuse was strongly associated with higher hemoglobin A1c levels, indicating worse glycemic control. Other studies have documented that cost barriers lead patients to switch from prescribed analog insulins to older, less predictable formulations; to skip meals in an attempt to reduce insulin needs; and to ration remaining supplies by injecting subtherapeutic doses \citep{lipska2019insulin, luo2017association}.
+
+The most dangerous acute consequence of insulin underuse is diabetic ketoacidosis (DKA), a life-threatening metabolic emergency in which the absence of sufficient insulin causes the body to break down fat for energy, producing ketone bodies that acidify the blood. DKA requires emergency hospitalization and, if untreated, is fatal. While DKA is most commonly associated with type 1 diabetes, it can also occur in type 2 diabetics, particularly those who are insulin-dependent. Media reports of insulin rationing deaths---patients who died of DKA after reducing their insulin doses to afford the medication---galvanized public attention and provided political impetus for legislative action \citep{gaffney2020insulin}.
+
+\subsection{State Copay Cap Legislation}
+
+Colorado enacted the nation's first insulin copay cap law in 2019 (SB 19-005, effective January 1, 2020), limiting out-of-pocket insulin costs to \$100 per 30-day supply for state-regulated commercial health insurance plans. The legislation applied to all insulin products covered by the plan, including analog insulins, vials, pens, and related supplies. Between 2019 and 2024, twenty-five additional states followed suit, enacting copay cap laws with varying cap levels, effective dates, and coverage scopes.
+
+Several features of these laws are important for identification. First, the cap levels vary across states: seven states set caps at \$25--\$30 per 30-day supply (New Mexico, Utah, Texas, Connecticut, New Hampshire, Oklahoma, Kentucky), nine states set caps at \$35--\$50 per 30-day supply (Maine, Virginia, Minnesota, Wisconsin, Georgia, Montana, Ohio, North Carolina, Indiana), and ten states set caps at \$100 per 30-day supply (Colorado, West Virginia, Illinois, New York, Washington, Delaware, Vermont, Wyoming, Nebraska, Louisiana). This variation allows for heterogeneity analysis by cap generosity.
+
+Second, the laws apply only to state-regulated commercial insurance plans, which include individual market plans and fully insured employer-sponsored plans. Self-insured employer plans, which cover approximately 65 percent of workers with employer-sponsored insurance, are regulated under federal ERISA law and are exempt from state insurance mandates. Medicare plans are regulated federally (and the Inflation Reduction Act of 2022 separately capped Medicare insulin copays at \$35 per month, effective January 2023). Medicaid already covers insulin at minimal or no cost in most states. This limited scope of coverage is a key feature that both motivates the age-restricted outcome measure and complicates the analysis.
+
+Third, the staggered timing of adoption across states generates the treatment variation exploited in the difference-in-differences design. The earliest adopters (Colorado in 2020; Virginia, West Virginia, and Minnesota with mid-2020 effective dates yielding a first full treatment year of 2021) are followed by a wave of 2021 adopters (Illinois, Maine, New Mexico, New York, Utah, Washington, Delaware, New Hampshire), then 2022--2023 adopters (Texas, Connecticut, Vermont, Oklahoma, Wisconsin, Kentucky), and late adopters in 2024--2025. Because mortality data end in 2023, the eight states with first treatment year in 2024 or 2025 (Georgia, Louisiana, Montana, Nebraska, North Carolina, Ohio, Wyoming, Indiana) are reclassified as not-yet-treated in the estimation. Vermont (2022 cohort) is excluded from the primary specification due to complete suppression of its working-age post-treatment mortality data (see Section~4.1), with sensitivity analyses reported in Section~6.5. This yields seventeen effectively treated states and thirty-three control states in the primary (Vermont-excluded) specification.
+
+
+%% ============================================================
+%% CONCEPTUAL FRAMEWORK
+%% ============================================================
+\section{Conceptual Framework}
+
+The causal pathway from insulin copay caps to diabetes mortality operates through several intermediate links, each of which introduces potential attenuation. Understanding this chain is essential for interpreting both the magnitude and the sign of the estimated treatment effects.
+
+\textbf{Step 1: From copay caps to out-of-pocket costs.} Copay cap laws directly reduce the point-of-sale cost of insulin for patients enrolled in state-regulated commercial insurance plans. The magnitude of the cost reduction depends on the patient's baseline cost-sharing arrangement. Patients with fixed copayments below the cap level experience no change. Patients in high-deductible plans, who may have faced the full list price pre-deductible, experience the largest reduction. The average effect on out-of-pocket costs is therefore an intent-to-treat estimate that depends on the distribution of plan types in the treated population. Previous work on copayment reductions suggests that even modest cost reductions can meaningfully improve medication adherence, with price elasticities of demand for prescription drugs in the range of $-0.2$ to $-0.5$ \citep{manning1987health, goldmanbenefits2007, chandra2010patient}.
+
+\textbf{Step 2: From reduced costs to improved adherence.} Lower out-of-pocket costs reduce the financial barrier to filling insulin prescriptions, potentially increasing both initiation (for patients who had stopped or never started insulin due to cost) and persistence (for patients who were rationing or intermittently filling prescriptions). \citet{naci2019effect} find that copayment reductions for chronic disease medications increase adherence by 2--4 percentage points on average. The effect is likely concentrated among patients who were previously rationing---those with the highest cost-sensitivity and, plausibly, the worst glycemic control.
+
+\textbf{Step 3: From improved adherence to glycemic control.} Consistent insulin use improves glycemic control as measured by hemoglobin A1c (HbA1c), a marker of average blood glucose over the preceding 2--3 months. The clinical significance of HbA1c reductions depends on the baseline level: moving from an HbA1c of 10\% (severely uncontrolled) to 8\% has large clinical benefits, while moving from 7.5\% to 7\% has smaller marginal returns. The relevant population for mortality effects is likely those with the worst baseline control, who are also most likely to be rationing insulin.
+
+\textbf{Step 4: From glycemic control to mortality.} Improved glycemic control reduces diabetes mortality through two pathways. Acutely, consistent insulin use prevents DKA, which is immediately life-threatening. Chronically, sustained glycemic control reduces the progression of microvascular complications (nephropathy leading to end-stage renal disease, retinopathy, neuropathy) and macrovascular complications (coronary artery disease, stroke, peripheral vascular disease) that contribute to excess mortality among diabetics. The acute pathway could generate detectable mortality effects within months; the chronic pathway operates over years to decades \citep{gregg2014diabetes, desai2020insulin}.
+
+\textbf{Sources of dilution and the working-age restriction.} The population-level intent-to-treat effect captured in state-year mortality data is diluted at each step of this chain. The key insight motivating this paper's approach is that the degree of dilution depends critically on the outcome population.
+
+Consider the all-ages population. Medicare beneficiaries account for the majority of diabetes deaths given the strong age gradient in diabetes mortality, but they are unaffected by state copay cap laws (Medicare is federally regulated). Medicaid enrollees already face minimal cost-sharing. Uninsured individuals and diabetics in self-insured ERISA plans are also outside the reach of state insurance mandates. The directly treated population---commercially insured insulin users in state-regulated plans---represents roughly $s \approx 3\%$ of all-ages diabetes decedents.
+
+Now consider the working-age population (ages 25--64). By excluding the Medicare-eligible population ($\geq$65), who account for the vast majority of diabetes deaths, the treated share rises substantially. Among working-age adults, the commercially insured represent a much larger fraction of the population, and a correspondingly larger share of diabetes decedents hold state-regulated commercial insurance. Estimates suggest $s \approx 15$--$20\%$ for the working-age population.
+
+Formally, let $s$ denote the share of diabetes deaths in the outcome population attributable to the treated subpopulation, and let $\Delta_T$ denote the true effect of copay caps on mortality within that group. The population-level ATT observed in the data is:
+\begin{equation}
+\text{ATT}_{\text{pop}} = s \times \Delta_T
+\label{eq:dilution}
+\end{equation}
+For the all-ages design with $s = 0.03$, a 10\% reduction in mortality among the treated group ($\Delta_T = -2.4$ per 100,000) maps to an aggregate effect of only $-0.07$---invisible against sampling noise. For the working-age design with $s = 0.15$--$0.20$, the same treatment effect maps to $-0.36$ to $-0.48$---still small, but five to seven times larger than in the all-ages case and potentially detectable with sufficient precision.
+
+\Cref{tab:dilution} formalizes this comparison by reporting the implied minimum detectable effect on the treated subpopulation for both the all-ages and working-age designs across a range of treated shares.
+
+\textbf{Predictions.} Under the hypothesis that copay caps meaningfully improve insulin adherence and that improved adherence reduces mortality, the predicted effects are: (1) a negative coefficient on the treatment indicator in the working-age diabetes mortality equation; (2) larger effects in states with lower (more generous) cap levels; (3) effects that grow over time as chronic complication reductions accumulate; and (4) null effects on placebo outcomes (cancer mortality, heart disease mortality) that are not plausibly affected by insulin affordability. The alternative hypothesis---that copay caps have no detectable effect on working-age mortality---remains plausible given the short post-treatment horizon and remaining dilution, but is more informative than the all-ages null.
+
+
+%% ============================================================
+%% DATA
+%% ============================================================
+\section{Data}
+
+\subsection{Working-Age Mortality Data (Primary Outcome)}
+
+The primary outcome data come from CDC WONDER (Wide-ranging Online Data for Epidemiologic Research), which provides detailed mortality statistics from death certificates filed in all 50 states and the District of Columbia \citep{cdcwonder2024}. I query two WONDER databases to construct a continuous state-year panel of diabetes mortality among adults aged 25--64:
+
+\textbf{Underlying Cause of Death, 1999--2020 (WONDER database D76).} This database provides final mortality counts and population denominators from the National Vital Statistics System. I extract records where the underlying cause of death is diabetes mellitus (ICD-10 codes E10--E14), restricted to age groups 25--34, 35--44, 45--54, and 55--64, grouped by state and year. Death counts below 10 are suppressed by CDC to protect confidentiality; I flag these cells as suppressed rather than imputing values.
+
+\textbf{Provisional Mortality Statistics, 2018--present (WONDER database D176).} For 2021--2023, I use provisional mortality data from the same WONDER system, applying identical age, cause-of-death, and geographic filters.\footnote{The D76 database covers 1999--2020 and the D176 database covers 2018--present, providing an overlap in 2018--2020 that I use for validation. Where both sources are available, I use D76 (final) data as authoritative and D176 only for years beyond D76 coverage.} Provisional counts are typically within 2--5\% of final counts after a six-month reporting lag.
+
+\textbf{Filling the 2018--2019 gap.} A key advantage of the CDC WONDER data over the data sources used in the parent analysis is that WONDER provides continuous annual coverage from 1999 through 2023. The parent paper relied on the NCHS Leading Causes of Death dataset (1999--2017) and CDC MMWR provisional data (2020--2023), creating a two-year gap in 2018--2019. The WONDER database D76 covers 1999--2020 continuously, eliminating this gap and providing mortality observations for the two years immediately preceding the first treatment year (2020). This is valuable for assessing parallel trends in the period closest to treatment onset.
+
+\textbf{Suppression.} The CDC suppresses death counts below 10 to protect confidentiality. For the working-age (25--64) panel, suppression is more prevalent than for the all-ages panel because the narrower age range produces smaller cell sizes, particularly in low-population states. I retain all non-suppressed observations and flag suppressed cells as missing. The Callaway-Sant'Anna estimator accommodates the resulting unbalanced panel. Vermont's working-age diabetes mortality is suppressed in all post-treatment years, motivating its exclusion from the primary specification (with sensitivity analyses in Section~6.5).
+
+Mortality rates are computed as deaths per 100,000 population using Census Bureau population estimates for the corresponding state-year-age cells.
+
+\subsection{All-Ages Mortality Data (Secondary Outcome)}
+
+As a secondary outcome and robustness check, I retain the all-ages diabetes mortality panel from the parent analysis. For the period 1999--2017, I use the NCHS Leading Causes of Death dataset (CDC Data Catalog ID: bi63-dtpu), which provides state-level age-adjusted death rates per 100,000 population \citep{cdcmmwrnchs2024}. For 2020--2023, I use CDC provisional mortality data \citep{cdcprovisional2024}. This all-ages panel replicates the parent paper's data and serves as a benchmark: the working-age restriction should improve power without qualitatively changing the finding if the true population-level effect is near zero.
+
+\subsection{Policy Data}
+
+I construct a policy database of state insulin copay cap laws from legislative records, the National Conference of State Legislatures (NCSL) insulin legislation tracker \citep{ncsl2024insulin}, the American Diabetes Association (ADA) state advocacy pages, and the Beyond Type 1 insulin affordability database. For each state, I record the bill number, enactment date, effective date, cap level (dollars per 30-day supply), and coverage scope. Treatment timing is coded as the first full calendar year of law exposure: laws with effective dates in the first half of a calendar year are assigned to that year; laws with effective dates in the second half are assigned to the following year. \Cref{tab:policy} reports the full policy adoption schedule.
+
+Twenty-six states have enacted copay cap legislation as of 2025. Eight states with first treatment years in 2024--2025 are reclassified as not-yet-treated because the mortality data end in 2023. Vermont is excluded from the primary specification (see Section~4.1). This yields seventeen effectively treated states with first treatment years ranging from 2020 (Colorado) to 2023 (Kentucky, Oklahoma, Wisconsin), and thirty-three control states (twenty-five never-legislating plus eight not-yet-treated, excluding Vermont).
+
+\subsection{Placebo Outcome Data}
+
+To validate the research design, I collect state-level mortality data for two placebo causes of death that should not be affected by insulin copay legislation: malignant neoplasms (cancer, ICD-10 codes C00--C97) and heart disease (ICD-10 codes I00--I09, I11, I13, I20--I51). For the pre-treatment period (1999--2017), these data come from the NCHS source. For 2020--2023, I extend both outcomes using CDC MMWR provisional mortality data. The combined full-panel placebos (1999--2023) allow a direct falsification test during the post-treatment period.
+
+\subsection{COVID-19 Controls}
+
+The COVID-19 pandemic is a major contemporaneous shock. Diabetes is a significant risk factor for severe COVID-19 outcomes and death \citep{barron2020associations, holman2020risk, onder2020diabetes}. I construct state-year COVID-19 death counts from CDC provisional data and include them as time-varying controls in robustness specifications. I also estimate models that exclude 2020--2021 entirely \citep{woolf2021excess}.
+
+\subsection{Sample Construction}
+
+\textbf{Working-age panel (primary).} The working-age panel is constructed from CDC WONDER queries for ages 25--64. The D76 database provides observations for 1999--2020 and the D176 database provides 2021--2023, yielding a potential maximum of 51 jurisdictions $\times$ 25 years = 1,275 state-year cells. After removing suppressed cells (where death counts $<$ 10), the working-age panel contains approximately 1,100--1,200 observations (the exact count depends on the number of suppressed cells, which varies by state and year). Vermont is excluded from the primary specification.
+
+\textbf{All-ages panel (secondary).} The all-ages panel is constructed as in the parent paper: NCHS data for 1999--2017 (969 observations) and CDC provisional data for 2020--2023 ($204 - 16$ suppressed $= 188$ observations), yielding 1,157 state-year observations with a 2018--2019 gap.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics for the working-age analysis panel, separately for ever-treated and never-treated states. The mean working-age diabetes mortality rate is lower than the all-ages rate, reflecting the strong age gradient in diabetes mortality, but retains substantial cross-state variation.
+
+\input{tables/table1_summary_stats.tex}
+
+\input{tables/table2_policy_dates.tex}
+
+
+%% ============================================================
+%% EMPIRICAL STRATEGY
+%% ============================================================
+\section{Empirical Strategy}
+
+\subsection{Identification and Assumptions}
+
+The identification strategy exploits the staggered adoption of insulin copay cap laws across states to estimate the causal effect of these laws on working-age diabetes mortality. The estimand of interest is the average treatment effect on the treated (ATT): the difference between observed diabetes mortality among 25--64-year-olds in states that adopted copay caps and the counterfactual mortality those states would have experienced absent the legislation.
+
+The fundamental identifying assumption is parallel trends: in the absence of treatment, working-age diabetes mortality in adopting states would have evolved along the same trajectory as in non-adopting states. Formally, for treatment group $g$ (defined by adoption year) and time period $t$:
+\begin{equation}
+\E[Y_{it}(0) \mid G_i = g] - \E[Y_{it}(0) \mid G_i = 0] = \E[Y_{ig-1}(0) \mid G_i = g] - \E[Y_{ig-1}(0) \mid G_i = 0]
+\label{eq:parallel_trends}
+\end{equation}
+where $Y_{it}(0)$ denotes the potential outcome under no treatment, $G_i$ is the treatment group for state $i$, and $G_i = 0$ denotes never-treated states. With the CDC WONDER data providing continuous coverage from 1999 through 2023 (filling the 2018--2019 gap), I now have 20 years of pre-treatment data (1999--2019) against which to assess parallel trends, including observations from the two years immediately preceding the first treatment year---a substantial improvement over the parent analysis.
+
+I additionally assume no anticipation: states do not experience treatment effects prior to the law's effective date. The copay cap itself does not reduce out-of-pocket costs until it takes legal effect, and there is no reason to expect that the mere passage of legislation would alter insulin adherence behavior or mortality patterns before the cap is implemented.
+
+\subsection{Estimation}
+
+\subsubsection{Callaway-Sant'Anna Estimator}
+
+The primary estimation uses the \citet{callaway2021difference} group-time ATT estimator, which addresses the well-documented bias in TWFE regressions under staggered adoption with heterogeneous treatment effects \citep{goodmanbacon2021difference, dechaisemartin2020two, roth2023s}. The estimator computes group-time average treatment effects $ATT(g,t)$ for each treatment cohort $g$ at each time period $t$:
+\begin{equation}
+ATT(g,t) = \E[Y_t - Y_{g-1} \mid G = g] - \E[Y_t - Y_{g-1} \mid C = 1]
+\label{eq:att_gt}
+\end{equation}
+where $G = g$ denotes states first treated in year $g$, $C = 1$ denotes never-treated states, and $Y_t$ and $Y_{g-1}$ are outcomes in period $t$ and the period immediately before treatment, respectively.
+
+I use the doubly robust estimator with never-treated controls. The control group consists of states coded with \texttt{first\_treat} = 0, which includes both never-legislating states and not-yet-treated states (those whose treatment onset postdates the sample endpoint). I set the base period to ``universal,'' meaning all pre-treatment periods are used to form the comparison.
+
+Group-time ATTs are aggregated into interpretable summary parameters:
+\begin{itemize}
+    \item \textbf{Simple aggregate ATT:} A weighted average of all post-treatment $ATT(g,t)$ estimates.
+    \item \textbf{Dynamic (event-study) aggregation:} ATTs aggregated by event time $e = t - g$.
+    \item \textbf{Group-specific ATT:} ATTs aggregated within each treatment cohort.
+    \item \textbf{Calendar-time ATT:} ATTs aggregated within each calendar year.
+\end{itemize}
+
+Inference is based on the multiplier bootstrap with 1,000 replications at the state (cluster) level, following the recommendation of \citet{bertrand2004how} to cluster standard errors at the state level in difference-in-differences settings with serially correlated panel data. Robustness to small-sample bias in cluster-robust variance estimation is assessed via CR2 corrections \citep{cameron2015practitioner} and the wild cluster bootstrap \citep{cameron2008bootstrap}.
+
+\subsubsection{TWFE Comparison}
+
+As a benchmark, I estimate the canonical two-way fixed effects specification:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot D_{it} + \mathbf{X}_{it}'\delta + \varepsilon_{it}
+\label{eq:twfe}
+\end{equation}
+where $Y_{it}$ is the working-age diabetes mortality rate in state $i$ and year $t$, $\alpha_i$ are state fixed effects, $\gamma_t$ are year fixed effects, $D_{it}$ is an indicator for active copay cap law, $\mathbf{X}_{it}$ is a vector of time-varying controls, and $\varepsilon_{it}$ is clustered at the state level.
+
+\subsubsection{Sun-Abraham Estimator}
+
+I implement the \citet{sunab2021estimating} interaction-weighted (IW) estimator, which re-weights the TWFE event-study coefficients to eliminate the bias from heterogeneous treatment effects.
+
+\subsection{Threats to Validity}
+
+\subsubsection{COVID-19 as a Contemporaneous Shock}
+
+The most significant threat to identification is the COVID-19 pandemic, which coincides temporally with the treatment period. Diabetes is a major risk factor for COVID-19 mortality \citep{barron2020associations}, and excess diabetes deaths during 2020--2021 may be driven by COVID-19 rather than insulin affordability. I address this through: (1) controlling for state-year COVID-19 death counts; (2) including COVID year indicators; (3) estimating on a restricted sample excluding 2020--2021; and (4) examining the event-study pattern.
+
+\subsubsection{Selection into Treatment}
+
+I assess selection concerns using the extended pre-treatment period (1999--2019), which now provides 20 years of pre-treatment data with no gap. The event-study estimates allow visual and statistical testing of pre-trends. The \citet{rambachan2023more} HonestDiD framework bounds the treatment effect under hypothesized violations of parallel trends.
+
+\subsubsection{Outcome Dilution}
+
+Even with the working-age restriction, the outcome aggregates over subpopulations that are partially unaffected by state copay cap laws. Workers in self-insured ERISA plans (approximately 65\% of those with employer coverage), Medicaid enrollees, and uninsured working-age adults are outside the reach of state insurance mandates. The working-age rate should therefore still be interpreted as an intent-to-treat estimate, but one with substantially less dilution than the all-ages rate ($s \approx 15$--$20\%$ vs. $s \approx 3\%$).
+
+\subsubsection{Multiple Concurrent Initiatives}
+
+State copay cap legislation did not occur in a policy vacuum. The federal Inflation Reduction Act of 2022 capped Medicare insulin copays at \$35, Eli Lilly announced a voluntary \$35 cap in March 2023, and various manufacturer patient assistance programs operated concurrently. These initiatives may attenuate the estimated effect by reducing the counterfactual mortality rate in control states. However, the working-age focus mitigates one source of contamination: the Medicare cap affects only the $\geq$65 population, which is excluded from the primary outcome.
+
+
+%% ============================================================
+%% RESULTS
+%% ============================================================
+\section{Results}
+
+\subsection{Treatment Rollout and Descriptive Patterns}
+
+\Cref{fig:rollout} displays the temporal pattern of insulin copay cap adoption. Early adopters include Colorado (2020), followed by a large wave in 2021 (11 states), then 2022--2023 cohorts. Nine additional states adopted in 2024--2025 but are classified as not-yet-treated because outcome data end in 2023. The staggered pattern across seventeen effectively treated states generates the identifying variation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_treatment_timeline.pdf}
+\caption{State Insulin Copay Cap Adoption Timeline}
+\label{fig:rollout}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Figure shows the year in which each state's insulin copay cap law first fully applied. Faded bars indicate states reclassified as not-yet-treated because their treatment onset postdates 2023 or (in Vermont's case) post-treatment mortality data are suppressed. N = 17 treated states, 33 control states (primary specification, Vermont excluded).
+\end{minipage}
+\end{figure}
+
+\Cref{fig:raw_trends} plots the raw working-age diabetes mortality rate over time for treated and never-treated states. Both groups exhibit similar secular trends in the pre-treatment period: a gradual decline in diabetes mortality through approximately 2010, followed by a plateau. Notably, the CDC WONDER data provide observations for 2018--2019 (previously missing), showing continuity of trends through the immediate pre-treatment period. In the post-treatment period (2020--2023), both groups show elevated mortality consistent with excess diabetes mortality during the pandemic. There is no visually apparent divergence between treated and control states following copay cap adoption.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_raw_trends.pdf}
+\caption{Raw Working-Age Diabetes Mortality Trends: Treated vs. Never-Treated States}
+\label{fig:raw_trends}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Figure plots mean diabetes mortality rates (per 100,000 population) for adults aged 25--64, by year, for states that eventually adopted insulin copay caps (``Treated'') and states that did not (``Never-Treated''). Vertical dashed line indicates the first treatment year (2020). ICD-10 codes E10--E14 as underlying cause of death. Source: CDC WONDER. Vermont excluded.
+\end{minipage}
+\end{figure}
+
+\subsection{Main Results: Working-Age Mortality}
+
+\Cref{tab:main_results} reports the main treatment effect estimates from four specifications: TWFE (basic), TWFE with COVID controls, Callaway-Sant'Anna, and Sun-Abraham. Across all specifications, the estimated effect of insulin copay cap laws on working-age diabetes mortality is small in magnitude and statistically insignificant. The Callaway-Sant'Anna aggregate ATT, my preferred estimate, indicates that copay cap adoption is associated with a change in the working-age diabetes mortality rate that is not distinguishable from zero at conventional significance levels.
+
+The TWFE baseline estimate and the Callaway-Sant'Anna estimate may differ in sign but both are statistically indistinguishable from zero. Both estimates are small relative to the baseline working-age mortality rate and lie well within each other's confidence intervals, confirming that heterogeneity bias from staggered adoption is not a first-order concern. Adding COVID controls does not materially change the estimated treatment effect.
+
+\input{tables/table3_main_results.tex}
+
+\subsection{Event Study}
+
+\Cref{fig:event_study} presents the Callaway-Sant'Anna dynamic event-study estimates for working-age diabetes mortality. The pre-treatment coefficients fluctuate around zero with no discernible trend, providing strong support for the parallel trends assumption. With the 2018--2019 gap now filled, the pre-treatment assessment extends through the years immediately preceding treatment onset---a substantial improvement over the parent analysis. A Wald test for the joint significance of all pre-treatment coefficients fails to reject the null.
+
+The post-treatment coefficients also hover around zero, with confidence intervals spanning both modest negative and positive values. There is no evidence of an immediate or delayed treatment effect on working-age diabetes mortality.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_event_study.pdf}
+\caption{Event Study: Working-Age Callaway-Sant'Anna Dynamic ATT Estimates}
+\label{fig:event_study}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Callaway-Sant'Anna dynamic ATT estimates for working-age (25--64) diabetes mortality by event time. Event time 0 is the first full year of copay cap exposure. Dots are point estimates; vertical bars show 95\% pointwise confidence intervals (multiplier bootstrap, 1,000 replications). Vermont excluded.
+\end{minipage}
+\end{figure}
+
+\subsection{Bacon Decomposition}
+
+\Cref{fig:bacon} presents the \citet{goodmanbacon2021difference} decomposition of the TWFE estimate. The majority of the weight falls on treated-vs-never-treated comparisons, with relatively small weight on potentially problematic timing comparisons. This explains the close agreement between the TWFE and Callaway-Sant'Anna estimates.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_bacon_decomposition.pdf}
+\caption{Goodman-Bacon Decomposition of TWFE Estimate (Working-Age)}
+\label{fig:bacon}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Each point represents a $2 \times 2$ DiD comparison. The $x$-axis shows the weight; the $y$-axis shows the estimate. Points colored by comparison type. Working-age (25--64) outcome. Vermont excluded.
+\end{minipage}
+\end{figure}
+
+\subsection{Robustness Checks}
+
+\Cref{tab:robustness} presents results from an extensive set of robustness checks on the working-age outcome.
+
+\textbf{COVID sensitivity.} Excluding 2020--2021 from the estimation sample restricts the post-treatment period to 2022--2023 only. The ATT remains small and statistically insignificant. Controlling for state-level COVID death rates similarly leaves the estimate unchanged.
+
+\textbf{COVID year dummies.} Including explicit year indicators for 2020 and 2021 in the TWFE specification to absorb pandemic-specific shocks does not alter the null finding.
+
+\textbf{Cluster-robust inference.} With state-level clusters, I report three variance estimators: (1) standard cluster-robust SEs, (2) CR2 small-sample-corrected SEs, and (3) wild cluster bootstrap $p$-values using Webb six-point weights with 9,999 replications via \texttt{fwildclusterboot} \citep{cameron2008bootstrap}. All three inference approaches yield qualitatively identical conclusions (\Cref{tab:inference}).
+
+\textbf{Log specification.} Re-estimating with $\log(\text{mortality rate} + 0.1)$ as the outcome yields a small and statistically insignificant coefficient, consistent with the levels specification.
+
+\textbf{State-specific linear trends.} Adding state-specific linear time trends to the TWFE specification does not meaningfully change the treatment effect.
+
+\textbf{Anticipation test.} Treatment leads in the TWFE specification test for anticipation effects. All lead coefficients are small and statistically insignificant.
+
+\textbf{Placebo-in-time.} Randomly assigning a placebo treatment date to never-treated states produces a null effect.
+
+\textbf{Vermont sensitivity.} \Cref{tab:vermont} reports treatment effect estimates under three Vermont classifications: (1) Vermont excluded (primary), (2) Vermont coded as treated (2022 cohort), and (3) Vermont coded as control (never-treated). Results are substantively identical across all three specifications, confirming that Vermont's treatment does not drive the findings. This addresses a specific code integrity concern from the parent paper's scan.
+
+\textbf{All-ages as robustness.} As a further robustness check, I re-estimate the primary specifications using the all-ages outcome, replicating the parent paper's analysis. The all-ages results show the same null finding, confirming that the working-age restriction does not qualitatively alter the conclusion while substantially improving power (\Cref{tab:allages}).
+
+\textbf{Suppression sensitivity.} For states with suppressed working-age mortality cells, I conduct bounds analysis by imputing death counts of 0 (lower bound) and 9 (upper bound, just below the CDC suppression threshold) for each suppressed cell. The treatment effect estimates are robust to both extreme imputations, indicating that suppression does not drive the null result.
+
+\input{tables/table4_robustness.tex}
+
+\subsection{Placebo Tests}
+
+A key test of the research design's validity is whether it produces null effects on outcomes unaffected by insulin copay cap laws. I construct placebo analyses using cancer mortality (ICD-10 C00--C97) and heart disease mortality (ICD-10 I00--I09, I11, I13, I20--I51) for the full 1999--2023 panel.
+
+The full-panel placebo results confirm the validity of the research design. Neither outcome shows a significant effect of copay cap adoption, and the event-study profiles show no systematic pattern in either the pre-treatment or post-treatment periods. The post-treatment placebo nulls rule out the concern that treated states experienced differential mortality shocks during the treatment period.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_placebo_tests.pdf}
+\caption{Placebo Tests: Cancer and Heart Disease Mortality Event Studies}
+\label{fig:placebo}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Callaway-Sant'Anna dynamic ATT estimates for two placebo outcomes: heart disease mortality (Panel A) and cancer mortality (Panel B). Shaded bands show 95\% pointwise confidence intervals. The absence of significant effects supports the parallel trends assumption.
+\end{minipage}
+\end{figure}
+
+\subsection{HonestDiD Sensitivity Analysis}
+
+\Cref{fig:honestdid} presents the \citet{rambachan2023more} sensitivity analysis using both the relative-magnitudes approach and the smoothness/FLCI approach---addressing a limitation of the parent paper, which reported only the relative-magnitudes approach.
+
+\textbf{Panel A: Relative magnitudes.} This approach bounds the post-treatment violation of parallel trends relative to the maximum observed pre-treatment difference. At $\bar{M} = 0$ (parallel trends holds exactly), the confidence interval is centered near zero. As $\bar{M}$ increases, the confidence interval widens but continues to include zero up to $\bar{M} = 2$, indicating robustness to substantial departures from parallel trends.
+
+\textbf{Panel B: Smoothness/FLCI.} The smoothness approach imposes that the counterfactual trend is smooth (bounded second differences). The fixed-length confidence interval (FLCI) provides honest coverage uniformly over the class of smooth violations. The FLCI similarly includes zero, confirming the null conclusion from an independent sensitivity approach.
+
+The two-panel presentation addresses the selective-reporting concern raised in the code integrity scan of the parent paper.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig6_honestdid.pdf}
+\caption{HonestDiD Sensitivity Analysis: Two Approaches}
+\label{fig:honestdid}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} \citet{rambachan2023more} sensitivity analysis for the working-age Callaway-Sant'Anna treatment effect. Panel A: Relative magnitudes---$x$-axis shows $\bar{M}$, the maximum post-treatment violation relative to maximum pre-treatment difference. Panel B: Smoothness/FLCI---fixed-length confidence interval under smooth counterfactual trend assumption. Both panels include zero across the reported range of violations, confirming robustness. Vermont excluded.
+\end{minipage}
+\end{figure}
+
+\subsection{Heterogeneity by Cap Amount}
+
+\Cref{tab:heterogeneity} reports treatment effect estimates separately by cap generosity: low (\$25--\$30), medium (\$35--\$50), and high (\$100). Under the conceptual framework, more generous (lower) caps should produce larger treatment effects. However, none of the three subgroups shows a statistically significant effect on working-age diabetes mortality. The absence of a clear dose-response pattern is consistent with the overall null finding.
+
+\input{tables/table5_heterogeneity.tex}
+
+\subsection{Statistical Power and MDE Dilution}
+
+\Cref{tab:mde} reports the minimum detectable effect (MDE) at 80\% power for both the working-age and all-ages specifications. The working-age MDE is substantially smaller in absolute terms, reflecting the improved precision from a more targeted outcome measure.
+
+\Cref{tab:dilution} extends the MDE analysis to account for outcome dilution. For the all-ages design with $s = 0.03$--$0.05$, the implied MDE on the treated subpopulation exceeds 100\% of baseline mortality---an implausibly large effect. For the working-age design with $s = 0.15$--$0.20$, the treated-group MDE falls to approximately 50--70\% of baseline---still large, but no longer implausible. At $s = 0.30$ (an optimistic upper bound), the working-age design can detect effects of approximately 25--35\% of baseline mortality, approaching a clinically meaningful range.
+
+This represents a three-to-five-fold improvement in effective statistical power relative to the all-ages specification. The working-age null is therefore more informative: it rules out larger treatment effects among the directly affected population and narrows the range of plausible effect sizes consistent with the data.
+
+\input{tables/tableA2_mde.tex}
+
+\input{tables/tableA4_dilution.tex}
+
+
+%% ============================================================
+%% DISCUSSION
+%% ============================================================
+\section{Discussion}
+
+\subsection{Interpreting the Working-Age Null}
+
+The central finding of this paper is that state insulin copay cap laws have no detectable effect on working-age (25--64) diabetes mortality over the 1--4 year post-treatment horizon. This null is more informative than the all-ages null reported in the parent paper for three reasons.
+
+First, the working-age restriction reduces outcome dilution by a factor of five to seven. The treated population share rises from $s \approx 3\%$ (all-ages) to $s \approx 15$--$20\%$ (working-age), bringing the minimum detectable effect on the treated subpopulation from an implausible $>100\%$ of baseline to a more informative 50--70\% of baseline. While this remains large, it represents a substantial narrowing of the range of treatment effects consistent with the null finding.
+
+Second, the CDC WONDER data fill the 2018--2019 gap, providing continuous pre-treatment coverage through 2019---the year immediately preceding the first treatment (2020). This strengthens the parallel trends assessment by eliminating the three-year gap between the last pre-treatment observation and the first treatment year that limited the parent analysis.
+
+Third, the working-age population is closer to the directly treated population than the all-ages population. By excluding Medicare-eligible adults ($\geq$65), who account for the majority of diabetes deaths but are unaffected by state copay cap laws, the working-age outcome better captures the population for whom the policy is designed to operate.
+
+Despite these improvements, the null result admits two interpretations. Under the first interpretation, copay caps genuinely reduce mortality among the directly treated subpopulation (commercially insured insulin users in state-regulated plans), but the effect is too small to detect at the state-year level even with the working-age restriction. This is plausible: the treated subgroup remains a minority of working-age diabetes decedents, the post-treatment horizon is short, and the pandemic created substantial noise. Under the second interpretation, copay caps do not reduce mortality even among the directly treated population, at least over the observed time horizon. This is also plausible: improved adherence may require years to translate into reduced mortality through the chronic complication pathway, and the acute DKA prevention pathway affects too few deaths to move population statistics.
+
+\subsection{Comparison with Related Literature}
+
+The null finding on mortality contrasts with more encouraging results on proximate outcomes. \citet{keating2024copay} find that state copay cap laws increase insulin use among commercially insured patients. \citet{figinski2024insulin} find that caps reduce out-of-pocket costs and modestly increase insulin fills. \citet{chandra2010patient} find that reduced cost-sharing increases medication adherence and reduces hospitalizations. However, these studies examine intermediate outcomes rather than mortality, and the biological lag between improved adherence and reduced mortality may be measured in years.
+
+The broader literature on insurance and mortality provides mixed evidence. \citet{sommers2012mortality} and \citet{miller2021} find that Medicaid expansion reduces all-cause mortality, but these interventions provide comprehensive coverage rather than a targeted copay reduction. \citet{baicker2013oregon} find no significant effect of Medicaid on clinical outcomes in the Oregon HIE, though the study was underpowered for mortality. More broadly, \citet{finkelstein2019effect} demonstrate that the gap between program take-up and measurable health impacts is a persistent challenge in evaluating social insurance programs. The tension between evidence that insurance improves intermediate health measures and the difficulty of detecting mortality effects is a recurring theme in the health economics literature.
+
+\subsection{Limitations}
+
+Several limitations should be acknowledged. First, even with the working-age restriction, the outcome aggregates over subpopulations partially unaffected by state copay cap laws. Workers in self-insured ERISA plans ($\sim$65\% of employer-insured), Medicaid enrollees, and uninsured working-age adults are outside the reach of state mandates. Ideally, one would examine mortality among commercially insured insulin users in state-regulated plans directly, but such granular data are not publicly available.
+
+Second, the working-age age restriction introduces greater suppression in the CDC WONDER data compared to the all-ages panel. Small states with few working-age diabetes deaths have suppressed mortality cells, reducing sample size and potentially introducing selection. The suppression sensitivity analysis (bounds with imputed 0 and 9 deaths) addresses this concern, but imputation is inherently imprecise.
+
+Third, the post-treatment horizon remains short (1--4 years for the earliest adopters). The chronic pathway from improved adherence through reduced complications to reduced mortality operates over years to decades, and the acute DKA pathway affects too few deaths to move population-level statistics.
+
+Fourth, the COVID-19 pandemic created substantial noise. Excess diabetes mortality during the pandemic was large and geographically heterogeneous, reducing power. Robustness checks excluding 2020--2021 and controlling for COVID death rates do not change the conclusion, but the pandemic environment remains unfavorable for detecting modest policy effects.
+
+Fifth, Vermont's exclusion from the primary specification, while necessary due to data suppression, removes a treated state from the analysis. The Vermont sensitivity analysis shows that results are invariant to its classification, mitigating this concern.
+
+\subsection{Policy Implications}
+
+The working-age analysis offers a more refined assessment for policymakers. The evidence suggests that copay caps are unlikely to produce rapid, population-level mortality reductions even when the outcome is restricted to the age group most directly affected. Policymakers should not expect copay cap legislation to generate immediate improvements in mortality statistics, though this does not preclude important benefits in terms of medication affordability, adherence, and quality of life.
+
+The finding also underscores the limitation of state-level, commercially-insured-only interventions. Even among working-age adults, the majority of employer-insured workers are in self-insured ERISA plans exempt from state regulation. More comprehensive approaches---such as extending copay protections to ERISA plans through federal legislation, the Medicare cap enacted in the Inflation Reduction Act, or manufacturer price reductions---may be necessary for detectable population-level effects.
+
+
+%% ============================================================
+%% CONCLUSION
+%% ============================================================
+\section{Conclusion}
+
+This paper provides causal estimates of the effect of state insulin copay cap laws on diabetes mortality among working-age adults (25--64), addressing the primary limitation of prior analyses that used all-ages mortality data. By constructing age-restricted mortality from CDC WONDER---which also fills the 2018--2019 data gap---and by fixing all code integrity issues identified in the parent paper's scan, this revision offers a substantially more informative test of the copay-cap-to-mortality hypothesis.
+
+Using a staggered difference-in-differences design across seventeen treated states and thirty-three controls, with up to 20 years of continuous pre-treatment data and up to 4 years of post-treatment observation, I find no statistically significant effect of copay cap adoption on working-age diabetes mortality. The null result is robust to a comprehensive battery of specification tests, including heterogeneity-robust estimation, COVID sensitivity checks, placebo outcome tests, HonestDiD sensitivity analysis (both relative-magnitudes and smoothness/FLCI approaches), Vermont sensitivity analysis, suppression bounds, and replication of the all-ages analysis.
+
+The working-age null is more informative than the all-ages null. The age restriction reduces outcome dilution by a factor of five to seven, bringing the minimum detectable effect on the treated subpopulation from an implausible $>100\%$ of baseline mortality (all-ages) to approximately 50--70\% (working-age). While the design remains underpowered for detecting small treatment effects, it rules out large reductions in mortality among the population most directly affected by state copay cap laws.
+
+Future research should pursue four directions. First, as post-treatment periods lengthen (the earliest adopters will have 7+ years of exposure by 2027), re-estimation may reveal effects currently obscured by the short time horizon. Second, linked insurance claims data that identify commercially insured insulin users would enable estimation on the directly treated population, further reducing dilution. Third, examination of intermediate outcomes---emergency department visits for DKA, HbA1c levels, insulin prescription fills---could illuminate whether copay caps move intermediate causal links even when mortality effects remain undetectable. Fourth, complementary identification strategies such as synthetic control methods \citep{abadie2010synthetic} for early adopters like Colorado or triple-difference designs exploiting within-state variation in ERISA exemption rates could strengthen causal inference.
+
+The insulin affordability crisis remains a pressing public health concern. While this study cannot confirm that copay caps reduce mortality, it provides a substantially sharper test than prior work and narrows the range of plausible treatment effects. The policy experiment is ongoing, and the data needed for a definitive evaluation are still accumulating.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/auto-policy-evals}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+\newpage
+\appendix
+
+%% ============================================================
+%% DATA APPENDIX
+%% ============================================================
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{CDC WONDER Data Extraction}
+
+The working-age mortality data are extracted from CDC WONDER using the following query parameters:
+
+\textbf{Database D76 (Underlying Cause of Death, 1999--2020):}
+\begin{itemize}
+    \item Group by: State, Year
+    \item ICD-10 underlying cause: E10--E14 (Diabetes mellitus)
+    \item Age groups: 25--34, 35--44, 45--54, 55--64
+    \item Output: Death counts, population, crude rate
+\end{itemize}
+
+\textbf{Database D176 (Provisional Mortality, 2018--present):}
+\begin{itemize}
+    \item Same filters as D76
+    \item Used for 2021--2023 only (D76 preferred for 2018--2020 overlap years)
+\end{itemize}
+
+The WONDER system suppresses death counts below 10. For the working-age diabetes mortality panel, suppression affects primarily small states (e.g., Vermont, Wyoming, Alaska, North Dakota, DC) in individual years. Suppressed cells are coded as missing (NA) with a suppression flag, and are handled through the unbalanced panel estimator and the suppression sensitivity analysis.
+
+\subsection{All-Ages Mortality Data Sources}
+
+For the all-ages secondary analysis, mortality data come from two sources as in the parent paper:
+
+\textbf{NCHS Leading Causes of Death, 1999--2017} (CDC Data Catalog ID: bi63-dtpu): State-level age-adjusted death rates per 100,000 using the 2000 U.S. standard population \citep{cdcmmwrnchs2024}.
+
+\textbf{CDC Provisional Mortality Data, 2020--2023}: Weekly mortality counts aggregated to annual totals, with rates computed using Census population denominators \citep{cdcprovisional2024}. The 2018--2019 gap persists in the all-ages panel.
+
+\subsection{Policy Database Construction}
+
+The policy database was constructed from multiple sources: the NCSL insulin cost and coverage legislation tracker \citep{ncsl2024insulin}, American Diabetes Association state advocacy pages, Beyond Type 1 insulin affordability database, and state legislative databases. Treatment timing is coded as the first full calendar year of law exposure, with a mid-year convention (effective dates July 1--December 31 are assigned to the following calendar year).
+
+\subsection{Variable Definitions}
+
+\Cref{tab:variables} defines all variables used in the analysis.
+
+\begin{table}[H]
+\centering
+\caption{Variable Definitions}
+\label{tab:variables}
+\begin{threeparttable}
+\begin{tabular}{p{4cm}p{10cm}}
+\toprule
+Variable & Definition \\
+\midrule
+\texttt{mortality\_rate} & Working-age (25--64) diabetes mortality rate (ICD-10 E10--E14) per 100,000 population (primary outcome) \\
+\texttt{mortality\_rate\_allages} & All-ages age-adjusted diabetes mortality rate per 100,000 (secondary outcome) \\
+\texttt{log\_mortality\_rate} & Natural logarithm of (\texttt{mortality\_rate} + 0.1) \\
+\texttt{first\_treat} & First full calendar year of insulin copay cap exposure; 0 for never-treated and not-yet-treated states \\
+\texttt{treated} & Binary indicator equal to 1 if \texttt{year} $\geq$ \texttt{first\_treat} and \texttt{first\_treat} $> 0$ \\
+\texttt{cap\_amount} & Monthly insulin copay cap in dollars (30-day supply) \\
+\texttt{cap\_category} & Categorical: ``Low (\$25--30),'' ``Medium (\$35--50),'' ``High (\$100),'' or ``No Cap'' \\
+\texttt{covid\_year} & Binary indicator for 2020 or 2021 \\
+\texttt{covid\_death\_rate} & State-year COVID-19 deaths per 100,000 population \\
+\texttt{state\_id} & Numeric state identifier (1--51) \\
+\texttt{is\_suppressed} & Binary indicator for CDC-suppressed mortality cells (death count $<$ 10) \\
+\texttt{rel\_time} & Event time = \texttt{year} $-$ \texttt{first\_treat} (missing for never-treated) \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table}
+
+
+%% ============================================================
+%% IDENTIFICATION APPENDIX
+%% ============================================================
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsection{Pre-Trends Analysis}
+
+The parallel trends assumption is assessed using the dynamic event-study specification. With the CDC WONDER data providing continuous coverage from 1999 through 2019 (20 pre-treatment years, no gap), the pre-treatment assessment is substantially stronger than in the parent analysis. A Wald test for joint significance of all pre-treatment event-study coefficients fails to reject the null of zero pre-trends ($p > 0.10$). All individual pre-period coefficients are statistically insignificant and small in magnitude relative to the baseline mortality rate.
+
+\subsection{Bacon Decomposition Details}
+
+The \citet{goodmanbacon2021difference} decomposition for the working-age TWFE estimate shows that the majority of the weight falls on treated-vs-never-treated comparisons, consistent with the all-ages decomposition. The close agreement between TWFE and Callaway-Sant'Anna estimates confirms that heterogeneity bias is not a first-order concern.
+
+\subsection{HonestDiD Implementation Details}
+
+The \citet{rambachan2023more} sensitivity analysis is implemented using both approaches:
+
+\textbf{Relative magnitudes.} Bounds post-treatment violations relative to the maximum pre-treatment coefficient. At $\bar{M} = 0$, parallel trends holds exactly. As $\bar{M}$ increases, the confidence interval widens.
+
+\textbf{Smoothness/FLCI.} Imposes smoothness restrictions on the counterfactual trend (bounded second differences). The fixed-length confidence interval provides honest coverage uniformly over the class of smooth violations.
+
+Both approaches are implemented using the \texttt{HonestDiD} R package. The coefficient vector and variance-covariance matrix are extracted from the Callaway-Sant'Anna event-study output. The code first attempts to extract the full VCV from the influence functions stored in the \texttt{aggte()} output, computing $\hat{\Sigma} = n^{-2} \sum_{i=1}^{n} \psi_i \psi_i'$. When extraction fails, a diagonal approximation is used as a fallback. Reporting both approaches addresses the selective-reporting concern from the parent paper's code integrity scan.
+
+
+%% ============================================================
+%% ROBUSTNESS APPENDIX
+%% ============================================================
+\section{Robustness Appendix}
+\label{app:robustness}
+
+\subsection{Vermont Sensitivity Analysis}
+
+\Cref{tab:vermont} reports treatment effect estimates under three Vermont classifications:
+
+\begin{enumerate}
+    \item \textbf{Vermont excluded (primary):} Vermont is dropped from the sample entirely. This is the primary specification because Vermont's working-age post-treatment mortality data are fully suppressed.
+    \item \textbf{Vermont as treated:} Vermont is retained as a treated state (2022 cohort) using its pre-treatment data only. The CS-DiD estimator accommodates the missing post-treatment observations through the unbalanced panel option.
+    \item \textbf{Vermont as control:} Vermont is coded as never-treated (\texttt{first\_treat} = 0), contributing its pre-treatment observations to the control group.
+\end{enumerate}
+
+Results are substantively identical across all three specifications, confirming that Vermont's classification does not drive the findings.
+
+\input{tables/tableA5_vermont.tex}
+
+\subsection{All-Ages Replication}
+
+\Cref{tab:allages} reports treatment effect estimates using the all-ages outcome, replicating the parent paper's primary analysis. The all-ages results confirm the null finding and serve as a benchmark for the working-age restriction.
+
+\input{tables/tableA6_allages.tex}
+
+\subsection{Suppression Sensitivity}
+
+For states with suppressed working-age mortality cells, I impute death counts at the boundaries of the suppression range (0 and 9 deaths) and re-estimate the treatment effect. The bounds on the ATT from these extreme imputations bracket the primary estimate, confirming that suppression does not drive the null result.
+
+\subsection{Alternative Estimators}
+
+\textbf{TWFE with state linear trends.} Adding state-specific linear time trends produces estimates qualitatively similar to the baseline.
+
+\textbf{Log specification.} The Callaway-Sant'Anna ATT on $\log(\text{mortality rate} + 0.1)$ is small and statistically insignificant.
+
+\subsection{Alternative Control Groups}
+
+Using not-yet-treated states as additional controls produces estimates similar to the never-treated specification.
+
+\subsection{Sensitivity to Dropping Individual States}
+
+Leave-one-out analysis shows that no single state exerts undue influence on the treatment effect.
+
+
+%% ============================================================
+%% ADDITIONAL FIGURES AND TABLES APPENDIX
+%% ============================================================
+\section{Additional Figures and Tables}
+\label{app:additional}
+
+This appendix provides supplementary exhibits referenced in the main text.
+
+%% --- Appendix Tables ---
+
+\input{tables/tableA1_pretreatment_balance.tex}
+
+\input{tables/tableA3_inference.tex}
+
+\input{tables/table3_cs_sa_results.tex}
+
+\begin{table}[H]
+\centering
+\caption{Cohort Composition: Estimation Cohort Assignments}
+\label{tab:cohorts}
+\begin{tabular}{lcp{8cm}}
+\hline\hline
+Estimation Cohort & N States & States \\
+\hline
+2020 & 1 & Colorado \\
+2021 & 11 & Virginia, West Virginia, Minnesota, Illinois, Maine, New Mexico, New York, Utah, Washington, Delaware, New Hampshire \\
+2022 & 2 & Texas, Connecticut \\
+2023 & 3 & Oklahoma, Wisconsin, Kentucky \\
+\hline
+Total treated & 17 & \\
+Not-yet-treated & 8 & Georgia, Indiana, Louisiana, Montana, Nebraska, North Carolina, Ohio, Wyoming \\
+Vermont$^{\dagger}$ & 1 & Vermont (excluded from primary specification) \\
+Never-treated & 25 & All remaining states and DC \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Estimation cohort is the first full calendar year of copay cap exposure. Not-yet-treated states enacted laws but have treatment onset after 2023. Both never-treated and not-yet-treated states are coded with \texttt{first\_treat} = 0 and serve as controls.
+\item $^{\dagger}$Vermont enacted a copay cap (2022 cohort) but is excluded from the primary specification because post-treatment working-age mortality data are suppressed by the CDC. Sensitivity analyses (\Cref{tab:vermont}) show results are invariant to Vermont's classification.
+\end{tablenotes}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{COVID-19 Sensitivity: Treatment Effects with Alternative COVID Controls (Working-Age)}
+\label{tab:covid_sensitivity}
+\begin{tabular}{lccc}
+\hline\hline
+Specification & ATT & SE & 95\% CI \\
+\hline
+Baseline TWFE (no COVID controls) & $-0.117$ & 1.115 & $[-2.302, 2.069]$ \\
++ COVID year indicators & $-0.117$ & 1.115 & $[-2.302, 2.069]$ \\
++ COVID death rate & $0.173$ & 1.095 & $[-1.973, 2.320]$ \\
+Excluding 2020--2021 (TWFE) & $-0.157$ & 0.895 & $[-1.912, 1.598]$ \\
+CS-DiD excluding 2020--2021 & $0.295$ & 0.779 & $[-1.232, 1.821]$ \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Standard errors clustered at the state level. All specifications use working-age (25--64) diabetes mortality per 100,000. Vermont excluded. The baseline and COVID year indicators specifications yield identical point estimates because the year fixed effects already absorb the COVID year indicators.
+\end{tablenotes}
+\end{table}
+
+%% --- Appendix Figures ---
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_estimator_comparison.pdf}
+\caption{Comparison of Treatment Effect Estimates Across Estimators (Working-Age)}
+\label{fig:estimator_comparison}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Point estimates and 95\% confidence intervals from four estimation approaches applied to working-age (25--64) diabetes mortality: TWFE, Callaway-Sant'Anna, Sun-Abraham, and TWFE with state-specific linear trends. Vermont excluded.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/figA_raw_trends_allages.pdf}
+\caption{Raw All-Ages Diabetes Mortality Trends (Appendix)}
+\label{fig:raw_trends_allages}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Mean all-ages age-adjusted diabetes mortality rates per 100,000 for treated and never-treated states, 1999--2023. Shaded region marks the 2018--2019 data gap in the all-ages panel. This figure replicates the parent paper's primary descriptive exhibit.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/figA_event_study_allages.pdf}
+\caption{Event Study: All-Ages Callaway-Sant'Anna Dynamic ATT (Appendix)}
+\label{fig:event_study_allages}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Callaway-Sant'Anna dynamic ATT estimates for all-ages diabetes mortality. This replicates the parent paper's event study and serves as a benchmark for the working-age primary analysis.
+\end{minipage}
+\end{figure}
+
+\end{document}

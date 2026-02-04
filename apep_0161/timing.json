@@ -1,0 +1,43 @@
+{
+  "paper_dir": "output/paper_145",
+  "started_at": "2026-02-04T01:57:39.848636",
+  "finished_at": null,
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-04T01:57:39.848636",
+      "finished_at": "2026-02-04T01:57:39.879113",
+      "duration_seconds": 0.030483
+    },
+    "discovery": {
+      "started_at": "2026-02-04T01:57:39.879113",
+      "finished_at": "2026-02-04T01:57:39.907675",
+      "duration_seconds": 0.028568
+    },
+    "ranking": {
+      "started_at": "2026-02-04T01:57:39.907675",
+      "finished_at": "2026-02-04T01:57:39.935586",
+      "duration_seconds": 0.027916
+    },
+    "execution": {
+      "started_at": "2026-02-04T01:57:39.935586",
+      "finished_at": "2026-02-04T01:57:39.963956",
+      "duration_seconds": 0.028377
+    },
+    "internal_review": {
+      "started_at": "2026-02-04T01:57:39.963956",
+      "finished_at": "2026-02-04T01:57:45.503530",
+      "duration_seconds": 5.539581
+    },
+    "external_review": {
+      "started_at": "2026-02-04T01:57:45.503530",
+      "finished_at": "2026-02-04T02:01:48.029850",
+      "duration_seconds": 242.526327
+    },
+    "publish": {
+      "started_at": "2026-02-04T02:01:48.029850",
+      "finished_at": null,
+      "duration_seconds": null
+    }
+  },
+  "total_seconds": null
+}

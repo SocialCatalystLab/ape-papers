@@ -1,0 +1,34 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Effect of Insulin Copay Caps on Working-Age (25--64) Diabetes Mortality},
+label={tab:main_results},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Standard errors clustered at state level in parentheses.},
+note{  }={All specifications include state and year fixed effects.},
+note{   }={Outcome: working-age (25--64) diabetes mortality rate per 100,000 (ICD-10 E10--E14).},
+note{    }={Column 3 uses log(mortality rate + 0.1) as outcome.},
+note{     }={Column 4 adds state-specific linear time trends.},
+note{      }={Vermont excluded from all specifications.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-5}{solid, black, 0.05em},
+hline{6}={1-5}{solid, black, 0.05em},
+hline{1}={1-5}{solid, black, 0.1em},
+hline{11}={1-5}{solid, black, 0.1em},
+column{2-5}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) TWFE & (2) + COVID Controls & (3) Log Rate & (4) + State Trends \\
+Post Copay Cap & \num{-0.117} & \num{0.173} & \num{0.046} & \num{0.439} \\
+& (\num{1.115}) & (\num{1.095}) & (\num{0.095}) & (\num{0.747}) \\
+COVID Death Rate &  & \num{0.021}** &  &  \\
+&  & (\num{0.010}) &  &  \\
+Num.Obs. & \num{1142} & \num{1142} & \num{1142} & \num{1142} \\
+R2 & \num{0.611} & \num{0.633} & \num{0.440} & \num{0.778} \\
+R2 Adj. & \num{0.585} & \num{0.608} & \num{0.402} & \num{0.751} \\
+FE: state\_id & X & X & X & X \\
+FE: year & X & X & X & X \\
+\end{talltblr}
+\end{table}

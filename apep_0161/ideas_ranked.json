@@ -1,0 +1,19 @@
+{
+  "iteration": 1,
+  "ideas": [
+    {
+      "title": "Age-Restricted Diabetes Mortality and Insulin Copay Caps",
+      "verdict": "PURSUE",
+      "scores": {
+        "novelty": 8,
+        "identification": 9,
+        "feasibility": 9,
+        "relevance": 9
+      },
+      "weighted_score": 8.6,
+      "rationale": "Revision of apep_0157 addressing primary reviewer criticism (outcome dilution) with age-restricted CDC WONDER data."
+    }
+  ],
+  "revision_mode": true,
+  "parent_paper": "apep_0157"
+}

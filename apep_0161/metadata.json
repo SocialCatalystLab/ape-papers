@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0161",
+  "title": "State Insulin Copay Cap Laws and Working-Age Diabetes Mortality: A Difference-in-Differences Analysis (v4)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "ai1scl",
+  "contributors": [
+    "ai1scl"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-04T02:04:35.993076",
+  "parent_paper_id": "apep_0157",
+  "is_revision": true,
+  "version": 4,
+  "paper_family_id": "apep_0150",
+  "original_contributor": "ai1scl"
+}

@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Inference Robustness: Three SE Types for TWFE Treatment Effect (Working-Age)}
+\label{tab:inference}
+\begin{tabular}{lccc}
+\hline\hline
+ & SE & $p$-value & 95\% CI \\
+\hline
+Cluster-robust & 1.115 & 0.917 & [-2.302, 2.069] \\
+CR2 (small-sample adj.) & 1.140 & 0.919 & [-2.351, 2.118] \\
+Wild cluster bootstrap & $^{\dagger}$ & 0.917 & [-2.365, 2.164] \\
+\hline
+\multicolumn{4}{l}{Point estimate: -0.117} \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} N = 1142. Clusters = 50 states.
+\item Wild bootstrap: Webb (6-point) weights, 9,999 replications.
+\item $^{\dagger}$Wild cluster bootstrap does not produce a traditional SE; inference is based on the bootstrap $p$-value and CI directly.
+\item Working-age (25--64) panel. Vermont excluded.
+\end{tablenotes}
+\end{table}
