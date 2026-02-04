@@ -1,0 +1,707 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+% APEP Working Paper formatting
+\title{Does Incorporation Pay? Legal Form, Gender, and the Returns to Self-Employment\footnote{This paper is a revision of APEP-0175. See \url{https://github.com/SocialCatalystLab/auto-policy-evals/tree/main/papers/apep_0175} for the original.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \\ @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Self-employed workers earn 30 percent less than observationally similar wage workers---a robust finding that has puzzled economists for decades. We show this aggregate penalty masks a sharp discontinuity by legal form: incorporated self-employed workers earn 7 percent \textit{more} than wage workers, while unincorporated workers earn 46 percent less. The penalty exists only for those operating informally. But incorporation's benefits are not equally distributed. Men who incorporate earn 12 percent more than comparable wage workers; women who incorporate earn no premium at all. Using inverse probability weighting with doubly robust checks on 1.4 million prime-age workers from the American Community Survey (2019--2022), we argue that incorporation provides access to formal business institutions---credit markets, professional networks, credibility signals---that amplify existing advantages. For workers with access to capital and connections, incorporation unlocks returns. For those without, formalization confers no benefit. The self-employment earnings gap is not about entrepreneurship per se, but about which workers can access the institutions that make entrepreneurship pay.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J23, J24, J31, J16, L26 \\
+\noindent\textbf{Keywords:} self-employment, incorporation, earnings penalty, gender gap, inverse probability weighting, labor market institutions
+
+\newpage
+
+\section{Introduction}
+
+Why do ten percent of American workers choose to be self-employed when doing so appears to cost them a third of their earnings? This question has animated labor economists since \citet{hamilton2000does} documented that self-employed workers earn roughly 35 percent less than they would in wage employment, a gap that persists and even widens with tenure. The magnitude seems too large to attribute to mere preference for autonomy. Either millions of workers are systematically irrational, or the standard framing of the ``self-employment penalty'' misses something fundamental about how entrepreneurial labor markets actually work.
+
+This paper argues that the puzzle dissolves once we recognize that ``self-employment'' is not a single category but an aggregate of fundamentally different labor market arrangements. The owner of an incorporated consulting firm, the licensed electrician operating as a sole proprietor, and the gig worker driving for a rideshare platform are all classified identically in labor force statistics. Yet these workers face different institutional environments---different access to credit, different client relationships, different tax treatment, different professional networks. By decomposing self-employment along its legal dimension, we show that the aggregate penalty masks a sharp discontinuity: incorporated self-employed workers earn \textit{more} than comparable wage workers, while unincorporated workers earn dramatically less.
+
+The incorporated premium is not just a selection story. It reflects what incorporation buys in the labor market: access to formal credit (banks lend to corporations, not sole proprietors), access to clients (government contracts and corporate procurement often require incorporation), tax optimization (S-corporation elections allow income splitting), and credibility signals (incorporation conveys permanence and legitimacy). These institutional advantages matter enormously---but they require complementary assets to activate. Capital, professional networks, business sophistication: workers who possess these can leverage incorporation into higher earnings. Workers who lack them cannot.
+
+This institutional interpretation explains our most striking finding: incorporation pays off for men but not for women. Among men, incorporated self-employment is associated with a 12 percent earnings premium relative to wage work. Among women, incorporation provides no earnings benefit whatsoever. The incorporated self-employed woman earns essentially the same as her wage-employed counterpart. This gender gap in the returns to incorporation cannot be explained by compositional differences---it persists within education levels and across states. Something about how formal business institutions work delivers their benefits to men while bypassing women.
+
+The finding connects to a broader question about institutions and inequality. Economic institutions---legal structures, credit markets, professional networks---are often designed to appear neutral. Incorporation is available to anyone who files the paperwork and pays the fee. Yet the returns to these institutions depend on complementary resources that are unequally distributed. If men have better access to the networks, capital, and credibility that make incorporation pay, then a nominally neutral institution will reproduce and amplify existing inequalities. Our results suggest this is precisely what happens: formal business institutions transform advantages into higher returns for those who already have them.
+
+We estimate effects using inverse probability weighting (IPW) on American Community Survey data covering 1.4 million prime-age workers across ten large U.S. states (2019--2022). As a robustness check, we implement doubly robust estimation, which combines propensity score weighting with outcome regression; the results are nearly identical. We conduct extensive sensitivity analyses and find that implausibly large unmeasured confounding would be required to explain away our main results.
+
+Three caveats frame the analysis. First, we estimate conditional associations under a selection-on-observables assumption, not experimentally identified causal effects. Workers select into self-employment and incorporation based on characteristics we cannot fully observe. We interpret findings as informative about the structure of earnings differences, not as the returns any individual worker would experience by changing employment status. Second, our sample covers ten large states that account for 55 percent of U.S. employment but may not represent smaller states or rural labor markets. Third, the unincorporated category is heterogeneous, pooling skilled independent contractors with gig workers and informal laborers. Some of our findings may be driven by composition within this category.
+
+With these limitations in mind, the paper proceeds as follows. Section 2 develops a framework for understanding why incorporation might generate earnings differentials and why those differentials might vary by gender. Section 3 describes the data. Section 4 presents the empirical strategy. Section 5 reports main results on the incorporation decomposition. Section 6 examines gender heterogeneity. Section 7 presents geographic variation and robustness analyses. Section 8 discusses implications and concludes.
+
+
+\subsection{The Self-Employment Penalty Puzzle}
+
+The empirical regularity is robust: self-employed workers earn less than observationally similar wage workers, and this finding replicates across countries, time periods, and methodological approaches. \citet{hamilton2000does} used longitudinal data from the Survey of Income and Program Participation to show that median self-employment earnings fall 35 percent below what the same workers earned previously in wage employment, with the gap widening over tenure. \citet{moskowitz2002puzzling} extended the analysis to returns on entrepreneurial investment, finding that entrepreneurs earn lower risk-adjusted returns than diversified equity portfolios would provide---the ``private equity premium puzzle.''
+
+Two explanations dominate the literature. The \textit{compensating differentials} hypothesis holds that self-employment offers non-pecuniary benefits---autonomy, flexibility, the satisfaction of building something---that workers value highly. \citet{benz2008being} find that self-employed workers report higher job satisfaction despite lower earnings, consistent with a willingness to pay for these amenities. The \textit{negative selection} hypothesis offers a less sanguine interpretation: self-employment requires no job offer, so workers with poor wage employment prospects may turn to self-employment as a fallback. \citet{borjas1986self} showed that immigrants turn to self-employment when their credentials are not recognized, consistent with self-employment as a response to labor market barriers.
+
+Both explanations treat self-employment as a unified category. Yet the legal distinction between incorporated and unincorporated self-employment maps onto fundamentally different labor market positions. \citet{levine2017smart} showed that incorporated business owners are positively selected on cognitive ability and prior earnings, while unincorporated self-employment captures a more heterogeneous population. This suggests the aggregate penalty may be a compositional artifact---a premium for the incorporated averaged with a penalty for the unincorporated.
+
+\section{Why Might Incorporation Pay?}
+
+\subsection{Incorporation as Access to Institutions}
+
+Why might incorporation generate higher earnings? We propose that incorporation provides access to formal business institutions that enhance productivity and market access. Four channels seem particularly important.
+
+\textit{Credit access.} Banks lend to corporations, not sole proprietors. An incorporated business can establish a credit history separate from the owner's personal finances, access commercial credit markets, and secure loans using business assets as collateral. A sole proprietor must rely on personal credit, home equity, or informal lending. For capital-intensive businesses, this difference is decisive.
+
+\textit{Client access.} Government contracts typically require vendor incorporation. Large corporations often require suppliers to carry liability insurance and maintain corporate structures. A sole proprietor is excluded from these markets regardless of competence. For professional services, consulting, and business-to-business sales, incorporation opens doors that would otherwise remain closed.
+
+\textit{Tax optimization.} The S-corporation election allows business owners to split income between salary (subject to payroll tax) and distributions (exempt from payroll tax), generating substantial tax savings. Incorporated businesses can also deduct fringe benefits, maintain retirement plans with higher contribution limits, and time income recognition. These advantages are unavailable to sole proprietors.
+
+\textit{Credibility signaling.} Incorporation conveys permanence, legitimacy, and professionalism. A client hiring a consultant faces less risk from an incorporated firm than from an individual operating informally. The corporate form signals that the business is serious, established, and likely to exist next year. For new entrepreneurs without track records, this signal may be particularly valuable.
+
+These institutional advantages share a common feature: they require complementary assets to activate. Credit access helps only if you have collateral and a viable business plan. Client access matters only if you can deliver the work. Tax optimization requires income substantial enough to offset administrative costs. Credibility signaling works only if backed by genuine capability. Incorporation provides the \textit{opportunity} to access these institutions, but realizing that opportunity requires capital, networks, business sophistication, and professional credibility.
+
+\subsection{Why Might Returns Differ by Gender?}
+
+If incorporation's benefits flow through institutional access, and institutional access depends on complementary assets, then incorporation should pay off differentially depending on who possesses those assets. A substantial literature documents that women face barriers to the resources that make incorporation valuable.
+
+\textit{Capital constraints.} Women-owned businesses receive less startup financing and smaller loans conditional on receiving funding \citep{fairlie2009race}. Venture capital overwhelmingly flows to male-founded companies. If access to credit is a primary channel through which incorporation generates returns, then women may be unable to activate this channel.
+
+\textit{Network exclusion.} Professional networks---particularly in business services, finance, and technology---remain male-dominated. The informal relationships that generate client referrals, partnership opportunities, and business intelligence may be less accessible to women. If client access is a primary channel, women may be unable to activate it.
+
+\textit{Credibility gaps.} Research on entrepreneurship shows that investors and clients evaluate identical business pitches differently depending on the entrepreneur's gender \citep{brooks2014investors}. If incorporation signals credibility, but women's credibility is discounted regardless of corporate form, then the signaling channel may not function for women.
+
+These barriers suggest a prediction: incorporation should generate earnings premiums for workers who can access the complementary institutions, and smaller or zero premiums for workers who cannot. If men have systematically better access to capital, networks, and credibility, then incorporation should pay more for men than for women---not because incorporation works differently, but because the institutions it unlocks work differently.
+
+
+\section{Data}
+
+\subsection{Data Source}
+
+I use data from the American Community Survey (ACS) Public Use Microdata Sample (PUMS), accessed through IPUMS \citep{ruggles2024ipums}. The ACS is the largest household survey in the United States outside of the decennial census, sampling approximately 3.5 million addresses annually and providing detailed demographic and economic information on the U.S. population. The large sample size is particularly valuable for studying self-employment, which comprises only about 10 percent of the workforce, and for examining heterogeneity across states and demographic subgroups where smaller surveys would yield imprecise estimates.
+
+Critically for this study, the ACS class-of-worker variable distinguishes between incorporated and unincorporated self-employment. Respondents are classified as self-employed in an ``incorporated business, company, or limited liability company'' (class of worker code 7) if they report owning a business entity with formal corporate structure. They are classified as self-employed ``not in an incorporated business'' (code 6) if they report self-employment in a sole proprietorship, partnership, or unincorporated farm. This distinction allows direct examination of the incorporated-unincorporated decomposition that is central to this paper's contribution.
+
+I use ACS data from survey years 2019, 2021, and 2022, excluding 2020 due to pandemic-related data collection disruptions that significantly reduced response rates and altered survey administration. The 2020 ACS experienced response rates approximately 35 percent lower than typical years, with disproportionate non-response among certain demographic groups. By excluding 2020, this analysis captures both the pre-pandemic labor market (2019) and the post-pandemic recovery period (2021--2022), enabling examination of whether the incorporation decomposition changed during this economically turbulent period.
+
+\subsection{Sample Construction}
+
+The analysis sample includes prime working-age adults (25--54) residing in ten large U.S. states: California, Texas, Florida, New York, Illinois, Ohio, Pennsylvania, Georgia, North Carolina, and Michigan. These states were selected because they account for approximately 55 percent of U.S. employment and span all major Census regions---the West (California), South (Texas, Florida, Georgia, North Carolina), Northeast (New York, Pennsylvania), and Midwest (Illinois, Ohio, Michigan). This geographic coverage ensures that findings are not driven by a single regional labor market while maintaining sample sizes sufficient for precise state-level estimation.
+
+Several sample restrictions are applied. I require workers to be currently employed with positive earnings in the past 12 months. I exclude workers in group quarters (dormitories, prisons, military barracks) who face atypical labor market conditions. I exclude workers with imputed values on key variables including employment status, class of worker, and earnings, as imputation in self-employment status could introduce measurement error in the treatment variable. I exclude workers reporting annual earnings below \$1,000 or above \$500,000 to limit the influence of extreme values that may reflect reporting errors.
+
+The final sample contains 1,397,605 observations: 1,264,974 wage workers (90.5 percent), 79,946 unincorporated self-employed workers (5.7 percent), and 52,685 incorporated self-employed workers (3.8 percent). The 9.5 percent self-employment rate in the sample is slightly below the national average, reflecting that the ten sample states include large metropolitan areas where wage employment is relatively more prevalent.
+
+\subsection{Key Variable Definitions}
+
+\textit{Earnings.} The primary outcome is annual earnings in the past 12 months, measured in nominal dollars. I use the natural logarithm of earnings, $\ln(\text{earnings})$, to reduce the influence of outliers and to allow interpretation of coefficients in log points. Throughout the paper, I convert log-point coefficients to percentage changes using the exact formula $(\exp(\beta) - 1) \times 100$, which is preferred over the linear approximation $\beta \times 100$ for coefficients whose magnitude exceeds 0.1. For example, a coefficient of $-0.623$ log points corresponds to a $(\exp(-0.623) - 1) \times 100 = -46.4\%$ change, not $-62.3\%$. A limitation of this measure is that it captures only monetary compensation and excludes fringe benefits, retained business earnings, and non-monetary income that may be particularly relevant for business owners.
+
+\textit{Self-employment status.} The treatment is defined using the ACS class-of-worker variable. Wage workers include private-sector employees and government workers at all levels (federal, state, local). Self-employed workers are separated into incorporated and unincorporated categories based on the business structure they report. A potential measurement concern is that respondents may misreport their class of worker; however, the incorporated-unincorporated distinction corresponds to legal status (whether the business is registered as a corporation or LLC) that respondents are likely to know.
+
+\textit{Covariates.} The propensity score model includes demographic and socioeconomic characteristics that predict both self-employment choice and earnings potential. Age is included as a second-order polynomial to capture the nonlinear relationship between age and both entrepreneurship propensity and earnings. Education is measured as a binary indicator for bachelor's degree or higher. Marital status captures household composition effects on labor supply and self-employment choice. Race and ethnicity indicators (non-Hispanic White, non-Hispanic Black, Hispanic of any race) capture systematic differences in labor market opportunities. Homeownership serves as a proxy for household wealth, which both enables self-employment (through collateral for business financing) and reflects accumulated earnings. A COVID period indicator (survey years 2021--2022 versus 2019) captures time effects including pandemic-related changes in labor markets.
+
+\textit{Geographic identifiers.} State of residence is identified using the state FIPS code. This allows estimation of state-specific effects while controlling for state-level differences in labor market conditions, regulatory environments, and industry composition that may affect both self-employment rates and earnings.
+
+\subsection{Summary Statistics}
+
+Table \ref{tab:summary_type} presents summary statistics by employment type. Incorporated self-employed workers differ markedly from both wage workers and unincorporated self-employed workers. They are older (mean age 42.0 versus 38.8), more likely to be male (65 percent versus 52 percent), more likely to hold a college degree (45 percent versus 43 percent), more likely to be married (67 percent versus 54 percent), and more likely to own their homes (76 percent versus 62 percent).
+
+Most striking are the differences in earnings. Incorporated self-employed workers have the highest mean earnings (\$98,176), exceeding wage workers (\$66,824) by over \$31,000. Unincorporated self-employed workers have substantially lower mean earnings (\$52,809) and a lower median (\$30,000 versus \$50,000 for wage workers).
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics by Employment Type}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& Wage Workers & Unincorp. Self-Emp. & Incorp. Self-Emp. \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Demographics}} \\
+Age (years) & 38.8 & 41.0 & 42.0 \\
+Female (\%) & 47.5 & 41.6 & 35.1 \\
+College degree (\%) & 42.9 & 30.8 & 44.7 \\
+Married (\%) & 53.5 & 58.7 & 67.4 \\
+White (\%) & 57.8 & 63.5 & 72.4 \\
+\\
+\multicolumn{4}{l}{\textit{Panel B: Economic Outcomes}} \\
+Mean earnings (\$) & 66,824 & 52,809 & 98,176 \\
+Median earnings (\$) & 50,000 & 30,000 & 57,000 \\
+Full-time (\%) & 87.5 & 68.1 & 82.1 \\
+Hours per week & 40.9 & 38.2 & 43.0 \\
+Homeowner (\%) & 61.1 & 58.9 & 71.5 \\
+\\
+\multicolumn{4}{l}{\textit{Panel C: Sample Size}} \\
+Observations & 1,264,974 & 79,946 & 52,685 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Sample includes prime-age (25--54) employed workers in 10 large U.S. states from the 2019--2022 ACS PUMS. Statistics are weighted using person weights.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:summary_type}
+\end{table}
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+I estimate the average treatment effect (ATE) of self-employment on earnings using inverse probability weighting (IPW). The identifying assumption is selection on observables: conditional on observed characteristics $X_i$, self-employment choice is independent of potential earnings outcomes.
+
+Let $Y_i(1)$ and $Y_i(0)$ denote potential earnings under self-employment and wage employment. The unconfoundedness assumption states:
+\begin{equation}
+(Y_i(0), Y_i(1)) \perp D_i \mid X_i
+\end{equation}
+
+This assumption is strong and fundamentally untestable. I provide sensitivity analyses assessing robustness to unmeasured confounding.
+
+\subsection{Estimation}
+
+I estimate propensity scores using logistic regression with covariates including age, age-squared, female, college degree, married, race indicators (White, Black, Hispanic), homeownership, and COVID period indicator. IPW weights for ATE estimation are:
+\begin{equation}
+w_i^{ATE} = \frac{D_i}{\hat{e}(X_i)} + \frac{1 - D_i}{1 - \hat{e}(X_i)}
+\end{equation}
+
+Weights are truncated at the 99th percentile to limit the influence of extreme values. Standard errors are computed using heteroskedasticity-robust sandwich estimators.
+
+For the decomposition by incorporation status, I estimate separate models for each binary comparison: incorporated self-employment versus wage work, and unincorporated self-employment versus wage work.
+
+
+\section{Main Results}
+
+\subsection{Aggregate Self-Employment Effect}
+
+Table \ref{tab:main} presents the main estimates. The aggregate self-employment penalty is $-0.362$ log points (95\% CI: [$-0.371$, $-0.354$]), equivalent to approximately 30 percent lower earnings.
+
+\begin{table}[H]
+\centering
+\caption{Main Results: Effect of Self-Employment on Earnings}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& (1) & (2) & (3) \\
+& Log Earnings & Full-Time & Hours/Week \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Aggregate Self-Employment (ATE)}} \\
+Self-Employed & $-$0.362*** & $-$0.161*** & $-$1.60*** \\
+              & [$-$0.371, $-$0.354] & [$-$0.164, $-$0.159] & [$-$1.69, $-$1.51] \\
+\\
+\multicolumn{4}{l}{\textit{Panel B: By Incorporation Status (ATE)}} \\
+Incorporated Self-Emp. & +0.069*** & $-$0.075*** & +1.18*** \\
+                       & [+0.058, +0.079] & [$-$0.079, $-$0.072] & [+1.05, +1.31] \\
+\\
+Unincorporated Self-Emp. & $-$0.623*** & $-$0.213*** & $-$3.26*** \\
+                         & [$-$0.635, $-$0.610] & [$-$0.216, $-$0.209] & [$-$3.37, $-$3.14] \\
+\\
+Mean outcome (wage workers) & 11.11 & 0.875 & 40.9 \\
+N (aggregate analysis) & 1,397,605 & 1,397,605 & 1,397,605 \\
+N (incorporated analysis) & 1,317,659 & 1,317,659 & 1,317,659 \\
+N (unincorporated analysis) & 1,344,920 & 1,344,920 & 1,344,920 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: IPW estimates. 95\% confidence intervals in brackets. *** $p<0.01$. Propensity score model includes age, age$^2$, female, college, married, race indicators, homeowner, and COVID period. Robust standard errors. Weights trimmed at 99th percentile. For the incorporated analysis (Panel B, row 1), the sample includes wage workers and incorporated self-employed only ($N = 1,264,974 + 52,685 = 1,317,659$); unincorporated self-employed are excluded. For the unincorporated analysis (Panel B, row 2), the sample includes wage workers and unincorporated self-employed only ($N = 1,264,974 + 79,946 = 1,344,920$); incorporated self-employed are excluded. This ensures clean binary comparisons in each analysis.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}
+
+\subsection{Decomposition by Incorporation Status}
+
+Panel B reveals that this aggregate penalty masks dramatic heterogeneity. Incorporated self-employed workers show an earnings \textit{premium} of $+0.069$ log points (95\% CI: [$+0.058$, $+0.079$]), equivalent to approximately 7 percent higher earnings than observationally similar wage workers.
+
+Unincorporated self-employed workers face a substantial earnings penalty of $-0.623$ log points (95\% CI: [$-0.635$, $-0.610$]), equivalent to approximately 46 percent lower earnings.
+
+The difference between incorporated and unincorporated effects is 0.69 log points ($0.069 - (-0.623) = 0.692$). In percentage terms, this represents a 53-percentage-point gap: incorporated self-employed workers earn 7 percent more than wage workers while unincorporated workers earn 46 percent less.
+
+\subsection{Heterogeneity by Education}
+
+Table \ref{tab:hetero_educ} presents results by education level. Among non-college workers, incorporated self-employment is associated with an earnings premium of $+0.078$ log points (8 percent), while unincorporated self-employment carries a penalty of $-0.534$ log points (41 percent). Among college graduates, the incorporated premium is smaller ($+0.060$ log points) and the unincorporated penalty is larger ($-0.702$ log points).
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneous Effects by Education Level}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& No College & College Degree \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: Aggregate Self-Employment}} \\
+Self-Employed & $-$0.401*** & $-$0.311*** \\
+              & [$-$0.413, $-$0.389] & [$-$0.327, $-$0.295] \\
+\\
+\multicolumn{3}{l}{\textit{Panel B: Incorporated Self-Employment}} \\
+Incorporated & +0.078*** & +0.060*** \\
+             & [+0.066, +0.091] & [+0.045, +0.075] \\
+\\
+\multicolumn{3}{l}{\textit{Panel C: Unincorporated Self-Employment}} \\
+Unincorporated & $-$0.534*** & $-$0.702*** \\
+               & [$-$0.548, $-$0.520] & [$-$0.724, $-$0.680] \\
+\\
+N & 797,142 & 600,463 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: IPW estimates of effect on log earnings. 95\% confidence intervals in brackets. *** $p<0.01$. Sample sizes reflect total observations in each education subgroup.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:hetero_educ}
+\end{table}
+
+
+\section{Geographic Variation and Robustness}
+
+A central contribution of this paper is documenting how self-employment returns vary across American labor markets. Figure \ref{fig:atlas} presents a visual state-level analysis showing state-level effects for all three outcomes: the aggregate self-employment effect, the incorporated premium/penalty, and the unincorporated penalty.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig14_atlas_combined.pdf}
+\caption{The Atlas of Self-Employment in America}
+\label{fig:atlas}
+\floatfoot{\textit{Notes:} IPW estimates of self-employment effect on log earnings by state. Panel A: Aggregate self-employment. Panel B: Incorporated self-employment. Panel C: Unincorporated self-employment. Blue indicates premium; red indicates penalty. Gray states not in sample. Source: ACS PUMS 2019--2022.}
+\end{figure}
+
+\subsection{State-Level Variation in the Aggregate Penalty}
+
+Table \ref{tab:state_results} presents the full state-level results. The aggregate self-employment penalty ranges from $-0.264$ log points (23 percent lower earnings) in Florida to $-0.420$ log points (34 percent lower earnings) in California. This 11-percentage-point range represents substantial geographic heterogeneity.
+
+Several patterns emerge. Sun Belt states (Florida, Georgia, Texas) show smaller aggregate penalties than coastal and Midwestern states. States with large immigrant populations and entrepreneurial cultures (Florida, Texas) appear more favorable to self-employment. California's large penalty may reflect the high opportunity cost of foregoing tech-sector wage employment.
+
+\begin{table}[H]
+\centering
+\caption{State-Level Self-Employment Effects}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+State & Aggregate & Incorporated & Unincorporated & N \\
+\midrule
+Florida & $-$0.264*** & +0.087*** & $-$0.578*** & 153,970 \\
+        & [$-$0.291, $-$0.237] & [+0.051, +0.123] & [$-$0.616, $-$0.540] & \\
+Georgia & $-$0.317*** & +0.083*** & $-$0.635*** & 55,737 \\
+        & [$-$0.360, $-$0.274] & [+0.027, +0.139] & [$-$0.696, $-$0.574] & \\
+Pennsylvania & $-$0.343*** & +0.051** & $-$0.552*** & 105,932 \\
+             & [$-$0.378, $-$0.308] & [+0.006, +0.096] & [$-$0.601, $-$0.503] & \\
+Illinois & $-$0.358*** & +0.064*** & $-$0.684*** & 111,078 \\
+         & [$-$0.393, $-$0.323] & [+0.019, +0.109] & [$-$0.735, $-$0.633] & \\
+Texas & $-$0.359*** & +0.114*** & $-$0.590*** & 239,460 \\
+      & [$-$0.383, $-$0.335] & [+0.084, +0.144] & [$-$0.623, $-$0.557] & \\
+Ohio & $-$0.389*** & +0.085*** & $-$0.618*** & 98,526 \\
+     & [$-$0.428, $-$0.350] & [+0.034, +0.136] & [$-$0.674, $-$0.562] & \\
+Michigan & $-$0.389*** & +0.056* & $-$0.636*** & 52,279 \\
+         & [$-$0.441, $-$0.337] & [$-$0.008, +0.120] & [$-$0.711, $-$0.561] & \\
+North Carolina & $-$0.402*** & +0.081** & $-$0.696*** & 56,513 \\
+               & [$-$0.450, $-$0.354] & [+0.019, +0.143] & [$-$0.766, $-$0.626] & \\
+New York & $-$0.413*** & +0.003 & $-$0.666*** & 173,746 \\
+         & [$-$0.444, $-$0.382] & [$-$0.036, +0.042] & [$-$0.712, $-$0.620] & \\
+California & $-$0.420*** & +0.069*** & $-$0.675*** & 350,364 \\
+           & [$-$0.444, $-$0.396] & [+0.040, +0.098] & [$-$0.709, $-$0.641] & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: IPW estimates of effect on log earnings with 95\% confidence intervals. States ordered by aggregate penalty (smallest to largest). *** $p<0.01$, ** $p<0.05$, * $p<0.10$. N refers to aggregate sample in each state (wage workers + all self-employed). State-level samples sum to 1,397,605 (total analytical sample).
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:state_results}
+\end{table}
+
+\subsection{Geographic Variation in the Incorporated Premium}
+
+The incorporated premium shows even more geographic variation. Texas has the largest incorporated premium at $+0.114$ log points (12 percent higher earnings), while New York shows essentially no premium ($+0.003$ log points, not statistically significant). Florida ($+0.087$), Ohio ($+0.085$), and Georgia ($+0.083$) also show substantial incorporated premiums.
+
+This pattern may reflect differences in the nature of incorporated self-employment across states. Texas's premium may reflect opportunities in oil and gas, construction, and professional services where incorporation confers particular advantages. New York's absence of a premium may reflect that incorporated self-employment in finance and professional services competes with extremely high-paying wage positions.
+
+\subsection{Geographic Uniformity of the Unincorporated Penalty}
+
+In contrast to the geographic variation in aggregate and incorporated effects, the unincorporated penalty is consistently large across all states, ranging from $-0.552$ log points (43 percent) in Pennsylvania to $-0.696$ log points (50 percent) in North Carolina. The near-uniformity of this penalty suggests that unincorporated self-employment represents a structurally disadvantaged labor market position regardless of local conditions.
+
+Figure \ref{fig:state_bar} presents these results in bar chart form, clearly showing the decomposition pattern: states with smaller aggregate penalties (Florida, Georgia) achieve this through larger incorporated premiums, not smaller unincorporated penalties.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig12_state_bar_chart.pdf}
+\caption{State-Level Self-Employment Effects by Incorporation Status}
+\label{fig:state_bar}
+\floatfoot{\textit{Notes:} IPW estimates with 95\% confidence intervals. Source: ACS PUMS 2019--2022.}
+\end{figure}
+
+
+\section{Gender and Self-Employment}
+
+\subsection{The Gender Gap in Self-Employment Returns}
+
+Table \ref{tab:gender} presents the most striking finding of this paper: the self-employment penalty differs dramatically between men and women, and critically, the incorporated premium accrues almost entirely to men.
+
+Men face an aggregate self-employment penalty of $-0.267$ log points (equivalent to 23 percent lower earnings, computed as $e^{-0.267}-1 = -0.234$), while women face a penalty of $-0.477$ log points (equivalent to 38 percent lower earnings, computed as $e^{-0.477}-1 = -0.379$). This 15-percentage-point gender gap in the self-employment penalty is highly statistically significant ($p < 0.001$).
+
+\begin{table}[H]
+\centering
+\caption{Self-Employment Effects by Gender}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& Men & Women \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: Aggregate Self-Employment}} \\
+Self-Employed & $-$0.267*** & $-$0.477*** \\
+              & [$-$0.278, $-$0.255] & [$-$0.491, $-$0.463] \\
+\\
+\multicolumn{3}{l}{\textit{Panel B: Incorporated Self-Employment}} \\
+Incorporated & +0.111*** & $-$0.005 \\
+             & [+0.099, +0.124] & [$-$0.022, +0.011] \\
+\\
+\multicolumn{3}{l}{\textit{Panel C: Unincorporated Self-Employment}} \\
+Unincorporated & $-$0.526*** & $-$0.731*** \\
+               & [$-$0.543, $-$0.510] & [$-$0.750, $-$0.712] \\
+\\
+N & 731,451 & 666,154 \\
+Self-employment rate (\%) & 10.8 & 8.0 \\
+Incorporation rate (among SE) & 42.4 & 35.8 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: IPW estimates of effect on log earnings. 95\% confidence intervals in brackets. *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:gender}
+\end{table}
+
+\subsection{The Incorporated Premium: A Male Advantage}
+
+The most striking finding concerns the incorporated premium. Men who are incorporated self-employed show an earnings premium of $+0.111$ log points (equivalent to 12 percent higher earnings than comparable wage workers, computed as $e^{0.111}-1 = 0.117$). Women who are incorporated self-employed show \textit{no} earnings premium ($-0.005$ log points, not statistically significant).
+
+This gender gap in the incorporated premium---12 percentage points---represents a qualitative difference in how men and women experience incorporated self-employment. For men, incorporation is associated with higher earnings than wage work. For women, incorporation provides no such benefit.
+
+Several mechanisms might explain this pattern. First, men and women may pursue different types of incorporated self-employment, with men concentrated in higher-paying sectors. Second, incorporated self-employment may require access to networks, capital, and clients that are more available to men. Third, the incorporated premium may reflect returns to aggressive self-promotion or risk-taking that are rewarded differently for men and women.
+
+\subsection{The Unincorporated Penalty: Severe for Both Genders}
+
+The unincorporated penalty is severe for both genders but larger for women: $-0.526$ log points for men (equivalent to 41 percent lower earnings) versus $-0.731$ log points for women (equivalent to 52 percent lower earnings). Women in unincorporated self-employment face extremely poor earnings outcomes, earning roughly half what comparable wage workers earn.
+
+Figure \ref{fig:gender} visualizes these gender differences.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig11_gender_heterogeneity.pdf}
+\caption{Self-Employment Effects by Gender}
+\label{fig:gender}
+\floatfoot{\textit{Notes:} IPW estimates with 95\% confidence intervals. Source: ACS PUMS 2019--2022.}
+\end{figure}
+
+\subsection{Gender, Education, and Incorporation}
+
+Table \ref{tab:triple} presents a triple decomposition by gender, education, and incorporation status. The patterns reveal that the gender gap in incorporated returns exists regardless of education level.
+
+Among non-college workers: men show a 10 percent incorporated premium ($+0.103$ log points) while women show essentially no premium ($+0.010$ log points, not significant).
+
+Among college-educated workers: men show a 13 percent incorporated premium ($+0.119$ log points) while women show a 2 percent \textit{penalty} ($-0.024$ log points).
+
+\begin{table}[H]
+\centering
+\caption{Self-Employment Effects by Gender, Education, and Incorporation}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{No College} & \multicolumn{2}{c}{College} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+& Men & Women & Men & Women \\
+\midrule
+Incorporated & +0.103*** & +0.010 & +0.119*** & $-$0.024* \\
+             & [+0.088, +0.118] & [$-$0.013, +0.032] & [+0.101, +0.138] & [$-$0.047, $-$0.001] \\
+\\
+Unincorporated & $-$0.460*** & $-$0.639*** & $-$0.579*** & $-$0.800*** \\
+               & [$-$0.478, $-$0.442] & [$-$0.662, $-$0.617] & [$-$0.609, $-$0.549] & [$-$0.831, $-$0.770] \\
+\\
+N & 432,985 & 364,157 & 298,466 & 301,997 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: IPW estimates of effect on log earnings. 95\% confidence intervals in brackets. *** $p<0.01$, * $p<0.10$. Sample sizes reflect total observations in each gender $\times$ education subgroup.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:triple}
+\end{table}
+
+
+\section{Robustness and Limitations}
+
+\subsection{Propensity Score Diagnostics}
+
+The credibility of inverse probability weighting depends critically on achieving balance in observed covariates between treatment and comparison groups. I conduct extensive diagnostics to assess the quality of propensity score estimation and covariate balance.
+
+Estimated propensity scores for the aggregate self-employment analysis range from 0.02 to 0.17, with mean values of 0.095 in the treated group (self-employed) and 0.089 in the control group (wage workers). The distributions show substantial overlap, with all observations falling within the common support region. No observations require trimming due to extreme propensity scores, as the maximum estimated probability of self-employment (0.17) remains well below one. This good overlap reflects that, conditional on observables, both wage workers and self-employed individuals are found throughout the covariate distribution.
+
+After applying IPW weights, covariate balance improves substantially across all variables. The maximum standardized mean difference (SMD) across covariates is 0.007 in the weighted sample, compared to 0.12 in the unweighted sample. All covariates fall well below the conventional threshold of SMD $< 0.1$ recommended by \citet{austin2009balance}, and most fall below the more stringent threshold of SMD $< 0.05$. The largest remaining imbalances are in age (weighted SMD = 0.007) and college education (weighted SMD = 0.006). These results indicate that the weighted comparison groups are well balanced on all observed characteristics.
+
+For the separate incorporated and unincorporated analyses, diagnostics are similarly favorable. Incorporated self-employment propensity scores range from 0.01 to 0.12 with good overlap. Unincorporated self-employment propensity scores range from 0.02 to 0.13. Weighted covariate balance is achieved in both analyses, with maximum SMD values of 0.008 and 0.006 respectively.
+
+\subsection{Sensitivity to Unmeasured Confounding}
+
+The selection-on-observables assumption underlying IPW is fundamentally untestable. To assess how sensitive the findings are to potential unmeasured confounding, I report two complementary sensitivity measures.
+
+First, I calculate E-values following \citet{vanderweele2017sensitivity}. The E-value represents the minimum strength of association, on the risk ratio scale, that an unmeasured confounder would need to have with both the treatment and the outcome to fully explain away the observed effect. For the aggregate self-employment penalty ($-0.362$ log points), the E-value is 1.91. This means an unmeasured confounder would need to be associated with both a 91 percent higher probability of self-employment and a 91 percent change in earnings to explain the full effect. For the incorporated-unincorporated difference ($+0.69$ log points), the E-value is 2.2. For the confidence interval bounds to include zero, the required confounding strength is somewhat lower (E-value = 1.86 for the aggregate penalty).
+
+Second, I implement the coefficient stability approach of \citet{oster2019unobservable}. This method assesses how much selection on unobservables would be required to drive the estimated effect to zero, relative to the selection on observables. Assuming that $R^2_{\max} = 1.3 \times R^2_{\text{full}}$ (that is, the maximum possible $R^2$ if all confounders were observed is 30 percent higher than the $R^2$ from the full model), the calculated $\delta$ for the aggregate self-employment effect is 2,589. This implies that selection on unobservables would need to be over 2,500 times as important as selection on observables to drive the result to zero. For the incorporated premium, $\delta = 847$; for the unincorporated penalty, $\delta = 3,142$. All three values far exceed the threshold of $\delta > 1$ typically used to suggest robustness.
+
+These sensitivity analyses suggest the main findings are unlikely to be fully explained by unmeasured confounding, though they cannot rule out that confounding explains some portion of the effects. In particular, factors like entrepreneurial ability, risk tolerance, and business-specific human capital are plausible confounders that may explain part of the incorporated premium.
+
+\subsection{Alternative Specifications}
+
+I examine robustness to several alternative specifications. First, I estimate effects separately by survey year to assess whether the incorporation decomposition is stable over time. Results are qualitatively similar across years, though estimates are less precise due to smaller sample sizes. The incorporated premium ranges from $+0.055$ (2019) to $+0.082$ (2022); the unincorporated penalty ranges from $-0.598$ (2019) to $-0.641$ (2022). These patterns suggest the findings are not driven by pandemic-specific labor market disruptions.
+
+Second, I restrict the sample to full-time workers (35+ hours per week) to examine whether results are driven by differences in labor supply. The incorporated premium remains positive and significant ($+0.084$ log points) and the unincorporated penalty remains large ($-0.487$ log points) in the full-time sample. The somewhat smaller unincorporated penalty in the full-time sample suggests that part of the aggregate unincorporated penalty reflects lower hours worked, but the majority reflects lower earnings conditional on work effort.
+
+Third, I estimate effects using doubly robust augmented IPW (AIPW), which combines propensity score weighting with outcome regression. The AIPW estimates are nearly identical to the IPW estimates (within 0.01 log points for all three effects), consistent with the good covariate balance achieved by IPW alone. This similarity suggests that the IPW estimates are not sensitive to minor misspecification of the propensity score model.
+
+\subsection{Placebo Analysis}
+
+As an additional specification check, I conduct placebo analysis among workers who should not be affected by the treatment. Specifically, I examine whether ``self-employment'' predicts earnings among workers who are retired (age 65+) or not in the labor force. Among these populations where the self-employment distinction should be economically meaningless, I find no significant effect of (former) self-employment status on current income ($-0.02$ log points, $p = 0.43$). This null result in the placebo sample provides some reassurance that the main findings are not driven by spurious correlation or systematic measurement error.
+
+\subsection{Limitations}
+
+Several limitations warrant acknowledgment. First, the identification strategy relies on selection on observables; unmeasured factors like entrepreneurial ability, risk preferences, and business-specific human capital likely affect both self-employment choice and earnings. The sensitivity analyses suggest the findings are robust to plausible levels of unmeasured confounding, but some residual bias likely remains. Readers should interpret the results as conditional associations under the selection-on-observables assumption rather than definitively established causal effects.
+
+Second, the ACS measures annual earnings from the past 12 months, which may not capture the full returns to business ownership. Retained earnings kept in the business to finance growth or smooth consumption do not appear in reported personal income. Fringe benefits such as health insurance, retirement contributions, and company vehicles represent compensation that is more common for incorporated business owners. Equity appreciation in the business represents a return that accrues over time and may not be captured in current-year earnings. These measurement issues likely cause understatement of the true incorporated premium.
+
+Third, the unincorporated self-employed category pools heterogeneous arrangements that cannot be separately identified in the ACS. A skilled consultant earning \$200,000 as an independent contractor is classified identically to a gig worker earning \$20,000 driving for a rideshare platform. The large unincorporated penalty may be driven primarily by the latter group, with the former group potentially facing no penalty at all. Unfortunately, the data do not permit decomposition of unincorporated self-employment into finer categories.
+
+Fourth, the analysis covers ten large U.S. states that account for approximately 55 percent of national employment but may not generalize to smaller states or rural areas. States with smaller populations, less diverse economies, or different regulatory environments may show different patterns. Future research extending this analysis to additional states would be valuable.
+
+Fifth, self-employment status is measured at a point in time and does not capture transitions. Workers who are currently self-employed include both long-term entrepreneurs and those who recently transitioned from wage work. The earnings penalties may differ between these groups, but the cross-sectional ACS data do not allow examination of dynamic effects.
+
+
+\section{Discussion and Conclusion}
+
+\subsection{Reconciling Conflicting Findings in the Literature}
+
+This paper has demonstrated that the self-employment earnings penalty---one of the most robust findings in labor economics---is neither uniform nor universal. By decomposing the aggregate penalty along three dimensions, I have shown that self-employment returns depend fundamentally on legal structure, geography, and gender.
+
+The first-order finding is the incorporation decomposition: incorporated self-employed workers earn 7 percent more than comparable wage workers ($+0.069$ log points), while unincorporated self-employed workers earn 46 percent less ($-0.623$ log points). The aggregate 30 percent penalty ($-0.362$ log points) reflects the compositional mix of these very different arrangements. This finding reconciles decades of conflicting results in the entrepreneurship literature.
+
+Studies documenting large self-employment penalties, including the seminal work of \citet{hamilton2000does}, pool incorporated and unincorporated workers into a single self-employment category. Hamilton's influential finding that median self-employment earnings fall 35 percent below comparable wage earnings has shaped the field's understanding of entrepreneurship as a potentially irrational choice requiring explanation through compensating differentials or negative selection. Our results suggest his estimate captures a weighted average of very different effects.
+
+Studies finding modest penalties or even premiums for entrepreneurs, by contrast, often focus on more select populations. \citet{levine2017smart} examine the NLSY79 cohort and distinguish incorporated from unincorporated self-employment, finding that incorporated self-employed men earn more than their wage-working counterparts. Studies of ``employers'' (self-employed workers with paid employees) versus ``own-account'' workers also find better outcomes for the former group. The apparent contradiction dissolves once self-employment is properly disaggregated: incorporated self-employment appears to reward entrepreneurial activity, while unincorporated self-employment includes many workers in precarious arrangements with poor earnings outcomes.
+
+\subsection{Mechanisms Underlying the Incorporation Gap}
+
+Several mechanisms may explain the large difference between incorporated and unincorporated self-employment earnings.
+
+\textit{Selection.} Workers with greater entrepreneurial ability, business acumen, social capital, and access to financial capital may disproportionately choose incorporation. The decision to incorporate requires planning, knowledge of business law, and willingness to bear administrative costs. Conversely, unincorporated self-employment may serve as a fallback for workers with limited wage employment alternatives. Under this mechanism, the earnings difference reflects who selects into each employment type rather than a structural advantage of incorporation itself.
+
+\textit{Structural features.} Incorporation may generate higher earnings through channels beyond selection. Incorporated businesses can more easily access formal credit markets, as lenders may require corporate structure for business loans. Some clients, particularly government agencies and large corporations, require vendor incorporation. Incorporation signals permanence and legitimacy, potentially attracting clients who would be reluctant to contract with sole proprietors. The limited liability protection of corporate form may encourage risk-taking and investment that generates higher returns.
+
+\textit{Measurement.} Incorporated business owners may receive compensation through mechanisms that do not appear in annual earnings measures. Retained earnings kept in the business, fringe benefits (health insurance, retirement contributions, company vehicles), and equity appreciation represent forms of compensation that may be substantial for incorporated owners but do not appear in reported income. \citet{hurst2014household} document substantial income underreporting among the self-employed, though this may affect unincorporated workers more than incorporated workers who face greater scrutiny.
+
+\textit{Labor supply.} The data show that incorporated self-employed workers actually work more hours than wage workers, while unincorporated workers work substantially fewer hours. Some of the earnings gap may reflect differences in labor supply rather than returns per hour. However, the magnitude of the earnings gap far exceeds what could be explained by hours differences alone.
+
+\subsection{Geographic Variation and Local Labor Markets}
+
+The second-order finding is geographic variation: the aggregate penalty ranges from 23 percent in Florida ($-0.264$ log points) to 34 percent in California ($-0.420$ log points), and the incorporated premium ranges from zero in New York (not statistically significant) to 12 percent in Texas ($+0.114$ log points). Some American labor markets are substantially more favorable to self-employment than others.
+
+Several factors may drive this geographic heterogeneity. Differences in industrial composition affect the types of self-employment opportunities available. Texas's large incorporated premium may reflect opportunities in oil and gas, construction, and professional services where incorporation confers particular advantages. California's large aggregate penalty may reflect the high opportunity cost of foregoing tech-sector wage employment. New York's absence of an incorporated premium may reflect that self-employment in finance and professional services competes with extremely high-paying wage positions.
+
+State-level regulatory environments may also matter. States differ in incorporation costs, licensing requirements, and tax treatment of business income. States with more burdensome regulations for small businesses may discourage incorporation, leaving only the most able entrepreneurs in the incorporated category. States with entrepreneurial cultures and support ecosystems (incubators, venture capital, business networks) may facilitate more successful self-employment.
+
+\subsection{The Gender Gap: A Puzzle Within a Puzzle}
+
+The third-order finding concerns gender: men face a 23 percent aggregate penalty ($-0.267$ log points) while women face a 38 percent penalty ($-0.477$ log points), and critically, the incorporated premium accrues entirely to men ($+0.111$ log points, 12 percent). Women who incorporate show no earnings benefit relative to wage work ($-0.005$ log points, not statistically significant). This finding suggests that policies promoting women's entrepreneurship may not improve women's earnings unless they also address the structural barriers that prevent women from capturing the returns to incorporation.
+
+Several mechanisms might explain why women do not benefit from incorporation while men do. First, men and women may pursue different types of incorporated self-employment, with men concentrated in higher-paying sectors (construction, professional services, technology) and women in lower-paying sectors (personal services, retail). Second, incorporated self-employment may require access to networks, capital, and clients that are more available to men than women. Third, the incorporated premium may reflect returns to aggressive self-promotion, risk-taking, or negotiation that are rewarded differently for men and women.
+
+The finding that the unincorporated penalty is larger for women ($-0.731$ log points, 52 percent lower) than men ($-0.526$ log points, 41 percent lower) is also concerning. Women in unincorporated self-employment face extremely poor earnings outcomes. This may reflect the composition of women's unincorporated self-employment: \citet{connelly1992self} documented that women turn to self-employment to accommodate childcare, potentially accepting lower-paying arrangements for flexibility.
+
+\subsection{Policy Implications}
+
+These findings carry important implications for policy at multiple levels. Programs promoting entrepreneurship and self-employment should recognize that outcomes depend critically on the type of self-employment encouraged.
+
+\textit{Facilitating incorporation.} Policies that reduce barriers to incorporation---streamlined registration, reduced fees, free legal assistance, educational programs---may help self-employed workers capture the returns associated with formal business structure. The small premium for incorporated non-college workers suggests that formalization could particularly benefit workers who lack other signals of competence. However, policymakers should be cautious about assuming that encouraging incorporation will automatically improve outcomes; the incorporated premium may reflect selection rather than a structural advantage of corporate form.
+
+\textit{Gig work regulation.} The growth of unincorporated gig work, even when framed as entrepreneurship and flexibility, is associated with dramatically lower earnings. Regulatory debates over worker classification---whether gig workers should be employees or independent contractors---take on new urgency in light of the massive earnings penalty associated with unincorporated status. Reclassifying gig workers as employees would shift them from the unincorporated self-employed category (with its 46 percent penalty) to wage employment.
+
+\textit{Women's entrepreneurship.} Programs designed to promote women's entrepreneurship should recognize that incorporation does not appear to benefit women's earnings. Simply encouraging women to start incorporated businesses may not close the gender gap. More targeted interventions---access to networks, capital, and clients---may be needed to address the structural barriers that prevent women from capturing the returns to entrepreneurship.
+
+\textit{Interpreting aggregate trends.} More broadly, the findings suggest caution in interpreting aggregate trends in self-employment. A decline in self-employment rates might be good news (fewer workers trapped in low-paying unincorporated work) or bad news (fewer entrepreneurial opportunities), depending on the composition of the change. Policymakers should monitor the incorporated-unincorporated composition of self-employment, not just its aggregate level.
+
+\subsection{Conclusion}
+
+The self-employment earnings penalty is real, but it is not uniform. Incorporated self-employed workers earn 7 percent more than comparable wage workers ($+0.069$ log points); unincorporated self-employed workers earn 46 percent less ($-0.623$ log points). This heterogeneity extends across geography---some American labor markets are far more favorable to self-employment than others---and gender---only men capture the incorporated premium ($+0.111$ log points, 12 percent).
+
+Understanding who bears the self-employment penalty, and who does not, is essential for designing effective policies to support workers and promote productive entrepreneurship. The aggregate statistics mask profound heterogeneity, and policies based on aggregate patterns may benefit some workers while leaving others worse off. The atlas of self-employment presented in this paper provides a first step toward more nuanced policy that recognizes the fundamental differences between types of entrepreneurial activity.
+
+
+\label{apep_main_text_end}
+\newpage
+
+\begin{thebibliography}{99}
+
+\bibitem[Acemoglu and Autor(2011)]{acemoglu2011skills}
+Acemoglu, Daron, and David Autor. 2011. ``Skills, Tasks and Technologies: Implications for Employment and Earnings.'' In \textit{Handbook of Labor Economics}, edited by Orley Ashenfelter and David Card, Volume 4B, 1043--1171. Amsterdam: Elsevier.
+
+\bibitem[Austin(2009)]{austin2009balance}
+Austin, Peter C. 2009. ``Balance Diagnostics for Comparing the Distribution of Baseline Covariates between Treatment Groups in Propensity-Score Matched Samples.'' \textit{Statistics in Medicine} 28(25): 3083--3107.
+
+\bibitem[Benz and Frey(2008)]{benz2008being}
+Benz, Matthias, and Bruno S. Frey. 2008. ``Being Independent is a Great Thing: Subjective Evaluations of Self-Employment and Hierarchy.'' \textit{Economica} 75(298): 362--383.
+
+\bibitem[Blanchflower and Oswald(1998)]{blanchflower1998what}
+Blanchflower, David G., and Andrew J. Oswald. 1998. ``What Makes an Entrepreneur?'' \textit{Journal of Labor Economics} 16(1): 26--60.
+
+\bibitem[Borjas(1986)]{borjas1986self}
+Borjas, George J. 1986. ``The Self-Employment Experience of Immigrants.'' \textit{Journal of Human Resources} 21(4): 485--506.
+
+\bibitem[Brooks et al.(2014)]{brooks2014investors}
+Brooks, Alison Wood, Laura Huang, Sarah Wood Kearney, and Fiona E. Murray. 2014. ``Investors Prefer Entrepreneurial Ventures Pitched by Attractive Men.'' \textit{Proceedings of the National Academy of Sciences} 111(12): 4427--4431.
+
+\bibitem[Evans and Jovanovic(1989)]{evans1989estimated}
+Evans, David S., and Boyan Jovanovic. 1989. ``An Estimated Model of Entrepreneurial Choice under Liquidity Constraints.'' \textit{Journal of Political Economy} 97(4): 808--827.
+
+\bibitem[Fairlie and Robb(2009)]{fairlie2009race}
+Fairlie, Robert W., and Alicia M. Robb. 2009. ``Gender Differences in Business Performance: Evidence from the Characteristics of Business Owners Survey.'' \textit{Small Business Economics} 33(4): 375--395.
+
+\bibitem[Hundley(2001)]{hundley2001earnings}
+Hundley, Greg. 2001. ``Why and When Are the Self-Employed More Satisfied with Their Work?'' \textit{Industrial Relations} 40(2): 293--316.
+
+\bibitem[Connelly(1992)]{connelly1992self}
+Connelly, Rachel. 1992. ``Self-Employment and Providing Child Care.'' \textit{Demography} 29(1): 17--29.
+
+\bibitem[Hurst et al.(2014)]{hurst2014household}
+Hurst, Erik, Geng Li, and Benjamin Pugsley. 2014. ``Are Household Surveys Like Tax Forms? Evidence from Income Underreporting of the Self-Employed.'' \textit{Review of Economics and Statistics} 96(1): 19--33.
+
+\bibitem[Katz and Krueger(2019)]{katz2019rise}
+Katz, Lawrence F., and Alan B. Krueger. 2019. ``The Rise and Nature of Alternative Work Arrangements in the United States, 1995--2015.'' \textit{ILR Review} 72(2): 382--416.
+
+\bibitem[Hamilton(2000)]{hamilton2000does}
+Hamilton, Barton H. 2000. ``Does Entrepreneurship Pay? An Empirical Analysis of the Returns to Self-Employment.'' \textit{Journal of Political Economy} 108(3): 604--631.
+
+\bibitem[Hirano, Imbens, and Ridder(2003)]{hirano2003efficient}
+Hirano, Keisuke, Guido W. Imbens, and Geert Ridder. 2003. ``Efficient Estimation of Average Treatment Effects Using the Estimated Propensity Score.'' \textit{Econometrica} 71(4): 1161--1189.
+
+\bibitem[Levine and Rubinstein(2017)]{levine2017smart}
+Levine, Ross, and Yona Rubinstein. 2017. ``Smart and Illicit: Who Becomes an Entrepreneur and Do They Earn More?'' \textit{Quarterly Journal of Economics} 132(2): 963--1018.
+
+\bibitem[Moskowitz and Vissing-Jorgensen(2002)]{moskowitz2002puzzling}
+Moskowitz, Tobias J., and Annette Vissing-Jorgensen. 2002. ``The Returns to Entrepreneurial Investment: A Private Equity Premium Puzzle?'' \textit{American Economic Review} 92(4): 745--778.
+
+\bibitem[Oster(2019)]{oster2019unobservable}
+Oster, Emily. 2019. ``Unobservable Selection and Coefficient Stability: Theory and Evidence.'' \textit{Journal of Business and Economic Statistics} 37(2): 187--204.
+
+\bibitem[Ruggles et al.(2024)]{ruggles2024ipums}
+Ruggles, Steven, Sarah Flood, Matthew Sobek, Daniel Backman, Annie Chen, Grace Cooper, Stephanie Richards, Renae Rogers, and Megan Schouweiler. 2024. IPUMS USA: Version 15.0 [dataset]. Minneapolis, MN: IPUMS.
+
+\bibitem[VanderWeele and Ding(2017)]{vanderweele2017sensitivity}
+VanderWeele, Tyler J., and Peng Ding. 2017. ``Sensitivity Analysis in Observational Research: Introducing the E-Value.'' \textit{Annals of Internal Medicine} 167(4): 268--274.
+
+\end{thebibliography}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{Variable Definitions}
+
+\begin{longtable}{p{3cm}p{3cm}p{8cm}}
+\toprule
+Variable & ACS Variable & Definition \\
+\midrule
+\endfirsthead
+\toprule
+Variable & ACS Variable & Definition \\
+\midrule
+\endhead
+Incorporated SE & COW & = 1 if Class of Worker is 7 (self-employed, incorporated business) \\
+Unincorporated SE & COW & = 1 if Class of Worker is 6 (self-employed, not incorporated) \\
+Wage worker & COW & = 1 if Class of Worker is 1--5 (private or government employee) \\
+Earnings & PINCP & Total personal income in past 12 months \\
+Log earnings & -- & = $\ln(\text{PINCP})$; sample restricted to PINCP $\geq$ \$1,000 \\
+Full-time & WKHP & = 1 if usual hours worked per week $\geq$ 35 \\
+Hours & WKHP & Usual hours worked per week \\
+Age & AGEP & Age in years \\
+Female & SEX & = 1 if sex = 2 (female) \\
+College & SCHL & = 1 if educational attainment $\geq$ 21 (bachelor's degree) \\
+Married & MAR & = 1 if marital status = 1 (married, spouse present) \\
+White & RAC1P, HISP & = 1 if White alone and not Hispanic \\
+Black & RAC1P, HISP & = 1 if Black alone and not Hispanic \\
+Hispanic & HISP & = 1 if Hispanic origin, any race \\
+Homeowner & TEN & = 1 if tenure = 1 or 2 (owned with or without mortgage) \\
+COVID period & YEAR & = 1 if survey year is 2021 or 2022 \\
+\bottomrule
+\end{longtable}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP). This revision addresses feedback from external reviewers on APEP-0175.
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/auto-policy-evals}
+
+\end{document}

@@ -1,0 +1,18 @@
+{
+  "ideas": [
+    {
+      "id": 1,
+      "title": "Self-Employment Earnings Penalty Decomposition",
+      "recommendation": "PURSUE",
+      "novelty_score": 4,
+      "identification_score": 4,
+      "feasibility_score": 5,
+      "relevance_score": 5,
+      "overall_score": 4.3,
+      "rationale": "Addresses critical reviewer concerns while adding substantial new contribution via incorporated/unincorporated decomposition. Reconciles conflicting findings in the literature."
+    }
+  ],
+  "timestamp": "2026-02-03T19:00:00-08:00",
+  "status": "revision",
+  "parent_paper": "apep_0169"
+}

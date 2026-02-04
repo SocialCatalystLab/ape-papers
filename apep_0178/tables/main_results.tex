@@ -1,0 +1,32 @@
+\begin{table}[H]
+\centering
+\caption{Main Results: Effect of Self-Employment on Earnings and Work Intensity}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& (1) & (2) & (3) \\
+& Log Earnings & Full-Time & Hours/Week \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Aggregate Self-Employment (ATE)}} \\
+Self-Employed & $-$0.0577*** & $-$0.161*** & $-$1.60*** \\
+              & [$-$0.058, $-$0.057] & [$-$0.164, $-$0.159] & [$-$1.69, $-$1.51] \\
+\\
+\multicolumn{4}{l}{\textit{Panel B: By Incorporation Status (ATE)}} \\
+Incorporated Self-Emp. & $-$0.032*** & $-$0.075*** & +1.18*** \\
+                       & [$-$0.042, $-$0.022] & [$-$0.079, $-$0.072] & [+1.05, +1.31] \\
+\\
+Unincorporated Self-Emp. & $-$9.47*** & $-$0.213*** & $-$3.26*** \\
+                         & [$-$9.49, $-$9.44] & [$-$0.216, $-$0.209] & [$-$3.37, $-$3.14] \\
+\\
+Mean outcome (wage workers) & 10.78 & 0.842 & 40.2 \\
+N (incorporated analysis) & 1,317,659 & 1,317,659 & 1,317,659 \\
+N (unincorporated analysis) & 1,344,920 & 1,344,920 & 1,344,920 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Doubly robust IPW estimates. 95\% confidence intervals in brackets. *** $p<0.01$. Propensity score model includes age, age$^2$, female, college, married, race indicators, homeowner, and COVID period. Robust standard errors. Weights trimmed at 99th percentile.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}
