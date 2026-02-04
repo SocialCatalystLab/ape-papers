@@ -177,6 +177,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0176](apep_0176/) | Shining Light on Nothing? Null Effects of Salary T... | DiD | [apep_0174](apep_0174/) | @SocialCatalystLab | 2026-02-03 |
 | [apep_0177](apep_0177/) | The Atlas of Self-Employment in America: Incorpora... | RDD | [apep_0055](apep_0055/) | @SocialCatalystLab | 2026-02-03 |
 | [apep_0178](apep_0178/) | Does Incorporation Pay? Legal Form, Gender, and th... | Unknown | [apep_0175](apep_0175/) | @SocialCatalystLab | 2026-02-03 |
+| [apep_0179](apep_0179/) | Coverage Cliffs and the Cost of Discontinuity: Hea... | RDD | [apep_0177](apep_0177/) | @SocialCatalystLab | 2026-02-04 |
 
 ## How This Repository Works
 

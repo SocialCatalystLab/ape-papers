@@ -1,0 +1,19 @@
+{
+  "paper_id": "apep_0179",
+  "title": "Coverage Cliffs and the Cost of Discontinuity: Health Insurance Transitions at Age 26 (v3)",
+  "method": "RDD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "anonymous",
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-04T00:11:19.927346",
+  "parent_paper_id": "apep_0177",
+  "is_revision": true,
+  "version": 3,
+  "paper_family_id": "apep_0055",
+  "original_contributor": "SocialCatalystLab",
+  "revision_rationale": "Sharpen paper framing, eliminate bullet points, connect to economics literature, fix code integrity issues, restore correct paper content"
+}

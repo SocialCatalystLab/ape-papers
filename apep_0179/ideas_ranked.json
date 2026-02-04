@@ -1,0 +1,45 @@
+{
+  "generated": "2026-01-23T14:52:03.956711",
+  "model": "gpt-5.2",
+  "tokens": 6711,
+  "openai_response_id": "resp_0fb4c47205cb980a0069737cb182f081938def096f725bb2fe",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Does Losing Parental Health Insurance at Age 26 Shift Births to Medicaid? (RDD)",
+      "score": 74,
+      "verdict": "PURSUE",
+      "strengths": "High policy salience (Medicaid vs private payment at delivery) and extremely large natality microdata gives strong precision. The age-26 cutoff is plausibly exogenous and directly tied to the insurance mechanism you measure (payer at delivery).",
+      "concerns": "In the public-use Natality file, mother's age is typically measured in integer years, not exact days-from-birthday—so this is not a truly sharp birthday RDD; it's effectively a discrete/fuzzy RD with substantial treatment misclassification.",
+      "novelty": "MODERATELY NOVEL"
+    },
+    {
+      "rank": 2,
+      "title": "Did Removing Age Restrictions on Emergency Contraception Reduce Teen Pregnancy? (RDD-in-time)",
+      "score": 44,
+      "verdict": "CONSIDER",
+      "strengths": "The policy date is clear and national, and teen birth outcomes are measurable at high frequency with CDC data.",
+      "concerns": "RD-in-time is fragile here: teen birth rates were already on a strong secular downward trend.",
+      "novelty": "LOW TO MODERATE"
+    },
+    {
+      "rank": 3,
+      "title": "Did OTC Birth Control (Opill) Approval Affect Fertility? (RDD-in-time)",
+      "score": 38,
+      "verdict": "SKIP",
+      "strengths": "Very high policy relevance and potentially high upside.",
+      "concerns": "No sharp threshold and the post-period is heavily confounded.",
+      "novelty": "HIGH"
+    },
+    {
+      "rank": 4,
+      "title": "Does Age 18 Eligibility for Pharmacist-Prescribed Contraception Increase Use? (Age-18 RDD)",
+      "score": 22,
+      "verdict": "SKIP",
+      "strengths": "The policy margin (pharmacist prescribing) is concrete and potentially important for access.",
+      "concerns": "The age-18 cutoff is a confounding magnet.",
+      "novelty": "MODERATE"
+    }
+  ],
+  "summary": "One genuinely fundable idea: the age-26 dependent coverage project."
+}

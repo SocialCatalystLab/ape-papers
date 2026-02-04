@@ -1,0 +1,15 @@
+\begin{table}[H]
+\centering
+\caption{Covariate Balance Tests}
+\label{tab:balance}
+\begin{tabular}{lccc}
+\toprule
+Covariate & RD Estimate & Robust SE & p-value \\
+\midrule
+Married & 0.0032 & (0.0017) & 0.063 \\
+College Degree & 0.0138* & (0.0014) & $<$0.001 \\
+US-Born & 0.0008 & (0.0015) & 0.592 \\
+\bottomrule
+\end{tabular}
+\floatfoot{\textit{Notes:} RD estimates for predetermined covariates using local linear regression with bandwidth of 4 years. * indicates p$<$0.05.}
+\end{table}

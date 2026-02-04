@@ -1,0 +1,21 @@
+\begin{table}[H]
+\centering
+\caption{Main RDD Results: Effect of Age 26 Threshold on Payment Source and Health}
+\label{tab:main}
+\begin{tabular}{lccccc}
+\toprule
+Outcome & RD Estimate & SE & 95\% CI & p-value & N \\
+\midrule
+\textit{Payment Source} & & & & & \\
+\quad Medicaid & 0.027 & (0.002) & [0.023, 0.030] & $<$0.001 & 1,639,017 \\
+\quad Private Insurance & -0.031 & (0.002) & [-0.034, -0.027] & $<$0.001 & 1,639,017 \\
+\quad Self-Pay & 0.002 & (0.001) & [0.001, 0.004] & $<$0.001 & 1,639,017 \\
+\midrule
+\textit{Health Outcomes} & & & & & \\
+\quad Early Prenatal Care & -0.003 & (0.002) & [-0.006, 0.000] & 0.064 & 1,639,017 \\
+\quad Preterm Birth & -0.001 & (0.001) & [-0.003, 0.001] & 0.385 & 1,637,724 \\
+\quad Low Birth Weight & 0.001 & (0.001) & [-0.001, 0.003] & 0.231 & 1,637,640 \\
+\bottomrule
+\end{tabular}
+\floatfoot{\textit{Notes:} RD estimates from local linear regression with bandwidth of 4 years and heteroskedasticity-robust standard errors. * p$<$0.05, ** p$<$0.01, *** p$<$0.001.}
+\end{table}
