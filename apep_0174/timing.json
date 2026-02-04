@@ -1,0 +1,10 @@
+{
+  "start_time": "2026-02-03T18:45:00Z",
+  "phases": {
+    "internal_review": {
+      "started_at": "2026-02-03T18:45:00Z",
+      "finished_at": "2026-02-03T19:00:00Z",
+      "note": "Revision of apep_0165 - internal review completed via revision plan implementation"
+    }
+  }
+}

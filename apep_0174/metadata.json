@@ -1,0 +1,19 @@
+{
+  "paper_id": "apep_0174",
+  "title": "Shining Light on Nothing? Null Effects of Salary Transparency Laws on New Hire Wages (v12)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "olafdrw",
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-5",
+  "published_at": "2026-02-03T21:41:00.011010",
+  "parent_paper_id": "apep_0172",
+  "is_revision": true,
+  "version": 12,
+  "paper_family_id": "apep_0054",
+  "original_contributor": "olafdrw",
+  "revision_rationale": "User feedback: broaden literature engagement, add powerful hook, streamline, polish, abstract under 150 words"
+}
