@@ -1,0 +1,35 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:gender_gap} Triple-Difference: Effect on Gender Wage Gap}
+   \bigskip
+   \centering
+   \begin{tabular}{lcccc}
+      \toprule
+       & \multicolumn{4}{c}{Log Hourly Wage}\\
+                                              & (1)             & (2)             & (3)             & (4)\\  
+      \midrule 
+      Treated $\times$ Post                   & -0.0190         & -0.0294$^{***}$ & -0.0228$^{***}$ & 0.2839\\   
+                                              & (0.0141)        & (0.0102)        & (0.0080)        & (167,382.8)\\   
+      Female                                  & -0.1690$^{***}$ & -0.1940$^{***}$ & -0.1778$^{***}$ & -0.1830$^{***}$\\   
+                                              & (0.0063)        & (0.0068)        & (0.0055)        & (0.0061)\\   
+      Treated $\times$ Post $\times$ Female   & 0.0586$^{***}$  & 0.0634$^{***}$  & 0.0455$^{***}$  & 0.0488$^{***}$\\   
+                                              & (0.0081)        & (0.0107)        & (0.0083)        & (0.0081)\\   
+       \\
+      R$^2$                                   & 0.06930         & 0.29313         & 0.39447         & 0.36487\\  
+      Observations                            & 567,613         & 567,613         & 567,613         & 567,613\\  
+       \\
+      statefip fixed effects                  & $\checkmark$    & $\checkmark$    & $\checkmark$    & \\  
+      income\_year fixed effects              & $\checkmark$    & $\checkmark$    & $\checkmark$    & \\  
+      occ\_major fixed effects                &                 & $\checkmark$    & $\checkmark$    & $\checkmark$\\   
+      ind\_major fixed effects                &                 &                 & $\checkmark$    & \\  
+      educ\_cat fixed effects                 &                 &                 & $\checkmark$    & $\checkmark$\\   
+      age\_group fixed effects                &                 &                 & $\checkmark$    & \\  
+      statefip-income\_year fixed effects     &                 &                 &                 & $\checkmark$\\   
+      \bottomrule
+   \end{tabular}
+   
+   \par \raggedright 
+   Notes: Standard errors clustered at the state level in parentheses. Sample: wage/salary workers ages 25-64, income years 2014-2023. The coefficient on Treated $\times$ Post represents the effect on male wages. The coefficient on Treated $\times$ Post $\times$ Female represents the additional effect for women; a positive coefficient indicates the gender gap narrows. * p $<$ 0.10, ** p $<$ 0.05, *** p $<$ 0.01.
+\end{table}
+
+
