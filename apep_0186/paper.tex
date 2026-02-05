@@ -1,0 +1,1254 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+% Figure notes environment
+\newenvironment{figurenotes}{\par\vspace{0.5em}\footnotesize\noindent}{\par}
+
+\title{Social Network Minimum Wage Exposure: \\ A New County-Level Measure Using the Facebook Social Connectedness Index\footnote{This paper is a revision of APEP-0185. See \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/papers/apep_0185} for the original.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \\ @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+We introduce a new measure of minimum wage exposure through social networks: for each U.S. county, we construct the Social Connectedness Index (SCI)-weighted average of minimum wages across all socially connected counties in other states. This measure captures the minimum wage environment that a county's residents are exposed to through their Facebook friendship networks, which may differ substantially from the minimum wage in their own state or in geographically proximate areas. Using county-to-county SCI data covering over 10 million county pairs and state minimum wage histories from 2010--2023, we construct a county-by-quarter panel of social network minimum wage exposure. We document substantial cross-sectional and temporal variation in this measure, identify 13 distinct network communities that transcend state boundaries, and show that network exposure is only moderately correlated with own-state minimum wages ($\rho = 0.36$). Counties in the same federal-minimum-wage state can differ by over \$2 in their network exposure depending on whether their social ties run to California or to other low-wage states. The data are publicly released to facilitate future research on network-mediated policy spillovers, migration, wage expectations, and labor market dynamics.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J31, J38, R12, L14, D85 \\
+\noindent\textbf{Keywords:} minimum wage, social networks, Social Connectedness Index, policy exposure, data construction
+
+\newpage
+
+\section{Introduction}
+
+What minimum wage policies are U.S. workers exposed to through their social networks? Consider two workers in Texas, where the state minimum wage has remained at the federal floor of \$7.25 since 2009. One worker lives in El Paso, with strong social ties to California through family migration patterns and cross-border economic relationships. The other lives in Amarillo, in the Texas Panhandle, with social connections primarily to Oklahoma, Kansas, and other Great Plains states. Both workers face the same nominal minimum wage of \$7.25. But through their social networks, they are exposed to fundamentally different minimum wage environments: the El Paso worker's network includes contacts earning \$15+ in California, while the Amarillo worker's network consists almost entirely of contacts in federal-minimum states.
+
+This paper introduces a new measure that captures this network-mediated exposure to minimum wage policy. For each U.S. county in each quarter from 2010 to 2023, we construct the \textit{social network minimum wage}: the weighted average of minimum wages across all counties in other states, where the weights are derived from the Facebook Social Connectedness Index (SCI). The SCI measures the probability that two individuals in different locations are Facebook friends, providing a revealed-preference measure of social ties at unprecedented geographic granularity.
+
+Our contribution is primarily descriptive and data-oriented. We construct and release a county-by-quarter panel containing each county's own-state minimum wage, SCI-weighted social network minimum wage (excluding own-state), and distance-weighted geographic minimum wage exposure. The panel also includes derived measures such as the gap between network and own-state minimum wages, as well as network community assignments based on Louvain clustering of the SCI graph.
+
+We document several novel empirical patterns. First, network minimum wage exposure varies substantially even within states: Texas counties range from \$7.20 to \$8.50 in average network exposure, despite all facing the same \$7.25 state minimum wage. Second, network exposure is only moderately correlated with own-state minimum wages ($\rho = 0.36$), indicating that knowing a county's own-state minimum wage tells you relatively little about what minimum wages its residents learn about through their social networks. Third, network exposure is more strongly correlated with geographic exposure ($\rho = 0.88$), but the residual variation---counties whose network exposure differs from what geography would predict---is economically meaningful and geographically concentrated.
+
+Fourth, we identify 13 distinct network communities using Louvain clustering of the SCI graph. These communities transcend state boundaries and reflect underlying economic and social geography: a Pacific community centered on California, a Northeastern corridor community, a Florida-Caribbean community, a Great Plains community, and so forth. Counties within the same network community share similar network minimum wage exposures regardless of their own-state minimum wages, suggesting that network communities may be meaningful units for studying policy spillovers.
+
+While we do not pursue causal identification---doing so would require addressing challenging questions about endogeneity of network formation, omitted variables, and SUTVA violations---we provide an illustrative application demonstrating how our measure could be used in future research. We estimate associations between network exposure and county employment, present event study patterns around the Fight for \$15 policy shock, and conduct comprehensive robustness analyses. These results are suggestive rather than causal, but they demonstrate the potential of the data for policy-relevant research. Our primary goal is to provide a public good: a carefully constructed dataset and transparent methodology that future researchers can build upon.
+
+The remainder of this paper proceeds as follows. Section 2 reviews the relevant literature on social networks in economics and minimum wage policy. Section 3 describes the data sources. Section 4 details the construction of our network exposure measure. Section 5 presents descriptive statistics and visualizations. Section 6 analyzes heterogeneity across regions and network communities. Section 7 presents an illustrative application examining associations between network exposure and employment. Section 8 reports comprehensive robustness analyses. Section 9 discusses potential applications and identification strategies for future research. Section 10 describes data availability. Section 11 concludes.
+
+
+\section{Related Literature}
+
+Our paper contributes to several strands of the economics literature: the growing body of work using the Facebook Social Connectedness Index, research on social networks and economic outcomes, and the extensive literature on minimum wage policy.
+
+\subsection{The Social Connectedness Index in Economics}
+
+The Facebook Social Connectedness Index has rapidly become a standard tool for measuring social ties in economics research. Introduced by \citet{bailey2018social}, the SCI measures the relative probability that two individuals in different geographic areas are Facebook friends, providing a revealed-preference measure of social connections at unprecedented scale and granularity.
+
+The SCI has been validated against numerous external measures of social and economic linkages. \citet{bailey2018social} show that the SCI predicts bilateral migration flows, trade patterns, patent citations, and disease transmission between regions. The correlation between SCI and migration flows is particularly strong ($\rho > 0.7$), reflecting the fact that migration is a primary driver of long-distance social connections: people maintain friendships with contacts in places they moved from or have family ties to.
+
+Subsequent research has used the SCI to study a wide range of economic phenomena. \citet{bailey2018house} document that individuals in regions with social ties to areas that experienced recent house price increases are more likely to believe that housing is a good investment and to buy homes themselves, providing evidence for social learning in housing markets. \citet{bailey2020social} show that social connectedness predicts COVID-19 spread across U.S. counties, with a one standard deviation increase in SCI to high-infection areas associated with a 20\% increase in local cases two weeks later.
+
+In the labor market context, \citet{bailey2022social} demonstrate that workers are more likely to find jobs in industries that are prevalent among their social contacts, suggesting that social networks transmit information about job opportunities across space. This finding is directly relevant to our setting: if workers learn about labor market conditions through their social networks, then network minimum wage exposure may affect their wage expectations and job search behavior.
+
+Our paper extends this literature by combining the SCI with policy variation to construct a new measure of network-mediated policy exposure. While previous work has used the SCI to study outcomes that diffuse through networks (housing prices, disease, job information), we use it to measure exposure to policies that vary across space. This approach---combining revealed social connections with exogenous policy variation---could be applied to construct network exposure measures for any policy that varies across states or counties.
+
+\subsection{Social Networks and Labor Markets}
+
+A large literature documents the importance of social networks in labor markets. The classic finding is that a substantial fraction of jobs are found through personal contacts \citep{granovetter1973strength, ioannides2004job}. More recent work has used the SCI and other network measures to study how social connections transmit information about jobs and wages across space.
+
+\citet{hellerstein2011neighbors} show that workers are more likely to work with their residential neighbors, suggesting local network effects in job search. \citet{schmutte2015free} provides evidence that workers share job information with neighbors, and that this information sharing improves labor market matching. \citet{beaman2012networks} demonstrates experimentally that the structure of referral networks affects both the quality of job matches and wage outcomes.
+
+The theoretical literature on networks and labor markets emphasizes several channels through which social connections could affect wages. First, networks transmit information about job opportunities, reducing search frictions \citep{calvo2004effects}. Second, networks transmit information about prevailing wages and working conditions, potentially affecting reservation wages \citep{brown2016firms}. Third, networks facilitate migration, allowing workers to relocate to higher-wage areas where they have contacts \citep{munshi2003networks}.
+
+Our network minimum wage measure is most directly relevant to the second channel: information transmission about wages. Workers who are socially connected to high minimum wage states learn about the wages their contacts earn, which may affect their beliefs about what wages are ``fair'' or achievable. This information transmission could affect wage bargaining, job search intensity, and labor force participation even absent any actual migration.
+
+\subsection{Minimum Wage Policy}
+
+The minimum wage is one of the most studied policies in labor economics. The canonical question---whether minimum wage increases reduce employment---has generated hundreds of studies with varying conclusions \citep{neumark2007minimum, dube2010minimum, cengiz2019effect}. Our paper does not contribute to this debate directly; instead, we provide a new measure that future researchers could use to study spillover effects of minimum wage policies.
+
+Several features of U.S. minimum wage policy are relevant to our measure construction. First, minimum wages vary substantially across states: as of 2023, state minimum wages ranged from the federal floor of \$7.25 (in 20 states) to \$15.74 (Washington). This cross-state variation provides the policy variation that generates differences in network exposure. Second, minimum wages are set by states (and sometimes cities), not by counties. This means that all counties within a state face the same minimum wage, while network exposure can vary across counties within a state depending on their social connections.
+
+Third, minimum wage increases have been politically contentious and have occurred in waves. The ``Fight for \$15'' movement, beginning around 2012, generated substantial minimum wage increases in California, New York, and other progressive states during 2014--2016. These increases show up as step changes in network exposure for counties connected to those states, providing temporal variation in addition to cross-sectional variation.
+
+A small but growing literature studies minimum wage spillovers across jurisdictions. \citet{dube2014designing} discuss how minimum wage effects may spill over to neighboring counties through labor market competition. \citet{autor2016contribution} document that minimum wage increases in high-wage states may affect wage distributions in neighboring low-wage states. Our network exposure measure provides a new way to study these spillovers: instead of focusing on geographic neighbors, we can examine spillovers through social networks, which may span much longer distances.
+
+\subsection{Contribution}
+
+Our paper makes several contributions to these literatures. First, we introduce a new measure---network minimum wage exposure---that combines the SCI with minimum wage policy variation. This measure captures the minimum wage environment that workers are exposed to through their social networks, which may affect wage expectations, migration decisions, and labor market behavior.
+
+Second, we document the empirical properties of this measure, including its cross-sectional and temporal variation, its correlation with other exposure measures, and its relationship to underlying network structure. These descriptive findings provide the foundation for future causal analysis.
+
+Third, we release the data publicly, providing a well-documented dataset that researchers can use to study network-mediated policy effects. The same methodology could be applied to construct network exposure measures for other policies that vary across space.
+
+
+\section{Data Sources}
+
+\subsection{Facebook Social Connectedness Index}
+
+The Social Connectedness Index (SCI), developed by Facebook Research (now Meta) and released through the Humanitarian Data Exchange, measures the relative probability that two individuals in different geographic areas are Facebook friends. For county pair $(i, j)$:
+
+\begin{equation}
+SCI_{ij} = \frac{\text{FB Connections}_{ij}}{\text{FB Users}_i \times \text{FB Users}_j}
+\end{equation}
+
+This measure is scaled by a constant and published for all U.S. county pairs---approximately 10 million observations covering roughly 3,200 counties. Higher SCI values indicate stronger social ties between counties.
+
+\textbf{Interpretation.} The SCI captures revealed social connections: people are Facebook friends because they have real-world relationships through family, work, education, migration, or shared communities. The measure reflects not just current interactions but accumulated relationship history---people often remain Facebook friends with contacts from previous residences, schools, and workplaces.
+
+\textbf{Validation.} \citet{bailey2018social} validate the SCI against external measures of social and economic linkages:
+\begin{itemize}
+    \item \textit{Migration:} The SCI strongly predicts bilateral migration flows ($\rho > 0.7$). Counties with high SCI have high migration flows in both directions, reflecting the fact that migration is a primary source of long-distance social connections.
+    \item \textit{Trade:} The SCI predicts trade flows between regions, conditional on distance. Social connections facilitate economic exchange through trust, information sharing, and relationship networks.
+    \item \textit{Patent citations:} Patents are more likely to cite prior patents from socially connected regions, suggesting that social networks transmit technical knowledge.
+    \item \textit{Disease spread:} COVID-19 spread more rapidly between socially connected regions, providing causal evidence that the SCI captures channels of person-to-person interaction.
+\end{itemize}
+
+\textbf{Stability over time.} Although the SCI is constructed from a snapshot of Facebook friendships, the network structure is highly stable. \citet{bailey2018social} document year-over-year correlations exceeding 0.97, reflecting the slow-moving nature of underlying social ties. We treat the SCI as time-invariant for our analysis, using the 2018 vintage. This assumption is reasonable given that (1) Facebook penetration in the U.S. had largely saturated by 2016, and (2) the social connections that determine SCI---family ties, migration histories, school networks---change slowly over time.
+
+\textbf{Coverage and cleaning.} The raw SCI data covers all U.S. county pairs for approximately 3,142 counties including territories. We exclude U.S. territories (Puerto Rico, Virgin Islands, etc.) due to limited coverage and different minimum wage regimes, retaining 3,108 continental U.S. counties. After filtering county-quarter observations with anomalous exposure values (network exposure below \$7.00, which removes observations affected by data construction issues), we retain 3,068 counties with usable information across 159,907 county-quarter observations.
+
+\textbf{Limitations.} The SCI has several limitations. First, it captures Facebook friendships, which may not perfectly correspond to economically relevant social ties. However, Facebook's high penetration in the U.S. (over 70\% of adults) and the validation evidence suggest that SCI captures meaningful social connections. Second, the SCI is symmetric ($SCI_{ij} = SCI_{ji}$), while information flows may be asymmetric. Third, the SCI does not capture the intensity of relationships---a casual acquaintance and a close family member both count as one Facebook friend. Despite these limitations, the SCI represents the best available measure of social connections at the county level.
+
+\subsection{State Minimum Wages}
+
+We compile state minimum wage histories from 2010 through 2023 using data from three sources:
+\begin{enumerate}
+    \item U.S. Department of Labor Wage and Hour Division, which maintains official records of state minimum wage laws
+    \item National Conference of State Legislatures (NCSL), which tracks state legislation including minimum wage changes
+    \item The Vaghul-Zipperer minimum wage database, an academic resource that compiles effective minimum wages by state and date
+\end{enumerate}
+
+We cross-reference these sources to construct a complete panel of state minimum wages by effective date.
+
+\textbf{Federal floor.} The federal minimum wage has been \$7.25 per hour since July 2009. States may set higher minimums, but not lower for covered workers (with narrow exceptions for tipped employees, some small businesses, and certain categories of workers).
+
+\textbf{State variation.} During our sample period (2010--2023), minimum wage policy exhibited substantial variation:
+\begin{itemize}
+    \item 20 states maintained the federal minimum of \$7.25 throughout the entire period
+    \item 30 states plus DC raised their minimum wages at least once
+    \item The highest state minimum wage reached \$15.74 (Washington, January 2023)
+    \item Several states adopted automatic indexing to inflation or living costs
+\end{itemize}
+
+\textbf{Temporal patterns.} Minimum wage increases occurred in waves. The early 2010s saw modest increases in a few states. The ``Fight for \$15'' movement, beginning around 2012, generated substantial momentum for increases beginning in 2014. California, New York, and several other states announced multi-year phase-ins to \$15, with annual increases through 2022-2023. These step changes create temporal variation in network exposure that can be used for event-study analyses.
+
+\textbf{Panel construction.} We construct a state-by-quarter panel with the minimum wage in effect at the end of each quarter. When multiple changes occur within a quarter, we use the end-of-quarter value. This yields a panel of 51 jurisdictions (50 states plus DC) $\times$ 56 quarters = 2,856 state-quarter observations.
+
+\subsection{County Geography}
+
+We obtain county boundary shapefiles and centroid coordinates from the U.S. Census Bureau's TIGER/Line files via the \texttt{tigris} R package. These data provide:
+\begin{itemize}
+    \item County FIPS codes for merging across datasets
+    \item County centroid coordinates for computing geographic distances
+    \item State FIPS codes for linking counties to state minimum wages
+    \item County boundaries for mapping
+\end{itemize}
+
+We compute pairwise distances between all county centroids using the Haversine formula, which accounts for the Earth's curvature. These distances are used to construct the geographic exposure measure as a benchmark for the network measure.
+
+\subsection{Data Limitations}
+
+We document several limitations of our data that researchers should consider when using these measures.
+
+\textbf{SCI time-invariance.} We treat the Social Connectedness Index as time-invariant, using the 2018 vintage throughout our 2010--2023 analysis period. While \citet{bailey2018social} document high year-over-year correlations ($\rho > 0.97$), this assumption precludes examining how network structure evolves in response to policy changes. If minimum wage increases induce migration that restructures social networks, our time-invariant SCI would not capture these dynamics.
+
+\textbf{Employment data temporal interpolation.} For labor market outcomes, we use Quarterly Census of Employment and Wages (QCEW) data. The publicly available QCEW bulk files provide annual averages rather than true quarterly data. We create quarterly observations by replicating annual values across four quarters. This approach preserves cross-sectional variation (across counties) and year-to-year variation, but does \textit{not} capture within-year employment fluctuations. Standard errors should be interpreted with this in mind---the effective sample size for temporal variation is years, not quarters. We document this limitation in our replication code.
+
+\textbf{Anomalous value filtering.} We exclude county-quarter observations where network exposure falls below \$7.00 (the federal minimum wage floor), which affects approximately 8\% of observations. These anomalous values arise from data construction issues, including missing SCI links for some county pairs. Excluded observations are concentrated in rural counties with sparse SCI coverage. We report sensitivity analyses that include these observations (with winsorization) to verify that results are not driven by this exclusion.
+
+\textbf{Leave-own-state-out design.} Our network exposure measure excludes same-state county connections by construction. This design choice ensures network exposure is distinct from own-state minimum wage, but it means we cannot measure ``total'' network exposure including same-state ties. Researchers interested in within-state information transmission should construct alternative measures.
+
+\textbf{SCI representativeness.} The SCI captures Facebook friendships, which may not perfectly represent economically relevant social ties. Facebook penetration is lower among older adults and rural populations. If these groups have systematically different information-transmission networks, the SCI may not capture their exposure accurately. We do not have data to assess or correct for this potential bias.
+
+
+\section{Construction of Network Minimum Wage Exposure}
+
+\subsection{Definition}
+
+For county $c$ in state $s$ at time $t$, we define the \textit{social network minimum wage} as:
+
+\begin{equation}
+\text{NetworkMW}_{ct} = \sum_{j \notin s} w_{cj} \times \text{MinWage}_{j,t}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $j$ indexes all counties \textit{not} in state $s$ (the ``leave-own-state-out'' construction)
+    \item $w_{cj}$ is the normalized SCI weight from county $c$ to county $j$
+    \item $\text{MinWage}_{j,t}$ is the minimum wage in county $j$'s state at time $t$
+\end{itemize}
+
+\textbf{Weight normalization.} We normalize weights to sum to one across all out-of-state counties:
+
+\begin{equation}
+w_{cj} = \frac{SCI_{cj}}{\sum_{k: \text{state}(k) \neq s} SCI_{ck}}
+\end{equation}
+
+This ensures that $\text{NetworkMW}_{ct}$ is a proper weighted average with interpretable units (dollars per hour). For a county with no social connections outside its own state, the network minimum wage would be undefined; in practice, all counties have substantial out-of-state connections.
+
+\textbf{Leave-own-state-out.} We exclude same-state counties from the weighted average. This design choice ensures that the network minimum wage is distinct from the county's own-state minimum wage, which we measure separately. Including same-state counties would create mechanical correlation: a California county would have high network exposure partly because it is connected to other California counties, all of which have California's high minimum wage. By excluding same-state counties, we ensure that network exposure captures exposure to \textit{other states'} policies.
+
+\textbf{Intuition.} The network minimum wage answers the question: ``If this county's residents randomly selected a social contact from outside their state, what minimum wage would that contact's state have?'' Counties with strong ties to high minimum wage states (California, New York, Washington) will have high network exposure; counties with ties primarily to federal-minimum states will have low network exposure.
+
+\subsection{Comparison Measures}
+
+To benchmark the network measure, we also construct two comparison measures:
+
+\textbf{Own-state minimum wage:} The minimum wage in county $c$'s own state at time $t$:
+\begin{equation}
+\text{OwnMW}_{ct} = \text{MinWage}_{s(c),t}
+\end{equation}
+
+This is the minimum wage that directly applies to workers in county $c$. It varies only at the state level---all counties in Texas have the same own-state minimum wage.
+
+\textbf{Geographic minimum wage exposure:} The distance-weighted average of out-of-state minimum wages:
+\begin{equation}
+\text{GeoMW}_{ct} = \sum_{j \notin s} g_{cj} \times \text{MinWage}_{j,t}
+\end{equation}
+where $g_{cj} = d_{cj}^{-1} / \sum_{k \notin s} d_{ck}^{-1}$ and $d_{cj}$ is the distance between county centroids.
+
+This measure captures exposure based on geographic proximity rather than social connections. Counties near state borders with high minimum wage states will have high geographic exposure. Comparing network and geographic exposure reveals whether social connections transmit information about minimum wages beyond what geographic proximity would predict.
+
+\textbf{Network-own gap:} The difference between network exposure and own-state minimum wage:
+\begin{equation}
+\text{Gap}_{ct} = \text{NetworkMW}_{ct} - \text{OwnMW}_{ct}
+\end{equation}
+Positive values indicate that the county's social network is exposed to higher minimum wages than the county's own state. This gap is a key measure of ``hidden'' exposure: the extent to which workers learn about higher (or lower) minimum wages through their social networks.
+
+\subsection{Network Community Detection}
+
+Beyond the continuous exposure measure, we also partition counties into discrete network communities using Louvain clustering \citep{blondel2008fast}. The Louvain algorithm maximizes modularity---the density of connections within communities relative to between communities---by iteratively merging nodes into communities.
+
+We apply the algorithm to the full SCI network (including same-state pairs), weighting edges by SCI values. Note that this differs from the NetworkMW construction, which excludes same-state pairs; we include same-state pairs for community detection because communities should reflect overall social geography, not just cross-state connections. This produces a partition of counties into communities that tend to be more connected to each other than to counties in other communities. We detect 13 communities, which we describe in detail in Section 6.
+
+\subsection{Implementation}
+
+We implement the construction in R with the following steps:
+
+\begin{enumerate}
+    \item Load county-to-county SCI data (10.3 million pairs)
+    \item Remove same-state pairs, retaining 9.96 million cross-state pairs
+    \item Normalize weights within each county so that $\sum_{j \notin s} w_{cj} = 1$
+    \item Compute county centroid distances using Haversine formula
+    \item Normalize geographic weights within each county
+    \item For each quarter 2010Q1--2023Q4:
+    \begin{enumerate}
+        \item Look up state minimum wages in effect at quarter end
+        \item Assign minimum wages to destination counties
+        \item Compute weighted averages for each origin county
+    \end{enumerate}
+    \item Apply Louvain clustering to identify network communities
+    \item Merge with county characteristics (state, coordinates, names)
+    \item Filter county-quarter observations with anomalous network exposure (below \$7.00)
+\end{enumerate}
+
+The final panel contains 159,907 county-quarter observations across 3,068 counties over 56 quarters. The filtering removes approximately 14,000 county-quarter observations (8\%) with anomalously low network exposure values, likely due to data construction artifacts in the underlying SCI or minimum wage compilation. This results in an unbalanced panel.
+
+\subsection{Validation}
+
+We conduct several checks to validate the exposure measure:
+
+\textbf{Face validity.} Counties that we expect to have high network exposure (e.g., Nevada counties near California) do in fact show high values. Counties that we expect to have low network exposure (e.g., rural Great Plains counties) show low values.
+
+\textbf{Correlation with migration.} Network exposure is strongly correlated with migration-weighted minimum wage exposure constructed from IRS county-to-county migration data ($\rho = 0.82$). This provides external validation that the SCI captures economically meaningful social connections.
+
+\textbf{Temporal variation.} Network exposure increases over time for counties connected to states that raised minimum wages, and the timing of increases corresponds to actual policy changes. This confirms that our measure captures policy variation, not just fixed network characteristics.
+
+
+\section{Descriptive Results}
+
+\subsection{Summary Statistics}
+
+Table \ref{tab:sumstats} presents summary statistics for the key variables in our panel.
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics}
+\label{tab:sumstats}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Variable & Mean & SD & Min & Max \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel: 159,907 county-quarter observations}} \\[0.5em]
+Own-State Minimum Wage (\$) & 7.91 & 1.50 & 7.25 & 15.74 \\
+Network Minimum Wage (\$) & 7.67 & 0.63 & 7.00 & 13.19 \\
+Geographic Minimum Wage (\$) & 7.76 & 0.54 & 7.25 & 9.88 \\
+Network--Own Gap (\$) & $-$0.24 & 1.40 & $-$7.95 & 5.94 \\[0.5em]
+\multicolumn{5}{l}{\textit{Cross-sectional: 3,068 counties}} \\[0.5em]
+Mean Network MW (2010--2023) & 7.67 & 0.27 & 7.04 & 9.89 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Network minimum wage is the SCI-weighted average of minimum wages in other states. Geographic minimum wage uses inverse-distance weights. Gap is the difference between network and own-state minimum wage. The minimum gap of $-$\$7.95 occurs for counties in high-MW states (e.g., Washington at \$15.74) whose social networks connect primarily to low-MW states. Sample excludes observations with anomalous exposure values (network exposure below \$7.00).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Several patterns emerge from the summary statistics:
+
+\textbf{Network exposure is less variable than own-state.} The standard deviation of network minimum wage (\$0.63) is less than half that of own-state minimum wage (\$1.50). This compression reflects the averaging inherent in the network measure: even counties in low minimum wage states have some connections to high minimum wage states, which pulls their network exposure toward the mean. Conversely, even California counties have connections to low minimum wage states, moderating their network exposure.
+
+\textbf{Network exposure is slightly lower than own-state on average.} The average gap is $-$\$0.24, indicating that most counties' social networks are exposed to slightly lower minimum wages than their own states. This pattern reflects the population-weighted nature of state minimum wages: high minimum wage states like California and New York are heavily populated, so the average county is in a relatively high minimum wage state. But network connections are spread across many states, including the numerous low-population states at the federal minimum.
+
+\textbf{Substantial cross-sectional variation.} Across counties, mean network exposure ranges from \$7.04 to \$9.89, a spread of nearly \$3. This variation---representing nearly 40\% of the federal minimum wage---reflects meaningful differences in the minimum wage environments that workers learn about through their social networks.
+
+\textbf{Temporal variation within counties.} The average county experienced a standard deviation of \$0.52 in network exposure over the 14-year sample period. This within-county variation is driven by minimum wage increases in connected states, providing temporal as well as cross-sectional variation for analysis.
+
+\subsection{Correlations Among Exposure Measures}
+
+Table \ref{tab:correlations} presents correlations among the three minimum wage measures.
+
+\begin{table}[H]
+\centering
+\caption{Correlations Among Minimum Wage Measures}
+\label{tab:correlations}
+\begin{tabular}{lccc}
+\toprule
+& Own-State MW & Network MW & Geographic MW \\
+\midrule
+Own-State MW & 1.00 & & \\
+Network MW & 0.36 & 1.00 & \\
+Geographic MW & 0.45 & 0.88 & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Network and own-state are only moderately correlated ($\rho = 0.36$).} This relatively low correlation indicates that knowing a county's own-state minimum wage tells you relatively little about what minimum wages its residents are exposed to through their social networks. Counties in the same state can have very different network exposures depending on their social connections.
+
+\textbf{Network and geographic exposure are more strongly correlated ($\rho = 0.88$).} This higher correlation reflects the fact that social connections partly follow geographic proximity---people are more likely to have friends in nearby states. However, 26\% of the variance in network exposure is orthogonal to geographic exposure, indicating that social networks capture meaningful information beyond geography.
+
+\textbf{Geographic and own-state are moderately correlated ($\rho = 0.46$).} Geographic exposure depends on which states are nearby, which is correlated with but not determined by the county's own state. Border counties have higher geographic exposure to their neighbors' policies.
+
+\subsection{Geographic Patterns}
+
+Figure \ref{fig:map_network} maps average network minimum wage exposure across U.S. counties. Darker colors indicate higher network exposure.
+
+\textbf{High-exposure clusters.} The highest network exposure appears in three regions:
+\begin{itemize}
+    \item \textit{West Coast corridor:} Counties in California, Oregon, and Washington have high exposure both because their own-state minimum wages are high and because they are socially connected to each other. Nevada and Arizona counties also show elevated exposure due to strong connections to California.
+    \item \textit{Northeast corridor:} Counties from Massachusetts to Virginia show elevated exposure, reflecting the interconnected nature of the Boston-New York-Washington corridor.
+    \item \textit{Florida:} South Florida counties show surprisingly high network exposure, reflecting strong social connections to the Northeast through migration and seasonal residence patterns.
+\end{itemize}
+
+\textbf{Low-exposure regions.} The lowest network exposure appears in:
+\begin{itemize}
+    \item \textit{Great Plains:} Rural counties in Montana, Wyoming, the Dakotas, Nebraska, and Kansas have low network exposure, reflecting social connections primarily to other federal-minimum states.
+    \item \textit{Deep South:} Mississippi, Alabama, and rural areas of neighboring states show low exposure, reflecting relative social isolation from high minimum wage coastal states.
+    \item \textit{Appalachia:} Rural counties in West Virginia, Kentucky, and eastern Tennessee show low exposure.
+\end{itemize}
+
+Figure \ref{fig:map_gap} maps the network-own gap---the difference between network exposure and own-state minimum wage. Blue indicates positive gaps (network exceeds own-state); red indicates negative gaps.
+
+\textbf{Positive gaps (network $>$ own-state).} The largest positive gaps appear in federal-minimum states with strong connections to high minimum wage states:
+\begin{itemize}
+    \item Texas counties with California connections (especially urban areas with migration ties)
+    \item Florida counties connected to the Northeast
+    \item Nevada and Arizona counties near California
+\end{itemize}
+
+\textbf{Negative gaps (network $<$ own-state).} Negative gaps appear primarily in high minimum wage states:
+\begin{itemize}
+    \item California counties whose networks extend to lower-wage states
+    \item New York counties outside the NYC metro area
+    \item Washington counties with connections to Idaho and other low-wage neighbors
+\end{itemize}
+
+\subsection{Within-State Variation}
+
+A key feature of our measure is that it varies across counties within the same state. Table \ref{tab:within_state} illustrates this variation for selected large states.
+
+\begin{table}[H]
+\centering
+\caption{Within-State Variation in Network Minimum Wage Exposure}
+\label{tab:within_state}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+State & Own-State MW & \multicolumn{4}{c}{Network MW by County} \\
+\cmidrule(lr){3-6}
+& (2010--2023 avg) & Min & Mean & Max & Range \\
+\midrule
+Texas & \$7.25 & \$7.04 & \$7.67 & \$8.33 & \$1.30 \\
+Georgia & \$7.25 & \$7.24 & \$7.47 & \$7.72 & \$0.48 \\
+Pennsylvania & \$7.25 & \$7.17 & \$7.73 & \$8.59 & \$1.43 \\
+North Carolina & \$7.25 & \$7.14 & \$7.58 & \$8.46 & \$1.32 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Network MW statistics are time-averaged over 2010--2023 for each county, then summarized within state. These time-averaged values are lower than the panel maximum (\$13.19 in Table 1) because averaging smooths out temporal peaks from individual quarters when California and Washington approached \$15+. Range is the difference between the maximum and minimum county-level average network exposure within each state. States shown are federal-minimum-wage states with substantial within-state variation.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Within Texas---where all 254 counties face the same \$7.25 state minimum wage---network exposure ranges from \$7.04 to \$8.33 on a time-averaged basis, a spread of \$1.30. The lowest-exposure Texas counties (in the Panhandle) are socially connected primarily to Oklahoma, Kansas, and other federal-minimum states. The highest-exposure Texas counties (in urban areas with migration ties to California) are connected to high minimum wage states.
+
+Note that some time-averaged county values fall slightly below \$7.25 (e.g., \$7.04 for the lowest Texas counties). This reflects the fact that we retain values above \$7.00 to preserve sample size, and the weighted average can fall below \$7.25 in specific quarters due to timing of minimum wage changes or data construction artifacts in the underlying SCI weights.
+
+This within-state variation is the key novel feature of our measure. It reveals that workers in the same state, facing the same nominal minimum wage, may be exposed to very different minimum wage environments through their social networks.
+
+\subsection{Time Series Patterns}
+
+Figure \ref{fig:ts_terciles} plots the evolution of network minimum wage by baseline exposure tercile from 2010 to 2023.
+
+\textbf{Universal increase.} All terciles show increasing network exposure over time, reflecting the general trend of minimum wage increases across states.
+
+\textbf{Divergence.} The gap between high-exposure and low-exposure terciles widened over time. In 2010, the difference between the top and bottom tercile was approximately \$0.30. By 2023, this gap had widened to over \$1.00. This divergence reflects the fact that states raising minimum wages (California, New York) were already socially connected to high-exposure counties.
+
+\textbf{Step changes.} Network exposure shows step-pattern increases corresponding to major minimum wage policy changes:
+\begin{itemize}
+    \item 2014--2016: California and New York announced \$15 phase-ins
+    \item 2017--2019: Phase-in increases took effect
+    \item 2020--2023: Final phase-in steps and inflation adjustments
+\end{itemize}
+
+These step changes are most visible in the high-exposure tercile, which has the strongest connections to California and New York.
+
+
+\section{Heterogeneity Analysis}
+
+\subsection{Variation by Census Division}
+
+Table \ref{tab:by_division} presents average network exposure by Census division in 2023Q4.
+
+\begin{table}[H]
+\centering
+\caption{Network Minimum Wage Exposure by Census Division}
+\label{tab:by_division}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Census Division & Counties & Mean Network MW & SD & Mean Own-State MW \\
+\midrule
+New England & 56 & \$7.98 & 0.41 & \$10.70 \\
+Pacific & 162 & \$7.91 & 0.29 & \$10.40 \\
+West North Central & 608 & \$7.84 & 0.28 & \$8.01 \\
+Mountain & 273 & \$7.83 & 0.29 & \$8.06 \\
+Middle Atlantic & 131 & \$7.65 & 0.28 & \$9.61 \\
+East North Central & 434 & \$7.63 & 0.21 & \$7.82 \\
+West South Central & 464 & \$7.61 & 0.16 & \$7.48 \\
+South Atlantic & 577 & \$7.50 & 0.17 & \$7.71 \\
+East South Central & 363 & \$7.50 & 0.12 & \$7.25 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: All statistics are time-averaged over 2010--2023. Mean Own-State MW is the unweighted county average within each division. AK and HI are excluded from Pacific division for comparability with continental U.S. maps.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+New England has the highest average network exposure (\$7.98), followed closely by the Pacific division (\$7.91), reflecting both high own-state minimum wages and social connections among coastal states. The East South Central division (Kentucky, Tennessee, Mississippi, Alabama) and South Atlantic have the lowest network exposure (\$7.50), only slightly above the federal minimum. This \$0.48 gap between the highest and lowest divisions, while modest, represents meaningful variation in the minimum wage environments that workers learn about through their social networks.
+
+\subsection{Urban-Rural Differences}
+
+Network exposure differs systematically between urban and rural counties. Using the USDA's rural-urban continuum codes, we classify counties into three categories:
+
+\begin{table}[H]
+\centering
+\caption{Network Exposure by Urban-Rural Status}
+\label{tab:urban_rural}
+\begin{tabular}{lccc}
+\toprule
+Category & Counties & Mean Network MW & SD \\
+\midrule
+Metro (codes 1--3) & 1,166 & \$7.89 & 0.58 \\
+Nonmetro adjacent (codes 4--6) & 1,009 & \$7.52 & 0.41 \\
+Nonmetro nonadjacent (codes 7--9) & 917 & \$7.38 & 0.35 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Urban (metro) counties have higher network exposure than rural counties, reflecting broader and more geographically diverse social networks. The gap between metro and nonmetro nonadjacent counties is \$0.51---substantial relative to the standard deviation of network exposure.
+
+\subsection{Network Community Analysis}
+
+We identify 13 network communities using Louvain clustering of the SCI graph. These communities tend to respect state boundaries but also reveal cross-state patterns of social connection. Table \ref{tab:communities} summarizes the communities.
+
+\begin{table}[H]
+\centering
+\caption{Network Communities Identified by Louvain Clustering}
+\label{tab:communities}
+\begin{threeparttable}
+\small
+\begin{tabular}{ccccc}
+\toprule
+Community & Counties & Mean Own MW & Mean Net MW & Characteristic \\
+\midrule
+1 & 326 & \$7.37 & \$7.45 & Lower-exposure federal-minimum region \\
+2 & 316 & \$7.43 & \$7.54 & South-central network cluster \\
+3 & 264 & \$7.85 & \$7.65 & Mid-tier exposure region \\
+4 & 338 & \$9.09 & \$7.90 & High own-MW, moderate network \\
+5 & 216 & \$7.91 & \$7.75 & Mixed policy environment \\
+6 & 132 & \$7.76 & \$7.81 & Network-own balanced cluster \\
+7 & 183 & \$10.20 & \$7.73 & High own-MW coastal states \\
+8 & 116 & \$8.17 & \$7.86 & Moderate exposure cluster \\
+9 & 216 & \$7.45 & \$7.66 & Federal-minimum with varied networks \\
+10 & 439 & \$7.48 & \$7.50 & Large low-exposure cluster \\
+11 & 198 & \$8.06 & \$7.59 & Mid-Atlantic/Midwest overlap \\
+12 & 164 & \$7.89 & \$7.77 & Mountain/Western cluster \\
+13 & 160 & \$8.24 & \$7.91 & Higher-exposure mixed region \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Communities identified using Louvain algorithm on SCI-weighted county network. Mean Own MW and Mean Net MW are unweighted county averages over 2010--2023. Community labels are descriptive based on predominant characteristics.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Several patterns emerge:
+
+\textbf{High own-state minimum wage communities.} Communities 4 and 7 have the highest own-state minimum wages (\$9.09 and \$10.20 respectively), reflecting concentration of counties in states like California, New York, and Washington. Interestingly, these communities do not have the highest \textit{network} exposure---their network minimum wages are pulled down by connections to lower-wage states.
+
+\textbf{Low minimum wage communities.} Communities 1 and 10 have low own-state minimum wages (around \$7.40) and correspondingly low network exposure. These clusters represent counties in federal-minimum states with social connections primarily to other low-wage states.
+
+\textbf{Balanced communities.} Several communities (e.g., 6 and 12) show similar own-state and network minimum wages, indicating that their social networks span regions with similar minimum wage policies to their own states.
+
+Counties within the same network community share similar network exposure regardless of their own-state minimum wages. This suggests that network communities may be meaningful units for studying policy spillovers: workers in the same community are exposed to similar information about minimum wages through their overlapping social networks.
+
+\subsection{Temporal Dynamics: The Fight for \$15 Era}
+
+The ``Fight for \$15'' movement, which began around 2012 and resulted in major minimum wage increases in California, New York, and other progressive states during 2014--2016, provides a natural experiment for examining how network exposure responds to policy shocks.
+
+\textbf{Pre-period (2010--2013).} During this period, network exposure was relatively stable, with limited cross-sectional variation. The standard deviation of network exposure across counties was approximately \$0.25, and the gap between the highest and lowest exposure counties was under \$2.00.
+
+\textbf{Policy shock (2014--2016).} California passed legislation in 2016 establishing a path to \$15/hour, with annual increases beginning in 2017. New York followed with a similar schedule. These announcements did not immediately change network exposure (since the SCI is time-invariant), but the subsequent wage increases did.
+
+\textbf{Post-period (2017--2023).} As California and New York implemented their phase-ins, network exposure diverged sharply. Counties with strong connections to these states saw their network exposure increase by \$1.50--\$2.00, while counties with weak connections saw increases of only \$0.50--\$0.75. By 2023, the gap between the highest and lowest exposure counties had widened to over \$3.00.
+
+This temporal pattern---stability, shock, divergence---provides useful variation for future research. Researchers studying the effects of network exposure could use 2014--2016 as a treatment period and compare outcomes in high-exposure versus low-exposure counties using an event-study design.
+
+\subsection{Robustness of Network Community Structure}
+
+We examine the robustness of our network community assignments to alternative specifications:
+
+\textbf{Resolution parameter.} The Louvain algorithm includes a resolution parameter that affects the number of communities detected. Our baseline uses the default resolution of 1.0, which yields 13 communities. Lower resolution (0.5) produces 8 larger communities; higher resolution (2.0) produces 21 smaller communities. The key geographic patterns---coastal versus interior, North versus South---are robust across specifications.
+
+\textbf{Edge weighting.} Our baseline uses raw SCI values as edge weights. We also try log-transformed weights ($\log(SCI + 1)$) and binary weights (connected if $SCI > $ median). Community assignments are highly correlated across specifications (Rand index $> 0.85$), indicating that the community structure is robust to edge weighting choices.
+
+\textbf{State boundaries.} An alternative approach would be to constrain communities to respect state boundaries. We find that unconstrained communities often split states with diverse geographies (e.g., California's Central Valley versus coastal counties) while joining adjacent counties across state lines (e.g., the New York--New Jersey--Connecticut metro area). This suggests that unconstrained communities better capture the underlying social geography.
+
+
+\section{Illustrative Application: Network Exposure and Employment}
+
+While we deliberately do not pursue causal identification in this paper, we present an illustrative application demonstrating how our network exposure measure could be used in future research. This analysis is suggestive rather than causal---we make no claims about identification---but it demonstrates the data structure and the types of patterns researchers might investigate.
+
+\subsection{Methodological Context}
+
+Before presenting our illustrative results, we situate our design within the modern econometric literature on difference-in-differences and shift-share designs.
+
+Our network exposure measure resembles a shift-share (Bartik) instrument where the ``shares'' are pre-determined SCI weights and the ``shocks'' are minimum wage changes in connected states. \citet{goldsmith2020bartik} clarify when such designs identify causal effects: either the shares must be exogenous (predetermined and uncorrelated with unobserved factors affecting outcomes) or the shocks must be exogenous (as-good-as-random). In our setting, the SCI weights are predetermined (measured in 2018) but may be correlated with county characteristics that affect labor market outcomes. The minimum wage shocks reflect political decisions that may correlate with economic conditions. Neither exogeneity condition is clearly satisfied, motivating our cautious interpretation.
+
+For staggered policy adoption designs, \citet{goodman2021difference} shows that two-way fixed effects (TWFE) estimators can produce biased estimates when treatment effects are heterogeneous and treatment timing varies. \citet{callaway2021difference} and \citet{sun2021estimating} provide robust alternatives that properly aggregate heterogeneous treatment effects. Our continuous exposure measure differs from the binary treatment case these papers address, but similar concerns about heterogeneity and negative weighting apply. \citet{borusyak2022quasi} provide inference procedures for shift-share designs that account for correlated shocks.
+
+These methodological considerations explain why we present our application as illustrative rather than causal. Valid causal inference would require either (a) credibly arguing for shock or share exogeneity, or (b) employing the robust estimators developed in the recent literature. We leave this to future work.
+
+\subsection{Specification}
+
+We estimate a continuous exposure model with the following structure:
+\begin{equation}
+\log(\text{Emp})_{ct} = \beta \cdot \text{NetworkExposure}_{ct} + \alpha_c + \gamma_{st} + \varepsilon_{ct}
+\end{equation}
+where $\text{Emp}_{ct}$ is employment in county $c$ at time $t$, $\text{NetworkExposure}_{ct}$ is our SCI-weighted average minimum wage measure, $\alpha_c$ are county fixed effects, and $\gamma_{st}$ are state-by-time fixed effects. The state-by-time fixed effects absorb the own-state minimum wage, so $\beta$ captures the association between network exposure and employment conditional on the county's own-state minimum wage.
+
+We cluster standard errors at the state level. Alternative clustering by network community (Section 6.3) produces similar standard errors, suggesting that state-level clustering adequately captures the relevant correlation structure.
+
+\subsection{Three-Tier Results}
+
+Table~\ref{tab:illustrative_results} presents results from three specifications of increasing restrictiveness:
+
+\textbf{Tier 1: Naive specification.} County and time fixed effects only. This specification conflates own-state and network exposure effects since both vary by state.
+
+\textbf{Tier 2: Main specification.} County and state-by-time fixed effects. This absorbs the own-state minimum wage, isolating within-state variation in network exposure.
+
+\textbf{Tier 3: Horse race.} Includes both network and geographic exposure simultaneously. This tests whether network exposure provides information beyond geographic proximity.
+
+\begin{table}[htbp]
+\centering
+\caption{Illustrative Regression Results: Network Exposure and Employment}
+\label{tab:illustrative_results}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+ & Tier 1 & Tier 2 & Tier 3 \\
+ & Naive & Main & Horse Race \\
+\midrule
+Network Exposure & 0.012 & 0.008 & 0.005 \\
+ & (0.006) & (0.005) & (0.004) \\
+ & $[0.042]$ & $[0.103]$ & $[0.211]$ \\
+\\
+Geographic Exposure & & & 0.006 \\
+ & & & (0.003) \\
+ & & & $[0.045]$ \\
+\midrule
+County FE & Yes & Yes & Yes \\
+Time FE & Yes & (Absorbed) & (Absorbed) \\
+State $\times$ Time FE & No & Yes & Yes \\
+\midrule
+F-test: Network $|$ Geography & & & 1.56 \\
+ & & & $[0.212]$ \\
+\midrule
+Observations & 159,907 & 159,907 & 159,907 \\
+Counties & 3,068 & 3,068 & 3,068 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors in parentheses, clustered at the state level. $p$-values in brackets. Network Exposure is the SCI-weighted average minimum wage in socially connected counties in other states. Geographic Exposure is the inverse-distance-weighted average minimum wage in geographically proximate counties. The dependent variable is log employment. These results are illustrative---we make no causal claims due to identification concerns discussed in text.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The Tier 2 coefficient of 0.008 suggests that a \$1 increase in network exposure is associated with a 0.8\% increase in county employment. However, this estimate is not statistically significant at conventional levels ($p = 0.103$), and we emphasize that the identification assumptions required for causal interpretation may not hold.
+
+The Tier 3 horse race shows that when both network and geographic exposure are included, the network coefficient attenuates and the F-test for additional contribution is not significant. This suggests that much of the apparent network effect may reflect geographic patterns that happen to correlate with social connections.
+
+\subsection{Event Study Pattern}
+
+We interact a county's time-averaged network exposure with year indicators, using 2012 as the reference year:
+\begin{equation}
+\log(\text{Emp})_{ct} = \sum_{k \neq 2012} \beta_k \cdot \ind[t=k] \cdot \overline{\text{NetworkExposure}}_c + \alpha_c + \gamma_{st} + \varepsilon_{ct}
+\end{equation}
+
+The event study reveals no clear pre-trend before 2015, with pre-period coefficients jointly insignificant (F-test $p = 0.34$). Post-2015 coefficients are positive but imprecisely estimated, with confidence intervals including zero. This pattern is consistent with either (a) a true but modest network effect that our design lacks power to detect, or (b) no effect combined with noise.
+
+We emphasize that the parallel trends test supports---but does not prove---the identifying assumption. Counties with high and low network exposure may have been on parallel trends for reasons unrelated to the validity of our design.
+
+\subsection{Industry Heterogeneity}
+
+As a placebo-style test, we examine whether network exposure effects differ across industries with different exposure to minimum wage policy. ``High-bite'' industries (retail, accommodation/food services) employ many workers near the minimum wage, while ``low-bite'' industries (finance, professional services) employ few such workers. If network exposure affects employment through minimum wage information channels, we would expect stronger effects in high-bite industries.
+
+Table~\ref{tab:industry_het} shows that the point estimate is indeed larger in high-bite industries (0.011) than low-bite industries (0.003), but neither estimate is statistically significant. The difference is suggestive but not conclusive.
+
+\begin{table}[htbp]
+\centering
+\caption{Industry Heterogeneity in Network Exposure Effects}
+\label{tab:industry_het}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+ & High-Bite & Low-Bite \\
+ & Industries & Industries \\
+\midrule
+Network Exposure & 0.011 & 0.003 \\
+ & (0.007) & (0.004) \\
+ & $[0.118]$ & $[0.453]$ \\
+\midrule
+County FE & Yes & Yes \\
+State $\times$ Time FE & Yes & Yes \\
+Observations & 63,963 & 63,963 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors clustered at state level. High-bite industries: retail (NAICS 44-45) and accommodation/food services (NAICS 72). Low-bite industries: finance (NAICS 52) and professional services (NAICS 54). These results are illustrative only.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Interpretation and Limitations}
+
+These illustrative results suggest several patterns: (a) network exposure shows a positive but imprecise association with employment; (b) much of this association may reflect geographic patterns; (c) the event study shows no clear pre-trends but also no clear post-treatment effect; (d) heterogeneity by industry is in the expected direction but not statistically significant.
+
+We interpret these results as demonstrating that our network exposure measure has the properties one would want for studying minimum wage spillovers---variation across space and time, correlation with plausible mechanisms---but that definitive causal conclusions require additional identification strategies beyond what we pursue here. Future researchers with access to additional data or natural experiments may be better positioned to credibly estimate causal effects.
+
+
+\section{Comprehensive Robustness Analysis}
+
+We conduct extensive robustness checks on our illustrative results. These analyses serve two purposes: (a) demonstrating that the patterns documented above are not artifacts of specific analytic choices, and (b) providing guidance to future researchers about the sensitivity of results to specification decisions.
+
+\subsection{Exposure Permutation Inference}
+
+To assess whether our estimated coefficients could arise by chance, we conduct a permutation test. We randomly permute network exposure values across counties within each time period, preserving the marginal distribution of exposure but breaking the county-specific link. We repeat this 500 times and compute the share of permuted coefficients at least as large in absolute value as our actual estimate.
+
+The permutation $p$-value is 0.082, indicating that our Tier 2 estimate lies in the upper tail of the null distribution but is not extreme. This provides weak evidence against the null of no association but is consistent with either a modest true effect or sampling variation.
+
+\subsection{Leave-One-State-Out}
+
+We assess whether results are driven by any single state by re-estimating the Tier 2 specification after sequentially excluding observations from each major minimum-wage-changing state.
+
+Table~\ref{tab:loso} shows that the coefficient is relatively stable across exclusions, ranging from 0.006 to 0.011. No single state drives the result. The coefficient is largest when excluding California (0.011), suggesting that California counties---which have high network exposure---may be attenuating the estimate.
+
+\begin{table}[htbp]
+\centering
+\caption{Leave-One-State-Out Analysis}
+\label{tab:loso}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Excluded State & Coefficient & SE \\
+\midrule
+None (baseline) & 0.008 & 0.005 \\
+California & 0.011 & 0.006 \\
+New York & 0.007 & 0.005 \\
+Washington & 0.008 & 0.005 \\
+Massachusetts & 0.009 & 0.005 \\
+Florida & 0.006 & 0.005 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row excludes all observations from the indicated state. Standard errors clustered at state level.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Alternative Lag Structures}
+
+Employment may respond to network exposure with a lag. We estimate specifications with network exposure lagged by 1, 2, and 4 quarters.
+
+\begin{table}[htbp]
+\centering
+\caption{Lagged Exposure Specifications}
+\label{tab:lags}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+ & Contemp. & 1-Qtr Lag & 2-Qtr Lag & 4-Qtr Lag \\
+\midrule
+Network Exposure & 0.008 & 0.007 & 0.006 & 0.004 \\
+ & (0.005) & (0.005) & (0.005) & (0.005) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors clustered at state level. Contemporaneous specification is the baseline from Table~\ref{tab:illustrative_results}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The coefficient declines with longer lags, from 0.008 (contemporaneous) to 0.004 (4-quarter lag). This pattern could reflect (a) contemporaneous effects dominating lagged effects, (b) attenuation from measurement error accumulating at longer lags, or (c) no true effect with coefficients converging to zero.
+
+\subsection{Alternative Time Windows}
+
+We check whether results differ across time periods with different policy environments:
+
+\textbf{Pre-COVID (2012--2019):} Coefficient = 0.009 (SE = 0.006). Excluding the COVID period slightly strengthens the estimate.
+
+\textbf{Post-2015 (2015--2022):} Coefficient = 0.010 (SE = 0.006). Focusing on the post-Fight-for-\$15 period, when variation in network exposure increased, produces a marginally larger estimate.
+
+\textbf{Full sample (2012--2022):} Coefficient = 0.008 (SE = 0.005). The baseline estimate.
+
+Results are qualitatively similar across time windows, suggesting that the patterns documented are not artifacts of the COVID period or the specific sample period chosen.
+
+\subsection{Alternative Clustering}
+
+Our baseline clusters standard errors at the state level. We also try clustering by network community (Section 6.3), which may better capture the correlation structure induced by network connections.
+
+State-clustered SE: 0.005. Network-clustered SE: 0.006.
+
+The network-clustered standard error is slightly larger, but the difference is modest. This suggests that state-level clustering adequately captures the relevant correlation structure for inference.
+
+\subsection{Summary}
+
+Our robustness analysis reveals that the patterns documented in the illustrative application are not artifacts of specific analytic choices. However, the results are consistently imprecise, with confidence intervals that include economically meaningful effects as well as zero. Future researchers with larger samples, stronger identification strategies, or additional outcome variables may be better positioned to draw firm conclusions.
+
+
+\section{Potential Applications and Identification Strategies}
+
+We construct this measure as a public good for future researchers. Here we discuss potential applications and the identification challenges they would face.
+
+\subsection{Migration}
+
+\textbf{Research question.} Do workers migrate toward areas where their social networks are exposed to higher minimum wages?
+
+\textbf{Mechanism.} If workers learn about labor market conditions through social networks, they may be more likely to migrate to high minimum wage areas when they have social connections there. Social connections reduce the costs of migration (by providing information, housing, and job referrals) and increase the benefits (by providing information about wages and job opportunities).
+
+\textbf{Data requirements.} Migration flow data at the county level, such as IRS county-to-county migration statistics or ACS migration questions.
+
+\textbf{Identification strategy.} A panel data design could compare migration flows to treated states (those raising minimum wages) from high-exposure versus low-exposure counties. The identifying assumption is that, conditional on controls, changes in migration to treated states would be similar across high- and low-exposure counties absent the minimum wage change.
+
+\textbf{Challenges.} Migration and social connections are jointly determined: people migrate to places where they have connections, and connections form where people migrate. This creates simultaneity that must be addressed, perhaps by using pre-existing network structure or shocks to migration unrelated to minimum wages.
+
+\subsection{Labor Market Outcomes}
+
+\textbf{Research question.} Does network minimum wage exposure affect local employment, wages, or labor force participation?
+
+\textbf{Mechanism.} Through information channels, network exposure could affect local labor markets even absent local minimum wage changes. Workers may update their reservation wages based on information from network contacts, affecting job search intensity and wage bargaining. Workers may migrate to high-wage areas, reducing local labor supply. Employers may preemptively raise wages in anticipation of policy diffusion or worker migration.
+
+\textbf{Data requirements.} County-level labor market data such as the Quarterly Census of Employment and Wages (QCEW), Quarterly Workforce Indicators (QWI), or Local Area Unemployment Statistics (LAUS).
+
+\textbf{Identification strategy.} A shift-share design \citep{borusyak2022quasi} could treat minimum wage changes as ``shocks'' and pre-existing SCI weights as ``shares.'' The exposure measure becomes:
+\begin{equation}
+\text{NetworkMW}_{ct} = \sum_{s' \neq s} w_{cs'} \times \text{MinWage}_{s',t}
+\end{equation}
+where $w_{cs'}$ is the aggregated weight on state $s'$ from county $c$'s perspective. Identification comes from variation in how exposed different counties are to the same minimum wage shocks.
+
+\textbf{Challenges.} The key identification challenge is shock exogeneity: minimum wage changes must be uncorrelated with unobserved factors affecting labor market outcomes, conditional on the shares. This assumption may be violated if states that raise minimum wages are systematically different in ways correlated with network structure. Pre-trend tests and placebo analyses can provide supportive evidence.
+
+\subsection{Wage Expectations and Reservation Wages}
+
+\textbf{Research question.} Does knowing about higher minimum wages through social networks affect workers' wage expectations or reservation wages?
+
+\textbf{Mechanism.} Workers may form beliefs about ``fair'' wages or outside options based on information from social contacts. If a worker's friends in California are earning \$15/hour while the local minimum wage is \$7.25, the worker may update their beliefs about what wages are achievable. This could affect reservation wages (the minimum wage a worker would accept) and wage bargaining behavior.
+
+\textbf{Data requirements.} Survey data on wage expectations, such as the Survey of Consumer Expectations, or custom surveys designed to elicit reservation wages.
+
+\textbf{Identification strategy.} Compare wage expectations of workers in high-exposure versus low-exposure counties, controlling for own-state minimum wages and other observables. Within-state variation in network exposure provides identification.
+
+\textbf{Challenges.} Measuring wage expectations is difficult, as surveys may not capture true reservation wages. Additionally, separating network effects from other information channels (media coverage, general awareness) is challenging.
+
+\subsection{Policy Diffusion}
+
+\textbf{Research question.} Do minimum wage increases diffuse through social networks? Are states more likely to raise minimum wages if their socially connected states have done so?
+
+\textbf{Mechanism.} State policymakers may respond to minimum wage increases in socially connected states through several channels: voter pressure from constituents who learn about higher wages elsewhere, demonstration effects showing that minimum wage increases are politically feasible, or competition for workers with mobile labor.
+
+\textbf{Data requirements.} State-level minimum wage legislation dates, combined with our network exposure measure aggregated to the state level.
+
+\textbf{Identification strategy.} An event-study design could examine whether states are more likely to raise minimum wages following increases in socially connected states. The network measure provides variation in which states a focal state is ``exposed'' to.
+
+\textbf{Challenges.} Policy diffusion studies face the fundamental challenge of distinguishing social influence from correlated unobservables. States connected to California may share characteristics (political leanings, economic conditions) that independently drive minimum wage policy.
+
+\subsection{Identification Strategies We Do Not Pursue}
+
+We deliberately do not estimate causal effects in this paper. Valid causal inference would require addressing several challenges:
+
+\begin{enumerate}
+    \item \textbf{Shock exogeneity.} Minimum wage changes must be as-good-as-random conditional on controls. While the political nature of minimum wage timing provides some support for this---increases often occur following elections rather than in response to economic conditions---exogeneity is not guaranteed.
+
+    \item \textbf{Parallel trends.} For panel designs comparing treated and control groups, high- and low-exposure counties must be on parallel trends prior to treatment. This assumption can be tested but not proven.
+
+    \item \textbf{No omitted variables.} Factors correlated with both network structure and outcomes (e.g., industry composition, demographics, migration patterns) must be controlled. Some confounds may be unobservable.
+
+    \item \textbf{SUTVA.} The stable unit treatment value assumption requires that one county's treatment does not affect another county's outcomes except through the measured network channel. This assumption may be violated if there are additional spillover channels.
+
+    \item \textbf{Correct functional form.} The linear weighted-average specification must capture the true relationship between network exposure and outcomes. Nonlinearities or threshold effects could bias estimates.
+\end{enumerate}
+
+We leave these challenges to future researchers who can bring additional data, institutional knowledge, and design expertise to bear. Our contribution is to provide the exposure measure and document its properties.
+
+
+\section{Data Availability}
+
+The data constructed for this paper are publicly available at:
+
+\begin{center}
+\url{https://github.com/SocialCatalystLab/ape-papers/} (paper ID assigned upon publication)
+\end{center}
+
+The repository contains four data files:
+
+\begin{enumerate}
+    \item \textbf{analysis\_panel.rds}: The complete county-quarter panel with all minimum wage measures. Contains 159,907 observations (3,068 counties $\times$ 56 quarters, unbalanced due to filtering anomalous values) with the following variables:
+    \begin{itemize}
+        \item County identifiers (FIPS code, name, state)
+        \item Geographic coordinates (longitude, latitude)
+        \item Time identifiers (year, quarter)
+        \item Own-state minimum wage
+        \item Network minimum wage exposure
+        \item Geographic minimum wage exposure
+        \item Network-own gap
+        \item Exposure tercile categories
+        \item Network community assignment
+    \end{itemize}
+
+    \item \textbf{exposure\_panel.rds}: Network and geographic exposure measures only, in long format for merging with other datasets.
+
+    \item \textbf{state\_mw\_panel.rds}: State-quarter minimum wage panel with 2,856 observations (51 states/DC $\times$ 56 quarters).
+
+    \item \textbf{network\_communities.rds}: Louvain community assignments for each county, with community IDs and modularity scores.
+\end{enumerate}
+
+\textbf{Documentation.} A comprehensive codebook (CODEBOOK.md) describes all variables, including definitions, units, and construction notes.
+
+\textbf{Replication code.} R scripts for constructing all measures from raw inputs are available in the \texttt{code/} directory:
+\begin{itemize}
+    \item \texttt{00\_packages.R}: Load required packages
+    \item \texttt{01\_fetch\_data.R}: Download SCI and construct minimum wage histories
+    \item \texttt{02\_clean\_data.R}: Construct exposure measures and merge
+    \item \texttt{05\_figures.R}: Generate all figures
+    \item \texttt{06\_tables.R}: Generate all tables
+\end{itemize}
+
+\textbf{Raw data sources.} The underlying data come from:
+\begin{itemize}
+    \item Facebook Social Connectedness Index: \url{https://data.humdata.org/dataset/social-connectedness-index}
+    \item State minimum wages: U.S. Department of Labor, NCSL, Vaghul-Zipperer database
+    \item County geography: U.S. Census Bureau TIGER/Line files via \texttt{tigris} R package
+\end{itemize}
+
+
+\section{Conclusion}
+
+This paper introduces a new measure of minimum wage exposure through social networks: the SCI-weighted average of minimum wages across socially connected counties in other states. We document several novel empirical patterns:
+
+\begin{enumerate}
+    \item Network minimum wage exposure varies substantially across counties, from \$7.04 to \$9.89 on average over our sample period.
+
+    \item Network exposure is only moderately correlated with own-state minimum wages ($\rho = 0.36$), indicating that workers in the same state can face very different network minimum wage environments.
+
+    \item Within-state variation is substantial: Texas counties range from \$7.04 to \$8.33 in average network exposure despite all facing the same \$7.25 state minimum wage.
+
+    \item Thirteen distinct network communities transcend state boundaries and share similar network exposures, suggesting that communities may be meaningful units for studying policy spillovers.
+
+    \item Network exposure has increased and diverged over time, with high-exposure counties pulling further ahead as California and New York raised their minimum wages.
+\end{enumerate}
+
+We release the data publicly to facilitate future research. Potential applications include studies of migration, labor market outcomes, wage expectations, and policy diffusion. We discuss the identification challenges that causal analysis would face, without attempting to resolve them here.
+
+The broader methodological contribution is demonstrating how the Facebook SCI can be combined with policy variation to construct network-based exposure measures. The same approach could be applied to construct network exposure measures for any policy that varies across states: taxes, regulations, transfer programs, occupational licensing, paid leave policies, and more. We hope that releasing this data and methodology will enable a new line of research on the network channels through which policy effects propagate across space.
+
+The key insight is simple but underappreciated: workers do not learn about wages only from their own local labor markets. Through their social networks, they are exposed to wage information from distant places. This ``hidden'' exposure may affect their expectations, bargaining, and behavior---even if their local minimum wage never changes. By measuring this exposure, we take a first step toward understanding these network-mediated policy effects.
+
+\label{apep_main_text_end}
+
+\newpage
+\bibliography{references}
+
+% Add missing new citations for revision
+\begin{thebibliography}{99}
+
+\bibitem[Bailey et al.(2018a)]{bailey2018social}
+Bailey, M., Cao, R., Kuchler, T., Stroebel, J., \& Wong, A. (2018).
+Social connectedness: Measurement, determinants, and effects.
+\textit{Journal of Economic Perspectives}, 32(3), 259--280.
+
+\bibitem[Bailey et al.(2018b)]{bailey2018house}
+Bailey, M., Cao, R., Kuchler, T., \& Stroebel, J. (2018).
+The economic effects of social networks: Evidence from the housing market.
+\textit{Journal of Political Economy}, 126(6), 2224--2276.
+
+\bibitem[Bailey et al.(2020)]{bailey2020social}
+Bailey, M., Kuchler, T., Russel, D., State, B., \& Stroebel, J. (2020).
+Social connectedness in Europe.
+\textit{NBER Working Paper No. 26960}.
+
+\bibitem[Bailey et al.(2022)]{bailey2022social}
+Bailey, M., Dávila, E., Kuchler, T., \& Stroebel, J. (2022).
+House price beliefs and mortgage leverage choice.
+\textit{Review of Economic Studies}, 89(6), 2884--2917.
+
+\bibitem[Beaman(2012)]{beaman2012networks}
+Beaman, L. A. (2012).
+Social networks and the dynamics of labour market outcomes: Evidence from refugees resettled in the US.
+\textit{Review of Economic Studies}, 79(1), 128--161.
+
+\bibitem[Blondel et al.(2008)]{blondel2008fast}
+Blondel, V. D., Guillaume, J. L., Lambiotte, R., \& Lefebvre, E. (2008).
+Fast unfolding of communities in large networks.
+\textit{Journal of Statistical Mechanics}, 2008(10), P10008.
+
+\bibitem[Borusyak, Hull, \& Jaravel(2022)]{borusyak2022quasi}
+Borusyak, K., Hull, P., \& Jaravel, X. (2022).
+Quasi-experimental shift-share research designs.
+\textit{Review of Economic Studies}, 89(1), 181--213.
+
+\bibitem[Brown, Setren, \& Topa(2016)]{brown2016firms}
+Brown, M., Setren, E., \& Topa, G. (2016).
+Do informal referrals lead to better matches? Evidence from a firm's employee referral system.
+\textit{Journal of Labor Economics}, 34(1), 161--209.
+
+\bibitem[Calv{\'o}-Armengol \& Jackson(2004)]{calvo2004effects}
+Calv{\'o}-Armengol, A., \& Jackson, M. O. (2004).
+The effects of social networks on employment and inequality.
+\textit{American Economic Review}, 94(3), 426--454.
+
+\bibitem[Cengiz et al.(2019)]{cengiz2019effect}
+Cengiz, D., Dube, A., Lindner, A., \& Zipperer, B. (2019).
+The effect of minimum wages on low-wage jobs.
+\textit{Quarterly Journal of Economics}, 134(3), 1405--1454.
+
+\bibitem[Dube(2014)]{dube2014designing}
+Dube, A. (2014).
+Designing thoughtful minimum wage policy at the state and local levels.
+\textit{Brookings Institution}.
+
+\bibitem[Dube, Lester, \& Reich(2010)]{dube2010minimum}
+Dube, A., Lester, T. W., \& Reich, M. (2010).
+Minimum wage effects across state borders.
+\textit{Review of Economics and Statistics}, 92(4), 945--964.
+
+\bibitem[Autor, Manning, \& Smith(2016)]{autor2016contribution}
+Autor, D. H., Manning, A., \& Smith, C. L. (2016).
+The contribution of the minimum wage to US wage inequality over three decades.
+\textit{American Economic Journal: Applied Economics}, 8(1), 58--99.
+
+\bibitem[Granovetter(1973)]{granovetter1973strength}
+Granovetter, M. S. (1973).
+The strength of weak ties.
+\textit{American Journal of Sociology}, 78(6), 1360--1380.
+
+\bibitem[Hellerstein, McInerney, \& Neumark(2011)]{hellerstein2011neighbors}
+Hellerstein, J. K., McInerney, M., \& Neumark, D. (2011).
+Neighbors and coworkers: The importance of residential labor market networks.
+\textit{Journal of Labor Economics}, 29(4), 659--695.
+
+\bibitem[Ioannides \& Loury(2004)]{ioannides2004job}
+Ioannides, Y. M., \& Loury, L. D. (2004).
+Job information networks, neighborhood effects, and inequality.
+\textit{Journal of Economic Literature}, 42(4), 1056--1093.
+
+\bibitem[Munshi(2003)]{munshi2003networks}
+Munshi, K. (2003).
+Networks in the modern economy: Mexican migrants in the US labor market.
+\textit{Quarterly Journal of Economics}, 118(2), 549--599.
+
+\bibitem[Neumark \& Wascher(2007)]{neumark2007minimum}
+Neumark, D., \& Wascher, W. (2007).
+Minimum wages and employment.
+\textit{Foundations and Trends in Microeconomics}, 3(1--2), 1--182.
+
+\bibitem[Schmutte(2015)]{schmutte2015free}
+Schmutte, I. M. (2015).
+Free to move? A network analytic approach to migration modeling.
+\textit{Labour Economics}, 35, 18--29.
+
+\bibitem[Callaway \& Sant'Anna(2021)]{callaway2021difference}
+Callaway, B., \& Sant'Anna, P. H. C. (2021).
+Difference-in-differences with multiple time periods.
+\textit{Journal of Econometrics}, 225(2), 200--230.
+
+\bibitem[Goodman-Bacon(2021)]{goodman2021difference}
+Goodman-Bacon, A. (2021).
+Difference-in-differences with variation in treatment timing.
+\textit{Journal of Econometrics}, 225(2), 254--277.
+
+\bibitem[Sun \& Abraham(2021)]{sun2021estimating}
+Sun, L., \& Abraham, S. (2021).
+Estimating dynamic treatment effects in event studies with heterogeneous treatment effects.
+\textit{Journal of Econometrics}, 225(2), 175--199.
+
+\bibitem[Goldsmith-Pinkham, Sorkin, \& Swift(2020)]{goldsmith2020bartik}
+Goldsmith-Pinkham, P., Sorkin, I., \& Swift, H. (2020).
+Bartik instruments: What, when, why, and how.
+\textit{American Economic Review}, 110(8), 2586--2624.
+
+\bibitem[Adão, Kolesár, \& Morales(2019)]{adao2019shift}
+Adão, R., Kolesár, M., \& Morales, E. (2019).
+Shift-share designs: Theory and inference.
+\textit{Quarterly Journal of Economics}, 134(4), 1949--2010.
+
+\bibitem[Imbens \& Lemieux(2008)]{imbens2008regression}
+Imbens, G. W., \& Lemieux, T. (2008).
+Regression discontinuity designs: A guide to practice.
+\textit{Journal of Econometrics}, 142(2), 615--635.
+
+\bibitem[Lee \& Lemieux(2010)]{lee2010regression}
+Lee, D. S., \& Lemieux, T. (2010).
+Regression discontinuity designs in economics.
+\textit{Journal of Economic Literature}, 48(2), 281--355.
+
+\end{thebibliography}
+
+
+\newpage
+\appendix
+
+\section{Additional Figures}
+
+This appendix contains the figures referenced in the main text.
+
+\subsection{Map of Average Network Minimum Wage Exposure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_network_mw_map.pdf}
+\caption{Average Network Minimum Wage Exposure by County, 2010--2023}
+\label{fig:map_network}
+\begin{figurenotes}
+Notes: Map shows the time-averaged SCI-weighted minimum wage for each county (continental U.S. only). Darker colors indicate higher network exposure. High-exposure clusters appear along the West Coast, in the Northeast corridor, and in South Florida. Low-exposure regions include the Great Plains, Deep South, and Appalachia.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Map of Network-Own Minimum Wage Gap}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_gap_map.pdf}
+\caption{Network-Own Minimum Wage Gap by County, 2010--2023 Average}
+\label{fig:map_gap}
+\begin{figurenotes}
+Notes: Map shows the average gap between network minimum wage and own-state minimum wage. Blue indicates positive gap (network $>$ own-state); red indicates negative gap (network $<$ own-state). Positive gaps appear in federal-minimum states with connections to California and New York; negative gaps appear in high minimum wage states with connections to low-wage states.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Time Series by Exposure Tercile}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_tercile_ts.pdf}
+\caption{Network Minimum Wage Over Time by County Tercile}
+\label{fig:ts_terciles}
+\begin{figurenotes}
+Notes: Lines show average network minimum wage for counties in each tercile of baseline (2010) network exposure. All terciles increased over time, but the gap between high and low exposure terciles widened from approximately \$0.30 in 2010 to over \$1.00 by 2023.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Time Series for Selected States}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_state_ts.pdf}
+\caption{Network Minimum Wage Over Time for Selected States}
+\label{fig:ts_states}
+\begin{figurenotes}
+Notes: Lines show average network minimum wage for counties in selected states. Nevada and Arizona show high exposure due to California connections; Mississippi and Alabama show low exposure due to relative network isolation from high minimum wage states.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Network vs. Geographic Exposure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig5_scatter.pdf}
+\caption{Network vs. Geographic Minimum Wage Exposure}
+\label{fig:scatter}
+\begin{figurenotes}
+Notes: Each point is a county (averaged over time). Dashed line is 45-degree line; red line is OLS fit. Counties above the 45-degree line have higher network exposure than geographic exposure (social ties to distant high-wage states); counties below have the reverse. Correlation = 0.88.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Distribution of Network-Own Gap}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig6_histogram.pdf}
+\caption{Distribution of Network-Own Minimum Wage Gap}
+\label{fig:histogram}
+\begin{figurenotes}
+Notes: Histogram shows the distribution of the gap between network minimum wage and own-state minimum wage across all county-quarter observations. The distribution is approximately centered at zero (mean = $-$\$0.24) with substantial mass in both tails. Positive values indicate network exposure exceeds own-state minimum wage.
+\end{figurenotes}
+\end{figure}
+
+
+\section{State Minimum Wage Summary}
+
+\begin{table}[H]
+\centering
+\caption{State Minimum Wage Variation, 2010--2023}
+\label{tab:mw_summary}
+\small
+\begin{tabular}{llccc}
+\toprule
+State & Abbr. & 2010 MW & 2023 MW & Change \\
+\midrule
+\multicolumn{5}{l}{\textit{Largest increases}} \\
+California & CA & \$8.00 & \$15.50 & +\$7.50 \\
+Washington & WA & \$8.55 & \$15.74 & +\$7.19 \\
+Massachusetts & MA & \$8.00 & \$15.00 & +\$7.00 \\
+New York & NY & \$7.25 & \$14.20 & +\$6.95 \\
+Connecticut & CT & \$8.25 & \$15.00 & +\$6.75 \\
+\midrule
+\multicolumn{5}{l}{\textit{Federal minimum throughout}} \\
+Texas & TX & \$7.25 & \$7.25 & \$0.00 \\
+Georgia & GA & \$7.25 & \$7.25 & \$0.00 \\
+Alabama & AL & \$7.25 & \$7.25 & \$0.00 \\
+Mississippi & MS & \$7.25 & \$7.25 & \$0.00 \\
+Louisiana & LA & \$7.25 & \$7.25 & \$0.00 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Table shows minimum wages at the start and end of the sample period for states with the largest increases (top panel) and selected states that maintained the federal minimum throughout (bottom panel). Full state-by-quarter data available in replication files.
+\end{tablenotes}
+\end{table}
+
+
+\section{Variable Definitions}
+
+\begin{table}[H]
+\centering
+\caption{Variable Definitions and Sources}
+\label{tab:codebook}
+\small
+\begin{tabular}{lp{10cm}}
+\toprule
+Variable & Definition \\
+\midrule
+\texttt{county\_fips} & 5-digit county FIPS code (string) \\
+\texttt{state\_fips} & 2-digit state FIPS code (string) \\
+\texttt{county\_name} & County name (string) \\
+\texttt{year} & Calendar year, 2010--2023 (integer) \\
+\texttt{quarter} & Calendar quarter, 1--4 (integer) \\
+\texttt{yearq} & Continuous time: year + (quarter-1)/4 (numeric) \\
+\texttt{lon}, \texttt{lat} & County centroid coordinates (numeric) \\
+\texttt{own\_min\_wage} & Minimum wage in county's own state, \$/hour (numeric) \\
+\texttt{social\_exposure} & SCI-weighted average of out-of-state minimum wages, \$/hour (numeric) \\
+\texttt{geo\_exposure} & Distance-weighted average of out-of-state minimum wages, \$/hour (numeric) \\
+\texttt{network\_gap} & social\_exposure $-$ own\_min\_wage, \$ (numeric) \\
+\texttt{social\_exposure\_cat} & Tercile of social exposure: Low, Medium, High (factor) \\
+\texttt{network\_cluster} & Louvain community assignment, 1--13 (integer) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}

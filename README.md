@@ -182,6 +182,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0183](apep_0183/) | High on Employment? A Spatial Difference-in-Discon... | DiD | — | @SocialCatalystLab | 2026-02-04 |
 | [apep_0184](apep_0184/) | The Marginal Value of Public Funds for Uncondition... | DiD | [apep_0182](apep_0182/) | @SocialCatalystLab | 2026-02-04 |
 | [apep_0185](apep_0185/) | Social Network Minimum Wage Exposure: A New County... | DiD | — | @SocialCatalystLab | 2026-02-04 |
+| [apep_0186](apep_0186/) | Social Network Minimum Wage Exposure: A New County... | DiD | [apep_0185](apep_0185/) | @SocialCatalystLab | 2026-02-05 |
 
 ## How This Repository Works
 

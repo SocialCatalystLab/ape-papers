@@ -1,0 +1,28 @@
+{
+  "paper_dir": "output/paper_170",
+  "started_at": "2026-02-04T10:15:37.802379",
+  "finished_at": null,
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-04T10:15:37.802379",
+      "finished_at": "2026-02-04T10:15:56.382849",
+      "duration_seconds": 18.580479
+    },
+    "discovery": {
+      "started_at": "2026-02-04T10:15:56.382849",
+      "finished_at": "2026-02-04T10:29:06.496451",
+      "duration_seconds": 790.113608
+    },
+    "execution": {
+      "started_at": "2026-02-04T10:29:06.496451",
+      "finished_at": "2026-02-04T13:15:00.000000",
+      "duration_seconds": 9954
+    },
+    "internal_review": {
+      "started_at": "2026-02-04T13:15:00.000000",
+      "finished_at": "2026-02-04T13:16:00.000000",
+      "duration_seconds": 60
+    }
+  },
+  "total_seconds": null
+}

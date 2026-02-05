@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-02-04T10:28:20.858939",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3982,
+    "output_tokens": 4156,
+    "total_tokens": 8138
+  },
+  "ideas_file": "output/paper_170/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Cross-Border Minimum Wage Spillovers: Did Germany's 2015 Minimum Wage Affect Polish Labor Markets?",
+      "score": 76,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "using NUTS3 or finer geography to increase clusters",
+        "incorporating commuting/posted-worker exposure measures",
+        "pre-trend/event-study checks",
+        "robustness to alternative donor pools / border-distance specifications"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "The Announcement Effect: Did EU's 2035 ICE Vehicle Ban Change Behavior Before Implementation?",
+      "score": 62,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Policy Learning vs. Policy Mimicry: Do Countries Adopt Minimum Wage Increases After Observing Neighbor Success or Failure?",
+      "score": 48,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "\u201cThe Thermostatic Employer\u201d: Does Mandating Paternity Leave Increase or Decrease Voluntary Family-Friendly Practices?",
+      "score": 42,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "Cross-Border Minimum Wage Spillovers: Did Germany's 2015 Minimum Wage Affect Polish Labor Markets?",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "using NUTS3 or finer geography to increase clusters",
+        "incorporating commuting/posted-worker exposure measures",
+        "pre-trend/event-study checks",
+        "robustness to alternative donor pools / border-distance specifications"
+      ]
+    }
+  ]
+}
