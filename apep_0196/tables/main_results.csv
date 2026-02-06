@@ -1,0 +1,3 @@
+Specification,Estimate,SE,95% CI Lower,95% CI Upper,P-value
+CS DiD (Overall),-0.0136,0.0104,-0.0339,0.0067,0.1886
+TWFE,-0.013,0.0142,-0.0409,0.0149,0.3647

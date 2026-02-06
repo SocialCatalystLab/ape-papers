@@ -1,0 +1,7 @@
+Specification,Estimate,SE,Pvalue,Notes
+"Main (CS DiD, never-treated)",-0.0136,0.0104,NA,Baseline
+CS DiD (not-yet-treated),-0.0127,0.01,NA,Alternative control
+TWFE,NA,NA,NA,Standard estimator
+TWFE + state trends,NA,NA,NA,State-specific trends
+Randomization Inference,NA,NA,NA,Permutation test
+Placebo (pre-treatment),-0.0033,0.0113,0.7746,Should be zero

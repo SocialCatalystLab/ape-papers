@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\begin{tabular}{lcccl}
+\toprule
+Specification & Estimate & SE & p-value & Notes \\
+\midrule
+Main (CS DiD, never-treated) & -0.0136 & 0.0104 & -- & Baseline \\
+CS DiD (not-yet-treated) & -0.0127 & 0.01 & -- & Alternative control \\
+TWFE & -- & -- & -- & Standard estimator \\
+TWFE + state trends & -- & -- & -- & State-specific trends \\
+Randomization Inference & -- & -- & -- & Permutation test \\
+Placebo (pre-treatment) & -0.0033 & 0.0113 & 0.7746 & Should be zero \\
+\bottomrule
+\end{tabular}
+\floatfoot{\textit{Notes:} All specifications use log enrollment as dependent variable. Randomization inference permutes treatment across states 1,000 times. Placebo test assigns pseudo-treatment 3 years before actual adoption.}
+\end{table}
+

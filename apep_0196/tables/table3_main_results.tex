@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of Promise Programs on College Enrollment}
+\label{tab:main_results}
+\begin{tabular}{lcccc}
+\toprule
+Specification & Estimate & SE & 95\% CI & p-value \\
+\midrule
+CS DiD (Overall) & -0.0136 & 0.0104 & [-0.0339, 0.0067] & 0.189 \\
+TWFE & -0.013 & 0.0142 & [-0.0409, 0.0149] & 0.365 \\
+\bottomrule
+\end{tabular}
+\floatfoot{\textit{Notes:} Dependent variable is log college enrollment. CS DiD uses the Callaway-Sant'Anna (2021) estimator with never-treated states as controls. Standard errors clustered at the state level. Estimates represent effect in log points; multiply by 100 for approximate percentage effect.}
+\end{table}
+
