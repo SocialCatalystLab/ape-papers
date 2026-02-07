@@ -1,0 +1,33 @@
+\begin{table}[htbp]
+\centering
+\caption{QWI Main Results: Earnings and Gender Gap}
+\label{tab:qwi_main}
+\begin{tabular}{lcc}
+\toprule
+ & C-S ATT & TWFE \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: Log Quarterly Earnings}} \\[3pt]
+Treated $\times$ Post & -0.0010 & 0.0295 \\
+ & (0.0199) & (0.0224) \\
+N & 2,599 & 2,599 \\
+\addlinespace
+\multicolumn{3}{l}{\textit{Panel B: Gender Earnings Gap (Male $-$ Female)}} \\[3pt]
+Treated $\times$ Post & 0.0051 & 0.0217$^{**}$ \\
+ & (0.0122) & (0.0109) \\
+N & 2,599 & 2,599 \\
+\addlinespace
+\multicolumn{3}{l}{\textit{Panel C: DDD (Treated $\times$ Post $\times$ Female)}} \\[3pt]
+Treated $\times$ Post $\times$ Female & 0.0605$^{***}$ & --- \\
+ & (0.0151) & \\
+\midrule
+State FE & Yes & Yes \\
+Quarter FE & Yes & Yes \\
+Clustering & State & State \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.92\textwidth}
+\footnotesize
+\textit{Notes:} Standard errors clustered at the state level in parentheses. Panel A reports the effect on log average quarterly earnings from the QWI state-quarter panel. Panel B reports the effect on the raw gender earnings gap (male earnings $-$ female earnings); a negative coefficient indicates the gap narrowed. Panel C reports the triple-difference coefficient from a sex-specific panel (male and female earnings stacked) with state$\times$quarter fixed effects; a positive coefficient indicates women's earnings rose relative to men's. C-S ATT uses Callaway \& Sant'Anna (2021) with doubly-robust estimation and never-treated controls. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+

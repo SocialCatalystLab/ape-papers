@@ -1,0 +1,20 @@
+{
+  "paper_id": "apep_0209",
+  "title": "Making Wages Visible: Labor Market Dynamics Under Salary Transparency (v11)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "olafdrw",
+    "SocialCatalystLab",
+    "ai1scl"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-07T03:52:27.695098",
+  "parent_paper_id": "apep_0208",
+  "is_revision": true,
+  "version": 11,
+  "paper_family_id": "apep_0054",
+  "original_contributor": "olafdrw",
+  "revision_rationale": "Structural overhaul to achieve AER-level presentation. User directive: \"make the two types of datasets show as much parallelism as possible when presented. Why not start with QWI data first, before CP"
+}

@@ -1,0 +1,14 @@
+{
+  "ranking_model": "N/A (revision)",
+  "parent_paper": "apep_0159",
+  "revision_type": "code_scan_fix",
+  "ideas": [
+    {
+      "rank": 1,
+      "title": "Fix code scan issues in apep_0159 (Salary Transparency Laws v5)",
+      "description": "Address DATA_PROVENANCE_MISSING and SUSPICIOUS_TRANSFORMS findings",
+      "score": "N/A",
+      "selected": true
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+\begin{table}[htbp]
+\centering
+\caption{Cross-Dataset Comparison: CPS vs.\ QWI Estimates}
+\label{tab:cross_dataset}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{CPS ASEC} & \multicolumn{2}{c}{QWI} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & C-S ATT & TWFE & C-S ATT & TWFE \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Aggregate Wage/Earnings Effect}} \\[3pt]
+Treated $\times$ Post & -0.0038 & --- & -0.0010 & 0.0295 \\
+ & (0.0064) &  & (0.0199) & (0.0224) \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel B: Gender Gap / DDD Effect}} \\[3pt]
+DDD ($\beta_2$) or Gap & 0.0402$^{***}$ & --- & 0.0051 & 0.0217$^{**}$ \\
+ & (0.0080) & & (0.0122) & (0.0109) \\
+\midrule
+Unit of observation & \multicolumn{2}{c}{Individual} & \multicolumn{2}{c}{State-Quarter} \\
+Outcome variable & \multicolumn{2}{c}{Log hourly wage} & \multicolumn{2}{c}{Log quarterly earnings} \\
+Frequency & \multicolumn{2}{c}{Annual} & \multicolumn{2}{c}{Quarterly} \\
+Source & \multicolumn{2}{c}{CPS ASEC} & \multicolumn{2}{c}{LEHD/QWI} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Notes:} Side-by-side comparison of estimates from the CPS ASEC individual-level analysis and the QWI administrative state-quarter panel. CPS outcomes are log hourly wages; QWI outcomes are log average quarterly earnings. The CPS gender effect is a triple-difference coefficient (Treated $\times$ Post $\times$ Female); the QWI gender effect is the gap in average earnings (male $-$ female). Standard errors clustered at the state level in parentheses. C-S ATT uses Callaway \& Sant'Anna (2021); TWFE includes state and time fixed effects. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+

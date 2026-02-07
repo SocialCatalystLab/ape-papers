@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+\centering
+\caption{QWI Labor Market Dynamism Results}
+\label{tab:qwi_dynamism}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{TWFE} & & \multicolumn{2}{c}{C-S ATT} \\
+\cmidrule{2-3} \cmidrule{5-6}
+Outcome & Coeff. & SE & & ATT & SE \\
+\midrule
+Hiring Rate & -0.0009 & (0.0036) & & 0.0009 & (0.0033) \\
+Separation Rate & -0.0001 & (0.0030) & & 0.0041 & (0.0033) \\
+Log Hires & 0.0090 & (0.0232) & & --- & --- \\
+Log Separations & 0.0138 & (0.0230) & & --- & --- \\
+Net Job Creation Rate & -0.0011 & (0.0017) & & --- & --- \\
+\midrule
+N & \multicolumn{2}{c}{2,603} & & \multicolumn{2}{c}{2,603} \\
+State FE & \multicolumn{2}{c}{Yes} & & \multicolumn{2}{c}{Yes} \\
+Quarter FE & \multicolumn{2}{c}{Yes} & & \multicolumn{2}{c}{Yes} \\
+Clustering & \multicolumn{2}{c}{State} & & \multicolumn{2}{c}{State} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.92\textwidth}
+\footnotesize
+\textit{Notes:} Standard errors clustered at the state level in parentheses. All outcomes from the QWI state-quarter panel. Hiring rate = total hires / beginning-of-quarter employment; separation rate = total separations / beginning-of-quarter employment; net job creation rate = (hires $-$ separations) / employment. TWFE includes state and quarter fixed effects. C-S uses Callaway \& Sant'Anna (2021) with never-treated controls (estimated for rate outcomes only). $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+

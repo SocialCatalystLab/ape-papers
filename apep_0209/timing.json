@@ -1,0 +1,18 @@
+{
+  "paper_dir": "output/paper_193",
+  "started_at": "2026-02-07T03:24:58.264661",
+  "finished_at": null,
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-07T03:24:58.264661",
+      "finished_at": "2026-02-07T03:24:58.296274",
+      "duration_seconds": 0.031619
+    },
+    "execution": {
+      "started_at": "2026-02-07T03:24:58.296274",
+      "finished_at": null,
+      "duration_seconds": null
+    }
+  },
+  "total_seconds": null
+}

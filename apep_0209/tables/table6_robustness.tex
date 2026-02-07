@@ -1,0 +1,27 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness of Main Results}
+\label{tab:robustness}
+\begin{tabular}{lccc}
+\toprule
+Specification & ATT & SE & 95\% CI \\
+\midrule
+Main (C-S, never-treated) & -0.0038 & 0.0064 & [-0.0165, 0.0088] \\
+Sun-Abraham & -2e-04 & 0.0076 & [-0.0152, 0.0148] \\
+C-S, not-yet-treated controls & -0.003 & 0.0068 & [-0.0163, 0.0103] \\
+Excl. border controls (asymm.) & -0.0062 & 0.0083 & [-0.0225, 0.0101] \\
+Full-time workers only & -0.0034 & 0.0077 & [-0.0185, 0.0116] \\
+College-educated only & -0.0132 & 0.0089 & [-0.0307, 0.0043] \\
+Non-college only & 0.0061 & 0.0142 & [-0.0219, 0.034] \\
+Individual-level, rich controls & 0.0103 & 0.0058 & [-0.0011, 0.0217] \\
+Excl. border states (symmetric) & -0.002 & 0.0104 & [-0.0224, 0.0185] \\
+Upper 75\% wage dist. & 1e-04 & 0.0071 & [-0.0138, 0.0139] \\
+Firm-size threshold interact. & 0.0097 & 0.0046 & [8e-04, 0.0187] \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.9\textwidth}
+\footnotesize
+\textit{Notes:} All specifications estimate the effect of salary transparency laws on log hourly wages. The main specification uses the Callaway \& Sant'Anna (2021) estimator with never-treated states as controls. Alternative specifications vary the estimator, control group, sample restrictions, and fixed effects. ``Upper 75\%'' restricts to workers above the 25th percentile of the pre-treatment wage distribution. ``Firm-size threshold'' interacts treatment with an indicator for states with all-employer coverage. Standard errors clustered at the state level.
+\end{minipage}
+\end{table}
+

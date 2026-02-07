@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering
+\caption{QWI Industry Heterogeneity: Earnings and Gender Gap Effects}
+\label{tab:qwi_industry}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Log Earnings} & \multicolumn{2}{c}{Gender Earnings Gap} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Industry & Coeff. & SE & Coeff. & SE \\
+\midrule
+Retail Trade & -0.0080 & (0.0240) & -0.0079 & (0.0155) \\
+Accommodation \& Food & 0.0206 & (0.0161) & 0.0083 & (0.0053) \\
+Finance \& Insurance & 0.0078 & (0.0358) & 0.0301 & (0.0294) \\
+Professional Services & 0.0314 & (0.0234) & 0.0071 & (0.0079) \\
+\midrule
+State FE & \multicolumn{2}{c}{Yes} & \multicolumn{2}{c}{Yes} \\
+Quarter FE & \multicolumn{2}{c}{Yes} & \multicolumn{2}{c}{Yes} \\
+Clustering & \multicolumn{2}{c}{State} & \multicolumn{2}{c}{State} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.92\textwidth}
+\footnotesize
+\textit{Notes:} Each cell reports a separate TWFE regression of the outcome on Treated $\times$ Post with state and quarter fixed effects, estimated within the indicated NAICS sector. Standard errors clustered at the state level in parentheses. Log Earnings columns use the sex-aggregate ($sex=0$) QWI panel by industry. Gender Earnings Gap columns use the male$-$female earnings difference within each industry. High-bargaining sectors (Finance, Professional Services) are expected to show larger transparency effects per Cullen \& Pakzad-Hurson (2023); low-bargaining sectors (Retail, Accommodation) provide a comparison group. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+

@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\caption{Composition Balance Tests: DiD on Workforce Characteristics}
+\label{tab:composition}
+\begin{tabular}{lccc}
+\toprule
+Outcome & Coefficient & SE & $p$-value \\
+\midrule
+Pct Female & 0.0057 & 0.0054 & 0.291 \\
+Pct College+ & 0.0043 & 0.0086 & 0.623 \\
+Mean Age & 0.0080 & 0.2239 & 0.972 \\
+Pct Full-time & 0.0024 & 0.0063 & 0.699 \\
+Pct High-Bargaining & 0.0144 & 0.0061 & 0.017 \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Each row reports results from a separate TWFE regression of the listed composition variable on Treated $\times$ Post with state and year fixed effects, using the state-year panel. A significant coefficient would indicate differential compositional changes in treated states, raising concerns about selection. Standard errors clustered at the state level.
+\end{minipage}
+\end{table}
+

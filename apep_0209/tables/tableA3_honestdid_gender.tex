@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\caption{HonestDiD Sensitivity: Gender Gap Effect}
+\label{tab:honestdid_gender}
+\begin{tabular}{cccc}
+\toprule
+$M$ & Estimate & 95\% CI & Zero Excluded? \\
+\midrule
+0.0 & 0.0264 & [-0.0067, 0.0595] & No \\
+0.5 & 0.0969 & [-2.4729, 2.6666] & No \\
+1.0 & 0.0969 & [-4.9729, 5.1666] & No \\
+1.5 & 0.0969 & [-7.4729, 7.6666] & No \\
+2.0 & 0.0969 & [-9.9729, 10.1666] & No \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} $M$ indicates the maximum magnitude of parallel trends violations relative to the largest pre-treatment coefficient magnitude for the gender gap event study. Bounds computed using the \citet{rambachan2023more} relative magnitudes approach on the gender gap event study (female ATT minus male ATT at each event time).
+\end{minipage}
+\end{table}
+

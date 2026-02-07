@@ -1,0 +1,32 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of Salary Transparency Laws on the Gender Wage Gap}
+\label{tab:gender}
+\begin{tabular}{lcccc}
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & Basic DDD & + Occupation FE & + Full Controls & State$\times$Time FE \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: QWI Administrative Data (N = 2,603 state-quarters, 51 clusters)}} \\[3pt]
+Treated $\times$ Post $\times$ Female & 0.0605$^{***}$ & --- & --- & 0.0605$^{***}$ \\
+ & (0.0151) & & & (0.0151) \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel B: CPS Microdata (N = 614,625 workers, 51 state clusters)}} \\[3pt]
+Treated $\times$ Post $\times$ Female & 0.0488$^{***}$ & 0.0556$^{***}$ & 0.0364$^{***}$ & 0.0514$^{***}$ \\
+ & (0.0077) & (0.0084) & (0.0074) & (0.0079) \\
+\midrule
+State FE & Yes & Yes & Yes & \\
+Time FE & Yes & Yes & Yes & \\
+State$\times$Time FE & & & & Yes \\
+Occupation FE & & Yes & Yes & Yes \\
+Industry FE & & & Yes & Yes \\
+Demographic controls & & & Yes & \\
+Clustering & State & State & State & State \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Notes:} Standard errors clustered at the state level (51 clusters) in parentheses. The coefficient of interest is Treated $\times$ Post $\times$ Female; a positive value indicates that transparency laws narrowed the gender gap (women's relative wages/earnings improved). Panel~A uses sex-disaggregated QWI data with state$\times$quarter fixed effects; individual-level controls are not available in administrative aggregates, so columns (2)--(3) are not applicable. The column (4) estimate repeats column (1) because the QWI specification already includes state$\times$quarter FE. Panel~B uses individual-level CPS ASEC data (wage/salary workers ages 25--64, income years 2014--2024). Column~(1): basic triple-difference with state and year FE. Column~(2): adds 2-digit occupation FE. Column~(3): adds industry FE and demographic controls (age group, education, race/ethnicity, marital status). Column~(4): replaces state and year FE with state$\times$year FE, absorbing the Treated $\times$ Post main effect. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+

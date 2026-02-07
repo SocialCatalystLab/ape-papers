@@ -1,0 +1,30 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:main_results} Effect of Salary Transparency Laws on Log Wages}
+   \bigskip
+   \centering
+   \begin{tabular}{lcccc}
+      \toprule
+       & Log Mean Wage & \multicolumn{3}{c}{Log Hourly Wage}\\
+                                  & (1)           & (2)           & (3)           & (4)\\  
+      \midrule 
+      Treated $\times$ Post       & 0.0049        & 0.0144$^{*}$  & 0.0053        & 0.0077\\   
+                                  & (0.0113)      & (0.0083)      & (0.0063)      & (0.0061)\\   
+       \\
+      R$^2$                       & 0.97173       & 0.05828       & 0.29920       & 0.38192\\  
+      Observations                & 561           & 614,625       & 614,625       & 614,625\\  
+       \\
+      statefip fixed effects      & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+      income\_year fixed effects  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+      occ\_major fixed effects    &               &               & $\checkmark$  & $\checkmark$\\   
+      ind\_major fixed effects    &               &               & $\checkmark$  & $\checkmark$\\   
+      educ\_cat fixed effects     &               &               &               & $\checkmark$\\   
+      age\_group fixed effects    &               &               &               & $\checkmark$\\   
+      \bottomrule
+   \end{tabular}
+   
+   \par \raggedright 
+   Notes: Standard errors clustered at the state level (51 clusters: 6 treated with post-treatment data, 45 control/not-yet-treated) in parentheses. Column (1) uses state-year aggregates (51 states $\times$ 10 years = 510 obs); the high $R^2$ (0.965) reflects 51 state + 10 year fixed effects absorbing most variation in this small panel. Columns (2)-(4) use individual-level CPS ASEC data with survey weights (ASECWT); observation counts are survey-weighted (unweighted N $\approx$ 650,000 person-years). The outcome is log hourly wage. Sample: wage/salary workers ages 25-64, income years 2014-2023. * p $<$ 0.10, ** p $<$ 0.05, *** p $<$ 0.01.
+\end{table}
+
+

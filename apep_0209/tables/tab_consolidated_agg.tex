@@ -1,0 +1,30 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of Salary Transparency Laws on Wages and Earnings}
+\label{tab:agg}
+\begin{tabular}{lccc}
+\toprule
+ & (1) & (2) & (3) \\
+ & C-S ATT & TWFE & TWFE + Controls \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: QWI Administrative Data (N = 2,603 state-quarters)}} \\[3pt]
+Treated $\times$ Post & -0.0010 & 0.0295 & --- \\
+ & (0.0199) & (0.0224) & \\
+\addlinespace
+\multicolumn{4}{l}{\textit{Panel B: CPS Microdata (N = 614,625 workers)}} \\[3pt]
+Treated $\times$ Post & -0.0038 & 0.0144$^{*}$ & 0.0053 \\
+ & (0.0064) & (0.0083) & (0.0063) \\
+\midrule
+State FE & Yes & Yes & Yes \\
+Time FE & Yes & Yes & Yes \\
+Occupation FE & & & Yes \\
+Industry FE & & & Yes \\
+Clustering & State & State & State \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Notes:} Standard errors clustered at the state level (51 clusters) in parentheses. Panel~A uses administrative earnings data from the Census Bureau's Quarterly Workforce Indicators (QWI), aggregated to the state-quarter level; the outcome is log average quarterly earnings. Column~(3) is not applicable because QWI provides aggregate data without individual-level controls. Panel~B uses individual-level data from the CPS ASEC (wage/salary workers ages 25--64, income years 2014--2024); the outcome is log hourly wage and regressions are weighted by ASECWT. Column~(1): Callaway \& Sant'Anna (2021) with doubly-robust estimation and never-treated controls. Column~(2): two-way fixed effects (state + time). Column~(3): adds 2-digit occupation and industry fixed effects. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+
