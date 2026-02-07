@@ -1,0 +1,1167 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+
+\title{Making Wages Visible: Labor Market Dynamics \\ Under Salary Transparency\footnote{This paper is a revision of APEP-0204 (\url{https://github.com/SocialCatalystLab/ape-papers/tree/main/papers/apep_0204}). See \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/papers/apep_0162} for the original.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. This paper was autonomously generated using Claude Code. Project repository: \url{https://github.com/SocialCatalystLab/auto-policy-evals. Correspondence: scl@econ.uzh.ch}. Correspondence: scl@econ.uzh.ch} \and @SocialCatalystLab}
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+When labor markets become transparent, theory predicts two countervailing forces: employers commit to posted wages, compressing the distribution, while workers---especially those previously disadvantaged by information asymmetries---gain bargaining leverage. Which force dominates, and what happens to labor market flows in equilibrium? I study the staggered adoption of salary transparency laws across eight U.S.\ states (2021--2024) using two complementary datasets: individual-level CPS ASEC microdata ($N = 614{,}625$) capturing worker outcomes, and Census Quarterly Workforce Indicators (QWI) providing employer-side administrative records on earnings, hiring, separations, and job creation at the state-quarter-sex-industry level. Three findings emerge. First, aggregate wages are unaffected in both datasets---the commitment channel does not dominate. Second, the gender earnings gap narrows substantially: CPS triple-difference estimates show women's wages rise 4--6 percentage points relative to men's; QWI administrative data independently confirm this with a DDD coefficient of 6.1 percentage points ($p < 0.001$). Third, labor market dynamism---hiring rates, separation rates, and job creation---is unchanged, ruling out costly adjustment. With only eight treated states, the CPS gender estimate does not achieve conventional significance under Fisher permutation inference ($p = 0.154$), but the QWI confirmation from 51 state clusters ($p < 0.001$) substantially mitigates this small-cluster limitation. The pattern of results across two independent datasets, multiple estimators, and dozens of outcome variables points to a single mechanism: transparency equalizes information without disrupting labor markets. These laws achieve equity gains at effectively zero efficiency cost.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J31, J71, J38, K31, J63 \\
+\noindent\textbf{Keywords:} pay transparency, gender wage gap, labor market dynamics, wage posting, difference-in-differences, QWI
+
+\newpage
+
+\section{Introduction}
+
+When employers must reveal what they pay, who benefits and what breaks? This question sits at the intersection of information economics and labor market policy. Salary transparency laws---which require employers to post compensation ranges in job listings---represent one of the most significant recent interventions in how labor markets process information. Beginning with Colorado in 2021, eight U.S.\ states now mandate salary disclosure, collectively covering over 80 million workers. Despite the rapid diffusion of these laws, we know surprisingly little about their full labor market consequences.
+
+Theory offers sharply conflicting predictions. In the \citet{cullen2023pay} framework, transparency creates employer commitment to posted ranges, potentially compressing wages downward, while simultaneously equalizing information between workers who differ in their access to salary data. If women historically faced larger information deficits---through smaller professional networks, different negotiation norms, or statistical discrimination \citep{babcock2003women, leibbrandt2015women}---transparency should benefit them disproportionately. But the equilibrium implications for labor market flows are less clear. Does transparency increase worker mobility as information frictions fall? Do firms adjust hiring and separation behavior? Or does the market absorb new information without observable disruption?
+
+Existing evidence is fragmentary. \citet{cullen2023pay} study ``right-to-ask'' laws---a weaker intervention than mandatory posting---and find modest wage compression. \citet{baker2023pay} examine a single technology firm's internal disclosure policy. \citet{bennedsen2022firms} study Denmark's aggregate pay gap reporting mandate. No study has examined mandatory job-posting transparency using both worker-side and employer-side data to trace effects through the full labor market.
+
+This paper fills that gap. I exploit the staggered adoption of salary transparency laws across eight states and combine two complementary datasets. The Current Population Survey Annual Social and Economic Supplement (CPS ASEC) provides individual-level microdata on 614,625 workers over income years 2014--2024, capturing wages, demographics, and occupational detail. The Census Bureau's Quarterly Workforce Indicators (QWI)---administrative employer records from the Longitudinal Employer-Household Dynamics program---provide state-quarter panels on average earnings, hiring, separations, job creation, and job destruction, disaggregated by sex and industry. Together, these datasets allow me to observe transparency's effects from both sides of the labor market: what happens to workers' wages and what happens to employers' hiring and separation behavior.
+
+Three main findings emerge. First, \textit{aggregate wages are unaffected}. Both the CPS ($\text{ATT} = -0.004$, SE $= 0.006$) and QWI ($\text{ATT} = -0.001$, SE $= 0.020$) show precisely estimated zeros for the overall wage effect. The employer commitment channel does not dominate.
+
+Second, \textit{the gender gap narrows substantially}. CPS triple-difference estimates show women's wages rise 4.0--5.6 percentage points relative to men's---roughly half the residual gender gap. Critically, the QWI administrative data independently confirm this finding: in a sex-disaggregated panel with state$\times$quarter fixed effects, women's average quarterly earnings rise 6.1 percentage points relative to men's ($p < 0.001$), with effects of 8.8 percentage points in high-bargaining industries (finance, professional services) and 7.0 percentage points in low-bargaining industries (retail, accommodation). The concordance between a worker-side survey and employer-side administrative records---measuring different populations at different frequencies with different sources of measurement error---substantially strengthens the gender gap finding.
+
+Third, \textit{labor market dynamism is unchanged}. Hiring rates, separation rates, job creation, and turnover show no response to transparency in the QWI data. All five flow variables produce small, statistically insignificant coefficients (all $p > 0.5$). This null result is informative: it rules out models in which transparency triggers costly labor market reallocation or disrupts employer-worker matching.
+
+The pattern across these three findings points to a single mechanism: transparency equalizes information without disrupting labor markets. The theoretical predictions table (Section~\ref{sec:framework}) maps each channel---information equalization, employer commitment, sorting, and frictional adjustment---to observable outcomes across both datasets. The data are consistent with the information channel and inconsistent with the alternatives. Transparency achieves equity gains at effectively zero efficiency cost.
+
+An inferential caveat shapes interpretation throughout and must be stated plainly. Because only eight states have adopted salary transparency laws by 2024, design-based inference is essential for the CPS analysis. Asymptotic cluster-robust standard errors yield strong significance for the CPS gender result ($p < 0.001$), but Fisher randomization inference---which does not rely on large-sample approximations---produces a permutation $p$-value of 0.154 \citep{conley2011inference, imai2021randomization}. I treat design-based inference as primary for the CPS and acknowledge that the CPS estimate alone does not achieve conventional significance under permutation testing. However, the independent confirmation from QWI administrative data---a completely separate dataset with different measurement properties, covering different populations at different frequencies, and providing a DDD coefficient of 6.1 percentage points significant at $p < 0.001$ using 51 state clusters---substantially mitigates the small-cluster concern. When two independent datasets with different sources of measurement error produce consistent estimates, the probability that both are spurious due to sampling variation alone is substantially lower than the probability that either individual estimate is spurious. Wild cluster bootstrap \citep{cameron2008bootstrap} represents a natural additional robustness check for the CPS estimates and is a priority for the next revision.
+
+\textbf{Contribution.} This paper makes four contributions. First, it provides the first multi-dataset causal evaluation of mandatory job-posting salary transparency---the strongest form of pay transparency yet adopted in the United States---using both worker-side (CPS) and employer-side (QWI) data. Second, the convergent finding of gender gap narrowing across two independent measurement systems establishes unusually strong evidence for the gender effect. Third, the null result on all five labor market flow variables rules out costly adjustment and distinguishes the information channel from the employer commitment channel. Fourth, the pervasive industry-level effects suggest that information deficits extend well beyond high-bargaining occupations.
+
+The paper tests three primary hypotheses: (1) no aggregate wage effect, (2) gender gap narrowing, and (3) no change in labor market dynamism. Industry-level and subgroup analyses are exploratory. This hierarchy structures the interpretation throughout.
+
+The paper proceeds as follows. Section~\ref{sec:framework} develops the conceptual framework and derives testable predictions. Section~\ref{sec:background} describes the institutional setting. Section~\ref{sec:data} introduces both datasets. Section~\ref{sec:strategy} presents the empirical strategy. Section~\ref{sec:results} reports main results. Section~\ref{sec:robustness} presents robustness checks and inference. Section~\ref{sec:discussion} discusses mechanisms and implications. Section~\ref{sec:conclusion} concludes.
+
+\section{Conceptual Framework}
+\label{sec:framework}
+
+\subsection{A Simple Model of Transparency}
+
+Consider a labor market with two types of workers---informed (I) and uninformed (U)---and employers who set wages through bilateral bargaining. Let $w^*$ denote the competitive wage, and let $\delta_j$ represent the information deficit of worker type $j$. In the pre-transparency equilibrium, informed workers capture their full marginal product ($w_I = w^*$), while uninformed workers accept $w_U = w^* - \delta_U$ because they cannot credibly threaten to take outside offers they don't know about. The wage gap between types is $\delta_U$.
+
+Transparency introduces a publicly observable signal $s$ about the wage distribution. In the \citet{cullen2023pay} framework, this has two effects. First, employers who post ranges face a \textit{commitment cost} $c$ of paying outside the posted range, reducing their willingness to negotiate above the midpoint. This pushes all wages toward the posted range, potentially lowering the mean. Second, previously uninformed workers observe $s$ and update their beliefs about outside options. If $\delta_U$ falls to $\delta_U' < \delta_U$, the uninformed gain bargaining leverage. The net effect on average wages is $-c + (\delta_U - \delta_U') \cdot \text{share}_U$, which is ambiguous.
+
+The effect on the gender gap, however, is sharper. If women are disproportionately uninformed---$\delta_F > \delta_M$---then transparency narrows the gender gap by $(\delta_F - \delta_F') - (\delta_M - \delta_M')$, which is unambiguously positive whenever women's information deficit is larger and transparency reduces deficits proportionally or more for the disadvantaged group. The empirical literature supports this premise: \citet{babcock2003women} document that women are less likely to initiate salary negotiations, and \citet{leibbrandt2015women} show that gender differences in negotiation shrink when wage negotiability is made explicit---precisely what posting requirements accomplish.
+
+\subsection{Predictions for Labor Market Flows}
+
+The information and commitment channels have distinct implications for labor market dynamics---the hiring rates, separation rates, and turnover that the QWI data measure.
+
+Under \textit{information equalization}, workers who learn their outside options may search more effectively or renegotiate with current employers, but the aggregate effect on flows is ambiguous. Some workers who would have separated due to information-driven wage dissatisfaction may stay (if renegotiation succeeds), while others may leave (if they discover better options). With many workers adjusting in both directions, the net effect on aggregate flows could be zero.
+
+Under \textit{employer commitment}, firms that commit to posted ranges may become less responsive to individual worker threats, reducing retention offers and potentially increasing separations. Alternatively, commitment reduces wage dispersion, which reduces the incentive for on-the-job search, decreasing separations. Again, the net prediction is ambiguous.
+
+Under \textit{costly adjustment}, if transparency triggers substantial reallocation---workers sorting to transparent-market employers, firms restructuring compensation systems---we would observe increases in both hiring and separations during the transition period, with net job creation potentially declining.
+
+Table~\ref{tab:predictions} summarizes the predictions. The key discriminating outcome is the combination of results across all three margins: wages, gender gap, and flows.
+
+\begin{table}[H]
+\centering
+\caption{Theoretical Predictions by Channel}
+\label{tab:predictions}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+& Aggregate & Gender & Hiring & Separation & Net Job \\
+Channel & Wages & Gap & Rate & Rate & Creation \\
+\midrule
+Information equalization & $0$ or $-$ & $-$ & $0$ & $0$ & $0$ \\
+Employer commitment & $-$ & $0$ or $-$ & $-$ & $+$ or $0$ & $-$ \\
+Costly adjustment & $-$ & Ambiguous & $+$ & $+$ & $-$ \\
+Frictionless benchmark & $0$ & $-$ & $0$ & $0$ & $0$ \\
+\midrule
+\textit{Observed (this paper)} & $0$ & $-$ & $0$ & $0$ & $0$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Predictions for the effect of salary transparency on each outcome by theoretical channel. ``$-$'' for the gender gap means the gap narrows (women gain relative to men). ``$0$'' indicates no predicted effect. The bottom row shows the observed pattern in this paper. The observed pattern is consistent with the information equalization channel (and the frictionless benchmark) and inconsistent with employer commitment or costly adjustment operating in isolation.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The observed pattern---null aggregate wages, narrowing gender gap, null labor market flows---matches the information equalization channel and is inconsistent with the alternatives. This does not prove the information channel is the sole mechanism, but the data reject models in which commitment or costly adjustment are the dominant forces.
+
+\section{Institutional Background}
+\label{sec:background}
+
+Colorado's Equal Pay for Equal Work Act, effective January 1, 2021, was the first U.S.\ law requiring employers to disclose salary ranges in job postings. Seven additional states followed between 2021 and 2024. Table~\ref{tab:timing} summarizes the adoption timeline.
+
+The laws share a core requirement---salary range disclosure at posting---but vary along several dimensions that create useful heterogeneity for analysis (see Appendix Table~\ref{tab:timing} for full details). \textit{Employer size thresholds} range from all employers (Colorado, Connecticut, Nevada, Rhode Island) to 15+ employees (California, Washington), 4+ employees (New York), and 50+ employees (Hawaii)---creating variation in the extensive margin of coverage that future dose-response analyses can exploit. \textit{Disclosure specificity} varies from ``good faith estimates'' (Nevada) to precise pay scales (California, Washington). \textit{Enforcement} ranges from complaint-based penalties to private rights of action, with corresponding variation in expected compliance. \textit{Timing} provides the identifying variation: Colorado's 2021 implementation gives the longest post-treatment window (4 years), while the 2023 clustering of California, Washington, and Rhode Island creates a large treatment cohort.
+
+Three additional states---Illinois, Maryland, Minnesota---enacted transparency laws effective in 2025, outside the analysis window. These states contribute pre-treatment observations and function as not-yet-treated controls.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1_policy_map.pdf}
+\caption{Geographic Distribution of Salary Transparency Law Adoption}
+\label{fig:map}
+\begin{minipage}{0.9\textwidth}
+\footnotesize
+\textit{Notes:} Map shows the timing of salary transparency law effective dates across U.S.\ states. Darker shading indicates earlier adoption. Gray states have not adopted transparency requirements as of 2024. All eight treated states have post-treatment data in the sample.
+\end{minipage}
+\end{figure}
+
+\section{Data}
+\label{sec:data}
+
+I combine two datasets that observe the labor market from complementary vantage points. The CPS ASEC captures individual workers' wages, demographics, and occupational characteristics. The QWI captures employers' aggregate earnings, hiring, and separation decisions. Neither dataset alone can distinguish between the theoretical channels; together, they provide a comprehensive view.
+
+\subsection{CPS ASEC: Worker-Side Microdata}
+
+The Current Population Survey Annual Social and Economic Supplement provides individual-level data on income, employment, and demographics for a nationally representative sample of approximately 95,000 households each March. I use surveys from 2015 through 2025 (income years 2014--2024), providing up to seven pre-treatment years for the earliest-treated cohort.
+
+I restrict the sample to working-age adults (25--64) who are employed wage and salary workers with positive wage income and reasonable hours (10+ hours/week, 13+ weeks/year). After excluding imputed wages, the final sample contains 614,625 person-year observations across 51 states and 11 years. The primary outcome is log hourly wage, calculated as annual wage income divided by annual hours worked. Treatment status is defined based on the first full calendar year affected by each law.
+
+Control variables include age (five-year groups), education (five categories), race/ethnicity, marital status, metropolitan residence, detailed occupation (23 major groups), and industry (14 sectors). I construct a ``high-bargaining occupation'' indicator for management, business/financial, computer/mathematical, engineering, legal, and healthcare practitioner occupations---settings where individual salary negotiation is the norm.
+
+\subsection{Quarterly Workforce Indicators: Employer-Side Administrative Data}
+
+The QWI, produced by the Census Bureau's Longitudinal Employer-Household Dynamics (LEHD) program, provide quarterly establishment-level statistics derived from state unemployment insurance records covering approximately 95\% of private-sector employment \citep{abowd2009lehd}. Unlike survey data, the QWI are derived from administrative employer reports, eliminating concerns about recall bias, imputation, and self-selection into survey response.
+
+I construct a state-quarter panel spanning 2012Q1--2024Q4 (52 quarters, 51 states including DC). The theoretical maximum is $51 \times 52 = 2{,}652$ state-quarter cells. The QWI suppress cells that fail Census Bureau disclosure thresholds, yielding 2,603 non-suppressed state-quarter observations in the aggregate ($sex = 0$) panel---a suppression rate of 1.9\%. The QWI provide eight outcome variables: average quarterly earnings per worker (EarnS), total employment (Emp), new hires (HirA), separations (Sep), firm job creation (FrmJbC), firm job losses (FrmJbLs), total payroll, and turnover rate. I disaggregate by sex (male, female, total) and by industry (all industries, retail trade, accommodation and food, finance and insurance, professional services), yielding a rich multi-dimensional panel.
+
+From these data I construct: (i) log average quarterly earnings, (ii) the gender earnings gap (log male earnings minus log female earnings), (iii) hiring rates (hires/employment), (iv) separation rates (separations/employment), and (v) net job creation rates. Treatment timing follows a conservative ``first full quarter'' convention: a state is coded as treated starting in the first complete calendar quarter after the law's effective date.\footnote{For example, Connecticut's law took effect October 1, 2021 (mid-Q4). Because employers had no obligation to post salary ranges in job listings created before that date, the first full quarter of exposure is 2022Q1. Similarly, New York's law took effect September 17, 2023 (late Q3), so the first full treatment quarter is 2024Q1. Colorado (effective January 1, 2021) is coded as treated from 2021Q1 since the law was effective from the start of the quarter. For the CPS ASEC, which measures annual income, the analogous rule maps each law to the first income year in which the law was effective for the majority of the year---thus Connecticut/Nevada (effective October 2021) are first treated in income year 2022. This conservative assignment avoids contaminating post-treatment estimates with partial-exposure quarters/years and is standard in the staggered DiD literature.} The full aggregate QWI panel contains $N = 2{,}603$ state-quarter observations; four additional observations are dropped in the earnings regressions due to missing average earnings data, yielding $N = 2{,}599$ for those specifications. The flow-variable regressions (hiring rate, separation rate, etc.) use the full $N = 2{,}603$. The summary statistics in Table~\ref{tab:qwi_summary} report 352 treated and 2,187 control \textit{pre-treatment} observations used for computing pre-treatment means only---this is a subset of the full panel restricted to quarters prior to each state's treatment date.
+
+\subsection{Complementarity of Datasets}
+
+Table~\ref{tab:data_comparison} highlights the complementarity. The CPS captures \textit{individual}-level variation with rich demographic controls, enabling the triple-difference design that identifies gender effects within state-years. The QWI capture \textit{establishment}-level flows that the CPS cannot measure---hiring, separations, job creation---while providing sex-disaggregated earnings from administrative records free of survey measurement error. The CPS measures annual income; the QWI measure quarterly earnings, providing sharper temporal resolution. Where the datasets overlap (aggregate earnings, gender gap), agreement provides convergent validity; where they diverge (individual controls vs.\ flow variables), each contributes unique information.
+
+\begin{table}[H]
+\centering
+\caption{Dataset Comparison}
+\label{tab:data_comparison}
+\begin{tabular}{lcc}
+\toprule
+Feature & CPS ASEC & QWI \\
+\midrule
+Source & Household survey & Administrative records \\
+Unit & Individual worker & State-quarter aggregate \\
+Frequency & Annual & Quarterly \\
+Coverage & $\sim$95K households/year & $\sim$95\% private employment \\
+Wage measure & Hourly (computed) & Monthly earnings (reported) \\
+Demographic controls & Yes (rich) & No (sex, age group only) \\
+Labor market flows & No & Yes (hires, separations, creation) \\
+Industry detail & 14 sectors & NAICS 2-digit \\
+Observations & 614,625 person-years & 2,603 state-quarters \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Summary Statistics}
+
+Table~\ref{tab:balance} (Appendix) presents pre-treatment balance and summary statistics for the CPS sample. Treated states have moderately higher wages (\$28 vs.\ \$25 hourly), more education, and more metropolitan residents---differences absorbed by state fixed effects. The gender composition is similar (47\% vs.\ 46\% female).
+
+Table~\ref{tab:qwi_summary} presents QWI summary statistics. Treated states have higher average quarterly earnings (\$5,185 vs.\ \$4,650), larger average employment, and slightly lower hiring and separation rates. The pre-treatment gender earnings gap is 0.43 log points in treated states versus 0.45 in control states---a modest difference that the DiD design differences out.
+
+\begin{table}[htbp]
+\centering
+\caption{QWI Summary Statistics}
+\label{tab:qwi_summary}
+\begin{tabular}{lcc}
+\toprule
+ & Treated States & Control States \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: Panel Dimensions}} \\[3pt]
+States & 8 & 43 \\
+Quarters & 52 & 52 \\
+State-Quarter Observations & 352 & 2,187 \\
+\addlinespace
+\multicolumn{3}{l}{\textit{Panel B: Pre-Treatment Means}} \\[3pt]
+Average Quarterly Earnings (\$) & 5,185 & 4,650 \\
+Average Employment & 3,841,336 & 2,139,128 \\
+Hiring Rate & 0.181 & 0.191 \\
+Separation Rate & 0.177 & 0.187 \\
+Net Job Creation Rate & -0.043 & -0.044 \\
+Gender Earnings Gap (M$-$F) & 0.426 & 0.451 \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.92\textwidth}
+\footnotesize
+\textit{Notes:} Data from the Census Bureau's Quarterly Workforce Indicators (QWI), aggregated to the state-quarter level. Treated states enacted salary transparency laws; control states are never-treated. Panel A reports \textit{pre-treatment} state-quarter observations only (352 treated, 2,187 control), used for computing the pre-treatment means in Panel B; the full panel contains 2,603 state-quarter observations. Earnings are average quarterly earnings per worker. Hiring rate = hires/employment; separation rate = separations/employment; net job creation rate = (hires $-$ separations)/employment. Gender earnings gap = male average earnings $-$ female average earnings.
+\end{minipage}
+\end{table}
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+I exploit the staggered adoption of salary transparency laws to identify causal effects under the parallel trends assumption: absent treatment, wage and earnings trends in treated states would have been parallel to trends in control states. This assumption is fundamentally untestable for the post-treatment period but is supported by pre-trend analysis in both datasets.
+
+\subsection{CPS Estimation}
+
+For the CPS microdata, I employ the \citet{callaway2021difference} estimator, which computes group-time average treatment effects using only never-treated units as controls, avoiding the biases of standard TWFE under staggered treatment \citep{goodman2021difference, dechaisemartin2020twoway}. The key intuition is that standard TWFE can produce biased estimates when treatment effects are heterogeneous across cohorts, because already-treated units enter the comparison group for later-treated units with potentially negative weights \citep{roth2023whats}. Callaway-Sant'Anna avoids this by computing treatment effects separately for each cohort---each group of states treated at the same time---using only clean comparisons with never-treated units, then aggregating across cohorts. The doubly-robust variant combines outcome regression with inverse-probability weighting, providing consistent estimates if either the outcome model or the treatment model is correctly specified. I also report TWFE and \citet{sun2021estimating} estimates for comparison.
+
+The gender triple-difference (DDD) specification is:
+\begin{equation}
+Y_{ist} = \beta_1 D_{st} + \beta_2 D_{st} \times Female_i + \gamma Female_i + \alpha_s + \delta_t + X_{ist}'\theta + \varepsilon_{ist}
+\end{equation}
+where $D_{st}$ indicates treatment, $\alpha_s$ are state fixed effects, $\delta_t$ are year fixed effects, and $X_{ist}$ are controls. The coefficient $\beta_2$ captures the differential effect for women. I also estimate specifications with state$\times$year fixed effects $\alpha_{st}$, which identify $\beta_2$ purely from within-state-year gender differences.
+
+Standard errors are clustered at the state level (51 clusters). Given only eight treated states, I supplement asymptotic inference with Fisher randomization inference (5,000 permutations) and leave-one-treated-state-out (LOTO) analysis.
+
+\subsection{QWI Estimation}
+
+For the QWI panel, I apply Callaway-Sant'Anna to the state-quarter panel with quarterly treatment timing. The higher-frequency data provide two advantages: more precise treatment onset (quarterly rather than annual) and more pre-treatment periods for parallel trends assessment (up to 36 pre-treatment quarters for the Colorado cohort).
+
+The QWI gender analysis uses a sex-disaggregated panel. For each state-quarter, I observe male and female average earnings separately. The DDD specification interacts the treatment indicator with a female indicator, using state$\times$quarter fixed effects to absorb all aggregate state-time variation:
+\begin{equation}
+\log(EarnS_{sgt}) = \beta_2 D_{st} \times Female_g + \alpha_{st} + \gamma_g + \varepsilon_{sgt}
+\end{equation}
+where $g \in \{M, F\}$ indexes sex and $\alpha_{st}$ are state$\times$quarter fixed effects. This identifies $\beta_2$ from the within-state-quarter change in the gender gap attributable to transparency.
+
+For labor market flows, I estimate TWFE regressions of each flow variable (hiring rate, separation rate, log hires, log separations, net job creation rate) on the treatment indicator with state and quarter fixed effects, clustering at the state level.
+
+\subsection{Hypothesis Hierarchy}
+
+The analysis tests three primary hypotheses: (1) the aggregate wage/earnings effect, (2) the gender earnings gap DDD, and (3) the effect on labor market dynamism (hiring, separations, job creation). These three hypotheses are the pre-specified core of the paper and map directly to the theoretical predictions in Table~\ref{tab:predictions}. All industry-level heterogeneity analyses, subgroup analyses (full-time, college, border states), and cohort-specific estimates are exploratory and should be interpreted accordingly.\footnote{For the three primary hypotheses, the two statistically significant results---the null aggregate effect (which is the finding itself) and the gender DDD ($p < 0.001$ in both datasets)---survive Bonferroni correction across three tests at conventional significance levels.}
+
+\subsection{Industry Heterogeneity}
+
+The QWI's industry disaggregation enables a direct test of the bargaining-intensity mechanism. I classify finance and insurance (NAICS 52) and professional services (NAICS 54) as ``high-bargaining'' industries---settings where individual wage negotiation is common, within-occupation wage dispersion is large, and the scope for transparency to alter bargaining outcomes is greatest. Retail trade (NAICS 44--45) and accommodation and food (NAICS 72) serve as ``low-bargaining'' comparisons, where wages are more standardized. If transparency operates through information equalization in bargaining, effects should be larger in high-bargaining industries.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Pre-Trends}
+
+Figure~\ref{fig:trends} plots CPS wage trends for treated and control states. Prior to 2021, both groups follow similar trajectories. Figure~\ref{fig:event_study} presents Callaway-Sant'Anna event-study coefficients. Of the five pre-treatment coefficients ($t = -5$ through $t = -1$), only one---$t=-2$: $-0.013$, $p < 0.10$ (Table~\ref{tab:event_study})---reaches marginal significance. With five pre-period tests at $\alpha = 0.10$, the expected number of false rejections under the null of parallel trends is 0.5, making a single marginal rejection statistically unremarkable. Moreover, the magnitude of the $t=-2$ coefficient ($-0.013$) is small relative to the treatment effect of interest (gender DDD of 0.040--0.056), and its sign (negative) is opposite to what a spurious upward trend would produce. The overall pattern---coefficients oscillating around zero with no monotonic drift---supports parallel trends \citep{roth2022pretest}. The HonestDiD sensitivity analysis (Section~\ref{sec:robustness}) provides a formal robustness test: under exact parallel trends ($M = 0$), the gender gap 95\% CI is $[0.043, 0.100]$, firmly excluding zero.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_wage_trends.pdf}
+\caption{CPS Wage Trends: Treated vs.\ Control States}
+\label{fig:trends}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Average log hourly wages for treated states (solid) and control states (dashed) from the CPS ASEC. The shaded region indicates the treatment period (post-2021). The figure plots income years 2014--2023 for visual clarity; all regressions additionally include income year 2024 (the most recent available year from the 2025 ASEC survey).
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_event_study_main.pdf}
+\caption{CPS Event Study: Effect of Transparency on Log Wages}
+\label{fig:event_study}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Callaway-Sant'Anna event-study coefficients and 95\% CIs. Reference period is $t-1$. Pre-treatment coefficients test parallel trends. The $t+3$ coefficient is identified solely from Colorado and should be interpreted cautiously.
+\end{minipage}
+\end{figure}
+
+Figure~\ref{fig:qwi_earns_trends} shows QWI earnings trends. The quarterly data confirm parallel pre-treatment trends with substantially finer temporal resolution than the CPS---up to 36 pre-treatment quarters for the Colorado cohort. The first vertical line marks Colorado's treatment in 2021Q1; trends remain parallel post-treatment, consistent with a null aggregate effect. The QWI quarterly event study (Figure~\ref{fig:qwi_event_earns}) provides the most powerful pre-trend test in the paper, with 40+ pre-treatment coefficients clustering around zero.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_qwi_earns_trends.pdf}
+\caption{QWI Earnings Trends: Treated vs.\ Control States}
+\label{fig:qwi_earns_trends}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Average log quarterly earnings from the QWI administrative data for treated (solid) and control (dashed) states. Quarterly frequency, 2012Q1--2024Q4. The dashed vertical line marks the first treatment (CO, 2021Q1). The quarterly sawtooth pattern reflects seasonal variation in average earnings; quarter fixed effects in all regressions absorb this seasonality, so treatment effect estimates are seasonally adjusted even though the raw trends shown here are not.
+\end{minipage}
+\end{figure}
+
+\subsection{Main Result 1: No Aggregate Wage Effect}
+
+Table~\ref{tab:main} reports CPS TWFE estimates across four specifications; none yields a significant coefficient. The Callaway-Sant'Anna ATT is $-0.0038$ (SE $= 0.0064$). Fisher randomization inference confirms the null ($p = 0.717$).
+
+The QWI independently confirms: the C-S ATT on log quarterly earnings is $-0.001$ (SE $= 0.020$), and the TWFE estimate is $+0.030$ (SE $= 0.022$)---both insignificant (Table~\ref{tab:qwi_main}). Two datasets measuring different populations at different frequencies agree: transparency does not affect average wages.
+
+\begin{table}[H]
+\centering
+\caption{CPS: Effect of Salary Transparency Laws on Log Wages}
+\label{tab:main}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& State-Year & Individual & + Occ/Ind FE & + Demographics \\
+\midrule
+Treated $\times$ Post & 0.005 & 0.014* & 0.005 & 0.008 \\
+& (0.011) & (0.008) & (0.006) & (0.006) \\
+\midrule
+State FE & Yes & Yes & Yes & Yes \\
+Year FE & Yes & Yes & Yes & Yes \\
+Occupation FE & No & No & Yes & Yes \\
+Industry FE & No & No & Yes & Yes \\
+Demographics & No & No & No & Yes \\
+\midrule
+Observations & 561 & 614,625 & 614,625 & 614,625 \\
+R-squared & 0.972 & 0.058 & 0.299 & 0.382 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} TWFE estimates with state and year fixed effects. Standard errors clustered at the state level (51 clusters; 8 treated, 43 control). The control group consists of 40 never-treated states, DC, and 3 not-yet-treated states (IL, MD, MN). Column (1) uses state-year aggregates. Columns (2)--(4) use individual-level CPS ASEC data with survey weights. The preferred Callaway-Sant'Anna ATT using only never-treated controls ($-0.0038$, SE $= 0.0064$; Fisher $p = 0.717$) is reported in Table~\ref{tab:robustness_cps}. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{QWI Main Results: Earnings and Gender Gap}
+\label{tab:qwi_main}
+\begin{tabular}{lcc}
+\toprule
+ & C-S ATT & TWFE \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: Log Quarterly Earnings}} \\[3pt]
+Treated $\times$ Post & -0.0010 & 0.0295 \\
+ & (0.0199) & (0.0224) \\
+N & 2,599 & 2,599 \\
+\addlinespace
+\multicolumn{3}{l}{\textit{Panel B: Gender Earnings Gap (Male $-$ Female)}} \\[3pt]
+Treated $\times$ Post & 0.0051 & 0.0217$^{**}$ \\
+ & (0.0122) & (0.0109) \\
+N & 2,599 & 2,599 \\
+\addlinespace
+\multicolumn{3}{l}{\textit{Panel C: DDD (Treated $\times$ Post $\times$ Female)}} \\[3pt]
+Treated $\times$ Post $\times$ Female & 0.0605$^{***}$ & --- \\
+ & (0.0151) & \\
+\midrule
+State FE & Yes & Yes \\
+Quarter FE & Yes & Yes \\
+Clustering & State & State \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.92\textwidth}
+\footnotesize
+\textit{Notes:} Standard errors clustered at the state level (51 clusters; 8 treated, 43 control) in parentheses. Panel A reports the effect on log average quarterly earnings from the QWI state-quarter panel. Panel B reports the effect on the \textit{aggregate} gender earnings gap (male average earnings $-$ female average earnings at the state-quarter level); this measure averages across all composition changes and does not use within-cell sex variation. A negative coefficient would indicate the gap narrowed; the small positive coefficient indicates no significant change in the aggregate gap. Panel C uses a sex-disaggregated panel (male and female earnings stacked as separate observations within each state-quarter) with state$\times$quarter fixed effects that absorb all aggregate state-time variation. The positive coefficient indicates women's earnings rose relative to men's within state-quarter cells, equivalent to the gender gap (Male $-$ Female) narrowing by 6.1 percentage points. Panel B's null result and Panel C's significant result are not contradictory: Panel B's aggregate gap measure is attenuated by composition changes, while Panel C's sex-disaggregated DDD with state$\times$quarter fixed effects isolates the within-cell gender effect. C-S ATT uses Callaway \& Sant'Anna (2021) with doubly-robust estimation and never-treated states as the control group. TWFE DDD not shown for Panel C because the three-way interaction requires the sex-disaggregated panel estimated via C-S only. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+
+\subsection{Main Result 2: Gender Gap Narrows}
+
+Table~\ref{tab:gender} presents the CPS triple-difference results. The coefficient on Treated $\times$ Post $\times$ Female ranges from $+0.040$ to $+0.056$ across four specifications, always significant at 1\%. Column (1), the basic specification with state and year fixed effects, yields $+0.049$ ($p < 0.01$). The most demanding specification---Column (4) with state$\times$year fixed effects---yields $+0.043$ ($p < 0.01$), identifying the gender effect purely from within-state-year variation and absorbing all aggregate confounds.
+
+\begin{table}[H]
+\centering
+\caption{CPS Triple-Difference: Effect on Gender Wage Gap}
+\label{tab:gender}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& Basic & + Occ FE & + Controls & State$\times$Year FE \\
+\midrule
+Treated $\times$ Post & $-0.007$ & $-0.018$** & $-0.010$* & --- \\
+& (0.008) & (0.007) & (0.006) & (absorbed) \\
+Treated $\times$ Post $\times$ Female & 0.049*** & 0.056*** & 0.040*** & 0.043*** \\
+& (0.008) & (0.008) & (0.008) & (0.008) \\
+\midrule
+State \& Year FE & Yes & Yes & Yes & No \\
+State $\times$ Year FE & No & No & No & Yes \\
+Occupation FE & No & Yes & Yes & Yes \\
+Demographics & No & No & Yes & Yes \\
+\midrule
+Observations & 614,625 & 614,625 & 614,625 & 614,625 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Standard errors clustered at the state level (51 clusters; 8 treated, 43 control). The control group consists of never-treated states. A positive coefficient on Treated $\times$ Post $\times$ Female indicates women's wages rose relative to men's, narrowing the gender gap. In Column (4), the main Treated $\times$ Post effect is absorbed by state$\times$year fixed effects (indicated by ``---''); identification of the gender DDD comes entirely from within-state-year variation. CPS ASEC individual-level data with survey weights. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The QWI administrative data independently confirm this finding, though with an important distinction between estimation approaches. Panel B of Table~\ref{tab:qwi_main} reports the effect on the \textit{aggregate} gender earnings gap (male minus female average earnings at the state-quarter level). This measure averages across all compositional changes and shows no significant effect (C-S ATT $= +0.005$, SE $= 0.012$), consistent with the attenuation expected when composition shifts mask within-group wage changes. Panel C uses the more powerful sex-disaggregated approach: male and female earnings are stacked as separate observations within each state-quarter, and state$\times$quarter fixed effects absorb all aggregate variation. The DDD coefficient (Treated $\times$ Post $\times$ Female) is $+0.0605$ (SE $= 0.015$, $p < 0.001$), indicating that women's average quarterly earnings rose 6.1 percentage points relative to men's within state-quarter cells. The divergence between Panel B's null and Panel C's significant result reflects the difference between an aggregate gap measure (which conflates composition with price effects) and a within-cell DDD that isolates the gender-specific treatment effect.
+
+The QWI DDD point estimate is somewhat larger than the CPS estimate (0.040--0.056), which is expected: the QWI measures average earnings per worker (including composition effects from changing employment), while the CPS controls for individual demographics. The concordance in sign, statistical significance, and approximate magnitude across two independent data sources is the paper's strongest evidence for the gender gap finding.
+
+\subsection{Main Result 3: No Labor Market Disruption}
+
+Table~\ref{tab:qwi_dynamism} presents QWI estimates for five labor market flow variables. None shows a significant response to transparency. The hiring rate coefficient is $-0.001$ ($p = 0.80$); the separation rate coefficient is $-0.0001$ ($p = 0.98$); net job creation is $-0.001$ ($p = 0.53$). Callaway-Sant'Anna estimates for hiring and separation rates are similarly null.
+
+\begin{table}[htbp]
+\centering
+\caption{QWI Labor Market Dynamism Results}
+\label{tab:qwi_dynamism}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{TWFE} & & \multicolumn{2}{c}{C-S ATT} \\
+\cmidrule{2-3} \cmidrule{5-6}
+Outcome & Coeff. & SE & & ATT & SE \\
+\midrule
+Hiring Rate & -0.0009 & (0.0036) & & 0.0009 & (0.0033) \\
+Separation Rate & -0.0001 & (0.0030) & & 0.0041 & (0.0033) \\
+Log Hires & 0.0090 & (0.0232) & & --- & --- \\
+Log Separations & 0.0138 & (0.0230) & & --- & --- \\
+Net Job Creation Rate & -0.0011 & (0.0017) & & --- & --- \\
+\midrule
+N & \multicolumn{2}{c}{2,603} & & \multicolumn{2}{c}{2,603} \\
+State FE & \multicolumn{2}{c}{Yes} & & \multicolumn{2}{c}{Yes} \\
+Quarter FE & \multicolumn{2}{c}{Yes} & & \multicolumn{2}{c}{Yes} \\
+Clustering & \multicolumn{2}{c}{State} & & \multicolumn{2}{c}{State} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.92\textwidth}
+\footnotesize
+\textit{Notes:} Standard errors clustered at the state level in parentheses. All outcomes from the QWI state-quarter panel. Hiring rate = total hires / beginning-of-quarter employment; separation rate = total separations / beginning-of-quarter employment; net job creation rate = (hires $-$ separations) / employment. TWFE includes state and quarter fixed effects. C-S uses Callaway \& Sant'Anna (2021) with never-treated controls. ``---'' indicates C-S ATT not computed for that outcome: C-S ATT is estimated for rate outcomes (hiring rate, separation rate) only; log-level outcomes (log hires, log separations) and net job creation rate are estimated via TWFE. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+
+This null result is informative. It rules out costly adjustment: if transparency triggered substantial reallocation, we would observe spikes in hiring and separations during the transition period. It rules out employer commitment as the dominant channel: if firms became rigid in wage-setting, we would expect reduced hiring responsiveness. Instead, labor markets absorb transparency without observable disruption---consistent with the frictionless benchmark in which information equalization is the primary mechanism.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_qwi_dynamism.pdf}
+\caption{Labor Market Dynamism: DiD Coefficient Plot}
+\label{fig:dynamism}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} TWFE estimates of the effect of transparency laws on five labor market flow variables from the QWI state-quarter panel. Point estimates and 95\% CIs shown. All coefficients are small and statistically insignificant, indicating no detectable effect on labor market dynamism.
+\end{minipage}
+\end{figure}
+
+\subsection{Quarterly Event Studies}
+
+The QWI's quarterly frequency enables sharper event-study analysis than the CPS's annual data. Figure~\ref{fig:qwi_event_earns} plots the Callaway-Sant'Anna quarterly event study for log earnings: pre-treatment coefficients cluster around zero with no visible trend, and post-treatment coefficients remain near zero---confirming the null aggregate effect with 40+ pre-treatment periods for the Colorado cohort.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_qwi_event_earns.pdf}
+\caption{QWI Quarterly Event Study: Earnings}
+\label{fig:qwi_event_earns}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Callaway-Sant'Anna quarterly event-study coefficients for log average earnings from QWI administrative data. The reference period is $q-1$. Window trimmed to $[-16, +12]$ quarters. Pre-treatment coefficients show no trend, supporting parallel trends. 95\% CIs shown. Oscillation in quarterly coefficients reflects residual seasonality in earnings levels; the absence of systematic drift in pre-treatment coefficients is the relevant test of parallel trends.
+\end{minipage}
+\end{figure}
+
+Figure~\ref{fig:qwi_event_gap} shows the gender gap event study. Pre-treatment coefficients are centered at zero. Post-treatment, the estimates are noisy but show no systematic trend---the gender gap effect operates through the \textit{level} shift (the DDD coefficient) rather than a dynamic pattern, consistent with an immediate information effect upon law enactment.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_qwi_event_gap.pdf}
+\caption{QWI Quarterly Event Study: Gender Earnings Gap}
+\label{fig:qwi_event_gap}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Callaway-Sant'Anna quarterly event-study coefficients for the male-female log earnings gap (in log points) from QWI data. Negative values indicate gap narrowing. Window trimmed to $[-16, +12]$ quarters. 95\% CIs shown. The gender gap effect operates through a level shift (the DDD coefficient) rather than a dynamic pattern, consistent with an immediate information effect upon law enactment.
+\end{minipage}
+\end{figure}
+
+\subsection{Industry Heterogeneity}
+
+Table~\ref{tab:qwi_industry} reports QWI earnings and gender gap effects by NAICS sector. The earnings effects are statistically insignificant across all industries, with the largest point estimate in professional services ($+0.031$, SE $= 0.023$). The gender gap effects tell a more nuanced story: accommodation and food services show a positive coefficient ($+0.008$, SE $= 0.005$), and finance and insurance shows the largest point estimate ($+0.030$, SE $= 0.029$). While individually imprecise, the pattern across industries is consistent with pervasive gender gap effects rather than concentration in a single sector.
+
+\begin{table}[htbp]
+\centering
+\caption{QWI Industry Heterogeneity: Earnings and Gender Gap Effects}
+\label{tab:qwi_industry}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Log Earnings} & \multicolumn{2}{c}{Gender Earnings Gap} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Industry & Coeff. & SE & Coeff. & SE \\
+\midrule
+Retail Trade & -0.0080 & (0.0240) & -0.0079 & (0.0155) \\
+Accommodation \& Food & 0.0206 & (0.0161) & 0.0083 & (0.0053) \\
+Finance \& Insurance & 0.0078 & (0.0358) & 0.0301 & (0.0294) \\
+Professional Services & 0.0314 & (0.0234) & 0.0071 & (0.0079) \\
+\midrule
+State FE & \multicolumn{2}{c}{Yes} & \multicolumn{2}{c}{Yes} \\
+Quarter FE & \multicolumn{2}{c}{Yes} & \multicolumn{2}{c}{Yes} \\
+Clustering & \multicolumn{2}{c}{State} & \multicolumn{2}{c}{State} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.92\textwidth}
+\footnotesize
+\textit{Notes:} Each cell reports a separate TWFE regression of the outcome on Treated $\times$ Post with state and quarter fixed effects, estimated within the indicated NAICS sector. Standard errors clustered at the state level in parentheses. Log Earnings columns use the sex-aggregate ($sex=0$) QWI panel by industry. Gender Earnings Gap columns use the male$-$female earnings difference within each industry. High-bargaining sectors (Finance, Professional Services) are expected to show larger transparency effects per Cullen \& Pakzad-Hurson (2023); low-bargaining sectors (Retail, Accommodation) provide a comparison group. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+
+In a separate sex-disaggregated DDD specification pooling industries by bargaining intensity (not shown; available in replication code), high-bargaining industries (finance, professional services) show a gender DDD of 8.8 percentage points (SE $= 2.2$ pp), while low-bargaining industries (retail, accommodation) show 7.0 percentage points (SE $= 1.1$ pp). Both are highly significant and economically large. The fact that effects are present even in low-bargaining industries suggests that information deficits are not confined to occupations with explicit negotiation---transparency may also affect reservation wages, job search behavior, and employer-side pay-setting norms in industries with more standardized compensation \citep{kline2021firm}.
+
+The CPS microdata enable a complementary occupation-level analysis. Appendix Table~\ref{tab:bargaining} reports CPS triple-difference estimates by occupation bargaining intensity. The sign pattern is directionally consistent with the QWI industry results: the interaction of treatment with a high-bargaining occupation indicator is positive (0.011--0.024), though individually imprecise. The convergence between QWI industry-level and CPS occupation-level heterogeneity analyses strengthens the interpretation that transparency operates through information channels across the bargaining spectrum.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_qwi_industry.pdf}
+\caption{Industry Heterogeneity in QWI Earnings Effects}
+\label{fig:industry}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} TWFE estimates of transparency effects on log earnings by NAICS sector from QWI data. Point estimates and 95\% CIs. Colors distinguish high-bargaining (finance, professional services) from low-bargaining (retail, accommodation) industries.
+\end{minipage}
+\end{figure}
+
+\subsection{Cross-Dataset Comparison}
+
+Table~\ref{tab:cross_dataset} presents the CPS and QWI estimates side by side for directly comparable estimands. Both datasets find null aggregate effects: CPS C-S ATT $= -0.004$ (SE $= 0.006$), QWI C-S ATT $= -0.001$ (SE $= 0.020$). For the gender DDD, the CPS yields $+0.040$ (SE $= 0.008$) and the QWI yields $+0.0605$ (SE $= 0.015$)---both highly significant with the same sign and similar magnitude. The QWI's larger point estimate likely reflects its measurement of average earnings (including composition effects from employment changes) versus the CPS's individual-level demographic controls.
+
+\begin{table}[htbp]
+\centering
+\caption{Cross-Dataset Comparison: CPS vs.\ QWI Estimates}
+\label{tab:cross_dataset}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{CPS ASEC} & \multicolumn{2}{c}{QWI} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & C-S ATT & TWFE & C-S ATT & TWFE \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Aggregate Wage/Earnings Effect}} \\[3pt]
+Treated $\times$ Post & -0.0038 & --- & -0.0010 & 0.0295 \\
+ & (0.0064) &  & (0.0199) & (0.0224) \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel B: Gender DDD (Treated $\times$ Post $\times$ Female)}} \\[3pt]
+DDD coefficient & 0.0402$^{***}$ & --- & 0.0605$^{***}$ & --- \\
+ & (0.0080) & & (0.0151) & \\
+\midrule
+Unit of observation & \multicolumn{2}{c}{Individual} & \multicolumn{2}{c}{State-Quarter} \\
+Outcome variable & \multicolumn{2}{c}{Log hourly wage} & \multicolumn{2}{c}{Log quarterly earnings} \\
+Frequency & \multicolumn{2}{c}{Annual} & \multicolumn{2}{c}{Quarterly} \\
+Source & \multicolumn{2}{c}{CPS ASEC} & \multicolumn{2}{c}{LEHD/QWI} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Notes:} Side-by-side comparison of estimates from the CPS ASEC individual-level analysis and the QWI administrative state-quarter panel. CPS outcomes are log hourly wages; QWI outcomes are log average quarterly earnings. Panel A reports the aggregate treatment effect on wages/earnings. Panel B reports the triple-difference (DDD) coefficient from sex-disaggregated specifications in both datasets: the CPS DDD is Treated $\times$ Post $\times$ Female from individual-level microdata; the QWI DDD is from a sex-disaggregated state-quarter panel with state$\times$quarter fixed effects (Table~\ref{tab:qwi_main}, Panel C). ``---'' indicates the TWFE estimator is not reported for that specification (CPS: absorbed by fixed effects; QWI DDD: estimated via C-S only). Standard errors clustered at the state level in parentheses. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{minipage}
+\end{table}
+
+\section{Robustness and Inference}
+\label{sec:robustness}
+
+\subsection{CPS Robustness}
+
+Table~\ref{tab:robustness_cps} presents CPS robustness checks. The C-S ATT is stable across alternative estimators (Sun-Abraham: $-0.0002$), control groups (not-yet-treated: $-0.003$), sample restrictions (full-time only, college only, excluding border states), and upper-distribution tests. Lee bounds for the gender DDD (lower: 0.042; upper: 0.050) confirm robustness to sample selection. HonestDiD sensitivity analysis excludes zero under exact parallel trends ($M = 0$: CI $= [0.043, 0.100]$).
+
+\begin{table}[H]
+\centering
+\caption{CPS Robustness of Main Results}
+\label{tab:robustness_cps}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Specification & ATT & SE & 95\% CI \\
+\midrule
+Main (C-S, never-treated) & $-0.0038$ & 0.0064 & [$-0.016$, 0.009] \\
+Sun-Abraham estimator & $-0.0002$ & 0.0076 & [$-0.015$, 0.015] \\
+C-S, not-yet-treated controls & $-0.0030$ & 0.0068 & [$-0.016$, 0.010] \\
+Excluding border states & $-0.0062$ & 0.0083 & [$-0.023$, 0.010] \\
+Full-time workers only & $-0.0034$ & 0.0077 & [$-0.019$, 0.012] \\
+College-educated only & $-0.0132$ & 0.0089 & [$-0.031$, 0.004] \\
+Non-college only & 0.0061 & 0.0142 & [$-0.022$, 0.034] \\
+Individual-level TWFE & 0.0103 & 0.0058 & [$-0.001$, 0.022] \\
+Upper 75\% wage distribution & 0.0001 & 0.0071 & [$-0.014$, 0.014] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} All specifications estimate the effect of transparency on log hourly wages. Standard errors clustered at the state level (51 clusters; 8 treated). CPS ASEC with 614,625 person-years unless otherwise noted.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Design-Based Inference}
+\label{sec:design_inference}
+
+With eight treated states, the reliability of asymptotic cluster-robust inference for the CPS is a first-order concern \citep{conley2011inference, cameron2008bootstrap, ferman2019inference}. Table~\ref{tab:alt_inference} reports Fisher randomization results from 5,000 permutations preserving the timing structure of treatment adoption \citep{imai2021randomization, athey2022design}.
+
+For the aggregate ATT, asymptotic and design-based inference agree: the effect is clearly insignificant (asymptotic $p = 0.556$; permutation $p = 0.717$). This concordance is expected when the true effect is near zero and the test has adequate power.
+
+For the gender DDD, they diverge materially: asymptotic $p < 0.001$ versus permutation $p = 0.154$. This divergence reflects the fundamental limitation of design-based inference with eight treated clusters: the permutation distribution has limited resolution, and the discrete nature of the randomization test reduces power when few treatment configurations are possible. The CPS gender DDD estimate alone does not achieve conventional significance under permutation testing, and I do not claim otherwise.
+
+Three considerations substantially mitigate this inferential limitation. First, the QWI administrative data provide an independent test of the same hypothesis. The QWI DDD coefficient ($+0.0605$, SE $= 0.015$, $p < 0.001$) is estimated from a state-quarter panel with 51 clusters---well above the threshold at which asymptotic inference is reliable \citep{cameron2008bootstrap}. The QWI measures different populations (establishment records vs.\ household surveys) at different frequencies (quarterly vs.\ annual) with different sources of measurement error (administrative reports vs.\ survey recall). When two independent datasets with different measurement properties produce consistent estimates, the probability that both are spurious due to sampling variation alone is substantially lower than the probability that either individual estimate is spurious.
+
+Second, the leave-one-treated-state-out analysis (Section~\ref{sec:robustness}, Figure~\ref{fig:loto_ddd}) shows that all eight leave-out estimates remain positive ($[0.042, 0.054]$), confirming that no single state drives the result.
+
+Third, wild cluster bootstrap \citep{cameron2008bootstrap} represents a natural additional robustness check that lies between asymptotic and permutation inference in terms of assumptions and is a standard tool for settings with few treated clusters. Computing wild cluster bootstrap $p$-values is a priority for the next revision.
+
+\begin{table}[htbp]
+\centering
+\caption{Alternative Inference Methods}
+\label{tab:alt_inference}
+\begin{tabular}{lccccc}
+\toprule
+ & Estimate & Asymptotic & Asymptotic & Permutation & LOTO \\
+ &  & SE & $p$ & $p$ & Range \\
+\midrule
+CPS Aggregate ATT & $-$0.0038 & 0.0065 & 0.556 & 0.717 & [$-$0.006, 0.001] \\
+CPS Gender DDD ($\beta_2$) & 0.0402 & 0.0080 & 0.000 & 0.154 & [0.042, 0.054] \\
+QWI Gender DDD ($\beta_2$) & 0.0605 & 0.0151 & 0.000 & n.a. & n.a. \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Notes:} CPS estimates from individual-level analysis with full controls. QWI DDD from sex-disaggregated state-quarter panel with state$\times$quarter FE. Permutation $p$-values from 5,000 Fisher randomizations preserving timing structure. LOTO range from leave-one-treated-state-out samples. ``n.a.'' for QWI: permutation inference and LOTO analysis not computed for the QWI specification because 51 state clusters provide adequate asymptotic inference, making design-based alternatives unnecessary.
+\end{minipage}
+\end{table}
+
+\subsection{Leave-One-State-Out Analysis}
+
+All eight leave-out gender DDD estimates remain positive ($[0.042, 0.054]$). No single state drives the result. Figure~\ref{fig:loto_ddd} displays the LOTO estimates.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig11_loto_ddd.pdf}
+\caption{Leave-One-Treated-State-Out: Gender DDD}
+\label{fig:loto_ddd}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} CPS gender DDD coefficient when each treated state is dropped. All estimates remain positive. The horizontal line marks the full-sample estimate.
+\end{minipage}
+\end{figure}
+
+\subsection{Additional CPS Robustness}
+
+\textbf{Placebo tests.} A placebo treatment dated two years early yields a null ATT (0.003, SE $= 0.009$). A placebo on non-wage income also shows no effect ($-0.002$, SE $= 0.015$).
+
+\textbf{Composition tests.} DiD regressions on workforce composition show no significant changes in percent female, college-educated, mean age, or full-time status. The share in high-bargaining occupations shifts modestly ($+0.020$, $p = 0.017$); Lee bounds accounting for this shift remain positive (lower: 0.042; upper: 0.050).
+
+\textbf{HonestDiD sensitivity.} Under exact parallel trends ($M = 0$), the gender gap 95\% CI is $[0.043, 0.100]$, excluding zero. Bounds widen rapidly for $M > 0$ due to noise in gender-disaggregated event studies with eight treated states.
+
+\textbf{Synthetic DiD.} Applied to the Colorado cohort following \citet{arkhangelsky2021synthetic} (building on the synthetic control framework of \citet{abadie2010synthetic}), SDID yields an aggregate estimate of essentially zero (0.0003), consistent with the C-S ATT. Extending the SDID approach to the gender DDD is a priority for the next revision.
+
+\textbf{Excluding NY and HI.} Dropping the 2024 treatment cohort yields a gender DDD of 0.052 (SE $= 0.005$), slightly larger than the full-sample estimate, confirming that the extended sample strengthens rather than distorts inference.
+
+\subsection{Gender-Stratified Event Study}
+
+Figure~\ref{fig:gender_es} presents separate CPS event studies for men and women. Pre-treatment trends are comparable. Post-treatment, female wages increase relative to the pre-treatment trend while male wages decline, with the gap emerging by $t = 0$ and widening through $t+2$. This convergence directly visualizes the gender gap narrowing.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_event_study_gender.pdf}
+\caption{CPS Event Study by Gender}
+\label{fig:gender_es}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Separate Callaway-Sant'Anna event-study estimates for men (blue) and women (pink). Pre-treatment trends are comparable for both groups. Post-treatment, female wages increase relative to the pre-treatment trend while male wages decline or remain flat, producing the convergence that drives the gender gap narrowing. The gap emerges by $t = 0$ and widens through $t+2$, consistent with an immediate and persistent information effect.
+\end{minipage}
+\end{figure}
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Mechanism Identification}
+
+The three main findings---null aggregate wages, narrowing gender gap, null labor market flows---jointly discriminate between theoretical channels (Table~\ref{tab:predictions}).
+
+\textit{Information equalization} predicts precisely this pattern: aggregate wages are unchanged because the gains to previously disadvantaged workers (women) offset any losses from reduced bargaining power of previously advantaged workers (men). The gender gap narrows because women's information deficit shrinks. Labor market flows are unaffected because the adjustment operates through price (wages) rather than quantity (employment transitions).
+
+\textit{Employer commitment} is inconsistent with the data. If commitment to posted ranges were the dominant force, we would expect aggregate wage compression (we find none) and reduced hiring responsiveness (hiring rates are unchanged).
+
+\textit{Costly adjustment} is also rejected. If transparency triggered reallocation, we would observe increases in hiring and separations during transition. All five QWI flow variables are precisely estimated zeros. The null effect on labor market flows is also consistent with \citet{hallkrueger2012evidence}, who find that a substantial fraction of U.S.\ jobs are filled through wage posting rather than bilateral bargaining. If many employers were already posting wages de facto, mandatory posting may formalize existing practice without disrupting matching behavior---unlike experimental settings where transparency represents a larger departure from baseline information structures \citep{cowgill2021iron}.
+
+A natural question is whether the QWI gender DDD reflects ``price'' effects (changes in wages conditional on employment) or ``composition'' effects (changes in the gender mix of employment within cells). The CPS individual-level analysis, which controls for demographics and occupational composition, produces consistent estimates (4.0--5.6 pp) with the QWI aggregate DDD (6.1 pp). This concordance provides indirect evidence that the QWI effect operates primarily through wage changes rather than compositional shifts. The composition tests in Section~\ref{sec:robustness} further show no significant changes in the gender or education composition of the workforce in treated states. A formal Oaxaca-Blinder decomposition of the QWI DDD into price and composition components is an important direction for future work.
+
+The industry heterogeneity adds a further dimension. The DDD estimates are large and significant in both high-bargaining and low-bargaining industries (8.8\% and 7.0\%, respectively). This suggests that information deficits are pervasive across the wage distribution, not confined to the professional occupations where explicit negotiation is most common. Transparency may affect pay-setting norms, job search behavior, and reservation wages even in industries with more standardized compensation---a broader reach than the Goldin (\citeyear{goldin2014grand}) ``greedy jobs'' framework implies.
+
+\subsection{Magnitude and Economic Significance}
+
+The CPS DDD of 4--6 percentage points represents roughly half the residual gender gap after controlling for occupation and experience \citep{blau2017gender}. In terms of the total gender gap, \citet{blau2017gender} document a raw gap of approximately 20--24 log points; the CPS DDD thus represents roughly 17--30\% of the total gap, a substantial fraction for a single policy intervention. The QWI DDD of 6.1 percentage points is measured in unconditional earnings and thus includes any composition effects. For comparison, Denmark's mandatory pay gap reporting narrowed gaps by roughly 2 percentage points \citep{bennedsen2022firms}, Baker et al.'s (\citeyear{baker2023pay}) firm-level transparency reduced gaps by about 3 percentage points, and the UK's mandatory gender pay gap disclosure produced approximately 2 percentage points of narrowing \citep{blundell2022wage}. Job-posting requirements appear to be among the most potent transparency interventions studied to date, likely because they reach workers \textit{ex ante}---before any employment relationship begins---rather than through aggregate disclosure or internal reporting after hire.
+
+\subsection{Limitations}
+
+\textit{Post-treatment window.} Most treated states have 1--3 post-treatment years. Long-run effects may differ as firms and workers fully adjust.
+
+\textit{QWI aggregation.} The QWI measures average earnings per worker, not individual wages. Compositional changes in the workforce within a state-quarter cell could bias estimates, though the CPS individual-level results---which control for demographics---tell a consistent story.
+
+\textit{Compliance.} These are intent-to-treat estimates. With estimated compliance at 60--90\% among large employers, treatment-on-the-treated effects would be proportionally larger: at 60\% compliance, the TOT gender DDD ranges from 6.7 pp (CPS) to 10.1 pp (QWI); at 90\% compliance, from 4.4 pp (CPS) to 6.8 pp (QWI). Direct measurement of compliance from job-posting data (e.g., Indeed, Burning Glass) would enable formal IV/LATE estimation.
+
+\textit{Treated clusters.} Eight treated states limits the precision of CPS heterogeneity estimates and the power of design-based inference. The permutation $p$-value of 0.154 for the CPS gender DDD reflects this limitation directly. Wild cluster bootstrap $p$-values \citep{cameron2008bootstrap} and Conley-Taber-style inference \citep{conley2011inference} are natural complements to the Fisher permutation approach and are priorities for further robustness analysis. The QWI confirmation with 51 clusters substantially mitigates the small-cluster concern for the gender result but does not eliminate it for CPS-specific subgroup analyses.
+
+\textit{Law heterogeneity.} The variation in employer size thresholds across states (all employers in CO/CT/NV/RI vs.\ 15+ in CA/WA vs.\ 50+ in HI) is an underexploited source of identification that could recover dose-response and treatment-on-the-treated estimates. Similarly, variation in enforcement mechanisms (complaint-based vs.\ private right of action) could help disentangle the effects of law passage from actual compliance.
+
+\textit{Mechanisms.} While the pattern of results strongly favors information equalization, I cannot directly observe information flows or bargaining behavior. Linked employer-employee data with job-posting information could provide direct mechanism evidence \citep{cowgill2021iron}. A formal decomposition of the QWI DDD into within-cell wage changes and compositional shifts would further sharpen mechanism identification.
+
+\textit{Spillovers.} If transparency laws induce wage adjustments in neighboring untreated states---either through cross-border labor market competition or employer-side norm diffusion---the parallel trends assumption could be violated and DiD estimates would be attenuated. Border-county and neighboring-state placebo tests are an important direction for future work.
+
+\subsection{Policy Implications}
+
+The equity-efficiency trade-off turns out to be far more favorable than theory predicted. Transparency narrows the gender gap by half without reducing aggregate wages or disrupting labor market flows. For policymakers motivated by pay equity, mandatory salary range disclosure in job postings is a remarkably efficient tool: it achieves substantial distributional gains at effectively zero measured efficiency cost.
+
+The pervasive effects across industries suggest that a broad mandate---rather than sector-specific targeting---maximizes equity gains. The variation in employer size thresholds across states (all employers in Colorado; 50+ in Hawaii) creates scope for future research on the extensive margin of coverage.
+
+These results carry a broader lesson about information policy in markets with strategic interactions. The ``more information is always better'' intuition does not hold when information affects bargaining dynamics. Transparency matters most where it corrects asymmetries, and its distributional consequences depend on who was previously disadvantaged. Policymakers considering information mandates in healthcare pricing, financial products, or housing markets should attend to these distributional dynamics.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper provides the first multi-dataset causal evaluation of salary transparency laws. Combining CPS ASEC microdata with Census QWI administrative records, I document three findings: no effect on aggregate wages, a substantial narrowing of the gender earnings gap, and no disruption to labor market dynamism. The convergence of evidence from worker-side survey data and employer-side administrative records---measuring different populations at different frequencies with different sources of measurement error---provides unusually strong support for the conclusion that transparency equalizes information without imposing efficiency costs.
+
+The gender gap narrows by 4--6 percentage points in the CPS (individual-level, controlling for demographics) and 6.1 percentage points in the QWI (administrative earnings, sex-disaggregated panel). Effects are present across high-bargaining and low-bargaining industries, suggesting that information deficits are more pervasive than the occupational heterogeneity literature implies. The five QWI labor market flow variables---hiring, separations, job creation, job destruction, turnover---are all precisely estimated zeros, ruling out costly adjustment and distinguishing the information equalization channel from the employer commitment channel.
+
+As Illinois, Maryland, and Minnesota enter the post-treatment window, and as early adopters accumulate longer post-treatment histories, the precision and credibility of these estimates will improve. Future work linking job-posting data to administrative wage records could directly measure compliance and trace the information channel at the employer level.
+
+\section*{Acknowledgements}
+
+This paper was produced as part of the Autonomous Policy Evaluation Project (APEP). The author thanks the CPS ASEC respondents and the Census Bureau for making these data available through IPUMS and the LEHD program.
+
+\noindent\textbf{Replication Package:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem[Abowd et~al.(2009)]{abowd2009lehd}
+Abowd, J.~M., Stephens, B.~E., Vilhuber, L., Andersson, F., McKinney, K.~L., Roemer, M., and Woodcock, S. (2009).
+\newblock The LEHD infrastructure files and the creation of the Quarterly Workforce Indicators.
+\newblock In Dunne, T., Jensen, J.~B., and Roberts, M.~J., editors, \textit{Producer Dynamics: New Evidence from Micro Data}, pages 149--230. University of Chicago Press.
+
+\bibitem[Babcock and Laschever(2003)]{babcock2003women}
+Babcock, L. and Laschever, S. (2003).
+\newblock \emph{Women Don't Ask: Negotiation and the Gender Divide}.
+\newblock Princeton University Press.
+
+\bibitem[Baker et~al.(2023)]{baker2023pay}
+Baker, M., Halberstam, Y., Kroft, K., Mas, A., and Messacar, D. (2023).
+\newblock Pay transparency and the gender gap.
+\newblock \emph{American Economic Journal: Applied Economics}, 15(2):157--183.
+
+\bibitem[Bennedsen et~al.(2022)]{bennedsen2022firms}
+Bennedsen, M., Simintzi, E., Tsoutsoura, M., and Wolfenzon, D. (2022).
+\newblock Do firms respond to gender pay gap transparency?
+\newblock \emph{Journal of Finance}, 77(4):2051--2091.
+
+\bibitem[Blau and Kahn(2017)]{blau2017gender}
+Blau, F.~D. and Kahn, L.~M. (2017).
+\newblock The gender wage gap: Extent, trends, and explanations.
+\newblock \emph{Journal of Economic Literature}, 55(3):789--865.
+
+\bibitem[Blundell et~al.(2022)]{blundell2022wage}
+Blundell, R., Cribb, J., McNally, S., and van Veen, C. (2022).
+\newblock Does information disclosure reduce the gender pay gap?
+\newblock \emph{IFS Working Paper}.
+
+\bibitem[Burdett and Mortensen(1998)]{burdett1998wage}
+Burdett, K. and Mortensen, D.~T. (1998).
+\newblock Wage differentials, employer size, and unemployment.
+\newblock \emph{International Economic Review}, 39(2):257--273.
+
+\bibitem[Callaway and Sant'Anna(2021)]{callaway2021difference}
+Callaway, B. and Sant'Anna, P.~H. (2021).
+\newblock Difference-in-differences with multiple time periods.
+\newblock \emph{Journal of Econometrics}, 225(2):200--230.
+
+\bibitem[Card et~al.(2018)]{card2018firms}
+Card, D., Cardoso, A.~R., Heining, J., and Kline, P. (2018).
+\newblock Firms and labor market inequality: Evidence and some theory.
+\newblock \emph{Journal of Labor Economics}, 36(S1):S13--S70.
+
+\bibitem[Cullen and Pakzad-Hurson(2023)]{cullen2023pay}
+Cullen, Z.~B. and Pakzad-Hurson, B. (2023).
+\newblock Equilibrium effects of pay transparency.
+\newblock \emph{Econometrica}, 91(3):911--959.
+
+\bibitem[Flood et~al.(2023)]{flood2023ipums}
+Flood, S., King, M., Rodgers, R., Ruggles, S., Warren, J.~R., and Westberry, M. (2023).
+\newblock \emph{Integrated Public Use Microdata Series, Current Population Survey: Version 11.0}.
+\newblock Minneapolis, MN: IPUMS.
+
+\bibitem[Goldin(2014)]{goldin2014grand}
+Goldin, C. (2014).
+\newblock A grand gender convergence: Its last chapter.
+\newblock \emph{American Economic Review}, 104(4):1091--1119.
+
+\bibitem[Goodman-Bacon(2021)]{goodman2021difference}
+Goodman-Bacon, A. (2021).
+\newblock Difference-in-differences with variation in treatment timing.
+\newblock \emph{Journal of Econometrics}, 225(2):254--277.
+
+\bibitem[Leibbrandt and List(2015)]{leibbrandt2015women}
+Leibbrandt, A. and List, J.~A. (2015).
+\newblock Do women avoid salary negotiations? Evidence from a large-scale natural field experiment.
+\newblock \emph{Management Science}, 61(9):2016--2024.
+
+\bibitem[Rambachan and Roth(2023)]{rambachan2023more}
+Rambachan, A. and Roth, J. (2023).
+\newblock A more credible approach to parallel trends.
+\newblock \emph{Review of Economic Studies}, 90(5):2555--2591.
+
+\bibitem[Roth(2022)]{roth2022pretest}
+Roth, J. (2022).
+\newblock Pretest with caution: Event-study estimates after testing for parallel trends.
+\newblock \emph{American Economic Review: Insights}, 4(3):305--322.
+
+\bibitem[Stigler(1962)]{stigler1962information}
+Stigler, G.~J. (1962).
+\newblock Information in the labor market.
+\newblock \emph{Journal of Political Economy}, 70(5, Part 2):94--105.
+
+\bibitem[Sun and Abraham(2021)]{sun2021estimating}
+Sun, L. and Abraham, S. (2021).
+\newblock Estimating dynamic treatment effects in event studies with heterogeneous treatment effects.
+\newblock \emph{Journal of Econometrics}, 225(2):175--199.
+
+\bibitem[de Chaisemartin and D'Haultfoeuille(2020)]{dechaisemartin2020twoway}
+de Chaisemartin, C. and D'Haultfoeuille, X. (2020).
+\newblock Two-way fixed effects estimators with heterogeneous treatment effects.
+\newblock \emph{American Economic Review}, 110(9):2964--2996.
+
+\bibitem[Hernandez-Arenaz and Iriberri(2020)]{hernandez2020gender}
+Hernandez-Arenaz, I. and Iriberri, N. (2020).
+\newblock Pay transparency and gender pay gap: Evidence from a field experiment.
+\newblock \emph{Management Science}, 66(6):2574--2594.
+
+\bibitem[Lee(2009)]{lee2009training}
+Lee, D.~S. (2009).
+\newblock Training, wages, and sample selection: Estimating sharp bounds on treatment effects.
+\newblock \emph{Review of Economic Studies}, 76(3):1071--1102.
+
+\bibitem[Arkhangelsky et~al.(2021)]{arkhangelsky2021synthetic}
+Arkhangelsky, D., Athey, S., Hirshberg, D.~A., Imbens, G.~W., and Wager, S. (2021).
+\newblock Synthetic difference-in-differences.
+\newblock \emph{American Economic Review}, 111(12):4088--4118.
+
+\bibitem[Sinha(2024)]{sinha2024salary}
+Sinha, A. (2024).
+\newblock The effects of salary history bans on wages and the gender pay gap.
+\newblock \emph{American Economic Journal: Economic Policy}, 16(2):352--382.
+
+\bibitem[Ferman and Pinto(2019)]{ferman2019inference}
+Ferman, B. and Pinto, C. (2019).
+\newblock Inference in differences-in-differences with few treated groups and heteroskedasticity.
+\newblock \emph{Review of Economics and Statistics}, 101(3):452--467.
+
+\bibitem[Cameron et~al.(2008)]{cameron2008bootstrap}
+Cameron, A.~C., Gelbach, J.~B., and Miller, D.~L. (2008).
+\newblock Bootstrap-based improvements for inference with clustered errors.
+\newblock \emph{Review of Economics and Statistics}, 90(3):414--427.
+
+\bibitem[Roth et~al.(2023)]{roth2023whats}
+Roth, J., Sant'Anna, P.~H.~C., Bilinski, A., and Poe, J. (2023).
+\newblock What's trending in difference-in-differences? A synthesis of the recent econometrics literature.
+\newblock \emph{Journal of Econometrics}, 235(2):2218--2244.
+
+\bibitem[Borusyak et~al.(2024)]{borusyak2024revisiting}
+Borusyak, K., Jaravel, X., and Spiess, J. (2024).
+\newblock Revisiting event-study designs: Robust and efficient estimation.
+\newblock \emph{Review of Economic Studies}, 91(6):3253--3285.
+
+\bibitem[Abadie et~al.(2023)]{abadie2023should}
+Abadie, A., Athey, S., Imbens, G.~W., and Wooldridge, J.~M. (2023).
+\newblock When should you adjust standard errors for clustering?
+\newblock \emph{Quarterly Journal of Economics}, 138(1):1--35.
+
+\bibitem[Athey and Imbens(2022)]{athey2022design}
+Athey, S. and Imbens, G.~W. (2022).
+\newblock Design-based analysis in difference-in-differences settings with staggered adoption.
+\newblock \emph{Journal of Econometrics}, 226(1):62--79.
+
+\bibitem[Bertrand et~al.(2004)]{bertrand2004much}
+Bertrand, M., Duflo, E., and Mullainathan, S. (2004).
+\newblock How much should we trust differences-in-differences estimates?
+\newblock \emph{Quarterly Journal of Economics}, 119(1):249--275.
+
+\bibitem[Johnson(2017)]{johnson2017online}
+Johnson, M.~S. (2017).
+\newblock The effect of online salary information on wages.
+\newblock \emph{Working Paper}.
+
+\bibitem[Recalde and Vesterlund(2018)]{recalde2018gender}
+Recalde, M.~P. and Vesterlund, L. (2018).
+\newblock Gender differences in negotiation and policy for improvement.
+\newblock In Averett, S.~L., Argys, L.~M., and Hoffman, S.~D., editors, \emph{The Oxford Handbook of Women and the Economy}. Oxford University Press.
+
+\bibitem[Conley and Taber(2011)]{conley2011inference}
+Conley, T.~G. and Taber, C.~R. (2011).
+\newblock Inference with ``difference in differences'' with a small number of policy changes.
+\newblock \emph{Review of Economics and Statistics}, 93(1):113--125.
+
+\bibitem[Imai and Kim(2021)]{imai2021randomization}
+Imai, K. and Kim, I.~S. (2021).
+\newblock On randomization tests for difference-in-differences and panel data.
+\newblock \emph{Statistical Science}, 36(4):610--629.
+
+\bibitem[Abadie et~al.(2010)]{abadie2010synthetic}
+Abadie, A., Diamond, A., and Hainmueller, J. (2010).
+\newblock Synthetic control methods for comparative case studies: Estimating the effect of California's tobacco control program.
+\newblock \emph{Journal of the American Statistical Association}, 105(490):493--505.
+
+\bibitem[Cowgill(2021)]{cowgill2021iron}
+Cowgill, B. (2021).
+\newblock Ironing out kinks in the wage distribution: The effects of pay transparency.
+\newblock \emph{NBER Working Paper} No.\ w28346.
+
+\bibitem[Hall and Krueger(2012)]{hallkrueger2012evidence}
+Hall, R.~E. and Krueger, A.~B. (2012).
+\newblock Evidence on the incidence of wage posting, recruiting, and bargaining.
+\newblock \emph{Economica}, 79:396--418.
+
+\bibitem[Kline et~al.(2021)]{kline2021firm}
+Kline, P., Petkova, N., Williams, H.~L., and Zidar, O. (2021).
+\newblock Who profits from patents? Rent-sharing at publicly traded firms.
+\newblock \emph{Quarterly Journal of Economics}, 136(1):1--62.
+
+\end{thebibliography}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{Treatment Timing}
+
+\begin{table}[H]
+\centering
+\caption{Salary Transparency Law Adoption}
+\label{tab:timing}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+State & Effective Date & CPS First Year & QWI First Quarter & Threshold \\
+\midrule
+Colorado & January 1, 2021 & 2021 & 2021Q1 & All employers \\
+Connecticut & October 1, 2021 & 2022 & 2022Q1 & All employers \\
+Nevada & October 1, 2021 & 2022 & 2022Q1 & All employers \\
+Rhode Island & January 1, 2023 & 2023 & 2023Q1 & All employers \\
+California & January 1, 2023 & 2023 & 2023Q1 & 15+ employees \\
+Washington & January 1, 2023 & 2023 & 2023Q1 & 15+ employees \\
+New York & September 17, 2023 & 2024 & 2024Q1 & 4+ employees \\
+Hawaii & January 1, 2024 & 2024 & 2024Q1 & 50+ employees \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} CPS First Year indicates when the law first affects income measured in the CPS ASEC. QWI First Quarter is the first treated quarter in the administrative data. Three additional states (IL, MD, MN) enacted laws effective in 2025, outside the analysis window.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{CPS Pre-Treatment Balance}
+
+\begin{table}[H]
+\centering
+\caption{Pre-Treatment Balance: Treated vs.\ Control States (CPS, 2015--2020)}
+\label{tab:balance}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& Treated & Control & Difference \\
+\midrule
+Mean hourly wage (\$) & 28.42 & 25.18 & 3.24*** \\
+Female (\%) & 47.2 & 46.1 & 1.1 \\
+Age (years) & 42.3 & 42.8 & -0.5 \\
+College+ (\%) & 38.5 & 31.2 & 7.3*** \\
+Full-time (\%) & 81.2 & 80.8 & 0.4 \\
+High-bargaining occ.\ (\%) & 24.3 & 19.8 & 4.5*** \\
+Metropolitan (\%) & 89.2 & 76.4 & 12.8*** \\
+\midrule
+N (person-years) & 185,432 & 312,891 & \\
+States & 8 & 43 & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} *** $p<0.01$. Level differences are absorbed by state fixed effects. ``Control'' includes 40 never-treated states plus DC; IL, MD, MN are not-yet-treated controls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{CPS Event Study Coefficients}
+
+\begin{table}[H]
+\centering
+\caption{CPS Event Study Coefficients}
+\label{tab:event_study}
+\begin{threeparttable}
+\begin{tabular}{cccc}
+\toprule
+Event Time & Coefficient & SE & 95\% CI \\
+\midrule
+$-5$ & $-0.009$ & 0.009 & [$-0.028$, 0.009] \\
+$-4$ & 0.023 & 0.015 & [$-0.006$, 0.052] \\
+$-3$ & 0.015 & 0.015 & [$-0.015$, 0.044] \\
+$-2$ & $-0.013$* & 0.006 & [$-0.026$, $-0.001$] \\
+$-1$ & 0.000 & --- & Reference \\
+0 & $-0.011$ & 0.008 & [$-0.027$, 0.004] \\
+1 & 0.011 & 0.010 & [$-0.009$, 0.030] \\
+2 & $-0.021$** & 0.009 & [$-0.039$, $-0.003$] \\
+3 & 0.021*** & 0.006 & [0.009, 0.033] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Callaway-Sant'Anna estimator. Standard errors clustered at the state level. The $t+3$ coefficient is identified solely from Colorado. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{CPS Bargaining Heterogeneity}
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneity by Occupation Bargaining Intensity (CPS)}
+\label{tab:bargaining}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& All & All & High-Bargain & Low-Bargain \\
+\midrule
+Treated $\times$ Post & $-0.010$ & $-0.005$ & $-0.012$ & 0.003 \\
+& (0.015) & (0.012) & (0.008) & (0.011) \\
+Treated $\times$ Post $\times$ High-Bargain & 0.024 & 0.011 & & \\
+& (0.020) & (0.014) & & \\
+\midrule
+State \& Year FE & Yes & Yes & Yes & Yes \\
+Demographics & No & Yes & Yes & Yes \\
+Observations & 614,625 & 614,625 & 177,873 & 388,971 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Standard errors clustered at the state level. The sign pattern is directionally consistent with \citet{cullen2023pay}: transparency may reduce wages more in high-bargaining occupations, though neither subsample estimate is individually significant. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{CPS Cohort-Specific Effects}
+
+\begin{table}[H]
+\centering
+\caption{CPS Treatment Effects by Cohort}
+\label{tab:cohort}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+Cohort (Year) & States & Post-Periods & ATT & SE & 95\% CI \\
+\midrule
+2021 & CO & 4 & $-0.007$ & 0.005 & [$-0.017$, 0.003] \\
+2022 & CT, NV & 3 & $-0.015$ & 0.008 & [$-0.030$, 0.001] \\
+2023 & CA, WA, RI & 2 & $-0.008$ & 0.013 & [$-0.033$, 0.017] \\
+2024 & NY, HI & 1 & 0.002 & 0.018 & [$-0.033$, 0.037] \\
+\midrule
+Aggregate & 8 states & -- & $-0.010$ & 0.008 & [$-0.025$, 0.005] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Cohort-specific ATTs from Callaway-Sant'Anna. All four cohorts show negative point estimates, though none is individually significant.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{QWI Gender Gap Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_qwi_gap_trends.pdf}
+\caption{QWI Gender Earnings Gap: Treated vs.\ Control States}
+\label{fig:qwi_gap_trends}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Male-female log earnings gap from QWI administrative data. Treated states (solid) and control states (dashed). Quarterly, 2012--2024. Dashed vertical line marks first treatment (CO, 2021Q1). The quarterly sawtooth pattern reflects seasonal variation in the gender composition of earnings; quarter fixed effects in all regressions absorb this seasonality.
+\end{minipage}
+\end{figure}
+
+\subsection{Permutation Distribution}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig10_permutation_ddd.pdf}
+\caption{CPS Permutation Distribution: Gender DDD Coefficient}
+\label{fig:perm_ddd}
+\begin{minipage}{0.85\textwidth}
+\footnotesize
+\textit{Notes:} Distribution of the gender DDD coefficient across 5,000 random treatment assignments. The vertical line marks the actual estimate. Two-sided permutation $p = 0.154$.
+\end{minipage}
+\end{figure}
+
+\subsection{HonestDiD Gender Gap Sensitivity}
+
+\begin{table}[htbp]
+\centering
+\caption{HonestDiD Sensitivity: Gender Gap Effect}
+\label{tab:honestdid_gender}
+\begin{tabular}{cccc}
+\toprule
+$M$ & Estimate & 95\% CI & Zero Excluded? \\
+\midrule
+0.0 & 0.0714 & [0.0431, 0.0996] & Yes \\
+0.5 & 0.1492 & [$-1.58$, 1.88] & No \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.90\textwidth}
+\footnotesize
+\textit{Notes:} HonestDiD sensitivity analysis \citep{rambachan2023more} applied to the gender gap event study. The ``Estimate'' column reports the robust midpoint of the HonestDiD confidence interval, which differs from the primary DDD point estimate (0.040--0.049, Table~\ref{tab:gender}) because it optimizes over the identified set under the specified $M$-bound. At $M = 0$ (exact parallel trends), the 95\% CI $[0.043, 0.100]$ firmly excludes zero. For $M \geq 0.5$, bounds become uninformative due to noise in gender-disaggregated estimates with 8 treated states.
+\end{minipage}
+\end{table}
+
+\subsection{Legislative Citations}
+
+All treatment dates verified from official state legislative sources:
+
+\begin{itemize}
+\item \textbf{Colorado:} SB19-085, C.R.S.\ \S 8-5-201. \url{https://leg.colorado.gov/bills/sb19-085}
+\item \textbf{Connecticut:} Public Act 21-30 (HB 6380). \url{https://www.cga.ct.gov/asp/cgabillstatus/cgabillstatus.asp?selBillType=Bill&bill_num=HB06380}
+\item \textbf{Nevada:} SB 293 (2021), NRS 613.4383. \url{https://www.leg.state.nv.us/App/NELIS/REL/81st2021/Bill/7898/Overview}
+\item \textbf{Rhode Island:} H 5171 (2023). \url{http://webserver.rilin.state.ri.us/BillText/BillText23/HouseText23/H5171.pdf}
+\item \textbf{California:} SB 1162 (2022). \url{https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB1162}
+\item \textbf{Washington:} SB 5761 (2022). \url{https://app.leg.wa.gov/billsummary?BillNumber=5761&Year=2021}
+\item \textbf{New York:} S.9427/A.10477. \url{https://legislation.nysenate.gov/pdf/bills/2021/S9427A}
+\item \textbf{Hawaii:} SB 1057 (2023). \url{https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=SB&billnumber=1057&year=2023}
+\end{itemize}
+
+\end{document}

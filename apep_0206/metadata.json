@@ -1,0 +1,20 @@
+{
+  "paper_id": "apep_0206",
+  "title": "Making Wages Visible: Labor Market Dynamics Under Salary Transparency (v9)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "olafdrw",
+    "SocialCatalystLab",
+    "ai1scl"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-07T02:03:01.270287",
+  "parent_paper_id": "apep_0204",
+  "is_revision": true,
+  "version": 9,
+  "paper_family_id": "apep_0054",
+  "original_contributor": "olafdrw",
+  "revision_rationale": "Add QWI administrative data as second independent dataset, reframe around labor market dynamics, strengthen mechanism analysis, improve AER-style prose"
+}

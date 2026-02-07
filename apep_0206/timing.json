@@ -1,0 +1,13 @@
+{
+  "paper_dir": "/Users/dyanag/auto-policy-evals/output/paper_189",
+  "started_at": "2026-02-07T01:05:36.654214",
+  "finished_at": null,
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-07T01:05:36.654214",
+      "finished_at": null,
+      "duration_seconds": null
+    }
+  },
+  "total_seconds": null
+}

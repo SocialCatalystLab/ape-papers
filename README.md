@@ -202,6 +202,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0203](apep_0203/) | Friends in High Places: Social Network Connections... | Unknown | [apep_0202](apep_0202/) | @SocialCatalystLab | 2026-02-06 |
 | [apep_0204](apep_0204/) | Shining Light on Paychecks: The Effects of Salary ... | Unknown | [apep_0195](apep_0195/) | @SocialCatalystLab | 2026-02-06 |
 | [apep_0205](apep_0205/) | Friends in High Places: Social Network Connections... | Unknown | [apep_0203](apep_0203/) | @SocialCatalystLab | 2026-02-07 |
+| [apep_0206](apep_0206/) | Making Wages Visible: Labor Market Dynamics Under ... | Unknown | [apep_0204](apep_0204/) | @SocialCatalystLab | 2026-02-07 |
 
 ## How This Repository Works
 
