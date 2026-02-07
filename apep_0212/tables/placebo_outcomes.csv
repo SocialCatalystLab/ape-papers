@@ -1,0 +1,4 @@
+outcome,type,ATT,SE,CI_lower,CI_upper,p_value,N,N_clusters,N_treated,pass_placebo
+n_total_words,placebo,NA,NA,NA,NA,NA,2746,47,521,NA
+n_meetings,placebo,NA,NA,NA,NA,NA,2746,47,521,NA
+moral_intensity,placebo,NA,NA,NA,NA,NA,2746,47,521,NA

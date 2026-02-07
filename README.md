@@ -208,6 +208,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0209](apep_0209/) | Making Wages Visible: Labor Market Dynamics Under ... | Unknown | [apep_0208](apep_0208/) | @SocialCatalystLab | 2026-02-07 |
 | [apep_0210](apep_0210/) | Does Local Climate Policy Build Demand for Nationa... | RDD | [apep_0133](apep_0133/) | @SocialCatalystLab | 2026-02-07 |
 | [apep_0211](apep_0211/) | Friends in High Places: Social Network Connections... | Unknown | [apep_0207](apep_0207/) | @SocialCatalystLab | 2026-02-07 |
+| [apep_0212](apep_0212/) | Moral Foundations Under Digital Pressure: Does Bro... | Unknown | [apep_0052](apep_0052/) | @SocialCatalystLab | 2026-02-07 |
 
 ## How This Repository Works
 

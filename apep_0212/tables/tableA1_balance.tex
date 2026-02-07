@@ -1,0 +1,34 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:tab:balance_detail}Detailed Pre-Treatment Balance: Treated vs.\ Never-Treated Places}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lrrrrrrrrr}
+\toprule
+Variable & $N_T$ & $N_C$ & Mean$_T$ & SD$_T$ & Mean$_C$ & SD$_C$ & Diff. & Norm.\ Diff. & $p$-value\\
+\midrule
+Individualizing & 80 & 9 & 1.0301 & 0.5343 & 0.7590 & 0.7272 & 0.2712 & 0.425 & 0.306\\
+Binding & 80 & 9 & 1.6483 & 0.8375 & 1.1433 & 1.1395 & 0.5050 & 0.505 & 0.229\\
+Universalism Index & 80 & 9 & -0.6182 & 0.5839 & -0.3843 & 0.5285 & -0.2339 & -0.420 & 0.241\\
+Log Ratio (Ind./Bind.) & 80 & 9 & -0.4137 & 0.3676 & -0.2159 & 0.2907 & -0.1978 & -0.597 & 0.087\\
+Moral Intensity & 80 & 9 & 7.0052 & 3.3662 & 4.9478 & 4.8052 & 2.0575 & 0.496 & 0.243\\
+\addlinespace
+Care & 80 & 9 & 1.6476 & 0.9083 & 1.2481 & 1.2026 & 0.3995 & 0.375 & 0.359\\
+Fairness & 80 & 9 & 0.4127 & 0.2524 & 0.2699 & 0.2688 & 0.1428 & 0.548 & 0.160\\
+Loyalty & 80 & 9 & 2.1525 & 1.3523 & 1.2795 & 1.2913 & 0.8730 & 0.660 & 0.084\\
+Authority & 80 & 9 & 2.0313 & 1.0826 & 1.5795 & 1.6378 & 0.4518 & 0.325 & 0.440\\
+Sanctity & 80 & 9 & 0.7611 & 0.4094 & 0.5708 & 0.5821 & 0.1903 & 0.378 & 0.365\\
+\addlinespace
+Broadband Rate & 80 & 9 & 0.6466 & 0.0488 & 0.5993 & 0.0655 & 0.0473 & 0.819 & 0.065\\
+Population & 80 & 9 & 20475.4442 & 28307.8118 & 13367.1815 & 17992.8051 & 7108.2627 & 0.300 & 0.314\\
+Median Income & 80 & 9 & 39065.5719 & 7030.6872 & 30515.5963 & 4924.8614 & 8549.9756 & 1.409 & 0.001\\
+\% College & 80 & 9 & 17.4835 & 6.5928 & 15.6757 & 5.9529 & 1.8078 & 0.288 & 0.412\\
+\% White & 80 & 9 & 73.4343 & 22.3835 & 65.9527 & 31.3924 & 7.4816 & 0.274 & 0.505\\
+\addlinespace
+Median Age & 80 & 9 & 37.9817 & 6.3208 & 41.6435 & 10.9754 & -3.6618 & -0.409 & 0.353\\
+N Meetings & 80 & 9 & 18.0598 & 14.7837 & 14.6315 & 12.7911 & 3.4283 & 0.248 & 0.470\\
+N Total Words & 80 & 9 & 131981.7131 & 172872.6912 & 43062.7833 & 63523.6077 & 88918.9298 & 0.683 & 0.005\\
+\bottomrule
+\multicolumn{10}{l}{\rule{0pt}{1em}\textit{Notes:} Pre-treatment place-level means for treated and never-treated places. Normalized differences follow Imbens and Rubin (2015): $\Delta_{\text{norm}} = (\bar{x}_T - \bar{x}_C) / \sqrt{(s_T^2 + s_C^2)/2}$. Values $|\Delta_{\text{norm}}| < 0.25$ indicate acceptable balance. $p$-values from Welch $t$-tests (unequal variances).}\\
+\end{tabular}}
+\end{table}

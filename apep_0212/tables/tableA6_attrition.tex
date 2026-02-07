@@ -1,0 +1,21 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:tab:attrition}Attrition Analysis: Does Treatment Predict Panel Exit?}
+\centering
+\begin{tabular}[t]{lcrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Dep.\textbackslash{} Var.: Attrited} \\
+\cmidrule(l{3pt}r{3pt}){2-5}
+Specification & Treated & $p$-value & N & $R^2$\\
+\midrule
+No controls & -0.3594** & 0.013 & 530 & 0.009\\
+ & (0.1441) &  &  & \\
+State FE & -0.3820** & 0.022 & 525 & 0.069\\
+ & (0.1664) &  &  & \\
+State FE + controls & -0.4738** & 0.017 & 80 & 0.373\\
+\addlinespace
+ & (0.1991) &  &  & \\
+\bottomrule
+\multicolumn{5}{l}{\rule{0pt}{1em}\textit{Notes:} Dependent variable: indicator for whether a place has fewer than 6 years in the panel (mean = 0.425). Attrition rate: treated = 0.418, never-treated = 0.778. Controls in column (3): pre-treatment broadband rate, log population, median income, and number of meetings. Standard errors clustered at state level. $^{***}$ $p<0.01$, $^{**}$ $p<0.05$, $^{*}$ $p<0.10$.}\\
+\end{tabular}
+\end{table}

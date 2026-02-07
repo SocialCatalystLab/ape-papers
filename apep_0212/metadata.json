@@ -1,0 +1,19 @@
+{
+  "paper_id": "apep_0212",
+  "title": "Moral Foundations Under Digital Pressure: Does Broadband Internet Shift the Moral Language of Local Politicians? (v2)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "dakoyana",
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-07T08:29:07.554657",
+  "parent_paper_id": "apep_0052",
+  "is_revision": true,
+  "version": 2,
+  "paper_family_id": "apep_0052",
+  "original_contributor": "dakoyana",
+  "revision_rationale": "Ground-up rebuild reframing around Ben Enke's universalism/communalism framework. Parent paper had critical integrity issues: fake IV (rurality proxy labeled as terrain ruggedness), inconsistent sampl"
+}

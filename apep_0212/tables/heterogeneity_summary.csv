@@ -1,0 +1,13 @@
+outcome,subgroup,ATT,SE,CI_lower,CI_upper,p_value,N,N_clusters,N_treated,N_control,sig,note,dimension
+individualizing,Republican,NA,NA,NA,NA,NA,1261,24,240,7,,,Partisanship
+individualizing,Democrat,NA,NA,NA,NA,NA,1485,23,281,2,NA,insufficient variation,Partisanship
+binding,Republican,NA,NA,NA,NA,NA,1261,24,240,7,,,Partisanship
+binding,Democrat,NA,NA,NA,NA,NA,1485,23,281,2,NA,insufficient variation,Partisanship
+individualizing,Metro,NA,NA,NA,NA,NA,825,14,156,3,NA,insufficient variation,Rurality
+individualizing,Non-Metro,NA,NA,NA,NA,NA,1921,33,365,6,,,Rurality
+binding,Metro,NA,NA,NA,NA,NA,825,14,156,3,NA,insufficient variation,Rurality
+binding,Non-Metro,NA,NA,NA,NA,NA,1921,33,365,6,,,Rurality
+individualizing,High Universalism,0.027647949290148882,0.08429548598895938,-0.13757120324821148,0.19286710182850925,0.7429203641984883,225,25,39,6,,,Moral Orientation
+individualizing,Low Universalism,NA,NA,NA,NA,NA,234,23,42,3,NA,insufficient variation,Moral Orientation
+binding,High Universalism,0.26678900872835604,0.13773795307949693,-0.003177379307457928,0.5367553967641701,0.052753691862983176,225,25,39,6,*,,Moral Orientation
+binding,Low Universalism,NA,NA,NA,NA,NA,234,23,42,3,NA,insufficient variation,Moral Orientation

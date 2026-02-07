@@ -1,0 +1,5 @@
+outcome,subgroup,ATT,SE,CI_lower,CI_upper,p_value,N,N_clusters,N_treated,N_control,sig,note
+individualizing,High Universalism,0.027647949290148882,0.08429548598895938,-0.13757120324821148,0.19286710182850925,0.7429203641984883,225,25,39,6,,
+individualizing,Low Universalism,NA,NA,NA,NA,NA,234,23,42,3,NA,insufficient variation
+binding,High Universalism,0.26678900872835604,0.13773795307949693,-0.003177379307457928,0.5367553967641701,0.052753691862983176,225,25,39,6,*,
+binding,Low Universalism,NA,NA,NA,NA,NA,234,23,42,3,NA,insufficient variation

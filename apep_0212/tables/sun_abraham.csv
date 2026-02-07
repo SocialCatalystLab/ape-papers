@@ -1,0 +1,5 @@
+outcome,estimator,ATT,SE,CI_lower,CI_upper,p_value,N,N_clusters
+individualizing,Sun-Abraham,0.020692835970685358,NA,NA,NA,NA,2711,NA
+binding,Sun-Abraham,0.008816652141863252,NA,NA,NA,NA,2711,NA
+universalism_index,Sun-Abraham,0.011876183828824424,NA,NA,NA,NA,2711,NA
+log_univ_comm,Sun-Abraham,0.01042406245391299,NA,NA,NA,NA,2711,NA

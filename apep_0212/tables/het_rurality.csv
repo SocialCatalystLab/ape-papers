@@ -1,0 +1,5 @@
+outcome,subgroup,ATT,SE,CI_lower,CI_upper,p_value,N,N_clusters,N_treated,N_control,note,sig
+individualizing,Metro,NA,NA,NA,NA,NA,825,14,156,3,insufficient variation,NA
+individualizing,Non-Metro,NA,NA,NA,NA,NA,1921,33,365,6,,
+binding,Metro,NA,NA,NA,NA,NA,825,14,156,3,insufficient variation,NA
+binding,Non-Metro,NA,NA,NA,NA,NA,1921,33,365,6,,
