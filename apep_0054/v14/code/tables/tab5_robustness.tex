@@ -1,0 +1,23 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:tab:robustness}Robustness Checks}
+\centering
+\begin{tabular}[t]{lll}
+\toprule
+Specification & ATT & SE\\
+\midrule
+Main (C-S) & 0.0101 & 0.0135\\
+Border county-pairs & 0.1153*** & 0.0198\\
+TWFE (all controls) & 0.0269 & 0.0164\\
+Exclude CA/WA (TWFE) & 0.0382** & 0.0178\\
+Placebo (2 years early) & 0.0188* & 0.0107\\
+\bottomrule
+\multicolumn{3}{l}{\textsuperscript{} \makecell[l]{Note: All specifications use log}\\
+\multicolumn{3}{l}{new hire earnings as outcome.\\Main uses}\\
+\multicolumn{3}{l}{Callaway-Sant'Anna with never-treated}\\
+\multicolumn{3}{l}{controls.\\Border pairs uses contiguous county}\\
+\multicolumn{3}{l}{design with pair×quarter FE.\\Placebo tests}\\
+\multicolumn{3}{l}{effect 2 years before actual treatment.\\***}\\
+\multicolumn{3}{l}{p<0.01, ** p<0.05, * p<0.10.}}\\
+\end{tabular}
+\end{table}

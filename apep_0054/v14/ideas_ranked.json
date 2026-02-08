@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-01-21T14:30:09.105937",
+  "model": "gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": "resp_0574e0782f64db3d006970d47a68b88195aab0a35bcafa432b",
+  "usage": {
+    "input_tokens": 3935,
+    "output_tokens": 4979,
+    "total_tokens": 8914
+  },
+  "ideas_file": "output/paper_51/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "State Automatic IRA Mandates and Retirement Savings Participation",
+      "score": 72,
+      "recommendation": "PURSUE"
+    },
+    {
+      "rank": 2,
+      "title": "State Surprise Billing Laws and Personal Bankruptcy Filings",
+      "score": 66,
+      "recommendation": "CONSIDER"
+    },
+    {
+      "rank": 3,
+      "title": "State Paid Family Leave and Self-Employment Entry",
+      "score": 48,
+      "recommendation": "SKIP"
+    },
+    {
+      "rank": 4,
+      "title": "Certificate of Need Repeal and Hospital Market Entry",
+      "score": 42,
+      "recommendation": "SKIP"
+    },
+    {
+      "rank": 5,
+      "title": "State Data Privacy Laws and Tech Sector Employment",
+      "score": 30,
+      "recommendation": "SKIP"
+    }
+  ]
+}

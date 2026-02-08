@@ -1,0 +1,20 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:tab:main}Effect of Salary Transparency Laws on New Hire Earnings}
+\centering
+\begin{tabular}[t]{llllrr}
+\toprule
+Specification & ATT & SE & Bootstrap p & N & Clusters\\
+\midrule
+Callaway-Sant'Anna & 0.0101 & (0.0135) & NA & 48189 & 17\\
+TWFE (fixest) & 0.0269 & (0.0164) & NA & 48189 & 17\\
+Border County-Pairs & 0.1153*** & (0.0198) & NA & 17568 & 129\\
+\bottomrule
+\multicolumn{6}{l}{\textsuperscript{} \makecell[l]{Note: Dependent variable is log average monthly earnings of}\\
+\multicolumn{6}{l}{new hires (EarnHirAS).\\Callaway-Sant'Anna uses doubly-robust estimation}\\
+\multicolumn{6}{l}{with never-treated controls.\\TWFE includes county and quarter fixed}\\
+\multicolumn{6}{l}{effects.\\Border county-pairs specification includes pair×quarter fixed}\\
+\multicolumn{6}{l}{effects.\\Standard errors clustered at state level (C-S, TWFE) or pair}\\
+\multicolumn{6}{l}{level (border).\\*** p<0.01, ** p<0.05, * p<0.10.}}\\
+\end{tabular}
+\end{table}
