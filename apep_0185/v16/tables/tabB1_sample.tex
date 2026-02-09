@@ -1,0 +1,33 @@
+\begin{table}[H]
+\centering
+\caption{Robustness: Sample Restrictions (2SLS)}
+\label{tab:robustB1}
+\small
+\begin{tabular}{l ccc}
+\toprule
+ & (1) Baseline & (2) Pre-COVID & (3) Post-2015 \\
+ & & (2012--2019) & (2016--2022) \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Log Employment}} \\[3pt]
+Network MW & 0.8858*** & 1.2027*** & 0.4426*** \\
+ & (0.1641) & (0.2413) & (0.1282) \\
+\addlinespace
+\multicolumn{4}{l}{\textit{Panel B: Log Earnings}} \\[3pt]
+Network MW & 0.3342*** & --- & --- \\
+ & (0.0708) & & \\
+\midrule
+County FE & Yes & Yes & Yes \\
+State $\times$ Time FE & Yes & Yes & Yes \\
+First Stage F & 582.1 & 90816.6 & 11.9 \\
+Observations & 135,695 & 99,055 & 98,415 \\
+\bottomrule
+\end{tabular}
+\begin{figurenotes}
+Notes: All columns report 2SLS estimates instrumenting network minimum wage exposure with
+out-of-state network exposure. Column (2) restricts to pre-COVID quarters (2012Q1--2019Q4).
+Column (3) restricts to post-2015 quarters.
+Standard errors clustered at state level in parentheses.
+*** p$<$0.01, ** p$<$0.05, * p$<$0.1.
+\end{figurenotes}
+\end{table}
+

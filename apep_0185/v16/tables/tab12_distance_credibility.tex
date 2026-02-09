@@ -1,0 +1,27 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:distcred}Distance-Credibility Analysis: Instrument Strength, Pre-Trends, and Treatment Effects}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lccccccc}
+\toprule
+Distance & FS F & Balance p & RF Pre-Trend p & 2SLS & SE & AR 95\% CI & N\\
+\midrule
+$\geq$ 0 km & 607.6 & 0.001 & 0.041 & 0.869 & (0.163) & {}[0.55, 1.20] & 135,695\\
+$\geq$ 100 km & 385.6 & 0.000 & 0.028 & 1.157 & (0.180) & {}[0.80, 1.52] & 135,695\\
+$\geq$ 150 km & 310.8 & 0.000 & 0.041 & 1.270 & (0.205) & {}[0.86, 1.69] & 135,695\\
+$\geq$ 200 km & 207.7 & 0.001 & 0.035 & 1.544 & (0.250) & {}[1.07, 2.07] & 135,695\\
+$\geq$ 250 km & 143.3 & 0.003 & 0.062 & 1.792 & (0.301) & {}[1.23, 2.45] & 135,695\\
+\addlinespace
+$\geq$ 300 km & 84.1 & 0.022 & 0.286 & 2.063 & (0.396) & {}[1.35, 2.98] & 135,695\\
+$\geq$ 400 km & 39.5 & 0.064 & 0.530 & 2.607 & (0.613) & {}[1.58, 4.22] & 135,695\\
+$\geq$ 500 km & 29.5 & 0.012 & 0.676 & 3.200 & (0.841) & {}[1.83, 5.58] & 135,695\\
+\bottomrule
+\multicolumn{8}{l}{\textsuperscript{} Notes: Each row uses out-of-state SCI connections beyond the distance threshold as the instrument. FS F}\\
+\multicolumn{8}{l}{= first-stage F-statistic. Balance p = joint F-test of pre-treatment employment equality across IV}\\
+\multicolumn{8}{l}{quartiles. RF Pre-Trend p = joint F-test of pre-period coefficients in the reduced-form event study}\\
+\multicolumn{8}{l}{(outcome regressed on instrument \$\textbackslash{}times\$ year). AR CI = Anderson-Rubin}\\
+\multicolumn{8}{l}{95\textbackslash{}\% confidence set (weak-instrument robust). State-clustered standard errors in}\\
+\multicolumn{8}{l}{parentheses.}\\
+\end{tabular}}
+\end{table}

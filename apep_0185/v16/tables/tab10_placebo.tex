@@ -1,0 +1,20 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:placebo}Placebo Shock Tests for Exclusion Restriction}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+Instrument & Coefficient & SE & p-value\\
+\midrule
+GDP-weighted exposure & 0.0019 & (0.0056) & 0.7305\\
+Employment-weighted exposure & 0.0018 & (0.0056) & 0.7479\\
+MW exposure (horse race) & 0.7092*** & (0.1526) & 0.0000\\
+GDP exposure (horse race) & 0.0049 & (0.0053) & 0.3538\\
+\bottomrule
+\multicolumn{4}{l}{\textsuperscript{} Notes: Reduced-form regressions of log employment on placebo}\\
+\multicolumn{4}{l}{instruments. GDP/Employment-weighted exposure uses same SCI weights}\\
+\multicolumn{4}{l}{as MW instrument but replaces MW with state GDP/employment. Horse}\\
+\multicolumn{4}{l}{race includes both MW and GDP exposure simultaneously. County and}\\
+\multicolumn{4}{l}{state x time FEs. SEs clustered at state level.}\\
+\end{tabular}
+\end{table}

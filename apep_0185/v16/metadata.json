@@ -1,0 +1,19 @@
+{
+  "paper_id": "apep_0185",
+  "title": "Friends in High Places: Social Network Connections and Local Labor Market Outcomes (v16)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "ai1scl",
+  "contributors": [
+    "SocialCatalystLab",
+    "ai1scl"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-09T15:23:27.317624",
+  "parent_paper_id": "apep_0185",
+  "is_revision": true,
+  "version": 16,
+  "paper_family_id": "apep_0185",
+  "original_contributor": "SocialCatalystLab",
+  "revision_rationale": "Integrity audit found critical problems: (1) County trends claimed \"positive and significant\" but actual IV coefficient was -0.084 (p=0.45); (2) LOSO claimed 2SLS range 0.78-0.85 but code ran OLS; (3)"
+}

@@ -1,0 +1,24 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:distance}Distance Robustness: 2SLS Estimates by IV Distance Threshold}
+\centering
+\begin{tabular}[t]{lcccccc}
+\toprule
+Distance Threshold & First Stage F & 2SLS Coef. & 2SLS SE & Balance p & N & Counties\\
+\midrule
+$\geq$ 0 km & 607.6 & 0.8690 & 0.1626 & 0.001 & 135,695 & 3,084\\
+$\geq$ 100 km & 385.6 & 1.1572 & 0.1799 & 0.000 & 135,695 & 3,084\\
+$\geq$ 150 km & 310.8 & 1.2700 & 0.2047 & 0.000 & 135,695 & 3,084\\
+$\geq$ 200 km & 207.7 & 1.5445 & 0.2500 & 0.001 & 135,695 & 3,084\\
+$\geq$ 250 km & 143.3 & 1.7922 & 0.3015 & 0.003 & 135,695 & 3,084\\
+\addlinespace
+$\geq$ 300 km & 84.1 & 2.0631 & 0.3960 & 0.022 & 135,695 & 3,084\\
+$\geq$ 400 km & 39.5 & 2.6067 & 0.6130 & 0.064 & 135,695 & 3,084\\
+$\geq$ 500 km & 29.5 & 3.1996 & 0.8412 & 0.012 & 135,695 & 3,084\\
+\bottomrule
+\multicolumn{7}{l}{\textsuperscript{} Notes: Each row uses out-of-state SCI connections beyond the distance threshold as the}\\
+\multicolumn{7}{l}{instrument. Balance p-value tests equality of pre-treatment employment across IV quartiles. N}\\
+\multicolumn{7}{l}{is the number of county-quarter observations; Counties is the approximate number of counties.}\\
+\multicolumn{7}{l}{Estimates shown only for specifications with F \$>\$ 10.}\\
+\end{tabular}
+\end{table}

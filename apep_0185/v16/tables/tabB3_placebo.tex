@@ -1,0 +1,38 @@
+\begin{table}[H]
+\centering
+\caption{Placebo Instrument Tests}
+\label{tab:robustB3}
+\small
+\begin{tabular}{l cccc}
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & MW Reduced & GDP Placebo & Emp Placebo & MW + GDP \\
+ & Form & Reduced Form & Reduced Form & Horse Race \\
+\midrule
+\multicolumn{5}{l}{\textit{Dependent Variable: Log Employment}} \\[3pt]
+Network MW & 0.7086*** & --- & --- & 0.7092*** \\
+ & (0.1526) & & & (0.1526) \\
+\addlinespace
+Placebo (GDP) & --- & 0.0019 & --- & 0.0049 \\
+ & & (0.0056) & & (0.0053) \\
+\addlinespace
+Placebo (Emp) & --- & --- & 0.0018 & --- \\
+ & & & (0.0056) & \\
+\midrule
+County FE & Yes & Yes & Yes & Yes \\
+State $\times$ Time FE & Yes & Yes & Yes & Yes \\
+Observations & 135,695 & 135,695 & 135,695 & 135,695 \\
+\bottomrule
+\end{tabular}
+\begin{figurenotes}
+Notes: All regressions are reduced-form (OLS). Placebo instruments are constructed
+by applying the same SCI network weights to other states' GDP (column 2) and employment
+(column 3) instead of minimum wages. If the instrument captures generic economic
+spillovers rather than MW information, these placebos should predict destination
+employment. Both placebos are statistically insignificant, supporting the
+exclusion restriction. Column (4) includes both MW and GDP exposure simultaneously.
+Standard errors clustered at state level in parentheses.
+*** p$<$0.01, ** p$<$0.05, * p$<$0.1.
+\end{figurenotes}
+\end{table}
+

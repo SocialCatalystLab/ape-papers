@@ -1,0 +1,26 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:shockdiag}Shock Contribution Diagnostics}
+\centering
+\begin{tabular}[t]{lcccc}
+\toprule
+State & Total MW Change & N Changes & LOO 2SLS Coef. & LOO 2SLS SE\\
+\midrule
+CA & 0.760 & 9 & 0.8887 & 0.1644\\
+09 & 0.727 & 9 & 0.8858 & 0.1641\\
+MA & 0.727 & 8 & 0.8871 & 0.1643\\
+NY & 0.672 & 10 & 0.8579 & 0.1644\\
+41 & 0.672 & 8 & 0.8946 & 0.1662\\
+\addlinespace
+34 & 0.667 & 5 & 0.8966 & 0.1662\\
+AZ & 0.647 & 7 & 0.8849 & 0.1643\\
+23 & 0.644 & 7 & 0.8849 & 0.1642\\
+CO & 0.633 & 7 & 0.8611 & 0.1642\\
+WA & 0.610 & 12 & 0.9057 & 0.1672\\
+\bottomrule
+\multicolumn{5}{l}{\textsuperscript{} Notes: Top 10 states by total minimum wage change magnitude (sum of}\\
+\multicolumn{5}{l}{absolute log MW changes). LOO 2SLS reports the 2SLS coefficient when all}\\
+\multicolumn{5}{l}{counties in that origin state are dropped from the sample. Stability of}\\
+\multicolumn{5}{l}{LOO coefficients indicates no single state drives the result.}\\
+\end{tabular}
+\end{table}

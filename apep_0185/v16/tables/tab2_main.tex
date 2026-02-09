@@ -1,0 +1,32 @@
+\begin{table}[H]
+\centering
+\caption{Main Results: Employment and Earnings}
+\label{tab:mainresults}
+\small
+\begin{tabular}{l cccc}
+\toprule
+ & (1) OLS & (2) OLS & (3) 2SLS & (4) 2SLS (USD) \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Log Employment}} \\[3pt]
+Full Network MW & 0.1000* & 0.7086*** & 0.8858*** & 0.0968*** \\
+ & (0.0587) & (0.1526) & (0.1641) & (0.0172) \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel B: Log Earnings}} \\[3pt]
+Full Network MW & --- & 0.2492*** & 0.3342*** & 0.0360*** \\
+ & & (0.0619) & (0.0708) & (0.0075) \\
+\midrule
+County FE & Yes & Yes & Yes & Yes \\
+Time FE & Yes & No & No & No \\
+State $\times$ Time FE & No & Yes & Yes & Yes \\
+First Stage F & --- & --- & 582.1 & 536.7 \\
+Observations & 135,695 & 135,695 & 135,695 & 135,695 \\
+\bottomrule
+\end{tabular}
+\begin{figurenotes}
+Notes: Dependent variables are log employment (Panel A) and log average quarterly earnings (Panel B). 
+Columns (1)--(3) use log network MW exposure; column (4) uses dollar-denominated exposure 
+(coefficient = semi-elasticity per \$1 increase in network average MW). 
+Standard errors clustered at state level in parentheses. 
+*** p$<$0.01, ** p$<$0.05, * p$<$0.1.
+\end{figurenotes}
+\end{table}

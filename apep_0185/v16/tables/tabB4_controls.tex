@@ -1,0 +1,29 @@
+\begin{table}[H]
+\centering
+\caption{Robustness: County-Specific Linear Trends}
+\label{tab:robustB4}
+\small
+\begin{tabular}{l cccc}
+\toprule
+ & (1) OLS & (2) OLS & (3) 2SLS & (4) 2SLS \\
+ & Baseline & + County Trends & Baseline & + County Trends \\
+\midrule
+\multicolumn{5}{l}{\textit{Dependent Variable: Log Employment}} \\[3pt]
+Network MW & 0.7086*** & 0.0099 & 0.8858*** & -0.1054 \\
+ & (0.1526) & (0.0759) & (0.1641) & (0.1550) \\
+\midrule
+County FE & Yes & Yes & Yes & Yes \\
+State $\times$ Time FE & Yes & Yes & Yes & Yes \\
+County Linear Trend & No & Yes & No & Yes \\
+\bottomrule
+\end{tabular}
+\begin{figurenotes}
+Notes: Columns (1)--(2) report OLS; columns (3)--(4) report 2SLS. Adding county-specific
+linear trends absorbs most of the variation, as expected when the identifying variation is
+gradual. The attenuation is 98.6\% for OLS, consistent with the slow-moving
+nature of network exposure changes.
+Standard errors clustered at state level in parentheses.
+*** p$<$0.01, ** p$<$0.05, * p$<$0.1.
+\end{figurenotes}
+\end{table}
+

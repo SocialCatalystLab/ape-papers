@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering
+\caption{Robustness: Leave-One-State-Out (2SLS)}
+\label{tab:robustB2}
+\small
+\begin{tabular}{l cccccc}
+\toprule
+ & (1) & (2) & (3) & (4) & (5) & (6) \\
+ & Baseline & $-$CA & $-$NY & $-$WA & $-$MA & $-$FL \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel A: Log Employment}} \\[3pt]
+Network MW & 0.8858*** & 0.6919*** & 0.7149*** & 0.7223*** & 0.7103*** & 0.7033*** \\
+ & (0.1641) & (0.1534) & (0.1553) & (0.1543) & (0.1530) & (0.1567) \\
+\midrule
+County FE & Yes & Yes & Yes & Yes & Yes & Yes \\
+State $\times$ Time FE & Yes & Yes & Yes & Yes & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\begin{figurenotes}
+Notes: All columns report 2SLS estimates instrumenting network minimum wage exposure with
+out-of-state network exposure. Each column excludes the indicated state from the estimation
+sample. Standard errors clustered at state level in parentheses.
+*** p$<$0.01, ** p$<$0.05, * p$<$0.1.
+\end{figurenotes}
+\end{table}
+

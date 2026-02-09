@@ -1,0 +1,16 @@
+{
+  "ideas": [
+    {
+      "title": "Social Network Connections and Local Labor Market Outcomes (Revision of apep_0202)",
+      "recommendation": "PURSUE",
+      "novelty_score": 8,
+      "identification_score": 8,
+      "feasibility_score": 10,
+      "relevance_score": 9,
+      "overall_score": 8.5,
+      "rationale": "Revision of published paper with code integrity fixes, reframing, and structural improvements. All data and analysis already validated."
+    }
+  ],
+  "iteration": 1,
+  "timestamp": "2026-02-06T23:15:00Z"
+}
