@@ -1,0 +1,11 @@
+{
+  "note": "Revision of apep_0133 — ranking inherited from parent paper",
+  "ideas": [
+    {
+      "title": "Does Local Climate Policy Build or Erode Support for National Action?",
+      "recommendation": "PURSUE",
+      "score": 85,
+      "rationale": "Inherited from parent paper apep_0133 (rating 19.9). Clean identification via spatial RDD at Swiss canton borders."
+    }
+  ]
+}

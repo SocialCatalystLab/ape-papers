@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0088",
+  "title": "Does Local Climate Policy Build Demand for National Action? Evidence from Swiss Energy Referendums (v2)",
+  "method": "RDD",
+  "policy_id": null,
+  "contributor": "olafdrw",
+  "contributors": [
+    "olafdrw"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-09T14:11:05.852391",
+  "parent_paper_id": "apep_0088",
+  "is_revision": true,
+  "version": 2,
+  "paper_family_id": "apep_0088",
+  "revision_rationale": "Fix code review issues flagged by GPT-5.2 scanner: referendum cherry-picking in DiDisc, missing placebo vote data, treat/treated variable bug, unprincipled placebo ordering, and bandwidth truncation m"
+}

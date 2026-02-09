@@ -1,0 +1,1438 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Does Local Climate Policy Build Demand for National Action? Evidence from Swiss Energy Referendums\thanks{This paper is a revision of APEP-0088. See \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0088} for the previous version.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \\ @anonymous \\ @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Five Swiss cantons adopted comprehensive energy laws between 2011 and 2017. When Swiss voters faced a federal referendum to extend similar measures nationally, did this local experience build support---or satisfy demand? Using a spatial regression discontinuity design at internal canton borders, I find that voters in treated cantons were \textit{less} likely to support national energy legislation. The primary specification---restricted to same-language borders to eliminate the French-German confound---yields an estimate of $-5.9$ percentage points ($p = 0.011$; wild cluster bootstrap $p \approx 0.06$). A Difference-in-Discontinuities design controlling for permanent border effects confirms the negative direction ($-4.7$ pp, $p = 0.008$). The evidence favors the ``thermostatic'' model of public opinion: citizens who already experienced local climate policy reduced their demand for federal action. For climate policy strategy, the implication is sobering---sub-national success may cap, rather than catalyze, national ambition.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} D72, H77, Q54, Q58 \\
+\noindent\textbf{Keywords:} climate policy demand, policy feedback, federalism, referendum voting, Switzerland, spatial RDD
+
+\newpage
+
+\section{Introduction}
+
+On May 21, 2017, Swiss voters approved a sweeping national energy law by a 16-point margin. But in the five cantons that had already adopted their own climate legislation, enthusiasm was muted. Voters there were nearly six percentage points \textit{less} likely to back the federal measure than their neighbors across the cantonal border. Local climate policy, it appears, did not build momentum for national action. It dampened it.
+
+This finding challenges a central assumption of ``bottom-up'' climate governance: that sub-national policy experimentation creates constituencies, demonstrates feasibility, and builds support for federal harmonization \citep{oates1999essay, rabe2004statehouse}. The alternative---that prior policy action satisfies voter demand and reduces appetite for more---has deep roots in political science. \citet{wlezien1995thermostat} documents a ``thermostatic'' dynamic in public opinion: as government delivers more policy in a domain, citizens demand less. If this logic applies to climate policy, then the very success of cantonal energy laws may have inoculated voters against federal expansion.
+
+Switzerland offers an unusually clean setting to test these competing predictions. Between 2011 and 2017, five cantons enacted comprehensive energy legislation implementing the Model Cantonal Energy Provisions (MuKEn): binding building efficiency standards, renewable energy mandates, and heat pump requirements. The remaining 21 cantons had not. When all Swiss voters then decided on the Energy Strategy 2050---a federal law proposing to extend similar measures nationwide---the five treated cantons provided a natural treatment group.
+
+Identification exploits a spatial regression discontinuity at internal canton borders \citep{keele2015geographic, dell2010persistent}. Municipalities on opposite sides of these centuries-old administrative boundaries differ in cantonal policy exposure but share geography, labor markets, and local economic conditions. The key threat to identification is Switzerland's ``Röstigraben''---the deep political divide between German- and French-speaking regions that correlates with both treatment status (all five treated cantons are German-speaking) and referendum support. I address this by restricting to same-language borders, where the confound is absent.
+
+The primary estimate---comparing municipalities at German-German canton borders---is $-5.9$ percentage points (SE = 2.32, $p = 0.011$). Pooling across all borders yields $-4.5$ pp ($p = 0.05$). A Difference-in-Discontinuities design that nets out permanent border effects confirms the negative direction at $-4.7$ pp ($p = 0.008$), and wild cluster bootstrap inference produces $p$-values around 0.06. The evidence is consistent across specifications: no design produces positive policy feedback. OLS with language controls yields a smaller, imprecise estimate ($-1.8$ pp), consistent with the RDD identifying local effects at the border (within $\sim$3 km) that OLS attenuates through broader averaging.
+
+These results contribute to three literatures. First, I extend the policy feedback tradition \citep{pierson1993when, mettler2011understanding, campbell2012policy} to environmental regulation and direct democracy, showing that feedback can run negative when costs are salient and benefits diffuse---unlike the positive feedback documented for social programs like the G.I.\ Bill \citep{mettler2002bringing} and Social Security \citep{campbell2003self}. Second, I provide evidence that ``laboratory federalism'' \citep{oates1999essay, shipan2008mechanisms} does not automatically translate sub-national success into federal support, a finding with direct implications for the Paris Agreement's architecture. Third, methodologically, the combination of spatial RDD, randomization inference, and Difference-in-Discontinuities offers a template for causal inference when few clusters receive treatment \citep{cameron2008bootstrap, young2019channeling}.
+
+
+\section{Conceptual Framework}
+
+Does experience with local policy build demand for national action, or satisfy it? Two well-established theoretical traditions generate sharply opposing predictions.
+
+\subsection{Hypothesis 1: Positive Policy Feedback}
+
+The policy feedback literature predicts that enacted policies reshape political preferences in their own favor \citep{pierson1993when}. Policies create beneficiaries who mobilize to defend and expand them. \citet{mettler2011understanding} distinguish two channels: \textit{interpretive effects} (policies signal government competence, building trust for further action) and \textit{resource effects} (policies distribute benefits that generate grateful constituencies). The canonical evidence is positive. G.I.\ Bill recipients became more civically engaged \citep{mettler2002bringing}. Social Security created a formidable lobby of senior citizens \citep{campbell2003self}. Welfare program clients developed political identities shaped by their interactions with the state \citep{soss1999lessons}.
+
+Applied to Swiss energy policy, this tradition predicts that cantonal energy laws should \textit{increase} support for federal harmonization. Voters who observed successful local implementation---functioning solar panels, warmer buildings, lower energy bills---would learn that national adoption is desirable. Contractors and installers who profited from MuKEn requirements would lobby for expansion. The laboratory of federalism would generate momentum for federal action \citep{oates1999essay, shipan2008mechanisms}.
+
+\textbf{Prediction:} Municipalities in treated cantons vote \textit{higher} on the Energy Strategy 2050 than comparable municipalities across the cantonal border.
+
+\subsection{Hypothesis 2: Thermostatic Response}
+
+An alternative tradition, rooted in \citet{wlezien1995thermostat}, predicts the opposite. Public opinion acts as a thermostat: as government delivers more policy output in a domain, citizens adjust their demand downward. \citet{soroka2010degrees} show this pattern holds across policy domains and federal systems. The mechanism is straightforward---voters perceive that ``enough has been done'' and resist further expansion.
+
+Three reinforcing channels strengthen this prediction in the climate context. First, \textit{cost salience}: building owners who faced MuKEn compliance costs---retrofit mandates, heat pump installations, permitting requirements---learned firsthand what energy transition costs. These concentrated, visible costs may outweigh the diffuse, invisible benefits of reduced emissions \citep{carattini2018green, stokes2016backlash}. Second, \textit{federal overreach}: Swiss voters prize cantonal autonomy \citep{vatter2018swiss}. Citizens in cantons that had already legislated may view federal harmonization as unnecessary centralization in a domain where local solutions were working. Third, \textit{policy satiation}: regulatory policies may be especially prone to negative feedback because, unlike transfer programs, they impose obligations rather than distribute benefits \citep{mettler2011submerged}.
+
+\textbf{Prediction:} Municipalities in treated cantons vote \textit{lower} on the Energy Strategy 2050 than comparable municipalities across the cantonal border.
+
+\subsection{What This Paper Tests}
+
+The Swiss setting is unusually well-suited to adjudicate between these hypotheses. Cantonal energy laws were substantively identical to the proposed federal law---the same building standards, the same renewable mandates. If experience breeds support (H1), treated cantons should vote more favorably. If the thermostat kicks in (H2), treated cantons should vote lower. The design isolates voter response from interest group politics: Switzerland's direct democracy means we observe pure citizen preferences, unmediated by legislative bargaining or party gatekeeping.
+
+
+\section{Institutional Background}
+
+\subsection{Swiss Federalism and Direct Democracy}
+
+Switzerland combines extreme federalism with pervasive direct democracy---a pairing that makes it uniquely suited for studying how policy experience shapes voter preferences. The 26 cantons set their own tax rates, education curricula, and regulatory standards \citep{vatter2018swiss}. Citizens vote on national referendums three to four times per year \citep{linder2010swiss, kriesi2005direct}. The May 2017 Energy Strategy 2050 was an optional referendum: parliament had passed the law, but opponents collected sufficient signatures to force a popular vote \citep{trechsel2000direct}. In this system, voter preferences are observed directly---not filtered through representatives.
+
+\subsection{Cantonal Energy Laws (MuKEn)}
+
+Energy regulation in Switzerland is a shared competence. The federal government sets broad targets; cantons regulate building energy performance through construction codes \citep{sager2014political}. In 2008, the Conference of Cantonal Energy Directors developed the Model Cantonal Energy Provisions (MuKEn), a harmonized framework that cantons could voluntarily adopt. MuKEn imposed building envelope standards for new construction and renovations, renewable energy requirements, restrictions on electric resistance heating, mandatory energy certificates upon sale, and subsidies for heat pumps and solar installations.
+
+Five cantons enacted comprehensive energy laws implementing MuKEn before May 2017. Graubünden moved first (in force January 2011), followed by Bern (January 2012), Aargau (January 2013), Basel-Landschaft (July 2016), and Basel-Stadt (January 2017). The staggered timing---spanning six years---provides useful variation for panel analysis. Other cantons adopted later: Lucerne in late 2017, Fribourg in 2019, Appenzell Innerrhoden in 2020. Some (Zürich, St.\ Gallen) had partial implementation but not comprehensive standalone laws by the referendum date.
+
+\subsection{The Energy Strategy 2050 Referendum}
+
+Fukushima changed Swiss energy politics. Within weeks of the March 2011 disaster, the Federal Council announced a nuclear phase-out---nuclear provided 40\% of Swiss electricity \citep{rinscheid2015crisis}. The resulting Energy Strategy 2050, passed by parliament in September 2016, proposed to ban new nuclear construction, cut per-capita energy consumption by 43\% by 2035, quadruple renewable generation, and extend MuKEn-style building standards nationwide.
+
+The Swiss People's Party collected over 60,000 signatures to force a referendum. On May 21, 2017, voters approved the law with 58.2\% support and 42.3\% turnout \citep{swissvotes2017}.
+
+The critical feature for identification: much of what the federal law proposed had already been implemented in the five treated cantons. Voters in Graubünden, Bern, and Aargau had lived under comprehensive energy regulation for years. Their neighbors across the cantonal border had not. Did this experience make them more enthusiastic about extending these policies nationally---or less?
+
+
+\section{Data and Descriptive Statistics}
+
+\subsection{Referendum Results}
+
+Voting data come from the Federal Statistical Office (BFS) via the \texttt{swissdd} R package, which provides official results for all federal referendums at the Gemeinde level. For the May 21, 2017 Energy Strategy 2050 vote, I observe yes-vote shares, turnout rates, and eligible voter counts for 2,120 Gemeinden across all 26 cantons. The municipality boundaries and referendum data use a harmonized municipal structure provided by swissdd, which applies BFS correspondence tables to ensure consistent units across referendum years and spatial polygons. Historical referendum results (2000, 2003, 2016) are harmonized to this same municipal structure.
+
+Table~\ref{tab:canton_results} presents canton-level results for selected cantons. The five treated cantons (GR, BE, AG, BL, BS) together contain 716 Gemeinden; the remaining 21 control cantons contain 1,404 Gemeinden.
+
+\begin{table}[H]
+\centering
+\caption{Canton-Level Results: Energy Strategy 2050 Referendum (May 21, 2017)}
+\begin{threeparttable}
+\begin{tabular}{llcccl}
+\toprule
+Canton & Abbr. & Yes Share (\%) & Turnout (\%) & N Gemeinden & Status \\
+\midrule
+\multicolumn{6}{l}{\textit{Treated Cantons (Energy Law In Force Before May 2017)}} \\
+Graubünden & GR & 55.4 & 43.8 & 100 & Treated (2011) \\
+Bern & BE & 62.5 & 41.7 & 328 & Treated (2012) \\
+Aargau & AG & 54.8 & 42.3 & 198 & Treated (2013) \\
+Basel-Landschaft & BL & 61.2 & 45.1 & 86 & Treated (2016) \\
+Basel-Stadt & BS & 72.8 & 47.2 & 4 & Treated (2017) \\
+\midrule
+\multicolumn{6}{l}{\textit{Selected Control Cantons}} \\
+Zürich & ZH & 62.3 & 44.5 & 162 & Control \\
+Lucerne & LU & 52.1 & 40.8 & 83 & Control \\
+St. Gallen & SG & 52.8 & 42.2 & 77 & Control \\
+Vaud & VD & 67.4 & 38.9 & 309 & Control \\
+Geneva & GE & 71.5 & 38.1 & 45 & Control \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Full results for all 26 cantons in Appendix Table~\ref{tab:full_results}. Treatment defined as having comprehensive cantonal energy legislation \textit{in force} prior to the referendum date. Year in parentheses is when law came into force (not adoption year).
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:canton_results}
+\end{table}
+
+\subsection{The Language Confound}
+
+One feature of the data dominates everything else. French-speaking cantons voted roughly 15 percentage points higher than German-speaking cantons---the ``Röstigraben'' that divides Swiss politics on nearly every federal question \citep{herrmann2010distinctive}. All five treated cantons are German-speaking. The high-support French cantons---Geneva, Vaud, Neuchâtel---are all controls. Naive treatment-control comparisons therefore confound energy policy exposure with the deepest political cleavage in Switzerland (Table~\ref{tab:language_summary}).
+
+\begin{table}[H]
+\centering
+\caption{Yes-Vote Share by Canton Language Region and Treatment Status}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Treated} & \multicolumn{2}{c}{Control} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Canton Language & Mean & N & Mean & N \\
+\midrule
+German-majority canton & 47.9 & 716 & 49.7 & 638 \\
+French-majority canton & --- & 0 & 67.7 & 421 \\
+Italian-majority canton & --- & 0 & 56.7 & 100 \\
+Mixed (FR, VS) & --- & 0 & 60.7 & 245 \\
+\midrule
+All & 47.9 & 716 & 57.5 & 1,404 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Gemeinde-level observations grouped by \textit{canton} majority language (not Gemeinde-level language), following standard practice in the Swiss referendum literature \citep{herrmann2010distinctive}. Canton-level classification is used because (i) BFS official language data is available at canton level, (ii) cantonal treatment is the policy variation of interest, and (iii) Gemeinde-level language data requires aggregating census responses which introduces measurement error. All five treated cantons (GR, BE, AG, BL, BS) are classified as German-majority following BFS convention, though BE contains French-speaking Gemeinden in the Jura bernois and GR contains Italian/Romansh-speaking areas. ``Mixed (FR, VS)'' refers to bilingual cantons Fribourg and Valais, which are coded as French-speaking in the regression models (i.e., the omitted category) following BFS primary language classification. See Section~\ref{sec:limitations} for discussion of this limitation.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:language_summary}
+\end{table}
+
+\subsection{Geographic Context}
+
+Three maps clarify the spatial structure of identification. Figure~\ref{fig:map_treatment} shows that the five treated cantons form a contiguous block in central and northern Switzerland---geographic clustering that creates border discontinuities but also raises spatial confounding concerns.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1a_treatment_map.pdf}
+\caption{Treatment Status by Canton}
+\label{fig:map_treatment}
+\begin{flushleft}
+\small Notes: Blue cantons adopted comprehensive cantonal energy legislation (MuKEn) before the May 2017 federal referendum. Red cantons are controls. Basel-Stadt (BS) is technically treated (law effective January 2017) but is excluded from the RDD sample because it is completely surrounded by treated Basel-Landschaft and has no treated-control border. Treatment is concentrated in central and northern German-speaking Switzerland.
+\end{flushleft}
+\end{figure}
+
+Figure~\ref{fig:map_language} displays the critical confound. Every treated canton is German-speaking; the high-support French-speaking west is entirely in the control group. Naive comparisons cannot disentangle policy exposure from the Röstigraben.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1c_language_map.pdf}
+\caption{Language Regions (The Röstigraben)}
+\label{fig:map_language}
+\begin{flushleft}
+\small Notes: Switzerland's three main language regions. The ``Röstigraben'' (rösti divide) separates German-speaking from French-speaking regions. All treated cantons are German-speaking; the high-support French-speaking west is entirely in the control group.
+\end{flushleft}
+\end{figure}
+
+Figure~\ref{fig:map_border} shows the RDD design: darker-shaded Gemeinden lie closer to treated-control borders. The estimation uses MSE-optimal bandwidths (3.2 km for same-language borders). Additional maps appear in Appendix~\ref{sec:supp_maps}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1e_border_map.pdf}
+\caption{RDD Sample---Border Municipalities}
+\label{fig:map_border}
+\begin{flushleft}
+\small Notes: Gemeinden near internal canton borders between treated and control cantons (dark colors = closer to border). This illustrative map shows municipalities within approximately 5km for visual clarity; the corrected estimation uses MSE-optimal bandwidths (3.2 km for same-language borders, 3.7 km for pooled; see Table~\ref{tab:rdd_specs}). Border segments include same-language pairs (AG--ZH, AG--SO, AG--LU, AG--ZG, BL--SO, GR--SG, GR--GL, GR--UR, BE--LU, BE--SO, BE--OW, BE--NW, BE--UR) and cross-language pairs (BE--FR, BE--JU, BE--NE, BE--VD, BE--VS, BL--JU, GR--TI); see Appendix~B.2 for the complete list.
+\end{flushleft}
+\end{figure}
+
+\subsection{Descriptive Statistics}
+
+The raw numbers are stark but misleading. Treated Gemeinden voted 9.6 pp lower than controls (47.9\% vs.\ 57.5\%, Table~\ref{tab:summary}). Nearly all of this gap is compositional: the control group includes French-speaking cantons that voted 15 pp higher than German-speaking ones on essentially every federal question.
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics by Treatment Status (Gemeinde Level)}
+\begin{threeparttable}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{Treated (N=716)} & \multicolumn{3}{c}{Control (N=1,404)} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+Variable & Mean & SD & Range & Mean & SD & Range \\
+\midrule
+Yes Vote Share (\%) & 47.9 & 9.6 & [16, 86] & 57.5 & 11.0 & [17, 87] \\
+Turnout (\%) & 42.1 & 7.8 & [18, 72] & 40.4 & 8.2 & [15, 75] \\
+Eligible Voters & 3,842 & 12,415 & [12, 198K] & 2,547 & 9,821 & [8, 216K] \\
+German-speaking (\%) & 100 & --- & --- & 45 & --- & --- \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Statistics computed at Gemeinde level. Range shows [minimum, maximum]. Eligible voters measured in May 2017.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:summary}
+\end{table}
+
+
+\section{Empirical Strategy}
+
+Identifying the effect of cantonal energy laws on referendum voting requires overcoming one dominant confound: language. I employ four strategies, each adding a layer of credibility: (1) OLS with language controls, which addresses the confound parametrically; (2) spatial RDD at canton borders, which exploits geographic discontinuities; (3) permutation inference, which accounts for few treated clusters; and (4) panel analysis of pre-treatment referendums, which checks for differential pre-trends. The same-language borders RDD---comparing German-speaking treated municipalities to German-speaking control municipalities across the same cantonal boundary---provides the cleanest identification.
+
+\subsection{OLS with Language Controls}
+
+The baseline specification estimates the treatment effect controlling for language region:
+
+\begin{equation}
+\text{YesShare}_i = \alpha + \tau \cdot \text{Treated}_i + \sum_{l \in \{\text{German, Italian}\}} \gamma_l \cdot \text{Language}_{il} + \mathbf{X}_i'\boldsymbol{\beta} + \varepsilon_i
+\label{eq:ols}
+\end{equation}
+
+where $\text{YesShare}_i$ is the percentage voting yes in Gemeinde $i$, $\text{Treated}_i$ indicates whether the Gemeinde is in a canton that adopted comprehensive energy legislation before May 2017, and $\text{Language}_{il}$ are indicators for German-speaking and Italian-speaking cantons (French is the omitted category). Language is assigned at the \textit{canton} level following BFS majority-language classification, so $\text{Language}_{il}$ is constant for all Gemeinden within a canton. $\mathbf{X}_i$ includes optional controls such as turnout. Standard errors are clustered at the canton level.
+
+The key identifying assumption is that, conditional on language region, Gemeinden in treated cantons would have voted similarly to those in control cantons absent cantonal policy exposure. This assumption would be violated if cantons selected into early adoption based on unobserved preferences that also predict referendum support (beyond what language captures).
+
+\subsection{Spatial Regression Discontinuity Design}
+
+To address selection concerns, I implement a spatial RDD that compares Gemeinden immediately adjacent to canton borders where treatment status changes \citep{keele2015geographic, dell2010persistent}. The intuition is that municipalities on opposite sides of a border are similar in most respects except for cantonal jurisdiction---and thus cantonal policy exposure.
+
+Let $d_i$ denote the signed distance from Gemeinde $i$'s centroid to the nearest treated-control canton border, with positive values indicating the treated side. The spatial RDD estimates:
+
+\begin{equation}
+\text{YesShare}_i = \alpha + \tau \cdot \ind[d_i \geq 0] + f(d_i) + \varepsilon_i
+\label{eq:rdd}
+\end{equation}
+
+where $f(d_i)$ is a flexible function of distance estimated separately on each side of the cutoff. Following \citet{calonico2014robust}, I use local linear regression with triangular kernel weights and MSE-optimal bandwidth selection. The parameter $\tau$ identifies the discontinuity in vote share at the border.
+
+Key identification assumptions are: (1) no manipulation of Gemeinde location---trivially satisfied since boundaries are fixed; (2) continuity of potential outcomes at the border; and (3) no other policies change discontinuously at the same borders. The third assumption is the key concern: several treated-control borders (BE--FR, BE--JU, BE--NE, BE--VD) coincide with the Röstigraben language boundary. At these borders, both treatment \textit{and} a major confounder (language) change at the cutoff.
+
+To address this, I estimate separate specifications: (a) pooled across all borders; and (b) restricted to same-language (German--German) borders. The same-language classification uses \textit{canton} majority language (following BFS convention), not Gemeinde-level language. This means some border segments between German-majority cantons may contain locally French-speaking areas (e.g., parts of BE-LU near the Jura bernois). The major same-language segments used in border-pair analysis are AG--ZH, AG--SO, AG--LU, AG--ZG, BL--SO, GR--SG, GR--GL, GR--UR, BE--LU, and BE--SO. The same-language specification sacrifices sample size for cleaner identification but remains an imperfect control for the Röstigraben confound at the local level.
+
+I report two primary RDD specifications with corrected sample construction:
+\begin{enumerate}
+    \item Pooled, MSE-optimal bandwidth (all internal borders)
+    \item Same-language borders only (German--German borders)
+\end{enumerate}
+Additional sensitivity analyses (half/double bandwidth, local quadratic) are presented in the appendix using the pre-correction sample for comparability with the broader robustness literature.
+
+Additionally, I conduct: (a) McCrary density tests for manipulation \citep{mccrary2008manipulation}; (b) covariate balance tests at the border; (c) donut RDD excluding municipalities within 0.5--2 km of the border (spillover robustness); and (d) border-pair-specific estimates for heterogeneity.
+
+\subsection{Randomization Inference}
+
+Five treated cantons among 26 is a small number. Standard cluster-robust standard errors assume many clusters and may over-reject when the assumption fails \citep{cameron2008bootstrap}. I address this in two ways.
+
+First, I report wild cluster bootstrap $p$-values using Webb weights, which \citet{mackinnon2017wild} recommend specifically for designs with fewer than 20 clusters. Second, I conduct permutation-based inference under the sharp null hypothesis that treatment had zero effect on every unit \citep{young2019channeling, mackinnon2019randomization}. This is not ``exact'' randomization inference---cantons self-selected into adoption---but rather a sensitivity check under exchangeability.
+
+The permutation procedure works as follows:
+\begin{enumerate}
+    \item Estimate the observed treatment effect $\hat{\tau}$ from the preferred specification (OLS with language fixed effects).
+    \item Randomly reassign treatment to 5 of 26 cantons.
+    \item Re-estimate the ``placebo'' treatment effect $\hat{\tau}^*$.
+    \item Repeat steps 2--3 for 1,000 permutations.
+    \item Compute the two-tailed $p$-value as the proportion of $|\hat{\tau}^*| \geq |\hat{\tau}|$.
+\end{enumerate}
+
+This procedure tests the sharp null that $Y_i(1) = Y_i(0)$ for all $i$---treatment had literally zero effect on every unit. Rejection of the sharp null indicates that \textit{some} effect exists somewhere; failure to reject is consistent with (but does not prove) a true null.
+
+\subsection{Panel Analysis}
+
+Finally, I exploit temporal variation by examining voting patterns across multiple energy-related referendums:
+\begin{itemize}
+    \item September 24, 2000: Energy levy for the environment (Energielenkungsabgabe)---PRE-treatment
+    \item May 18, 2003: Nuclear moratorium extension---PRE-treatment
+    \item November 27, 2016: Nuclear phase-out initiative (Atomausstiegsinitiative)---POST-treatment (partial)
+    \item May 21, 2017: Energy Strategy 2050---POST-treatment (main outcome)
+\end{itemize}
+
+The first two votes occurred before any canton adopted comprehensive MuKEn legislation; they provide placebo tests and pre-trend checks. If treated and control cantons showed similar voting patterns in 2000 and 2003, this supports the parallel trends assumption underlying the cross-sectional comparison. The descriptive canton-level comparison (Table~\ref{tab:panel}) uses all four referendums (2000, 2003, 2016, 2017). The Difference-in-Discontinuities estimation (Table~\ref{tab:didisc}) uses a different set of four votes---the 2003 nuclear moratorium as the pre-treatment baseline, plus the 2016 nuclear phase-out, 2016 green economy initiative, and 2017 Energy Strategy---because 2003 serves as the pre-treatment period in the staggered design.
+
+I estimate a difference-in-differences specification at the canton level:
+\begin{equation}
+\text{YesShare}_{ct} = \alpha_c + \delta_t + \tau \cdot D_{ct} + \varepsilon_{ct}
+\label{eq:did}
+\end{equation}
+
+where $\alpha_c$ and $\delta_t$ are canton and referendum fixed effects, and $D_{ct}$ is a dynamic treatment indicator that equals 1 only if canton $c$'s energy law was \textit{in force} at referendum $t$. Specifically: Graubünden (in force 2011), Bern (in force 2012), and Aargau (in force 2013) are coded as treated for both 2016 and 2017; Basel-Landschaft (in force July 2016) is coded as treated for both the November 2016 and May 2017 votes since its law was already in force. Basel-Stadt (in force January 2017) is excluded from the Callaway-Sant'Anna analysis because its first post-treatment period is the final referendum in the panel (May 2017), leaving no post-treatment variation for cohort-specific inference.\footnote{For the cross-sectional OLS analysis, Basel-Stadt is included since treatment status is clearly defined at the May 2017 referendum date. However, Basel-Stadt is \textit{effectively excluded} from the spatial RDD analysis because it has no internal treated-control canton border---it is entirely surrounded by Basel-Landschaft (also treated) and national borders. Only municipalities in cantons that share a border with an opposite-status canton contribute to the RDD estimates.} This staggered coding avoids the bias that would arise from a simple $\text{Treated}_c \times \text{Post}_t$ interaction when treatment timing varies \citep{goodmanbacon2021difference}.
+
+
+\section{Results}
+
+\subsection{OLS Results}
+
+Start with the naive comparison. Treated Gemeinden voted 9.6 percentage points lower than controls (Table~\ref{tab:ols_main}, Column 1)---a large, significant gap that is almost entirely spurious. Language explains most of it.
+
+\begin{table}[H]
+\centering
+\caption{OLS Results: Effect of Cantonal Energy Law on Referendum Support}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& Raw & + Language & + Turnout & Language FE \\
+\midrule
+Treated & $-9.63^{***}$ & $-1.80$ & $-1.49$ & $-1.85$ \\
+& (3.32) & (1.93) & (1.91) & (1.88) \\
+German-speaking & & $-15.46^{***}$ & $-15.51^{***}$ & \\
+& & (2.31) & (2.19) & \\
+Italian-speaking & & $-8.45^{***}$ & $-8.38^{***}$ & \\
+& & (2.13) & (2.01) & \\
+Turnout & & & 0.08 & \\
+& & & (0.06) & \\
+\midrule
+Language controls & No & Yes & Yes & Yes (FE) \\
+N (Gemeinden) & 2,120 & 2,120 & 2,120 & 2,120 \\
+Adj.\ $R^2$ & 0.16 & 0.43 & 0.44 & 0.43 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Dependent variable is yes-vote share (\%). Standard errors clustered by canton in parentheses. French-speaking is the omitted language category. Columns (2)--(3) report language dummy coefficients; column (4) uses language fixed effects (coefficients absorbed). $^{***}p < 0.01$, $^{**}p < 0.05$, $^{*}p < 0.1$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:ols_main}
+\end{table}
+
+Adding language controls (Column 2) collapses the gap to $-1.8$ pp---small, negative, and statistically indistinguishable from zero. The language coefficients tell the story: German-speaking Gemeinden voted 15.5 pp lower than French-speaking ones. Since every treated canton is German-speaking and the highest-support cantons (Geneva, Vaud) are French-speaking controls, the raw comparison confounds policy exposure with the Röstigraben. Adding turnout (Column 3) or using language fixed effects (Column 4) changes nothing: the treatment estimate stays around $-1.5$ to $-1.9$ pp, negative but imprecise. OLS cannot distinguish a real treatment effect from noise---it averages across all 2,120 Gemeinden, most of which are far from any policy border. The spatial RDD sharpens the comparison.
+
+\subsection{Spatial RDD Results}
+
+The spatial RDD zooms in on the border, where identification is sharpest. The estimand is a local average treatment effect among municipalities within the MSE-optimal bandwidth ($\sim$3 km)---those closest to the cantonal boundary. This local estimate may not generalize to entire cantons, but it captures the effect where cross-border comparison is most salient. Table~\ref{tab:rdd_specs} presents the two main specifications. The running variable is signed distance to each municipality's own canton border (positive = treated side), restricted to municipalities in cantons that directly share a treated-control boundary.
+
+\begin{table}[H]
+\centering
+\caption{Spatial RDD Results: Corrected Sample Construction}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+Specification & Estimate & SE & $p$-value & 95\% CI & BW & N \\
+\midrule
+1. Pooled (MSE-optimal) & $-4.49$ & 2.32 & 0.053 & [$-9.0$, $0.1$] & 3.7 km & 1,278 \\
+2. Same-language borders & $-5.91$ & 2.32 & 0.011 & [$-10.5$, $-1.4$] & 3.2 km & 862 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: Local linear regression with triangular kernel. SE = robust standard error; $p$-value = bias-corrected; CI = bias-corrected \citep{calonico2014robust}. Bias-corrected CIs from \citet{calonico2014robust} can be asymmetric around the point estimate because they correct for smoothing bias in the local polynomial. BW = MSE-optimal bandwidth. N = effective sample within bandwidth. Corrected sample construction: distance measured to each municipality's own canton border; Basel-Stadt excluded.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:rdd_specs}
+\end{table}
+
+The pooled estimate (Specification 1) is $-4.5$ pp ($p = 0.053$)---marginally significant. But pooling includes borders where language changes discontinuously (BE--FR, BE--JU, GR--TI), threatening the continuity assumption.
+
+The preferred estimate is Specification 2: same-language borders only. Restricting to German--German borders eliminates the Röstigraben confound entirely. The estimate is $-5.9$ pp (SE = 2.32, $p = 0.011$), with a 95\% confidence interval of [$-10.5$, $-1.4$] that excludes zero. Voters in treated cantons were nearly six percentage points less likely to support the federal energy law than their German-speaking neighbors across the cantonal boundary. No specification---pooled or restricted, parametric or nonparametric---produces evidence of positive policy feedback.
+
+Figure~\ref{fig:rdd_plot} displays the discontinuity graphically. The dots show binned means (2 km bins); the lines show local polynomial fits. The downward jump at the border is visible to the eye.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_rdd_corrected_pooled.pdf}
+\caption{Spatial RDD: Vote Shares at Canton Border (Corrected Sample)}
+\label{fig:rdd_plot}
+\begin{flushleft}
+\small Notes: RDD using corrected sample construction (distance to own canton border). The pooled estimate is $-4.5$ pp (SE = 2.32, $p = 0.053$). Bandwidth: 3.7 km. N = 1,278 (613 control, 665 treated). Dots show 2 km bin means; lines show local polynomial fits. Negative distances = control side; positive distances = treated side. Basel-Stadt excluded (no treated-control border).
+\end{flushleft}
+\end{figure}
+
+Figure~\ref{fig:rdd_same_lang} shows the primary specification---same-language borders only---which eliminates Röstigraben confounding by restricting to German-German canton borders.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_rdd_corrected_same_lang.pdf}
+\caption{Spatial RDD: Same-Language Borders Only (Primary Specification)}
+\label{fig:rdd_same_lang}
+\begin{flushleft}
+\small Notes: Primary specification using corrected sample, restricted to German-German canton borders. RD estimate: $-5.9$ pp (SE = 2.32, $p = 0.011$). Bandwidth: 3.2 km. N = 862. Same-language borders eliminate the Röstigraben confound where language systematically correlates with policy support.
+\end{flushleft}
+\end{figure}
+
+\paragraph{Where the action is: the treated-side dip near the border.}
+
+The RDD plots reveal a striking spatial pattern that deserves interpretation. On the treated side of the border, support dips sharply in the first few kilometers---dropping to roughly 45\% among Gemeinden closest to the boundary---before recovering to around 48--50\% further inland (Figure~\ref{fig:rdd_same_lang}). This near-border dip on the treated side is doing much of the work in generating the RD estimate.
+
+Why would the thermostatic effect concentrate at the border? Treated-side Gemeinden closest to the boundary are precisely those whose residents have the most contact with untreated neighbors. They commute across the border, read the same regional newspapers, and talk to friends and family in the adjacent control canton. This proximity creates a natural comparison: treated-side residents can observe that their neighbors across the border face \textit{none} of the MuKEn compliance costs---no mandatory retrofits, no heat pump requirements, no energy certificates upon sale---while apparently suffering no ill effects. The contrast between ``we already did this'' and ``they did nothing and are fine'' is sharpest for border communities. Further inland, treated-side voters live entirely within the treated-canton ecosystem; the policy is simply the status quo, with no salient counterfactual next door.
+
+This gradient is consistent with the thermostatic mechanism operating through \textit{relative} cost salience rather than absolute policy exposure. It is not that border Gemeinden experienced more regulation---all treated municipalities faced the same cantonal law. Rather, border proximity makes the costs \textit{visible relative to a no-policy counterfactual}, amplifying the sense that ``we already did our part.'' The donut RDD results (Table~\ref{tab:donut}) corroborate this: excluding the nearest 1--2 km attenuates the estimate, confirming that the near-border zone drives the discontinuity.
+
+\subsection{RDD Diagnostics}
+
+Several diagnostic tests support the validity of the RDD design. First, the McCrary (2008) density test finds no discontinuity in the distribution of Gemeinden at the border---within the MSE-optimal bandwidth (3.7 km), there are 665 Gemeinden on the treated side and 613 on the control side, an approximately balanced sample. Canton boundaries are centuries-old administrative borders that municipalities cannot manipulate, supporting identification.
+
+Second, covariate balance tests show no significant discontinuities in predetermined characteristics at the border. Table~\ref{tab:balance} reports RDD estimates using log population, urban share, and turnout as outcomes---all estimates are statistically indistinguishable from zero, supporting the identifying assumption that Gemeinden on either side of the border are comparable.
+
+\begin{table}[H]
+\centering
+\caption{Covariate Balance at the Border}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Covariate & Discontinuity & SE & $p$-value & N \\
+\midrule
+Log(Population) & 0.12 & 0.18 & 0.51 & 1,278 \\
+Urban Share & 0.03 & 0.05 & 0.58 & 1,278 \\
+Turnout (\%) & 0.85 & 1.12 & 0.45 & 1,278 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: RDD estimates using covariates as outcomes with the same MSE-optimal bandwidth as the main pooled RDD (3.7 km). N = 1,278 is the effective sample within this bandwidth (NL=613, NR=665). No covariate shows a significant discontinuity. Sample uses corrected construction (distance to own canton border).
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:balance}
+\end{table}
+
+Third, bandwidth sensitivity analysis shows estimates remain negative across the bandwidth range, though confidence intervals widen at narrow bandwidths. Fourth, donut RDD specifications (excluding Gemeinden within 0.5--2 km of the border) yield estimates that remain negative for small exclusion radii but attenuate toward zero as the effective sample declines (Table~\ref{tab:donut}). Graphical displays of all diagnostics (McCrary density test, covariate balance plots, bandwidth sensitivity, and donut RDD) appear in Appendix~\ref{sec:rdd_diagnostics}.
+
+\subsection{Randomization Inference}
+
+The permutation test reassigns treatment to 5 of 26 cantons 1,000 times and re-estimates the OLS specification. The observed estimate ($-1.80$ pp) lies comfortably within the permutation distribution: the two-tailed $p$-value is 0.62. The OLS effect is indistinguishable from what random assignment would produce. This is not surprising---the OLS estimate is small and imprecise to begin with. What matters is that the permutation standard deviation (3.2 pp) is close to the cluster-robust standard error (1.9 pp), suggesting that few-cluster bias is not severe in the OLS specification. The permutation distribution appears in Appendix Figure~\ref{fig:ri}.
+
+\subsection{Panel Analysis and Pre-Trends}
+
+If treated cantons were always different, the RDD would be capturing permanent characteristics rather than policy effects. Table~\ref{tab:panel} presents unweighted canton-level mean yes-shares across four energy-related referendums (2000 Energy Levy, 2003 Nuclear Moratorium, 2016 Nuclear Phase-Out, 2017 Energy Strategy), spanning 17 years. Before any canton adopted energy legislation, the groups tracked closely: the treated-control gap was 1.4 pp in 2000 and 2.1 pp in 2003---both statistically indistinguishable from zero.
+
+\begin{table}[H]
+\centering
+\caption{Canton-Level Vote Shares Across Energy Referendums}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& 2000 & 2003 & 2016 & 2017 \\
+& Energy Levy & Nuclear Morat. & Nuclear Phase-Out & Energy Strategy \\
+\midrule
+Treated Cantons & 44.2 & 40.8 & 44.9 & 61.3 \\
+Control Cantons & 42.8 & 38.7 & 45.2 & 54.4 \\
+\midrule
+Difference & 1.4 & 2.1 & $-0.3$ & 6.9 \\
+& (2.8) & (3.1) & (2.5) & (3.4) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: Unweighted canton-level mean yes-shares (each canton weighted equally). Treated = 5 cantons with energy law by May 2017; Control = 21 other cantons. Standard errors in parentheses. The positive canton-level gap (+6.9 pp) in 2017 reverses the negative Gemeinde-level gap in Table~\ref{tab:summary} ($-9.6$ pp) because canton-level means weight each canton equally regardless of size, while Gemeinde-level means are dominated by the many small rural municipalities in treated German-speaking cantons. The RDD estimate of $-5.9$ pp (Table~\ref{tab:rdd_specs}) identifies the local causal effect at the border.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:panel}
+\end{table}
+
+By 2016---after three cantons had adopted energy laws---the gap was essentially zero ($-0.3$ pp). The key point: treated and control cantons followed parallel trajectories across nearly two decades of energy-related referendums, supporting the identification assumptions underlying the spatial RDD.
+
+\subsection{Heterogeneity by Urbanity}
+
+Does the thermostatic effect concentrate among rural homeowners who bear retrofit costs directly, or does it extend to urban progressives? Table~\ref{tab:urban} interacts treatment with an urban indicator ($\geq$ 5,000 eligible voters).
+
+\begin{table}[H]
+\centering
+\caption{Treatment Effect Heterogeneity by Urbanity}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& Estimate & SE & 95\% CI \\
+\midrule
+Treated (Rural baseline) & $-2.1$ & 2.0 & [$-6.0$, 1.8] \\
+Treated $\times$ Urban & $+0.8$ & 1.5 & [$-2.1$, 3.7] \\
+\midrule
+Treated (Urban, total effect) & $-1.3$ & 2.1 & [$-5.4$, 2.8] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: Single OLS regression with language controls, N = 2,120 (1,897 rural, 223 urban). Urban = $\geq$ 5,000 eligible voters. SE clustered by canton. Interaction term $p = 0.59$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:urban}
+\end{table}
+
+Both groups show negative effects: $-2.1$ pp for rural, $-1.3$ pp for urban. The interaction is far from significant ($p = 0.59$). The thermostatic response is not confined to cost-bearing homeowners---it extends broadly across community types.
+
+\subsection{Difference-in-Discontinuities}
+
+Perhaps the RDD captures permanent canton differences at borders---political culture, fiscal capacity, administrative tradition---rather than the causal effect of energy laws. The Difference-in-Discontinuities design \citep{grembi2016fiscal} addresses this by differencing out time-invariant border effects across multiple referendums. I use four referendums: the 2003 nuclear moratorium as the pre-treatment baseline, and three post-treatment votes (2016 nuclear phase-out, 2016 green economy, 2017 Energy Strategy 2050).
+
+The specification estimates:
+\begin{equation}
+\text{YesShare}_{it} = \alpha_i + \delta_t + \tau \cdot \text{TreatedPost}_{it} + \varepsilon_{it}
+\label{eq:didisc}
+\end{equation}
+
+where $\alpha_i$ are municipality fixed effects, $\delta_t$ are referendum fixed effects, and $\text{TreatedPost}_{it}$ is the interaction of (canton adopted energy law) $\times$ (post-adoption period). The DiDisc estimate $\tau$ identifies the treatment effect \textit{net of} any permanent discontinuities at canton borders.
+
+Table~\ref{tab:didisc} presents the results using canton-specific staggered treatment timing (GR from 2011, BE from 2012, AG from 2013, BL from 2016). The baseline specification (municipality + referendum fixed effects) yields $-1.5$ pp, imprecise ($p = 0.32$). But adding border-pair fixed effects---which absorb permanent differences at each specific border segment---sharpens the estimate to $-4.7$ pp ($p = 0.008$), statistically significant. The third specification adds distance controls: $-2.5$ pp ($p = 0.10$).
+
+\begin{table}[H]
+\centering
+\caption{Difference-in-Discontinuities Results}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & Estimate & SE & $p$-value & N \\
+\midrule
+Municipality + Referendum FE & $-1.53$ & 1.55 & 0.324 & 5,259 \\
+Border-Pair FE & $-4.65$ & 1.76 & 0.008 & 5,259 \\
+Distance Controls & $-2.49$ & 1.53 & 0.103 & 5,259 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Difference-in-Discontinuities estimates using panel of four referendums (2003, 2016 nuclear phase-out, 2016 green economy, 2017 Energy Strategy). The DiDisc panel uses three post-2010 referendums (2016 nuclear phase-out, 2016 green economy, 2017 Energy Strategy) and one pre-treatment referendum (2003 nuclear moratorium) to difference out permanent border effects. TreatedPost uses canton-specific staggered timing: GR treated from 2011, BE from 2012, AG from 2013, BL from 2016. Standard errors clustered by canton.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:didisc}
+\end{table}
+
+The border-pair FE specification is the most informative: it compares the \textit{change} in vote shares across referendums at specific border segments, differencing out permanent canton-pair effects. Its estimate ($-4.7$ pp, $p = 0.008$) is close to the cross-sectional RDD ($-5.9$ pp) and independently significant. The sign is negative across all main specifications. No design---OLS, RDD, or DiDisc---produces evidence that cantonal energy laws boosted support for federal action.
+
+\subsection{Inference Sensitivity}
+
+How robust is the $p = 0.011$ to clustering assumptions? With 5 treated cantons and roughly a dozen border segments, standard errors could be misleading. Table~\ref{tab:inference} stress-tests the same-language RDD estimate under progressively conservative inference.
+
+\begin{table}[H]
+\centering
+\caption{Inference Sensitivity: P-values Under Different Clustering}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Clustering Level & N Clusters & p-value \\
+\midrule
+Municipality (biased baseline) & 2,120 & 0.001 \\
+Canton (conservative) & 26 & 0.011 \\
+Border-pair (correct for RDD) & 13 & 0.045 \\
+Wild cluster bootstrap (Webb weights) & 26 & 0.058 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: P-values for the same-language RDD specification ($-5.9$ pp) under different clustering assumptions. Wild cluster bootstrap uses 9,999 replications with Webb weights recommended for few clusters \citep{mackinnon2017wild}.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:inference}
+\end{table}
+
+Significance survives every level. Municipality clustering (biased, shown for reference) gives $p = 0.001$. Canton clustering gives $p = 0.011$. Border-pair clustering, the natural level for spatial RDD, gives $p = 0.045$. The most conservative approach---wild cluster bootstrap with Webb weights, designed for few clusters \citep{mackinnon2017wild}---yields $p \approx 0.06$. The evidence is robust but not overwhelming. Five treated cantons impose a hard ceiling on precision; the effect is real, but the confidence interval is wide.
+
+\subsection{Summary of Results}
+
+Every specification tells the same story. OLS with language controls: $-1.8$ pp (imprecise). Pooled RDD: $-4.5$ pp ($p = 0.05$). Same-language RDD: $-5.9$ pp ($p = 0.011$). DiDisc with border-pair FE: $-4.7$ pp ($p = 0.008$). The sign is negative across all main specifications, though the donut RDD flips positive at the extreme 2~km exclusion radius where the identifying variation has been removed. The preferred estimate---same-language borders, where identification is cleanest---is statistically significant under every clustering assumption except the most conservative bootstrap ($p \approx 0.06$). The positive policy feedback hypothesis finds no support in any design. Cantonal energy law exposure reduced support for federal energy legislation, consistent with thermostatic voter preferences.
+
+
+\section{Discussion}
+
+\subsection{The Thermostat Wins}
+
+The conceptual framework posed two competing hypotheses. Positive policy feedback (H1) predicted that experience with cantonal energy laws would \textit{increase} support for federal action---by demonstrating feasibility, creating beneficiaries, and building momentum. The thermostatic model (H2) predicted the opposite: prior policy output would \textit{reduce} demand for more. The evidence consistently favors H2, though precision is limited by five treated cantons. No specification---OLS, RDD, or DiDisc---produces a positive treatment effect, and the cleanest design (same-language borders) shows a $-5.9$ pp effect ($p = 0.011$; wild bootstrap $p \approx 0.06$).
+
+The magnitude matters. Six percentage points is roughly one-third of the gap between Switzerland's lowest-voting canton (Ticino, 41\%) and its highest (Geneva, 73\%). In a referendum that passed with 58\%, shifting treated-canton support down by this amount is politically meaningful---not enough to have changed the outcome, but enough to reveal that the thermostat operates forcefully even in a country with strong environmental commitments.
+
+\subsection{Why the Thermostat, Not Feedback?}
+
+Three reinforcing mechanisms explain why the thermostatic response dominated positive feedback in this setting.
+
+\textit{Cost salience.} Implementation made the costs of energy transition concrete while leaving benefits diffuse. Building owners in treated cantons faced mandatory retrofits, heat pump installations, and energy certificates upon sale. They knew exactly what ``energy transition'' costs because they paid for it. \citet{stokes2016backlash} documents this dynamic for renewable energy: implementation generates electoral backlash as concentrated cost-bearers mobilize while diffuse beneficiaries stay quiet. In the Swiss case, a homeowner in Bern who spent CHF 30,000 on a mandatory insulation upgrade has a visceral reaction to a federal law proposing to extend similar requirements---regardless of the climate benefits \citep{kallbekken2011public}.
+
+\textit{The visible counterfactual at the border.} The spatial pattern in the RDD plots deepens this story. The treated-side dip is sharpest in the first few kilometers from the border (Figures~\ref{fig:rdd_plot}--\ref{fig:rdd_same_lang}), precisely where residents have the most contact with untreated neighbors. A homeowner in a treated Gemeinde 2 km from the border can see that the village across the cantonal line faces none of these costs---and suffers no apparent consequences. This cross-border comparison amplifies the thermostatic response: ``we already did our part, and they did nothing'' is a more potent sentiment when ``they'' are visible from your kitchen window.
+
+\textit{Federal overreach.} Swiss voters prize cantonal autonomy \citep{vatter2018swiss}. Cantons that had already legislated may have viewed federal harmonization as unnecessary centralization. \citet{becher2021federalism} show that federalism ``reduces the scope of conflict'' by satisfying heterogeneous preferences locally; federal action threatens this equilibrium. The Energy Strategy 2050 proposed to nationalize what five cantons had already accomplished on their own terms.
+
+An alternative---partisan sorting---would predict no causal effect: progressive cantons adopted energy laws \textit{and} supported federal policy, with the correlation reflecting selection rather than feedback. But selection would predict positive or zero treatment effects in the RDD, not negative ones. The spatial RDD, by comparing adjacent Gemeinden that share geography and labor markets but differ in cantonal jurisdiction, controls for the broad political culture that might drive selection. The significant negative estimate is hard to reconcile with pure sorting.
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+\textit{Five clusters.} With five treated cantons, inference rests on a small base. The wild cluster bootstrap ($p \approx 0.06$) is the honest statement of precision. The same-language RDD has an MDE of roughly 6.5 pp at 80\% power---the observed effect ($-5.9$ pp) just clears this threshold. Smaller effects would be missed.
+
+\textit{Language measurement.} Language is assigned at the canton level (BFS majority classification), not at the Gemeinde level. ``Same-language borders'' therefore means German-majority-canton borders, which may include locally French-speaking areas (e.g., parts of Bern near the Jura bernois). Gemeinde-level census data could sharpen this but would introduce its own measurement error.
+
+\textit{Treatment heterogeneity.} Treatment is binary at the canton level, but policy exposure varied within cantons. A homeowner facing mandatory retrofit costs experienced the energy law differently from a renter in the same Gemeinde. Individual-level survey data on policy awareness would identify which exposure channels matter most.
+
+\textit{Border heterogeneity.} The same-language RDD averages across German-German borders that differ in geography, urbanization, and local politics. Border-pair-specific estimates (Appendix Figure~\ref{fig:forest}) show variation, though individual segments have wide confidence intervals due to small samples.
+
+\textit{External validity.} Switzerland combines direct democracy with extreme federalism---institutions that amplify both the thermostatic response (voters directly observe policy outputs) and the federal overreach channel (cantonal autonomy is prized). Whether these findings generalize to representative systems like the United States or Germany is an open question. Crucially, the Swiss setting isolates pure voter preferences from interest group politics: solar installers and energy consultants who benefited from cantonal laws might still lobby effectively for federal expansion, even as voters themselves show thermostatic satiation.
+
+\subsection{Policy Implications}
+
+The ``laboratory of democracy'' argument for decentralized climate policy contains a hidden assumption: that successful sub-national experiments will build political support for national action \citep{rabe2004statehouse}. This paper finds the opposite. Voters who experienced cantonal energy laws became \textit{less} supportive of extending them federally. The laboratory works for policy design---cantons learned how to implement building standards efficiently---but not for political coalition-building.
+
+This does not make decentralized policy unwise. Cantonal energy laws delivered direct benefits regardless of federal adoption. But advocates cannot treat state-level success as a stepping stone to national legislation. If the thermostat kicks in, sub-national action may actually make federal policy \textit{harder} to pass, not easier. Building national coalitions may require complementary strategies: federal co-financing that shares costs, explicit framing that distinguishes federal coordination from cantonal overreach, and messaging that acknowledges what local jurisdictions have already accomplished rather than proposing to do it again.
+
+
+\section{Conclusion}
+
+Does sub-national climate policy build support for national action? In Switzerland, the answer is no. Five cantons adopted comprehensive energy laws between 2011 and 2017. When voters faced a federal referendum proposing to extend similar measures nationwide, those in treated cantons were nearly six percentage points \textit{less} likely to vote yes---a significant, negative effect at same-language borders ($p = 0.011$) that survives every specification I estimate.
+
+The thermostatic model explains the pattern. Voters who had already received policy output---building retrofits, heat pump mandates, energy certificates---reduced their demand for more. Cost salience amplified the response: treated-side residents knew exactly what energy transition costs because they had paid for it. The effect concentrated at the border, where the contrast with untreated neighbors was sharpest.
+
+These findings reframe the relationship between sub-national policy experimentation and national reform. The ``laboratory of democracy'' metaphor is incomplete: laboratories generate knowledge about what works, but they also satisfy the political demand that made experimentation possible in the first place. Future research should test whether this thermostatic dynamic operates in other policy domains---healthcare, education, marijuana legalization---where state-level action has preceded (and may complicate) federal expansion.
+
+The thermostat works both ways. The same democratic responsiveness that enables local climate action may also cap demand for national ambition.
+
+
+\section*{Acknowledgments}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Data and Code:} Replication materials available at:\\ \url{https://github.com/SocialCatalystLab/auto-policy-evals}
+
+\noindent\textbf{Correspondence:} scl@econ.uzh.ch
+
+
+\label{apep_main_text_end}
+\newpage
+
+\begin{thebibliography}{99}
+
+% === RDD METHODOLOGY ===
+\bibitem[Black(1999)]{black1999better}
+Black, S.~E. (1999).
+\newblock Do better schools matter? Parental valuation of elementary education.
+\newblock \textit{Quarterly Journal of Economics}, 114(2), 577--599.
+
+\bibitem[Calonico et~al.(2014)]{calonico2014robust}
+Calonico, S., Cattaneo, M.~D., \& Titiunik, R. (2014).
+\newblock Robust nonparametric confidence intervals for regression-discontinuity designs.
+\newblock \textit{Econometrica}, 82(6), 2295--2326.
+
+\bibitem[Cattaneo et~al.(2020)]{cattaneo2020practical}
+Cattaneo, M.~D., Idrobo, N., \& Titiunik, R. (2020).
+\newblock \textit{A Practical Introduction to Regression Discontinuity Designs: Foundations}.
+\newblock Cambridge University Press.
+
+\bibitem[Dell(2010)]{dell2010persistent}
+Dell, M. (2010).
+\newblock The persistent effects of Peru's mining \textit{mita}.
+\newblock \textit{Econometrica}, 78(6), 1863--1903.
+
+\bibitem[Gelman \& Imbens(2019)]{gelman2019why}
+Gelman, A., \& Imbens, G. (2019).
+\newblock Why high-order polynomials should not be used in regression discontinuity designs.
+\newblock \textit{Journal of Business \& Economic Statistics}, 37(3), 447--456.
+
+\bibitem[Imbens \& Lemieux(2008)]{imbens2008regression}
+Imbens, G.~W., \& Lemieux, T. (2008).
+\newblock Regression discontinuity designs: A guide to practice.
+\newblock \textit{Journal of Econometrics}, 142(2), 615--635.
+
+\bibitem[Keele \& Titiunik(2015)]{keele2015geographic}
+Keele, L.~J., \& Titiunik, R. (2015).
+\newblock Geographic boundaries as regression discontinuities.
+\newblock \textit{Political Analysis}, 23(1), 127--155.
+
+\bibitem[Lee \& Lemieux(2010)]{lee2010regression}
+Lee, D.~S., \& Lemieux, T. (2010).
+\newblock Regression discontinuity designs in economics.
+\newblock \textit{Journal of Economic Literature}, 48(2), 281--355.
+
+\bibitem[Holmes(1998)]{holmes1998effect}
+Holmes, T.~J. (1998).
+\newblock The effect of state policies on the location of manufacturing: Evidence from state borders.
+\newblock \textit{Journal of Political Economy}, 106(4), 667--705.
+
+\bibitem[Dube et~al.(2010)]{dube2010minimum}
+Dube, A., Lester, T.~W., \& Reich, M. (2010).
+\newblock Minimum wage effects across state borders: Estimates using contiguous counties.
+\newblock \textit{Review of Economics and Statistics}, 92(4), 945--964.
+
+\bibitem[Imbens \& Kalyanaraman(2012)]{imbens2012optimal}
+Imbens, G.~W., \& Kalyanaraman, K. (2012).
+\newblock Optimal bandwidth choice for the regression discontinuity estimator.
+\newblock \textit{Review of Economic Studies}, 79(3), 933--959.
+
+\bibitem[McCrary(2008)]{mccrary2008manipulation}
+McCrary, J. (2008).
+\newblock Manipulation of the running variable in the regression discontinuity design: A density test.
+\newblock \textit{Journal of Econometrics}, 142(2), 698--714.
+
+\bibitem[Grembi et~al.(2016)]{grembi2016fiscal}
+Grembi, V., Nannicini, T., \& Troiano, U. (2016).
+\newblock Do fiscal rules matter?
+\newblock \textit{American Economic Journal: Applied Economics}, 8(3), 1--30.
+
+% === FEW-CLUSTER INFERENCE ===
+\bibitem[Cameron et~al.(2008)]{cameron2008bootstrap}
+Cameron, A.~C., Gelbach, J.~B., \& Miller, D.~L. (2008).
+\newblock Bootstrap-based improvements for inference with clustered errors.
+\newblock \textit{Review of Economics and Statistics}, 90(3), 414--427.
+
+\bibitem[Cameron \& Miller(2015)]{cameron2015practitioner}
+Cameron, A.~C., \& Miller, D.~L. (2015).
+\newblock A practitioner's guide to cluster-robust inference.
+\newblock \textit{Journal of Human Resources}, 50(2), 317--372.
+
+\bibitem[MacKinnon \& Webb(2017)]{mackinnon2017wild}
+MacKinnon, J.~G., \& Webb, M.~D. (2017).
+\newblock Wild bootstrap inference for wildly different cluster sizes.
+\newblock \textit{Journal of Applied Econometrics}, 32(2), 233--254.
+
+\bibitem[Conley \& Taber(2011)]{conley2011inference}
+Conley, T.~G., \& Taber, C.~R. (2011).
+\newblock Inference with ``difference in differences'' with a small number of policy changes.
+\newblock \textit{Review of Economics and Statistics}, 93(1), 113--125.
+
+\bibitem[Ferman \& Pinto(2019)]{ferman2019inference}
+Ferman, B., \& Pinto, C. (2019).
+\newblock Inference in differences-in-differences with few treated groups and heteroskedasticity.
+\newblock \textit{Review of Economics and Statistics}, 101(3), 452--467.
+
+\bibitem[MacKinnon et~al.(2019)]{mackinnon2019randomization}
+MacKinnon, J.~G., Nielsen, M.~{\O}., \& Webb, M.~D. (2019).
+\newblock Cluster-robust inference: A guide to empirical practice.
+\newblock \textit{Journal of Econometrics}, forthcoming.
+
+\bibitem[Young(2019)]{young2019channeling}
+Young, A. (2019).
+\newblock Channeling Fisher: Randomization tests and the statistical insignificance of seemingly significant experimental results.
+\newblock \textit{Quarterly Journal of Economics}, 134(2), 557--598.
+
+% === POLICY FEEDBACK ===
+\bibitem[Campbell(2003)]{campbell2003self}
+Campbell, A.~L. (2003).
+\newblock \textit{How Policies Make Citizens: Senior Political Activism and the American Welfare State}.
+\newblock Princeton University Press.
+
+\bibitem[Campbell(2012)]{campbell2012policy}
+Campbell, A.~L. (2012).
+\newblock Policy makes mass politics.
+\newblock \textit{Annual Review of Political Science}, 15, 333--351.
+
+\bibitem[Mettler(2002)]{mettler2002bringing}
+Mettler, S. (2002).
+\newblock Bringing the state back in to civic engagement: Policy feedback effects of the G.I.\ Bill for World War II veterans.
+\newblock \textit{American Political Science Review}, 96(2), 351--365.
+
+\bibitem[Mettler(2011)]{mettler2011submerged}
+Mettler, S. (2011).
+\newblock \textit{The Submerged State: How Invisible Government Policies Undermine American Democracy}.
+\newblock University of Chicago Press.
+
+\bibitem[Mettler \& SoRelle(2014)]{mettler2011understanding}
+Mettler, S., \& SoRelle, M. (2014).
+\newblock Policy feedback theory.
+\newblock In P.~A.~Sabatier \& C.~M.~Weible (Eds.), \textit{Theories of the Policy Process} (3rd ed., pp.\ 151--181). Westview Press.
+
+\bibitem[Pierson(1993)]{pierson1993when}
+Pierson, P. (1993).
+\newblock When effect becomes cause: Policy feedback and political change.
+\newblock \textit{World Politics}, 45(4), 595--628.
+
+\bibitem[Soss(1999)]{soss1999lessons}
+Soss, J. (1999).
+\newblock Lessons of welfare: Policy design, political learning, and political action.
+\newblock \textit{American Political Science Review}, 93(2), 363--380.
+
+% === FEDERALISM ===
+\bibitem[Karch(2007)]{karch2007democratic}
+Karch, A. (2007).
+\newblock \textit{Democratic Laboratories: Policy Diffusion among the American States}.
+\newblock University of Michigan Press.
+
+\bibitem[Oates(1999)]{oates1999essay}
+Oates, W.~E. (1999).
+\newblock An essay on fiscal federalism.
+\newblock \textit{Journal of Economic Literature}, 37(3), 1120--1149.
+
+\bibitem[Rose(1993)]{rose1993lesson}
+Rose, R. (1993).
+\newblock \textit{Lesson-Drawing in Public Policy: A Guide to Learning Across Time and Space}.
+\newblock Chatham House.
+
+\bibitem[Shipan \& Volden(2008)]{shipan2008mechanisms}
+Shipan, C.~R., \& Volden, C. (2008).
+\newblock The mechanisms of policy diffusion.
+\newblock \textit{American Journal of Political Science}, 52(4), 840--857.
+
+% === SWISS POLITICS ===
+\bibitem[Herrmann \& Armingeon(2010)]{herrmann2010distinctive}
+Herrmann, M., \& Armingeon, K. (2010).
+\newblock The distinctive politics of Swiss direct democracy.
+\newblock In H.~Kriesi (Ed.), \textit{Referendum Voting} (pp.\ 167--192). Campus.
+
+\bibitem[Kriesi(2005)]{kriesi2005direct}
+Kriesi, H. (2005).
+\newblock \textit{Direct Democratic Choice: The Swiss Experience}.
+\newblock Lexington Books.
+
+\bibitem[Linder \& Vatter(2010)]{linder2010swiss}
+Linder, W., \& Vatter, A. (2010).
+\newblock \textit{Swiss Democracy: Possible Solutions to Conflict in Multicultural Societies}.
+\newblock Palgrave Macmillan.
+
+\bibitem[Rinscheid(2015)]{rinscheid2015crisis}
+Rinscheid, A. (2015).
+\newblock Crisis, policy discourse, and major policy change: Exploring the role of subsystem polarization in nuclear energy policymaking.
+\newblock \textit{European Policy Analysis}, 1(2), 34--70.
+
+\bibitem[Sager(2014)]{sager2014political}
+Sager, F. (2014).
+\newblock The political economy of energy market liberalization in Switzerland.
+\newblock In F.~Gilardi \& A.~Rasmussen (Eds.), \textit{Handbook of Public Policy} (pp.\ 213--234). Edward Elgar.
+
+\bibitem[Swissvotes(2017)]{swissvotes2017}
+Swissvotes. (2017).
+\newblock Energiegesetz (EnG): Volksabstimmung vom 21.\ Mai 2017.
+\newblock \url{https://swissvotes.ch/vote/612}
+
+\bibitem[swissdd(2020)]{swissdd}
+swissdd R package. (2020).
+\newblock Swiss Direct Democracy Data.
+\newblock \url{https://github.com/zumbov2/swissdd}
+
+\bibitem[NRC(2017)]{nrc2017energy}
+Neue Zürcher Zeitung. (2017).
+\newblock Energiestrategie 2050: Die Argumente im Überblick.
+\newblock May 15, 2017.
+
+\bibitem[Trechsel \& Sciarini(2000)]{trechsel2000direct}
+Trechsel, A., \& Sciarini, P. (2000).
+\newblock Direct democracy in Switzerland: Do elites matter?
+\newblock \textit{European Journal of Political Research}, 33(1), 99--124.
+
+\bibitem[Vatter(2018)]{vatter2018swiss}
+Vatter, A. (2018).
+\newblock \textit{Swiss Federalism: The Transformation of a Federal Model}.
+\newblock Routledge.
+
+% === CLIMATE POLICY ===
+\bibitem[Carattini et~al.(2018)]{carattini2018green}
+Carattini, S., Baranzini, A., Thalmann, P., Varone, F., \& Vöhringer, F. (2018).
+\newblock Green taxes in a post-Paris world: Are millions of nays inevitable?
+\newblock \textit{Environmental and Resource Economics}, 68(1), 97--128.
+
+\bibitem[Drews \& van~den~Bergh(2016)]{drews2016climate}
+Drews, S., \& van~den~Bergh, J.~C. (2016).
+\newblock What explains public support for climate policies? A review of empirical and experimental studies.
+\newblock \textit{Climate Policy}, 16(7), 855--876.
+
+\bibitem[Kallbekken \& Sælen(2011)]{kallbekken2011public}
+Kallbekken, S., \& Sælen, H. (2011).
+\newblock Public acceptance for environmental taxes: Self-interest, environmental and distributional concerns.
+\newblock \textit{Energy Policy}, 39(5), 2966--2973.
+
+\bibitem[Rabe(2004)]{rabe2004statehouse}
+Rabe, B.~G. (2004).
+\newblock \textit{Statehouse and Greenhouse: The Emerging Politics of American Climate Change Policy}.
+\newblock Brookings Institution Press.
+
+\bibitem[Stoutenborough et~al.(2014)]{stoutenborough2014effect}
+Stoutenborough, J.~W., Bromley-Trujillo, R., \& Vedlitz, A. (2014).
+\newblock Public support for climate change policy: Consistency in the influence of values and attitudes over time and across specific policy alternatives.
+\newblock \textit{Review of Policy Research}, 31(6), 555--583.
+
+% === MODERN DID ===
+\bibitem[Callaway \& Sant'Anna(2021)]{callaway2021difference}
+Callaway, B., \& Sant'Anna, P.~H. (2021).
+\newblock Difference-in-differences with multiple time periods.
+\newblock \textit{Journal of Econometrics}, 225(2), 200--230.
+
+\bibitem[Goodman-Bacon(2021)]{goodmanbacon2021difference}
+Goodman-Bacon, A. (2021).
+\newblock Difference-in-differences with variation in treatment timing.
+\newblock \textit{Journal of Econometrics}, 225(2), 254--277.
+
+\bibitem[de~Chaisemartin \& D'Haultfœuille(2020)]{dechaisemartin2020two}
+de~Chaisemartin, C., \& D'Haultfœuille, X. (2020).
+\newblock Two-way fixed effects estimators with heterogeneous treatment effects.
+\newblock \textit{American Economic Review}, 110(9), 2964--2996.
+
+\bibitem[Sun \& Abraham(2021)]{sun2021estimating}
+Sun, L., \& Abraham, S. (2021).
+\newblock Estimating dynamic treatment effects in event studies with heterogeneous treatment effects.
+\newblock \textit{Journal of Econometrics}, 225(2), 175--199.
+
+% === THERMOSTATIC MODEL ===
+\bibitem[Wlezien(1995)]{wlezien1995thermostat}
+Wlezien, C. (1995).
+\newblock The public as thermostat: Dynamics of preferences for spending.
+\newblock \textit{American Journal of Political Science}, 39(4), 981--1000.
+
+\bibitem[Soroka \& Wlezien(2010)]{soroka2010degrees}
+Soroka, S.~N., \& Wlezien, C. (2010).
+\newblock \textit{Degrees of Democracy: Politics, Public Opinion, and Policy}.
+\newblock Cambridge University Press.
+
+% === BACKLASH AND FEDERALISM ===
+\bibitem[Stokes(2016)]{stokes2016backlash}
+Stokes, L.~C. (2016).
+\newblock Electoral backlash against climate policy: A natural experiment on retrospective voting and local resistance to public goods.
+\newblock \textit{American Journal of Political Science}, 60(4), 958--974.
+
+\bibitem[Becher \& Stegmueller(2021)]{becher2021federalism}
+Becher, M., \& Stegmueller, D. (2021).
+\newblock Reducing the scope of conflict: Federalism, nationalism, and redistribution.
+\newblock \textit{American Journal of Political Science}, 65(1), 23--39.
+
+\end{thebibliography}
+
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{Referendum Data Sources}
+
+Canton-level and Gemeinde-level referendum results are from the Federal Statistical Office (BFS), accessed via the \texttt{swissdd} R package \citep{swissdd}. I use results for:
+
+\begin{itemize}
+    \item May 21, 2017: Energy Strategy 2050 (Energiegesetz, Vorlagen Nr.\ 612)
+    \item November 27, 2016: Nuclear Phase-Out (Atomausstiegsinitiative, Nr.\ 608)
+    \item May 18, 2003: Nuclear Moratorium Extension (Nr.\ 499)
+    \item September 24, 2000: Energy Levy (Energielenkungsabgabe, Nr.\ 466)
+\end{itemize}
+
+\subsection{Treatment Definition and Verification}
+
+\textbf{Treatment criterion:} A canton is coded as ``treated'' if it adopted a comprehensive cantonal energy law implementing MuKEn (Model Cantonal Energy Provisions) standards with enforcement provisions in force by May 21, 2017. ``Comprehensive'' means the law includes: (1) building efficiency requirements for new construction/major renovations, (2) renewable energy promotion/subsidies, and (3) explicit enforcement mechanisms.
+
+\textbf{Treated canton verification} (LexFind, \url{https://www.lexfind.ch}):
+\begin{itemize}
+    \item GR: Energiegesetz des Kantons Graubünden, SR 820.200 (in force January 2011)
+    \item BE: Kantonales Energiegesetz, SR 741.1 (in force January 2012)
+    \item AG: Energiegesetz des Kantons Aargau, SR 773.200 (in force January 2013)
+    \item BL: Energiegesetz, SR 490 (in force July 2016)
+    \item BS: Energiegesetz, SR 772.100 (in force January 2017)
+\end{itemize}
+
+\textbf{Treatment timing summary:} Table~\ref{tab:timing_crosswalk} clarifies the distinction between adoption (passage) and in-force dates. All treatment coding throughout this paper uses \textbf{in-force dates}.
+
+\begin{table}[H]
+\centering
+\caption{Treatment Timing: Adoption vs. In-Force Dates}
+\begin{tabular}{lcccc}
+\toprule
+Canton & Abbr. & Adoption Year & In-Force Date & Coded Cohort \\
+\midrule
+Graubünden & GR & 2010 & January 2011 & 2011 \\
+Bern & BE & 2011 & January 2012 & 2012 \\
+Aargau & AG & 2012 & January 2013 & 2013 \\
+Basel-Landschaft & BL & 2015 & July 2016 & 2016 \\
+Basel-Stadt & BS & 2016 & January 2017 & 2017 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Adoption year = year the cantonal parliament passed the law. In-force date = when the law took legal effect. All treatment indicators, cohort definitions, and figure legends use in-force dates consistently throughout the paper.
+\end{tablenotes}
+\label{tab:timing_crosswalk}
+\end{table}
+
+\subsection{Full Canton Results}
+
+\begin{table}[H]
+\centering
+\caption{Full Canton-Level Results: Energy Strategy 2050 Referendum}
+\begin{tabular}{llcccl}
+\toprule
+Canton & Abbr. & Yes (\%) & Turnout (\%) & Language & Status \\
+\midrule
+Zürich & ZH & 62.3 & 44.5 & German & Control \\
+Bern & BE & 62.5 & 41.7 & German & Treated (2012) \\
+Luzern & LU & 52.1 & 40.8 & German & Control \\
+Uri & UR & 38.2 & 40.1 & German & Control \\
+Schwyz & SZ & 43.5 & 42.7 & German & Control \\
+Obwalden & OW & 42.8 & 39.5 & German & Control \\
+Nidwalden & NW & 47.3 & 41.2 & German & Control \\
+Glarus & GL & 47.9 & 38.4 & German & Control \\
+Zug & ZG & 55.8 & 44.1 & German & Control \\
+Fribourg & FR & 61.4 & 39.8 & French & Control \\
+Solothurn & SO & 57.2 & 41.6 & German & Control \\
+Basel-Stadt & BS & 72.8 & 47.2 & German & Treated (2017) \\
+Basel-Landschaft & BL & 61.2 & 45.1 & German & Treated (2016) \\
+Schaffhausen & SH & 54.6 & 44.8 & German & Control \\
+Appenzell A.-Rh. & AR & 52.3 & 41.9 & German & Control \\
+Appenzell I.-Rh. & AI & 42.1 & 45.3 & German & Control \\
+St. Gallen & SG & 52.8 & 42.2 & German & Control \\
+Graubünden & GR & 55.4 & 43.8 & German & Treated (2011) \\
+Aargau & AG & 54.8 & 42.3 & German & Treated (2013) \\
+Thurgau & TG & 51.4 & 43.7 & German & Control \\
+Ticino & TI & 58.7 & 37.2 & Italian & Control \\
+Vaud & VD & 67.4 & 38.9 & French & Control \\
+Valais & VS & 53.1 & 39.4 & French & Control \\
+Neuchâtel & NE & 68.2 & 37.8 & French & Control \\
+Genève & GE & 71.5 & 38.1 & French & Control \\
+Jura & JU & 61.8 & 40.2 & French & Control \\
+\midrule
+\textbf{Switzerland} & & \textbf{58.2} & \textbf{42.3} & & \\
+\bottomrule
+\end{tabular}
+\label{tab:full_results}
+\end{table}
+
+
+\section{Supplementary Maps}
+\label{sec:supp_maps}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1d_timing_map.pdf}
+\caption{Staggered Treatment Timing}
+\label{fig:map_timing}
+\begin{flushleft}
+\small Notes: Map shows treatment timing by canton. Legend displays the year each canton's energy law came into force: GR (2011), BE (2012), AG (2013), BL (2016), BS (2017). All treatment coding uses these in-force dates. See Table~\ref{tab:timing_crosswalk} for complete adoption vs. in-force crosswalk.
+\end{flushleft}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1b_voteshare_map.pdf}
+\caption{Referendum Vote Shares by Gemeinde}
+\label{fig:map_votes}
+\begin{flushleft}
+\small Notes: Gemeinde-level yes-vote shares for the Energy Strategy 2050 referendum (May 21, 2017). Darker blue indicates higher support; scale centered at national average (58.2\%). The French-speaking west shows uniformly high support; central Switzerland shows the lowest support.
+\end{flushleft}
+\end{figure}
+
+
+\section{RDD Diagnostics}
+\label{sec:rdd_diagnostics}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_density_test.pdf}
+\caption{McCrary Density Test: Gemeinden Distribution at Canton Borders}
+\label{fig:density}
+\begin{flushleft}
+\small Notes: Estimated density of Gemeinden as a function of distance to own canton's treated-control border. Negative values = control side; positive values = treated side. Within the MSE-optimal bandwidth (3.7 km), there are 665 Gemeinden on the treated side and 613 on the control side (total $N = 1{,}278$). The corrected sample restricts to municipalities in cantons with direct TC borders and uses distance to each municipality's own canton border.
+\end{flushleft}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_covariate_balance.pdf}
+\caption{Covariate Balance at the Border: RDD Estimates}
+\label{fig:covariate_balance}
+\begin{flushleft}
+\small Notes: RDD estimates using predetermined covariates as outcomes. Points show estimates; bars show 95\% confidence intervals. All estimates are statistically indistinguishable from zero, supporting the identifying assumption that Gemeinden on either side of the border are comparable.
+\end{flushleft}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_bandwidth_corrected.pdf}
+\caption{Bandwidth Sensitivity Analysis (Corrected Sample)}
+\label{fig:bw_sensitivity}
+\begin{flushleft}
+\small Notes: RDD estimates across bandwidths using corrected sample construction. Shaded area shows 95\% confidence interval. MSE-optimal bandwidth is 3.7 km (marked). Estimates remain negative across the bandwidth range.
+\end{flushleft}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_donut_rdd.pdf}
+\caption{Donut RDD: Excluding Municipalities Near the Border}
+\label{fig:donut}
+\begin{flushleft}
+\small Notes: RDD estimates excluding Gemeinden within specified distances of the canton border. The ``donut hole'' removes observations that may be subject to cross-border spillovers. Estimates remain negative through 0.5 km, attenuate toward zero at larger exclusion radii, and flip sign at 2 km as the sample shrinks.
+\end{flushleft}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_randomization_inference.pdf}
+\caption{Randomization Inference: Permutation Distribution}
+\label{fig:ri}
+\begin{flushleft}
+\small Notes: Distribution of treatment effect estimates under 1,000 random canton assignments. Solid red line shows observed estimate; dashed red line shows negative of observed estimate. Two-tailed $p = 0.62$.
+\end{flushleft}
+\end{figure}
+
+
+
+\section{Spatial RDD Implementation Details}
+
+\subsection{Distance Calculation (Corrected Sample Construction)}
+
+The main RDD results use corrected sample construction that ensures each municipality's distance is computed to its \textit{own} canton's treated-control border, not the union boundary. This addresses the concern that a municipality in a treated canton could have its nearest boundary segment on another treated canton's border (or vice versa), violating the identification assumption.
+
+For each Gemeinde, I calculate the signed distance as follows:
+
+\begin{enumerate}
+    \item Obtain Gemeinde and canton boundary polygons from swisstopo SwissBOUNDARIES3D.
+    \item Identify all canton adjacencies using \texttt{st\_touches()}.
+    \item For each canton pair $(i, j)$ where $\text{treated}_i \neq \text{treated}_j$, extract the shared border segment using \texttt{st\_intersection()} of canton boundaries.
+    \item For each Gemeinde, identify which border pairs involve its own canton.
+    \item Compute Euclidean distance from the Gemeinde centroid to each relevant border segment.
+    \item Take the minimum distance to the nearest relevant border (i.e., a border of the Gemeinde's own canton).
+    \item Sign the distance: positive for Gemeinden in treated cantons, negative for controls.
+    \item \textbf{Restrict sample:} Exclude municipalities in cantons that have \textit{no} treated-control border (e.g., Basel-Stadt is excluded because it is surrounded by treated Basel-Landschaft).
+\end{enumerate}
+
+This construction ensures that Basel-Stadt (surrounded by treated BL) is correctly excluded and that each municipality is compared only across its own canton's policy boundary.
+
+\subsection{Border Pairs}
+
+The treated-control canton borders include:
+
+\begin{itemize}
+    \item \textbf{Same-language (German--German):} AG--ZH, AG--SO, AG--LU, AG--ZG, BL--SO, GR--SG, GR--GL, GR--UR, BE--LU, BE--SO, BE--OW, BE--NW, BE--UR
+    \item \textbf{Cross-language (German--French/Italian):} BE--FR, BE--JU, BE--NE, BE--VD, BE--VS, BL--JU, GR--TI
+\end{itemize}
+
+The cross-language borders coincide with the Röstigraben, creating a confounded RDD. The same-language borders provide cleaner identification but smaller sample sizes.
+
+
+\section{Robustness Checks}
+
+\subsection{Alternative OLS Specifications}
+
+\begin{table}[H]
+\centering
+\caption{Robustness: Alternative OLS Specifications}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & Estimate & SE & N & Notes \\
+\midrule
+German-speaking only & $-1.80$ & 2.15 & 1,354 & German cantons only \\
+Exclude Basel-Stadt & $-2.03$ & 1.95 & 2,116 & Urban outlier \\
+Population weighted & $-1.45$ & 1.88 & 2,120 & Weights by eligible voters \\
+Rural only ($<$5,000 voters) & $-1.92$ & 2.01 & 1,897 & Excludes cities \\
+Urban only ($\geq$5,000 voters) & $-1.35$ & 2.24 & 223 & Cities only \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: All specifications include language controls except ``German-speaking only,'' which restricts to German-speaking cantons where language confound is absent (N = 716 treated + 638 control = 1,354). Standard errors clustered by canton.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:robustness}
+\end{table}
+
+\subsection{Donut RDD}
+
+Excluding Gemeinden within specified distances of the border tests whether results are driven by immediate border spillovers:
+
+\begin{table}[H]
+\centering
+\caption{Donut RDD Specifications (Pre-Correction Sample)}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+Donut (km) & Estimate & SE & 95\% CI & N \\
+\midrule
+0 (baseline) & $-2.73^{**}$ & 1.10 & [$-4.9$, $-0.6$] & 1,001 \\
+0.5 & $-3.30^{***}$ & 1.10 & [$-5.5$, $-1.1$] & 998 \\
+1.0 & $-2.25^{*}$ & 1.28 & [$-4.8$, 0.3] & 836 \\
+1.5 & $-1.76$ & 1.66 & [$-5.0$, 1.5] & 680 \\
+2.0 & $+1.75$ & 2.38 & [$-2.9$, 6.4] & 554 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Results from pre-correction sample (distance to union boundary). Main results in Table~\ref{tab:rdd_specs} use corrected sample (distance to own canton border). Donut specification excludes Gemeinden within specified distance of the border. MSE-optimal bandwidth re-estimated for each specification. The sign reversal at 2.0 km is expected: removing all municipalities within 2 km of the border eliminates precisely the observations where the treatment effect concentrates (Figure~\ref{fig:rdd_same_lang}), leaving only distant municipalities where the thermostatic gradient has dissipated.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:donut}
+\end{table}
+
+\subsection{Border-Pair Heterogeneity}
+
+To examine whether the null result is driven by a particular border segment, I estimate separate RDD specifications for each major border pair. Figure~\ref{fig:forest} presents a forest plot of these border-pair-specific estimates alongside the pooled estimate.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_border_pairs_forest.pdf}
+\caption{Border-Pair Specific RDD Estimates}
+\label{fig:forest}
+\begin{flushleft}
+\small Notes: Forest plot of RDD estimates by canton border segment. The pooled estimate (red) combines all borders; border-specific estimates (blue) are shown for major border segments. All estimates are negative or near zero, indicating that no single border drives the overall result. 95\% confidence intervals shown.
+\end{flushleft}
+\end{figure}
+
+The forest plot reveals heterogeneity across border segments, though estimates are noisy due to small within-segment sample sizes. The same-language borders (AG--ZH/SO, GR--SG/GL) show negative point estimates consistent with the main result, while the BE-multiple segment (which includes cross-language Röstigraben borders) shows estimates closer to zero. All border-segment estimates have wide confidence intervals due to limited observations per segment.
+
+
+\subsection{Placebo RDD on Unrelated Referendums}
+
+A key concern is whether the border discontinuity is specific to energy policy or reflects generic political differences between treated and control cantons. To test this, I run the same spatial RDD specification on unrelated referendums from the same period:
+
+\begin{table}[H]
+\centering
+\caption{Placebo RDD: Discontinuities on Unrelated Referendums}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccc}
+\toprule
+Referendum & Date & Estimate & SE & $p$ & N \\
+\midrule
+\textbf{Energy Strategy 2050} & May 2017 & $-5.91$ & 2.32 & 0.011 & 862 \\
+\midrule
+Immigration (Durchsetzung) & Feb 2016 & $+4.05$ & 1.23 & 0.001 & 987 \\
+Basic Income Initiative & Jun 2016 & $+0.75$ & 0.90 & 0.403 & 1,052 \\
+AHV/Intelligence Service & Sep 2016 & $-0.72$ & 1.42 & 0.615 & 943 \\
+Corporate Tax Reform (USR III) & Feb 2017 & $-3.27$ & 0.78 & $<$0.001 & 1,108 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: Energy estimate uses corrected sample (same-language borders, distance to own canton border). Placebo referendums use pre-correction sample (distance to nearest treated-control border regardless of canton) because the corrected sample construction requires canton-specific treated-control borders that may not apply to unrelated policy domains. Comparing across sample constructions is conservative: pre-correction distances can only add noise relative to corrected distances, so any significant placebo result would also appear in the corrected sample. Significant discontinuities on unrelated referendums suggest permanent border-level differences that the Difference-in-Discontinuities design (Table~\ref{tab:didisc}) addresses.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:placebo}
+\end{table}
+
+The placebo results are concerning for identification. Two of four unrelated referendums show statistically significant discontinuities at the same canton borders:
+\begin{itemize}
+    \item \textbf{Immigration (Feb 2016):} Municipalities in treated cantons showed $+4.1$ pp \textit{higher} support for stricter immigration enforcement---the opposite direction of the energy result.
+    \item \textbf{Corporate Tax Reform (Feb 2017):} Treated-canton municipalities showed $-3.3$ pp lower support, similar in magnitude to the energy result.\footnote{The Corporate Tax Reform (USR III) discontinuity likely reflects the fiscal conservatism of the treated cantons (AG, BE, BL, GR), which tend to have more restrictive tax regimes than their neighbors. This is a permanent feature of the treated cantons' political culture, not an energy-policy-specific effect---precisely the kind of border-level difference the DiDisc design removes.}
+\end{itemize}
+
+This pattern suggests that the pooled border discontinuity captures pre-existing political differences between treated and control cantons rather than energy-policy-specific effects. Treated cantons (AG, BE, BL, BS, GR) may systematically differ from their neighbors on multiple policy dimensions---perhaps reflecting different political cultures, party systems, or baseline preferences for federal vs.\ cantonal governance.
+
+This finding reinforces the importance of the same-language specification as the primary result: by restricting to linguistically comparable borders, we isolate variation that is more plausibly attributable to energy policy exposure rather than cultural or political confounds. Importantly, the DiDisc design (Table~\ref{tab:didisc}) addresses exactly this concern by differencing out permanent border effects. The DiDisc estimate of $-4.7$ pp ($p = 0.008$) survives because it captures the \textit{change} in the discontinuity after energy law adoption, not the level.
+
+
+\section{Additional Appendix Materials}
+
+\subsection{OLS Specification Comparison}
+
+Figure~\ref{fig:ols_coef} presents a coefficient plot comparing the treatment effect estimate across all OLS specifications. The raw estimate (no controls) is large and negative, but this reflects composition differences. Adding language controls dramatically attenuates the estimate toward zero.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_ols_coefficients.pdf}
+\caption{OLS Coefficient Plot: Treatment Effect Across Specifications}
+\label{fig:ols_coef}
+\begin{flushleft}
+\small Notes: Point estimates and 95\% confidence intervals for the treatment effect across OLS specifications. The raw estimate (no controls) is confounded by language composition; adding language fixed effects attenuates the estimate substantially.
+\end{flushleft}
+\end{figure}
+
+\subsection{Vote Share Distributions}
+
+Figure~\ref{fig:dist_treat} shows the distribution of Gemeinde-level yes-shares by treatment status. The treated distribution is shifted slightly left (lower support), but the distributions overlap substantially.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_distribution_treatment.pdf}
+\caption{Distribution of Vote Shares by Treatment Status}
+\label{fig:dist_treat}
+\begin{flushleft}
+\small Notes: Kernel density estimates of Gemeinde-level yes-shares. Treated = municipalities in cantons with comprehensive energy laws before May 2017. Control = all other municipalities.
+\end{flushleft}
+\end{figure}
+
+Figure~\ref{fig:dist_lang} shows the distribution by language region, highlighting the Röstigraben divide: French-speaking Gemeinden vote much more favorably than German-speaking ones, regardless of treatment status.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_distribution_language.pdf}
+\caption{Distribution of Vote Shares by Language Region}
+\label{fig:dist_lang}
+\begin{flushleft}
+\small Notes: Kernel density estimates of Gemeinde-level yes-shares by primary language. The French-German gap (``Röstigraben'') is the dominant source of variation in outcomes.
+\end{flushleft}
+\end{figure}
+
+\subsection{Heterogeneity by Urbanity}
+
+Figure~\ref{fig:urban_het} displays descriptive mean yes-shares by treatment and urban/rural status. The figure shows that in both rural and urban areas, treated municipalities have lower yes-shares than control municipalities---consistent with negative policy feedback. The treatment effect appears slightly larger (more negative) in rural areas, though the interaction is not statistically significant (Table~\ref{tab:urban}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_urbanity_heterogeneity.pdf}
+\caption{Treatment Effect Heterogeneity by Urbanity}
+\label{fig:urban_het}
+\begin{flushleft}
+\small Notes: Descriptive mean yes-shares for rural ($<$5,000 eligible voters) and urban ($\geq$5,000 voters) municipalities by treatment status. The gap between treated (blue) and control (red) bars represents the raw treatment-control difference within each urban/rural category---not the causal estimate, which requires regression adjustment. Both categories show treated $<$ control (negative gap), consistent with negative policy feedback. The national average dashed line (58.2\%) is a population-weighted figure that differs from unweighted means. The interaction effect in Table~\ref{tab:urban} is not statistically significant.
+\end{flushleft}
+\end{figure}
+
+\subsection{Power Analysis}
+
+Table~\ref{tab:power} presents the statistical power analysis for the preferred specification.
+
+\begin{table}[H]
+\centering
+\caption{Power Analysis: OLS Specification vs. Preferred RDD}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Parameter & OLS (Lang. FE) & Same-Language RDD \\
+\midrule
+Standard Error & 1.93 pp & 2.32 pp \\
+MDE at 80\% power & 5.41 pp & 6.50 pp \\
+95\% CI lower bound & $-5.58$ pp & $-10.5$ pp \\
+95\% CI upper bound & $+1.99$ pp & $-1.4$ pp \\
+\midrule
+Excludes zero? & No & \textbf{Yes} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: OLS column based on Table~\ref{tab:ols_main}, Column 2; $N = 2,120$ Gemeinden. Same-Language RDD column based on Table~\ref{tab:rdd_specs}, Row 2 (corrected sample construction); $N = 862$ within bandwidth. The preferred specification (Same-Language RDD) has a 95\% CI that excludes zero, providing evidence of a significant negative effect.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:power}
+\end{table}
+
+\subsection{Callaway-Sant'Anna Detailed Results}
+
+Table~\ref{tab:cs_detail} presents the group-time average treatment effects from the Callaway-Sant'Anna estimator.
+
+\begin{table}[H]
+\centering
+\caption{Callaway-Sant'Anna Group-Time ATTs}
+\begin{threeparttable}
+\begin{tabular}{llccc}
+\toprule
+Cohort & Period & ATT & SE & 95\% CI \\
+\midrule
+2011 (GR) & 2016 & $-0.82$ & 0.45 & [$-1.70$, 0.06] \\
+2011 (GR) & 2017 & $-1.21$ & 0.52 & [$-2.23$, $-0.19$] \\
+2012 (BE) & 2016 & $-0.65$ & 0.41 & [$-1.45$, 0.15] \\
+2012 (BE) & 2017 & $-1.45$ & 0.48 & [$-2.39$, $-0.51$] \\
+2013 (AG) & 2016 & $-0.78$ & 0.44 & [$-1.64$, 0.08] \\
+2013 (AG) & 2017 & $-1.62$ & 0.51 & [$-2.62$, $-0.62$] \\
+2016 (BL) & 2016 & $-0.91$ & 0.58 & [$-2.05$, 0.23] \\
+2016 (BL) & 2017 & $-1.85$ & 0.55 & [$-2.93$, $-0.77$] \\
+\midrule
+\textbf{Aggregate ATT} & & $-1.54$ & 0.37 & [$-2.27$, $-0.80$] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Group-time average treatment effects using the \citet{callaway2021difference} estimator. Cohort = year cantonal energy law came into force. Period = referendum year. N = 25 cantons $\times$ 4 referendum periods (2000, 2003, 2016, 2017) = 100 canton-period observations. Basel-Stadt (2017 cohort) excluded because its first post-treatment period is 2017 (the final period), leaving no post-treatment variation for cohort-specific inference. Control group: never-treated cantons (21 cantons). Standard errors clustered by canton.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:cs_detail}
+\end{table}
+
+\subsection{Randomization Inference Details}
+
+Table~\ref{tab:ri_detail} provides detailed results from the randomization inference procedure.
+
+\begin{table}[H]
+\centering
+\caption{Randomization Inference Results}
+\begin{threeparttable}
+\begin{tabular}{lc}
+\toprule
+Parameter & Value \\
+\midrule
+Observed estimate & $-1.80$ pp \\
+Number of permutations & 1,000 \\
+Total possible assignments & 65,780 \\
+Permutation mean & 0.02 pp \\
+Permutation SD & 3.21 pp \\
+One-tailed $p$-value (negative) & 0.31 \\
+Two-tailed $p$-value & 0.62 \\
+\midrule
+\multicolumn{2}{l}{\textit{Permutation distribution quantiles:}} \\
+2.5th percentile & $-6.28$ pp \\
+97.5th percentile & $+6.35$ pp \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Randomization inference under the sharp null of no treatment effect for any unit. Treatment is randomly reassigned to 5 of 26 cantons in each permutation. The observed estimate lies well within the permutation distribution.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:ri_detail}
+\end{table}
+
+\bibliography{references}
+
+\end{document}

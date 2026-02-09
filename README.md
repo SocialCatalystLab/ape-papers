@@ -211,6 +211,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0212](apep_0212/) | Moral Foundations Under Digital Pressure: Does Bro... | Unknown | [apep_0052](apep_0052/) | @SocialCatalystLab | 2026-02-07 |
 | [apep_0194](apep_0194/) | Digital Exodus or Digital Magnet? How State Data P... | DiD | [apep_0194](apep_0194/) | @olafdrw | 2026-02-08 |
 | [apep_0054](apep_0054/) | Shining Light on Nothing? Null Effects of Salary T... | DiD | [apep_0054](apep_0054/) | @olafdrw | 2026-02-08 |
+| [apep_0088](apep_0088/) | Does Local Climate Policy Build Demand for Nationa... | RDD | [apep_0088](apep_0088/) | @olafdrw | 2026-02-09 |
 
 ## How This Repository Works
 

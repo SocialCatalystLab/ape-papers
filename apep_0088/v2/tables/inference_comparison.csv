@@ -1,0 +1,4 @@
+clustering,description,n_clusters
+Municipality (biased),Standard OLS SE,2120
+Canton (conservative),Cluster at treatment level,26
+Border-pair (correct),Cluster at border segment,NA
