@@ -214,6 +214,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0088](apep_0088/) | Does Local Climate Policy Build Demand for Nationa... | RDD | [apep_0088](apep_0088/) | @olafdrw | 2026-02-09 |
 | [apep_0185](apep_0185/) | Friends in High Places: Social Network Connections... | Unknown | [apep_0185](apep_0185/) | @ai1scl | 2026-02-09 |
 | [apep_0038](apep_0038/) | Betting on Jobs? The Employment Effects of Legal S... | DiD | [apep_0038](apep_0038/) | @olafdrw | 2026-02-09 |
+| [apep_0049](apep_0049/) | Does Federal Transit Funding Improve Local Labor M... | RDD | [apep_0049](apep_0049/) | @olafdrw | 2026-02-09 |
 
 ## How This Repository Works
 

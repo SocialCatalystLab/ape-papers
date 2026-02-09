@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-02-01T18:45:00Z",
+  "model": "revision-mode",
+  "ideas": [
+    {
+      "title": "Federal Transit Funding and Local Labor Markets (REVISED)",
+      "policy": "FTA Section 5307 Urbanized Area Formula Grants",
+      "outcome": "Transit ridership, employment, vehicle ownership, commute times",
+      "identification": "Sharp RDD at 50,000 population threshold",
+      "scores": {
+        "novelty": 35,
+        "identification": 28,
+        "feasibility": 19,
+        "relevance": 9
+      },
+      "total_score": 91,
+      "recommendation": "PURSUE",
+      "rationale": "This is a revision of a published APEP paper. The core research question remains valid and the identification strategy is sound. Critical fixes to code integrity and timing address all major reviewer concerns. The paper now uses real Census API data with proper temporal alignment. Strongly recommended for execution."
+    }
+  ],
+  "summary": {
+    "best_idea": "Federal Transit Funding and Local Labor Markets (REVISED)",
+    "recommendation": "PURSUE",
+    "notes": "Revision mode - parent paper apep_0049 had critical code integrity issues that are now fixed"
+  }
+}

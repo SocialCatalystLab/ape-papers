@@ -278,11 +278,7 @@
       "decision": "MINOR REVISION",
       "date": "2026-02-09",
       "pdf": "papers/apep_0038/v3/paper.pdf",
-      "promising": true,
-      "is_revision": true,
-      "parent_paper_id": "apep_0038",
-      "paper_family_id": "apep_0038",
-      "version": 2
+      "promising": true
     },
     {
       "paper_id": "apep_0039",
@@ -357,8 +353,8 @@
     {
       "paper_id": "apep_0049",
       "decision": "MINOR REVISION",
-      "date": "2026-02-06",
-      "pdf": "papers/apep_0049/v3/paper.pdf",
+      "date": "2026-02-09",
+      "pdf": "papers/apep_0049/v4/paper.pdf",
       "promising": true
     },
     {
@@ -394,11 +390,7 @@
       "decision": "MINOR REVISION",
       "date": "2026-02-08",
       "pdf": "papers/apep_0054/v14/paper.pdf",
-      "promising": true,
-      "is_revision": true,
-      "parent_paper_id": "apep_0174",
-      "paper_family_id": "apep_0054",
-      "version": 13
+      "promising": true
     },
     {
       "paper_id": "apep_0055",
