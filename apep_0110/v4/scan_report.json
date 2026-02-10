@@ -1,120 +1,157 @@
 {
-  "paper_id": "apep_0123",
-  "scan_date": "2026-02-06T12:47:25.675074+00:00",
+  "paper_id": "apep_0110_v4",
+  "scan_date": "2026-02-10T12:48:40.495896+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "SEVERE",
   "files_scanned": 17,
   "flags": [
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        238,
-        251
-      ],
-      "evidence": "If the Overpass API query fails, the script silently substitutes a hand-entered \"minimal dispensary dataset\" of four locations and then saves it to the same dispensaries file used downstream. This is a form of synthetic data creation that can materially alter the distance-to-dispensary analysis and any first-stage/\"access\" validation. The manuscript emphasizes using 1,399 OSM dispensaries; this fallback could produce results from only 4 points without prominent failure, undermining integrity/reproducibility unless explicitly blocked or clearly flagged and excluded from analysis outputs.: if (httr::status_code(response) == 200) {\n  ...\n} else {\n  cat(\"Warning: OSM query failed. Status:\", httr::status_code(response), \"\\n\")\n\n  # Create minimal dispensary dataset from known locations\n  known_dispensaries <- data.frame(\n    name = c(\"Trinidad Dispensary\", \"Fort Collins Dispensary\", \"Ontario Dispensary\", \"Spokane Dispensary\"),\n    lat = c(37.169, 40.585, 44.025, 47.658),\n    lon = c(-104.500, -105.084, -116.963, -117.426)\n  )\n  dispensaries_sf <- st_as_sf(known_dispensaries, coords = c(\"lon\", \"lat\"), crs = 4326)\n  saveRDS(dispensaries_sf, \"../data/dispensaries_sf.rds\")\n  cat(\"Created minimal dispensary dataset with known locations.\\n\")\n}",
-      "confidence": 0.9
-    },
     {
       "category": "HARD_CODED_RESULTS",
       "severity": "HIGH",
       "file": "06_tables_v2.R",
       "lines": [
-        20,
-        66
+        33,
+        34,
+        35,
+        36,
+        37,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
       ],
-      "evidence": "Table values for non-baseline specifications are not computed from model objects; they are mechanically created by multiplying the baseline estimate/SE by ad hoc factors (1.2, 1.3, 0.75, 0.43, etc.), while p-values, Ns, and (some) bandwidths are hard-coded as string/numeric literals. This directly violates computational reproducibility and can misstate results. The manuscript reports a full Table of RDD estimates across bandwidths/polynomials; this script can fabricate those entries rather than re-estimating them.: rdd_results <- data.frame(\n  Specification = c(\"Baseline\", \"Quadratic\", \"0.5x BW\", \"1.5x BW\", \"2x BW\"),\n  Estimate = c(\n    sprintf(\"%.3f\", main_results$main_estimate),\n    sprintf(\"%.3f\", main_results$main_estimate * 1.2),\n    sprintf(\"%.3f\", main_results$main_estimate * 1.3),\n    sprintf(\"%.3f\", main_results$main_estimate * 0.75),\n    sprintf(\"%.3f\", main_results$main_estimate * 0.43)\n  ),\n  SE = c(\n    sprintf(\"(%.3f)\", main_results$main_se),\n    sprintf(\"(%.3f)\", main_results$main_se * 1.4),\n    sprintf(\"(%.3f)\", main_results$main_se * 1.44),\n    sprintf(\"(%.3f)\", main_results$main_se * 0.83),\n    sprintf(\"(%.3f)\", main_results$main_se * 0.71)\n  ),\n  pvalue = c(\"0.127\", \"0.173\", \"0.158\", \"0.163\", \"0.347\"),\n  Bandwidth = c(\n    sprintf(\"%.1f\", main_results$optimal_bandwidth),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 1.37),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 0.5),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 1.5),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 2)\n  ),\n  N = c(1446, 2093, 562, 2275, 2888)\n)",
+      "evidence": "Several summary-statistics table entries are inserted as fixed numeric literals labeled as \"approximate\" rather than computed from the analysis dataset (single-vehicle and rural shares for All/Legal/Prohibition/Border150km). This is hard-coded reporting and can diverge from the actual sample used in the code/paper, undermining reproducibility and creating an integrity risk if these values are presented as computed statistics.: summary_df <- data.frame(\n  Statistic = c(\"N Crashes\", \"Alcohol Involvement (%)\", \"Nighttime (%)\", \"Weekend (%)\", \"Single Vehicle (%)\", \"Rural (%)\"),\n  All = c(\n    format(nrow(crashes), big.mark = \",\"),\n    sprintf(\"%.1f\", mean(crashes$alcohol_involved) * 100),\n    sprintf(\"%.1f\", mean(crashes$is_nighttime, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", mean(crashes$is_weekend, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", 48.3),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 42.1)   # approximate rural rate\n  ),\n  Legal = c(\n    format(nrow(legal_crashes), big.mark = \",\"),\n    sprintf(\"%.1f\", mean(legal_crashes$alcohol_involved) * 100),\n    sprintf(\"%.1f\", mean(legal_crashes$is_nighttime, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", mean(legal_crashes$is_weekend, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", 47.8),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 38.9)   # approximate rural rate\n  ),\n  Prohibition = c(\n    format(nrow(prohib_crashes), big.mark = \",\"),\n    sprintf(\"%.1f\", mean(prohib_crashes$alcohol_involved) * 100),\n    sprintf(\"%.1f\", mean(prohib_crashes$is_nighttime, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", mean(prohib_crashes$is_weekend, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", 49.5),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 50.4)   # approximate rural rate\n  ),\n  Border150km = c(\n    format(nrow(border_crashes), big.mark = \",\"),\n    sprintf(\"%.1f\", mean(border_crashes$alcohol_involved) * 100),\n    sprintf(\"%.1f\", mean(border_crashes$is_nighttime, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", mean(border_crashes$is_weekend, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", 49.1),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 55.2)   # approximate rural rate\n  )\n)",
+      "confidence": 0.9
+    },
+    {
+      "category": "HARD_CODED_RESULTS",
+      "severity": "CRITICAL",
+      "file": "06_tables_v2.R",
+      "lines": [
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80
+      ],
+      "evidence": "This script fabricates non-baseline RDD point estimates and standard errors by multiplying the baseline estimate/SE by arbitrary constants, while also hard-coding p-values and effective N. These values are presented as if they come from re-estimated specifications (Quadratic, bandwidth variants), but they are not computed from rdrobust outputs here. This directly risks producing tables that do not correspond to any actual estimation, and is inconsistent with research integrity standards.: rdd_results <- data.frame(\n  Specification = c(\"Baseline\", \"Quadratic\", \"0.5x BW\", \"1.5x BW\", \"2x BW\"),\n  Estimate = c(\n    sprintf(\"%.3f\", main_results$main_estimate),\n    sprintf(\"%.3f\", main_results$main_estimate * 1.2),\n    sprintf(\"%.3f\", main_results$main_estimate * 1.3),\n    sprintf(\"%.3f\", main_results$main_estimate * 0.75),\n    sprintf(\"%.3f\", main_results$main_estimate * 0.43)\n  ),\n  SE = c(\n    sprintf(\"(%.3f)\", main_results$main_se),\n    sprintf(\"(%.3f)\", main_results$main_se * 1.4),\n    sprintf(\"(%.3f)\", main_results$main_se * 1.44),\n    sprintf(\"(%.3f)\", main_results$main_se * 0.83),\n    sprintf(\"(%.3f)\", main_results$main_se * 0.71)\n  ),\n  pvalue = c(\"0.127\", \"0.173\", \"0.158\", \"0.163\", \"0.347\"),\n  Bandwidth = c(\n    sprintf(\"%.1f\", main_results$optimal_bandwidth),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 1.37),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 0.5),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 1.5),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 2)\n  ),\n  N = c(1446, 2093, 562, 2275, 2888)\n)",
       "confidence": 0.95
     },
     {
       "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
+      "severity": "HIGH",
       "file": "06_tables_v2.R",
       "lines": [
-        29,
-        51
+        94,
+        95,
+        96,
+        97,
+        98,
+        99
       ],
-      "evidence": "Several summary-statistics cells (single-vehicle %, rural %) are hard-coded as \"approximate\" constants rather than computed from the dataset. If these are intended to match the manuscript\u2019s Table 1, this creates a risk that the paper\u2019s summary statistics are not actually produced from the analysis sample (or could diverge after cleaning changes).: summary_df <- data.frame(\n  Statistic = c(\"N Crashes\", \"Alcohol Involvement (%)\", \"Nighttime (%)\", \"Weekend (%)\", \"Single Vehicle (%)\", \"Rural (%)\"),\n  All = c(\n    format(nrow(crashes), big.mark = \",\"),\n    sprintf(\"%.1f\", mean(crashes$alcohol_involved) * 100),\n    sprintf(\"%.1f\", mean(crashes$is_nighttime, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", mean(crashes$is_weekend, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", 48.3),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 42.1)   # approximate rural rate\n  ),\n  Legal = c(\n    ...\n    sprintf(\"%.1f\", 47.8),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 38.9)   # approximate rural rate\n  ),\n  Prohibition = c(\n    ...\n    sprintf(\"%.1f\", 49.5),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 50.4)   # approximate rural rate\n  ),\n  Border150km = c(\n    ...\n    sprintf(\"%.1f\", 49.1),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 55.2)   # approximate rural rate\n  )\n)",
-      "confidence": 0.85
+      "evidence": "The 'Weekend Night' coefficient, SE, and N are hard-coded instead of being extracted from a model object like the other rows. This creates the possibility that the reported weekend-night result is not actually produced by the code/model and may not match the underlying data.: dist_results <- data.frame(\n  Specification = c(\"All Crashes\", \"Nighttime\", \"Daytime\", \"Weekend Night\"),\n  Coefficient = c(sprintf(\"%.3f\", coef_all), sprintf(\"%.3f\", coef_night), sprintf(\"%.3f\", coef_day), \"0.003\"),\n  SE = c(sprintf(\"(%.3f)\", se_all), sprintf(\"(%.3f)\", se_night), sprintf(\"(%.3f)\", se_day), \"(0.025)\"),\n  N = c(n_all, n_night, n_day, 1358),\n  MeanAlcohol = c(\"28.0%\", \"45.2%\", \"20.5%\", \"51.3%\")\n)",
+      "confidence": 0.9
     },
     {
       "category": "HARD_CODED_RESULTS",
       "severity": "HIGH",
-      "file": "06_tables_v2.R",
-      "lines": [
-        93,
-        118
-      ],
-      "evidence": "The \"Weekend Night\" row is partially hard-coded: coefficient, SE, N, and means are literals instead of being extracted from a model object like the other rows. If this row is reported in the manuscript (it is: the paper shows a weekend-night column), the code can inject a desired value without recomputation.: dist_results <- data.frame(\n  Specification = c(\"All Crashes\", \"Nighttime\", \"Daytime\", \"Weekend Night\"),\n  Coefficient = c(sprintf(\"%.3f\", coef_all), sprintf(\"%.3f\", coef_night), sprintf(\"%.3f\", coef_day), \"0.003\"),\n  SE = c(sprintf(\"(%.3f)\", se_all), sprintf(\"(%.3f)\", se_night), sprintf(\"(%.3f)\", se_day), \"(0.025)\"),\n  N = c(n_all, n_night, n_day, 1358),\n  MeanAlcohol = c(\"28.0%\", \"45.2%\", \"20.5%\", \"51.3%\")\n)",
-      "confidence": 0.9
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
       "file": "06_tables.R",
       "lines": [
-        96,
-        114
+        86,
+        87,
+        88,
+        89,
+        90
       ],
-      "evidence": "Significance stars are appended unconditionally (e.g., \"%.4f**\") rather than based on computed p-values. This can misrepresent statistical significance in the exported LaTeX table even if the numeric coefficient is correct. The manuscript\u2019s main result is explicitly not significant (p=0.127), so unconditional stars are inconsistent with the narrative and are a red-flag integrity issue for the produced tables.: cat(sprintf(\"Legal Cannabis Access & %.4f** & %.4f** & %.4f** & %.4f* & %.4f** \\\\\\n\",\n            rdd_linear$coef[1], rdd_quad$coef[1], rdd_uniform$coef[1],\n            rdd_50bw$coef[1], rdd_200bw$coef[1]),\n    file = \"../tables/tab02_main_results.tex\", append = TRUE)",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "04_robustness.R",
-      "lines": [
-        178,
-        202
-      ],
-      "evidence": "The permutation test permutes the logical vector (data_local$rv > 0) rather than reassigning treatment labels independently of outcomes with a fixed treated count (or permuting an index). This is not necessarily invalid, but it is easy to get wrong and is not transparently aligned with standard local randomization inference (which typically permutes a treatment indicator). Additionally, earlier the code defines diff as mean_control - mean_treated with comments indicating sign flips; combined with multiple sign conventions across scripts, this creates risk that reported \"difference\" signs/p-values do not correspond to the estimand described in the manuscript (legal-side minus prohibition-side at cutoff).: perm_diffs <- replicate(n_perm, {\n    perm_treat <- sample(data_local$rv > 0)\n    mean(data_local$alcohol_involved[perm_treat]) -\n      mean(data_local$alcohol_involved[!perm_treat])\n  })\n  p_value <- mean(abs(perm_diffs) >= abs(diff))",
-      "confidence": 0.7
+      "evidence": "Significance stars are hard-coded into the LaTeX output (e.g., '**' appended regardless of actual p-values). The manuscript describes largely null/insignificant results (e.g., baseline p=0.127), so hard-coding stars can misrepresent inference in the generated tables.: cat(sprintf(\"Legal Cannabis Access & %.4f** & %.4f** & %.4f** & %.4f* & %.4f** \\\\\\\\\\n\",\n            rdd_linear$coef[1], rdd_quad$coef[1], rdd_uniform$coef[1],\n            rdd_50bw$coef[1], rdd_200bw$coef[1]),\n    file = \"../tables/tab02_main_results.tex\", append = TRUE)",
+      "confidence": 0.95
     },
     {
       "category": "METHODOLOGY_MISMATCH",
       "severity": "MEDIUM",
       "file": "11_driver_residency.R",
       "lines": [
-        41,
-        58
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
       ],
-      "evidence": "Other scripts frequently flip the running variable sign (e.g., crashes$rv <- -crashes$running_var) and interpret sign as \"positive = legal\" or the opposite, but this driver-residency script uses running_var directly for some analyses and a custom signed variable for others. Without a single enforced convention, it is easy for estimates to be sign-inverted relative to the manuscript\u2019s definition (negative=legal, positive=prohibition, or vice versa). This is a methodology/estimand alignment risk rather than definitive misconduct, but it can materially change interpretation (substitution vs complementarity).: rdd_instate <- rdrobust(\n    y = instate_crashes$alcohol_involved,\n    x = instate_crashes$running_var,\n    c = 0,\n    kernel = \"triangular\",\n    p = 1,\n    bwselect = \"mserd\"\n  )",
-      "confidence": 0.65
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        90,
-        207
-      ],
-      "evidence": "The code mixes two different FARS acquisition methods: (i) NHTSA CrashAPI endpoints and (ii) downloading FARS National CSV zip files. These sources/structures differ (CrashAPI is a derived service and may not contain the same fields or definitions as the raw FARS flat files used in most academic work). Downstream code assumes availability of variables like DRUNK_DR and hour; when absent it sets drunk_dr to NA and proceeds. This creates a provenance/consistency risk: the final analysis dataset may depend on whichever endpoint happened to work at runtime, potentially changing variable definitions and sample composition without explicit logging/versioning.: fetch_fars_crashes <- function(state_fips, year) {\n  url <- sprintf(\n    \"%s/crashes/GetCrashList?State=%s&fromCaseYear=%d&toCaseYear=%d&MinLatitude=25&MaxLatitude=50&MinLongitude=-130&MaxLongitude=-100&format=json\",\n    fars_base, as.integer(state_fips), year, year\n  )\n  ...\n}\n...\n# If API fails, try the public FARS download\n...\nacc_file <- list.files(temp_extract, pattern = \"accident\", ignore.case = TRUE, full.names = TRUE)[1]",
-      "confidence": 0.75
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        12,
-        14
-      ],
-      "evidence": "The script overwrites is_nighttime based on crashes$hour with a comment indicating the hour field may be incorrect. If hour is missing/miscoded for some records (common in FARS), this could change subgroup sample definitions and heterogeneity results. Not inherently improper, but should be justified and accompanied by missingness handling (e.g., hour NA) and consistency checks.: # Fix is_nighttime using hour column (hour_val may be incorrect)\ncrashes$is_nighttime <- as.integer(crashes$hour >= 21 | crashes$hour <= 5)",
-      "confidence": 0.6
+      "evidence": "Elsewhere in the codebase (e.g., figures/tables scripts) the running variable is often sign-flipped via `crashes$rv <- -crashes$running_var` for interpretation. Here the in-state driver RDD uses `running_var` directly (not `rv`). That is not necessarily wrong, but it creates a high risk of inconsistent sign conventions across reported specifications (treated side swapping), which can lead to mismatched interpretation relative to the manuscript's definition (negative=legal, positive=prohibition).: rdd_instate <- rdrobust(\n    y = instate_crashes$alcohol_involved,\n    x = instate_crashes$running_var,\n    c = 0,\n    kernel = \"triangular\",\n    p = 1,\n    bwselect = \"mserd\"\n  )",
+      "confidence": 0.7
     },
     {
       "category": "SELECTIVE_REPORTING",
       "severity": "MEDIUM",
       "file": "04_robustness.R",
       "lines": [
-        220,
-        228
+        257,
+        258,
+        259,
+        260,
+        261,
+        262
       ],
-      "evidence": "The script prints a narrative \"Key findings\" claiming age-21\u201345 effects etc., but earlier in the same file it explicitly skips age heterogeneity analysis (age_groups is an empty list; \"Skipping age group analysis.\"). This creates an appearance of selective/aspirational reporting: the output text can contradict the executed analysis. While not a hard-coded coefficient, it is a hard-coded conclusion that could be copied into the manuscript despite not being supported by computed results.: cat(\"\\nKey findings:\\n\")\ncat(\"1. Effects concentrated at night (consistent with recreational use)\\n\")\ncat(\"2. Effects strongest for ages 21-45 (prime recreational ages)\\n\")\ncat(\"3. Null effects for elderly drivers (placebo confirmation)\\n\")\ncat(\"4. Results robust to donut RDD and bandwidth choices\\n\")",
+      "evidence": "The script prints a narrative 'Key findings' claiming age heterogeneity patterns ('21\u201345 strongest', 'elderly null') even though the code explicitly skips age heterogeneity due to missing driver_age data and saves an empty `age_results`. This is a form of result misrepresentation: the printed claims are not supported by computed outputs in this script.: cat(\"\\nKey findings:\\n\")\ncat(\"1. Effects concentrated at night (consistent with recreational use)\\n\")\ncat(\"2. Effects strongest for ages 21-45 (prime recreational ages)\\n\")\ncat(\"3. Null effects for elderly drivers (placebo confirmation)\\n\")\ncat(\"4. Results robust to donut RDD and bandwidth choices\\n\")",
+      "confidence": 0.9
+    },
+    {
+      "category": "DATA_FABRICATION",
+      "severity": "HIGH",
+      "file": "01_fetch_data.R",
+      "lines": [
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        258,
+        259,
+        260,
+        261,
+        262,
+        263
+      ],
+      "evidence": "If the Overpass API request fails, the code constructs a synthetic/minimal dispensary dataset with 4 hand-entered points and saves it under the same filename (`dispensaries_sf.rds`) used downstream. This can silently replace the intended dataset of ~1,399 dispensaries described in the manuscript, substantially altering 'distance to dispensary' measures and any first-stage/distance analyses. Because this fallback is not clearly surfaced as a different dataset in later scripts, it creates a serious integrity/reproducibility risk.: cat(\"Warning: OSM query failed. Status:\", httr::status_code(response), \"\\n\")\n\n  # Create minimal dispensary dataset from known locations\n  known_dispensaries <- data.frame(\n    name = c(\"Trinidad Dispensary\", \"Fort Collins Dispensary\", \"Ontario Dispensary\", \"Spokane Dispensary\"),\n    lat = c(37.169, 40.585, 44.025, 47.658),\n    lon = c(-104.500, -105.084, -116.963, -117.426)\n  )\n  dispensaries_sf <- st_as_sf(known_dispensaries, coords = c(\"lon\", \"lat\"), crs = 4326)\n  saveRDS(dispensaries_sf, \"../data/dispensaries_sf.rds\")\n  cat(\"Created minimal dispensary dataset with known locations.\\n\")",
       "confidence": 0.85
+    },
+    {
+      "category": "DATA_PROVENANCE_MISSING",
+      "severity": "MEDIUM",
+      "file": "01_fetch_data.R",
+      "lines": [
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120
+      ],
+      "evidence": "The fallback data ingestion uses only the FARS 'accident' file if the CrashAPI path fails. The manuscript describes constructing DRUNK_DR from merged accident/vehicle/person files; however, this fallback does not merge vehicle/person data and later sets `drunk_dr <- NA` if not found. If the workflow runs through this fallback, key variables (alcohol involvement, driver info) may be missing or imputed elsewhere, diverging from the manuscript's stated provenance and construction.: acc_file <- list.files(temp_extract, pattern = \"accident\", ignore.case = TRUE, full.names = TRUE)[1]\nif (!is.na(acc_file) && file.exists(acc_file)) {\n  acc_data <- read.csv(acc_file, stringsAsFactors = FALSE)\n\n  # Filter to study states\n  acc_data <- acc_data %>%\n    filter(STATE %in% as.integer(all_fips))",
+      "confidence": 0.75
     }
   ],
   "file_verdicts": [
@@ -128,7 +165,7 @@
     },
     {
       "file": "06_tables.R",
-      "verdict": "CLEAN"
+      "verdict": "SUSPICIOUS"
     },
     {
       "file": "00_packages.R",
@@ -136,7 +173,7 @@
     },
     {
       "file": "06_tables_v2.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "SEVERE"
     },
     {
       "file": "09_border_heterogeneity.R",
@@ -188,51 +225,51 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "SEVERE",
     "counts": {
-      "CRITICAL": 0,
-      "HIGH": 3,
-      "MEDIUM": 6,
-      "LOW": 1
+      "CRITICAL": 1,
+      "HIGH": 4,
+      "MEDIUM": 3,
+      "LOW": 0
     },
-    "one_liner": "fabricated data; hard-coded results",
-    "executive_summary": "The code can overwrite real dispensary data with a hand-entered \u201cminimal\u201d dataset of four locations whenever an Overpass API query fails, silently saving this substitute to the same file used for downstream analysis. Several reported table entries are not generated from model objects: non-baseline specifications are produced by mechanically scaling the baseline estimate/SE using ad hoc multipliers (e.g., 1.2, 1.3, 0.75, 0.43), and the \u201cWeekend Night\u201d row includes literal coefficients, SEs, sample size, and means rather than values extracted from fitted results. These practices make key inputs and reported results potentially non-reproducible and inconsistent with the underlying data/model outputs.",
+    "one_liner": "hard-coded results",
+    "executive_summary": "The analysis scripts embed and manipulate results rather than deriving them from the underlying data and model objects: multiple table entries are hard-coded as \u201capproximate,\u201d a \u201cWeekend Night\u201d coefficient/SE/N is manually inserted, and non-baseline RDD estimates/standard errors are fabricated by scaling the baseline estimate while p-values and effective N are directly hard-coded. The LaTeX tables also hard-code significance stars independent of the computed p-values, which can misrepresent statistical significance. Separately, the data-fetch script silently substitutes a tiny hand-entered dispensary dataset if the Overpass API call fails, saving it under the same filename used downstream and making the analysis depend on synthetic data without clear warning.",
     "top_issues": [
       {
-        "category": "DATA_FABRICATION",
-        "severity": "HIGH",
-        "short": "If the Overpass API query fails, the script silently subs...",
-        "file": "01_fetch_data.R",
+        "category": "HARD_CODED_RESULTS",
+        "severity": "CRITICAL",
+        "short": "This script fabricates non-baseline RDD point estimates a...",
+        "file": "06_tables_v2.R",
         "lines": [
-          238,
-          251
+          66,
+          67
         ],
-        "github_url": "/apep_0123/code/01_fetch_data.R#L238-L251"
+        "github_url": "https://github.com/SocialCatalystLab/ape-papers/blob/main/apep_0110/v4/code/06_tables_v2.R#L66-L80"
       },
       {
         "category": "HARD_CODED_RESULTS",
         "severity": "HIGH",
-        "short": "Table values for non-baseline specifications are not comp...",
+        "short": "Several summary-statistics table entries are inserted as ...",
         "file": "06_tables_v2.R",
         "lines": [
-          20,
-          66
+          33,
+          34
         ],
-        "github_url": "/apep_0123/code/06_tables_v2.R#L20-L66"
+        "github_url": "https://github.com/SocialCatalystLab/ape-papers/blob/main/apep_0110/v4/code/06_tables_v2.R#L33-L60"
       },
       {
         "category": "HARD_CODED_RESULTS",
         "severity": "HIGH",
-        "short": "The \"Weekend Night\" row is partially hard-coded",
+        "short": "The 'Weekend Night' coefficient, SE, and N are hard-coded...",
         "file": "06_tables_v2.R",
         "lines": [
-          93,
-          118
+          94,
+          95
         ],
-        "github_url": "/apep_0123/code/06_tables_v2.R#L93-L118"
+        "github_url": "https://github.com/SocialCatalystLab/ape-papers/blob/main/apep_0110/v4/code/06_tables_v2.R#L94-L99"
       }
     ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0123_scan.json"
+    "full_report_url": "/scans/apep_0110_v4_scan.json"
   },
   "error": null
 }
