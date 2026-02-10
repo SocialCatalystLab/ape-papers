@@ -1,0 +1,30 @@
+\begin{table}[H]
+\centering
+\caption{Main Results: Effect of State Data Privacy Laws on the Technology Sector}
+\label{tab:main}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+ & (1) & (2) & (3) \\
+ & Log Emp. & Log Estab. & Log Bus.\ Apps. \\
+ & \small(NAICS 5112) & \small(NAICS 51) & \small(BFS, CA only) \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Callaway-Sant'Anna DiD}} \\
+ATT & -0.0767$^{***}$ & -0.1234 & -0.0026 \\
+ & (0.0247) & (0.0909) & (0.0177) \\
+\addlinespace
+\multicolumn{4}{l}{\textit{Panel B: Two-Way Fixed Effects}} \\
+Treated & -0.0289 & -0.0950$^{**}$ & 0.0189 \\
+ & (0.0424) & (0.0426) & (0.0199) \\
+\addlinespace
+\midrule
+States & 52 & 52 & 51 \\
+State-Quarters & 1,456 & 2,226 & 1,224 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Panel A reports Callaway and Sant'Anna (2021) aggregate ATT with doubly robust estimation and 1,000 bootstrap iterations. Panel B reports TWFE coefficients with state and period fixed effects. Standard errors clustered at the state level in parentheses. Column (1) uses NAICS 5112 (Software Publishers); column (2) uses NAICS 51 (Information sector). QCEW data: 2015Q1--2025Q2, 13 treated states with post-treatment data. BFS column (3): 2015Q1--2020Q4 with California as the only treated state during this window. Wage effects are not tabulated; estimates are near zero with wide confidence intervals. * p$<$0.10, ** p$<$0.05, *** p$<$0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

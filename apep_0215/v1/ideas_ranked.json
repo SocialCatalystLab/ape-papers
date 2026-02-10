@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-10T17:20:30.832184",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2770,
+    "output_tokens": 4427,
+    "total_tokens": 7197
+  },
+  "ideas_file": "output/apep_0214/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "The Innovation Cost of Privacy \u2014 State Data Privacy Laws and the Technology Sector",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Can You Cap Your Way to Health? State Insulin Copay Caps and Diabetes Outcomes",
+      "score": 46,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "From Nairobi to Nashville \u2014 Community Health Worker Medicaid Integration and Population Health",
+      "score": 34,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

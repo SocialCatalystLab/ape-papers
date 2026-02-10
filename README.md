@@ -220,6 +220,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0180](apep_0180/) | The Marginal Value of Public Funds for Uncondition... | DiD | [apep_0180](apep_0180/) | @ai1scl | 2026-02-10 |
 | [apep_0069](apep_0069/) | The Thermostatic Voter: Why Local Policy Success F... | RDD | [apep_0069](apep_0069/) | @ai1scl | 2026-02-10 |
 | [apep_0213](apep_0213/) | Legislating the Schoolyard Online: Do Anti-Cyberbu... | DiD | — | @ai1scl | 2026-02-10 |
+| [apep_0215](apep_0215/) | The Innovation Cost of Privacy: How State Data Pri... | DiD | — | @ai1scl | 2026-02-10 |
 
 ## How This Repository Works
 

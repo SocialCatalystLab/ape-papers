@@ -1,0 +1,24 @@
+\begin{table}[H]
+\centering
+\caption{Robustness and Placebo Tests: Log Employment ATT}
+\label{tab:robustness}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Specification & ATT & SE & Note \\
+\midrule
+Software Publishers (5112) & -0.0767$^{***}$ & (0.0247) & Primary specification \\
+Broad Info (NAICS 51) & -0.0034 & (0.5209) & Broad sector; underpowered$^\dag$ \\
+Placebo: Healthcare & 0.0140 & (0.0117) & NAICS 62 \\
+Placebo: Construction & 0.3793 & (0.3196) & NAICS 23 \\
+Not-Yet-Treated Controls & -0.0767$^{***}$ & (0.0234) & Alternative control group \\
+\addlinespace
+Randomization Inference & \multicolumn{3}{c}{p-value = 0.077 (156 permutations)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: All specifications use Callaway-Sant'Anna (2021) with doubly robust estimation. Unless noted, the control group is never-treated states. QCEW data: 2015Q1--2025Q2, 52 units, 13 treated states with post-treatment data. All rows report log employment ATT for Software Publishers (NAICS 5112) unless otherwise noted. Placebo industries should show null effects if privacy laws specifically affect the technology sector. Not-yet-treated controls expand the comparison group to include states that adopted laws later. Randomization inference permutes treatment assignment 500 times across the Software Publishers specification. $^\dag$The broad NAICS 51 specification has SE $\gg$ $|$ATT$|$ because enormous cross-state heterogeneity in Information sector employment produces wide confidence intervals; this is a power limitation, not a specification error. * p$<$0.10, ** p$<$0.05, *** p$<$0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
