@@ -1,0 +1,32 @@
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\begin{tabular}{lcc}
+\toprule
+Specification & Estimate & SE \\
+\midrule
+\multicolumn{3}{l}{\textit{Considered Suicide}} \\[2pt]
+\quad TWFE (baseline) & 0.111 & (0.457) \\
+\quad Sun-Abraham (2021) & 0.785 & (1.434) \\
+\quad Treatment $-$2 years & 0.064 & (0.449) \\
+\quad Treatment $+$2 years & 0.092 & (0.440) \\
+\quad Years since adoption & 0.0253 & (0.1266) \\
+[6pt]
+\multicolumn{3}{l}{\textit{Sad/Hopeless}} \\[2pt]
+\quad TWFE (baseline) & -0.202 & (0.423) \\
+\quad Sun-Abraham (2021) & 0.056 & (1.531) \\
+\quad Treatment $-$2 years & -0.296 & (0.462) \\
+\quad Treatment $+$2 years & -0.013 & (0.438) \\
+\quad Years since adoption & -0.0773 & (0.1458) \\
+[6pt]
+
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} All specifications include state and year fixed effects with standard errors clustered at the state level. Sun-Abraham uses the heterogeneity-robust estimator of Sun and Abraham (2021). Treatment $\pm$2 years shifts the assumed law effective date by $\pm$2 years as a timing sensitivity check. Years since adoption tests for dose-response (cumulative effect per year of exposure). * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{table}
+

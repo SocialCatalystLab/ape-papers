@@ -1,0 +1,41 @@
+
+\begin{table}[htbp]
+\centering
+\caption{Effect of Anti-Cyberbullying Laws on Youth Mental Health}
+\label{tab:main_results}
+\begin{tabular}{lccc}
+\toprule
+& Sun-Abraham & TWFE & RI $p$-value \\
+\midrule
+Considered Suicide & 0.785 & 0.111 & 0.752 \\
+& (1.434) & (0.457) & \\
+& [-2.025, 3.596] & [-0.786, 1.007] & \\
+[6pt]
+Attempted Suicide & 1.209** & 0.465 & 0.259 \\
+& (0.579) & (0.320) & \\
+& [0.075, 2.344] & [-0.163, 1.092] & \\
+[6pt]
+Sad/Hopeless (Depression) & 0.056 & -0.202 & 0.608 \\
+& (1.531) & (0.423) & \\
+& [-2.944, 3.056] & [-1.031, 0.627] & \\
+[6pt]
+Suicide Plan & 0.800 & 0.102 & --- \\
+& (2.194) & (0.326) & \\
+& [-3.501, 5.102] & [-0.538, 0.741] & \\
+[6pt]
+Bullied at School & -0.002 & -0.550 & --- \\
+& (0.678) & (0.679) & \\
+& [-1.330, 1.327] & [-1.881, 0.782] & \\
+
+\midrule
+State FE & Yes & Yes & --- \\
+Year FE & Yes & Yes & --- \\
+Estimator & SA (2021) & OLS & Permutation \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Estimates of the average treatment effect on the treated (ATT). Sun-Abraham uses the heterogeneity-robust estimator of Sun and Abraham (2021). TWFE is standard two-way fixed effects. RI $p$-values from 1,000 permutations of treatment assignment across states; reported for three primary outcomes (suicide ideation, suicide attempt, depression) only. Standard errors (in parentheses) and 95\% CIs [in brackets] clustered at the state level. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{table}
+

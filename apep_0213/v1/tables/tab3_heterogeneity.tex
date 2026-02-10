@@ -1,0 +1,30 @@
+
+\begin{table}[htbp]
+\centering
+\caption{Heterogeneity by Sex and Law Type}
+\label{tab:heterogeneity}
+\begin{tabular}{lcccc}
+\toprule
+& Female & Male & Criminal & School Only \\
+\midrule
+Considered Suicide & 0.736 & -0.440 & 0.430 & -0.027 \\
+& (0.556) & (0.448) & (0.517) & (0.493) \\
+[6pt]
+Attempted Suicide & 0.657* & 0.271 & 0.598 & 0.408 \\
+& (0.370) & (0.377) & (0.448) & (0.384) \\
+[6pt]
+Sad/Hopeless & -0.506 & 0.046 & -0.156 & -0.222 \\
+& (0.558) & (0.451) & (0.538) & (0.485) \\
+
+\midrule
+State FE & Yes & Yes & Yes & Yes \\
+Year FE & Yes & Yes & Yes & Yes \\
+Clustering & State & State & State & State \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} TWFE estimates. Columns (1)--(2) estimate effects separately by sex on subsample. Columns (3)--(4) interact treatment with law type: ``Criminal'' includes states with criminal penalties for cyberbullying; ``School Only'' includes states mandating school policies without criminal sanctions. Standard errors (in parentheses) clustered at the state level. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{table}
+

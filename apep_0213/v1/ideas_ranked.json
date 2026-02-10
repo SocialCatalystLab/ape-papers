@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-02-10T15:29:51.223007",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2930,
+    "output_tokens": 4543,
+    "total_tokens": 7473
+  },
+  "ideas_file": "output/apep_0197/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Anti-Cyberbullying Laws and Youth Mental Health: Modern Causal Evidence from Staggered State Adoption",
+      "score": 68,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "coding treatment by effective date relative to YRBS survey fielding",
+        "pre-registering cohort restrictions/robustness that ensure \u22653\u20135 true pre-periods for key cohorts",
+        "presenting distributional outcomes or subgroup analyses to reduce dilution"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Anti-Cyberbullying Laws and School Discipline: Unintended Consequences of Zero-Tolerance Digital Policies",
+      "score": 48,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Does Criminalizing Revenge Porn Protect Women? Staggered Adoption of Non-Consensual Intimate Image Laws",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "State Data Breach Notification Law Amendments and Identity Theft",
+      "score": 41,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 5,
+      "title": "State Sexting Diversion Laws and Juvenile Justice: Does Decriminalization Reduce Collateral Consequences?",
+      "score": 34,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "Anti-Cyberbullying Laws and Youth Mental Health: Modern Causal Evidence from Staggered State Adoption",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "coding treatment by effective date relative to YRBS survey fielding",
+        "pre-registering cohort restrictions/robustness that ensure \u22653\u20135 true pre-periods for key cohorts",
+        "presenting distributional outcomes or subgroup analyses to reduce dilution"
+      ]
+    }
+  ]
+}
