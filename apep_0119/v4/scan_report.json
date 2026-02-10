@@ -1,77 +1,11 @@
 {
-  "paper_id": "apep_0144",
-  "scan_date": "2026-02-06T12:51:09.123081+00:00",
+  "paper_id": "apep_0119_v4",
+  "scan_date": "2026-02-10T13:14:53.251804+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SEVERE",
+  "overall_verdict": "CLEAN",
   "files_scanned": 12,
-  "flags": [
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "CRITICAL",
-      "file": "01e_fetch_dsm.R",
-      "lines": [
-        1,
-        40,
-        55,
-        220
-      ],
-      "evidence": "The DSM expenditure and energy-savings dataset is not fetched from EIA Form 861 (despite the script header claiming it is) and instead is manually constructed as a large tribble of numeric values that appear synthetic/arbitrary (e.g., round-looking figures, repeated patterns across years/states, no read-in from raw files or API). This constitutes direct fabrication risk for the treatment-intensity analysis and any downstream results using these values.: dsm_expenditures <- tribble(\n  ~state_abbr, ~year, ~dsm_cost_thousands, ~ee_savings_mwh,\n  # 2010 data\n  \"AZ\", 2010, 89432, 312456,\n  \"AR\", 2010, 31254, 98765,\n  \"CA\", 2010, 987654, 5432109,\n  ...\n  # 2015 data\n  \"AZ\", 2015, 112345, 456789,\n  ...\n  # 2020 data\n  \"AZ\", 2020, 156789, 678901,\n  ...\n)",
-      "confidence": 0.95
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "04b_sdid_robustness.R",
-      "lines": [
-        120,
-        170,
-        185,
-        250
-      ],
-      "evidence": "The manuscript describes implementing Arkhangelsky et al. (2021) Synthetic Difference-in-Differences (SDID). However, this script does not implement the SDID optimization problem (unit weights and time weights estimated via the SDID objective / convex optimization as in the synthdid package). Instead it uses ad hoc correlation-based nonnegative weights and an arbitrary exponential decay for time weights, then computes a DiD-style adjustment. This is not equivalent to SDID and can materially change the estimate/SEs, undermining the claimed robustness check.: # Estimate SDID (Manual Implementation)\n...\n# Simple correlation-based weights for controls\n# (More sophisticated: quadratic programming as in synthdid package)\ncorrelations <- apply(Y_pre_control, 1, function(row) {\n  cor(row, Y_pre_treated_avg)\n})\ncorrelations[correlations < 0] <- 0\nomega <- correlations / sum(correlations)\n...\n# Step 2: Compute time weights\n# Weight pre-treatment periods by inverse distance to treatment\ntime_weights <- exp(-(T0 - 1:T0) / 3)  # Exponential decay\nlambda <- time_weights / sum(time_weights)\n...\nsdid_estimate <- (post_treated - post_control) - pre_gap\n",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        20,
-        40,
-        55,
-        95
-      ],
-      "evidence": "Key treatment coding (EERS adoption years) can silently fall back to an embedded hard-coded table whenever the raw provenance CSV is missing. In such a case, the run is no longer fully provenance-traceable/reproducible from documented raw sources, and results depend on code literals. The repository includes a validator script, but it will not prevent users from generating results using the fallback without noticing beyond a console warning.: eers_raw_file <- paste0(data_dir, \"raw/eers_adoption_sources.csv\")\nif (file.exists(eers_raw_file)) {\n  eers_treatment <- read_csv(eers_raw_file, show_col_types = FALSE) %>%\n    select(state_abbr, state_name, eers_year, eers_type)\n  cat(\"Loaded EERS treatment data from:\", eers_raw_file, \"\\n\")\n} else {\n  # Fallback for backward compatibility (documented in DATA_SOURCES.md)\n  cat(\"WARNING: Raw CSV not found, using embedded data\\n\")\n  eers_treatment <- tribble(\n    ~state_abbr, ~state_name,           ~eers_year, ~eers_type,\n    \"AZ\",        \"Arizona\",              2010,       \"mandatory\",\n    ...\n  )\n}\n",
-      "confidence": 0.8
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "04b_sdid_robustness.R",
-      "lines": [
-        70,
-        90,
-        105,
-        135
-      ],
-      "evidence": "The SDID robustness sample is altered via (i) imposing a single post indicator at year>=2004 even for units treated earlier, and (ii) dropping states to enforce a balanced panel by keeping only complete-case states. Both choices can change identification/composition in ways that may tilt the result (especially if missingness is correlated with outcomes or treatment timing). These restrictions are not inherently invalid, but they are consequential and should be transparently reported as sample-selection steps and sensitivity-checked.: # Use 2004 as uniform treatment year (latest adoption year in sample)\ntreatment_year <- 2004\n...\nmutate(\n  sdid_treated = as.integer(first_treat > 0 & first_treat <= 2004),\n  sdid_post = as.integer(year >= treatment_year)\n)\n...\n# Focus on years 1995-2015 for cleaner pre/post balance\nsdid_balanced <- sdid_sample %>%\n  filter(year >= 1995 & year <= 2015) %>%\n  select(state_abbr, year, log_res_elec_pc, sdid_treated) %>%\n  filter(!is.na(log_res_elec_pc))\n...\nif (min(balance_check$n_years) < max(balance_check$n_years)) {\n  cat(\"Warning: Unbalanced panel. Restricting to complete cases.\\n\")\n  complete_states <- balance_check %>%\n    filter(n_years == max(n_years)) %>%\n    pull(state_abbr)\n  sdid_balanced <- sdid_balanced %>%\n    filter(state_abbr %in% complete_states)\n}\n",
-      "confidence": 0.75
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "01c_fetch_policy.R",
-      "lines": [
-        20,
-        40,
-        80,
-        150
-      ],
-      "evidence": "Policy-control adoption years (RPS/decoupling/building codes) are hard-coded as tribbles rather than programmatically extracted from the referenced raw files. The paper\u2019s appendix emphasizes public sources and the repo includes 01d_validate_provenance.R to cross-check against raw CSV exports, which reduces integrity risk. Still, two entries are internally flagged by comments as 'voluntary' (VT, VA) but are included in the 'mandatory RPS only' list, which can misclassify controls if used as covariates.: rps_data <- tribble(\n  ~state_abbr, ~rps_year,\n  ...\n  \"VT\", 2005,  # Vermont: SPEED 2005 (voluntary, mandatory 2017)\n  \"VA\", 2007,  # Virginia: RPS 2007 (voluntary target)\n  ...\n)\n...\ndecoupling_data <- tribble(\n  ~state_abbr, ~decoupling_year,\n  \"CA\", 1982,\n  ...\n)\n...\nbuilding_code_data <- tribble(\n  ~state_abbr, ~building_code_year,\n  \"CA\", 2010,\n  ...\n)\n",
-      "confidence": 0.7
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_weather.R",
@@ -79,7 +13,7 @@
     },
     {
       "file": "04b_sdid_robustness.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "01c_fetch_policy.R",
@@ -107,7 +41,7 @@
     },
     {
       "file": "01e_fetch_dsm.R",
-      "verdict": "SEVERE"
+      "verdict": "CLEAN"
     },
     {
       "file": "02_clean_data.R",
@@ -123,40 +57,17 @@
     }
   ],
   "summary": {
-    "verdict": "SEVERE",
+    "verdict": "CLEAN",
     "counts": {
-      "CRITICAL": 1,
-      "HIGH": 1,
-      "MEDIUM": 2,
-      "LOW": 1
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "fabricated data; method mismatch",
-    "executive_summary": "The DSM expenditure and energy-savings dataset is not actually retrieved from EIA Form 861 as claimed; instead, `01e_fetch_dsm.R` manually hard-codes a large table of numeric values, making the provenance and reproducibility of the core inputs unverifiable and consistent with data fabrication. In addition, `04b_sdid_robustness.R` does not implement the Arkhangelsky et al. (2021) Synthetic Difference-in-Differences optimization (unit/time weight estimation and the SDID objective) described in the manuscript, indicating a major mismatch between the stated methodology and the code used to produce results.",
-    "top_issues": [
-      {
-        "category": "DATA_FABRICATION",
-        "severity": "CRITICAL",
-        "short": "The DSM expenditure and energy-savings dataset is not fet...",
-        "file": "01e_fetch_dsm.R",
-        "lines": [
-          1,
-          40
-        ],
-        "github_url": "/apep_0144/code/01e_fetch_dsm.R#L1-L220"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript describes implementing Arkhangelsky et al....",
-        "file": "04b_sdid_robustness.R",
-        "lines": [
-          120,
-          170
-        ],
-        "github_url": "/apep_0144/code/04b_sdid_robustness.R#L120-L250"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0144_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0119_v4_scan.json"
   },
   "error": null
 }

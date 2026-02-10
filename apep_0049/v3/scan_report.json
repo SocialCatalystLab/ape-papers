@@ -1,82 +1,11 @@
 {
-  "paper_id": "apep_0147",
-  "scan_date": "2026-02-06T12:51:45.829209+00:00",
+  "paper_id": "apep_0049_v3",
+  "scan_date": "2026-02-10T13:13:34.377353+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 6,
-  "flags": [
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "05_first_stage_figure.R",
-      "lines": [
-        44,
-        45,
-        46,
-        47,
-        48,
-        49,
-        50,
-        51,
-        52,
-        53
-      ],
-      "evidence": "The script hard-codes a per-capita base rate (32) and a density adjustment (0.15 * min(1, density/4000)) to compute \u201cannual formula funding\u201d. These quantities are presented in comments as being \u201cderived from actual FTA apportionments\u201d but there is no code that documents or reproduces that derivation from raw FTA data. This is not a minor constant (like a statutory threshold); it directly determines the plotted funding levels and the implied jump size in the first-stage figure if this script is used.: calculate_5307_funding <- function(population, density_per_sq_mi = 2500) {\n  # Only eligible if population >= 50,000\n  if (population < 50000) return(0)\n\n  # Base rate per capita for small urbanized areas (from FY2020-2024 apportionment data)\n  # This is derived from actual FTA apportionments, not assumed\n  base_rate <- 32  # Base rate in dollars per capita\n\n  # Density adjustment factor (areas with higher density get modestly more)\n  # Based on formula structure where density-weighted component adds ~5-15%\n  density_factor <- 1 + 0.15 * min(1, density_per_sq_mi / 4000)\n\n  # Calculate total annual funding\n  per_capita <- base_rate * density_factor\n  total <- population * per_capita\n\n  return(total)\n}",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "MEDIUM",
-      "file": "05_first_stage_figure.R",
-      "lines": [
-        60,
-        61,
-        62,
-        63,
-        64,
-        65,
-        66,
-        67,
-        68
-      ],
-      "evidence": "This script generates a fully synthetic dataset (population grid and modeled funding) and saves a figure named identically to the manuscript\u2019s Figure 7 output (\"figures/fig7_first_stage.png\"). Synthetic data generation is acceptable for conceptual illustrations, but it becomes an integrity risk because it can overwrite the expected \u201cstatutory eligibility discontinuity\u201d figure with a modeled funding discontinuity figure, potentially misrepresenting empirics as data-based.: population_grid <- seq(30000, 70000, by = 200)\n\n# Calculate funding for each population level\n# Assume typical density of ~2500 people per sq mi for areas near threshold\nfunding_data <- tibble(\n  population = population_grid,\n  running_var = population - 50000,\n  eligible = population >= 50000,\n  total_funding = sapply(population, calculate_5307_funding, density_per_sq_mi = 2500),\n  total_funding_millions = total_funding / 1e6,\n  per_capita_funding = ifelse(eligible, total_funding / population, 0)\n)",
-      "confidence": 0.78
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "05_first_stage_figure.R",
-      "lines": [
-        99,
-        100,
-        101,
-        102,
-        103,
-        104
-      ],
-      "evidence": "The manuscript\u2019s Figure 7 is described as a binary \u201cstatutory eligibility discontinuity\u201d (eligibility vs. population). However, this script saves a funding-in-dollars plot to the same filename used in the manuscript (fig7_first_stage.png). If this script is run, it can silently replace the intended eligibility plot (generated in 04_figures.R) with a modeled funding plot, creating a paper/code inconsistency and risking misrepresentation of what Figure 7 depicts.: ggsave(\n  \"./figures/fig7_first_stage.png\",\n  plot = p_first_stage,\n  width = 10, height = 7, dpi = 300,\n  bg = \"white\"\n)",
-      "confidence": 0.92
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
-      ],
-      "evidence": "Despite the header comment claiming that the script fetches \u201cACTUAL FTA Section 5307 apportionments,\u201d the code in this file only calls the Census API (2010 SF1) and the ACS API (2020/acs/acs5). There is no FTA apportionment download, scrape, read_excel/read_csv of FTA files, or API request to transit.dot.gov. This creates a provenance/documentation mismatch: readers may believe FTA funding data were used or verified when they were not actually fetched here.: # 01_fetch_data.R - Fetch REAL data from Census API and FTA apportionments\n#\n# CRITICAL FIX: This script fetches ACTUAL FTA Section 5307 apportionments\n# instead of the fabricated synthetic data in the original paper.",
-      "confidence": 0.85
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "02_fetch_ua_characteristics.R",
@@ -96,7 +25,7 @@
     },
     {
       "file": "05_first_stage_figure.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -104,40 +33,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 2,
+      "HIGH": 0,
+      "MEDIUM": 0,
       "LOW": 0
     },
-    "one_liner": "hard-coded results; method mismatch",
-    "executive_summary": "The script in `05_first_stage_figure.R` hard-codes key parameters used to compute \u201cannual formula funding\u201d (a per-capita base rate of 32 and a density adjustment of `0.15 * min(1, density/4000)`), so the headline funding values are driven by fixed, undocumented constants rather than transparently derived inputs. It also produces and saves a funding-in-dollars plot under the filename associated with Figure 7, even though the manuscript describes Figure 7 as a binary statutory eligibility discontinuity (eligibility vs. population), indicating the code output does not match the stated methodology or figure description.",
-    "top_issues": [
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "The script hard-codes a per-capita base rate (32) and a d...",
-        "file": "05_first_stage_figure.R",
-        "lines": [
-          44,
-          45
-        ],
-        "github_url": "/apep_0147/code/05_first_stage_figure.R#L44-L53"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript\u2019s Figure 7 is described as a binary \u201cstatu...",
-        "file": "05_first_stage_figure.R",
-        "lines": [
-          99,
-          100
-        ],
-        "github_url": "/apep_0147/code/05_first_stage_figure.R#L99-L104"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0147_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0049_v3_scan.json"
   },
   "error": null
 }

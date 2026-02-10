@@ -1,107 +1,11 @@
 {
-  "paper_id": "apep_0055",
-  "scan_date": "2026-02-06T12:37:33.330491+00:00",
+  "paper_id": "apep_0055_v1",
+  "scan_date": "2026-02-10T13:14:19.941499+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
   "files_scanned": 11,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        77,
-        78,
-        79,
-        80,
-        81,
-        82
-      ],
-      "evidence": "Project paths are hard-coded to a specific user's local filesystem. This is a reproducibility/provenance risk: a third party cannot re-run the pipeline without editing code, and it obscures where outputs were generated/stored. While the raw data source is documented (NBER/CDC), the hard-coded path undermines transparent replication in a clean environment.: proj_root <- \"/Users/celine/Dropbox (Personal)/SC_Diverse/auto-policy-evals/output/paper_70\"\n\n# Subdirectories\ndata_dir <- file.path(proj_root, \"data\")\ncode_dir <- file.path(proj_root, \"code\")\nfig_dir <- file.path(proj_root, \"figures\")",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "paper.tex",
-      "lines": [
-        203,
-        204,
-        205,
-        206,
-        207
-      ],
-      "evidence": "The manuscript claims implementation of Koles\u00e1r and Rothe (2018) inference for discrete/mass-point RD. In the provided code, the main estimation uses rdrobust with its default robust bias-corrected SEs, plus a simple age-25-vs-26 t-test; there is no implementation of KR(2018) discrete-running-variable inference (e.g., via appropriate variance adjustments or dedicated routines). This is not necessarily invalid, but it is a mismatch between claimed and executed inference.: First, I implement the variance estimator of \\citet{kolesar2018} designed for RD with discrete running variables.",
-      "confidence": 0.75
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        46,
-        47,
-        48,
-        49
-      ],
-      "evidence": "The paper emphasizes local-polynomial RD with optimal bandwidth selection and robust bias correction. The code calls rdrobust (which can select bandwidths internally), but it also pre-restricts the sample to ages 22\u201330 (\u00b14 years). This does not fully negate rdrobust\u2019s internal bandwidth choice, but it can constrain it (e.g., if the MSE-optimal bandwidth would be wider than 4 years, it cannot be selected). This is a mild implementation divergence from a fully unconstrained optimal-bandwidth approach.: bandwidth <- 4  # Ages 22-30\ndf <- natality[MAGER >= (26 - bandwidth) & MAGER <= (26 + bandwidth)]\n...\nrd_medicaid <- rdrobust(y = df$medicaid, x = df$age_centered, c = 0)",
-      "confidence": 0.6
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "02_clean_data.R",
-      "lines": [
-        74,
-        75,
-        76,
-        77
-      ],
-      "evidence": "The code enforces the primary sample restriction (ages 22\u201330) at the cleaning stage, before any analysis/robustness routines. This is consistent with the manuscript, but it limits transparency for bandwidth sensitivity beyond \u00b14 years and makes it easier to inadvertently lock in a favorable window without later visibility. Not evidence of p-hacking on its own, but worth flagging as a design choice that should be explicitly justified (and ideally parameterized) for replication.: # Basic cleaning\n# Filter to ages 22-30 (gives us bandwidth flexibility around 26)\ndt <- dt[mager >= 22 & mager <= 30]",
-      "confidence": 0.65
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "08_tables.R",
-      "lines": [
-        67
-      ],
-      "evidence": "Table note hard-codes '2023' even though the pipeline downloads/uses 2016\u20132023 (and the manuscript repeatedly states 2016\u20132023). This is not hard-coding coefficients, but it is hard-coded descriptive output that can misstate the analysis dataset and mislead readers.: cat(\"\\\\floatfoot{\\\\textit{Notes:} Sample includes all births to mothers ages 22--30 in 2023 CDC Natality data.}\\\\n\")",
-      "confidence": 0.8
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "07_placebo_figure.R",
-      "lines": [
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29
-      ],
-      "evidence": "The figure caption asserts a conclusion ('Only age 26 shows a positive discontinuity') regardless of what the placebo results actually are. This is not fabrication, but it is outcome-assertive labeling that can bias interpretation if placebo estimates are positive/significant for other cutoffs in a given run.: labs(\n    title = \"RDD Estimates at Placebo and Policy Cutoffs\",\n    subtitle = \"Medicaid payment discontinuity\",\n    x = \"Cutoff Age\",\n    y = \"RD Estimate (pp)\",\n    caption = \"Note: Points show RD estimates; bars show 95% CI. Only age 26 shows a positive discontinuity.\"\n  )",
-      "confidence": 0.7
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        20,
-        21,
-        22,
-        23
-      ],
-      "evidence": "Data provenance is generally strong (explicit NBER URL pattern), but the script does not record/check file hashes, versions, or download logs. For archival integrity, storing a manifest (URL, date accessed, file size, checksum) would improve verifiability that the underlying data used in analysis matches what was purportedly downloaded.: url <- sprintf(\"https://data.nber.org/nvss/natality/dta/%d/natality%dus.dta\", year, year)\ndest_file <- file.path(data_dir, sprintf(\"natality%dus.dta\", year))\n...\ndownload.file(url, dest_file, mode = \"wb\", quiet = FALSE)",
-      "confidence": 0.55
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -153,13 +57,13 @@
     "counts": {
       "CRITICAL": 0,
       "HIGH": 0,
-      "MEDIUM": 3,
-      "LOW": 4
+      "MEDIUM": 0,
+      "LOW": 0
     },
     "one_liner": "Minor issues only",
-    "executive_summary": "Minor code quality issues detected, but no evidence of data fabrication or manipulation.",
+    "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0055_scan.json"
+    "full_report_url": "/scans/apep_0055_v1_scan.json"
   },
   "error": null
 }

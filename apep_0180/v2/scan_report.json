@@ -1,67 +1,11 @@
 {
-  "paper_id": "apep_0182",
-  "scan_date": "2026-02-06T12:59:21.330175+00:00",
+  "paper_id": "apep_0180_v2",
+  "scan_date": "2026-02-10T13:15:51.812727+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
   "files_scanned": 7,
-  "flags": [
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        45,
-        139
-      ],
-      "evidence": "Key numeric inputs (treatment effects, SEs, p-values, fiscal parameters) are hard-coded via tribble()/list() rather than programmatically extracted from replication datasets or an external source file. In isolation this can be a major integrity risk, but the manuscript and code comments explicitly state the analysis is a published-estimates MVPF calibration (transcribed from Haushofer & Shapiro 2016/2018 and Egger et al. 2022), which is standard in MVPF work. Risk mainly becomes transcription-error risk; best practice would be to include a citation-to-cell map or a unit test that reproduces the paper tables from the entered values.: haushofer_shapiro_effects <- tibble::tribble(\n  ~outcome, ~control_mean, ~treatment_effect, ~se, ~pvalue, ~n_obs,\n  # Consumption (monthly, USD PPP)\n  \"Total consumption\", 158, 35, 8, 0.001, 1372,\n  ...\n)\n\negger_ge_effects <- tibble::tribble(\n  ~outcome, ~recipient_effect, ~recipient_se, ~nonrecipient_effect, ~nonrecipient_se, ~n_villages,\n  \"Consumption\", 293, 62, 245, 78, 653,\n  ...\n)\n\nkenya_fiscal <- list(\n  vat_rate = 0.16,\n  income_tax_formal = 0.185,\n  informal_share = 0.80,\n  transfer_amount_usd = 1000,\n  admin_cost_rate = 0.15,\n  mcpf_baseline = 1.3,\n  discount_rate = 0.05,\n  ppp_factor = 2.515\n)",
-      "confidence": 0.86
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        214
-      ],
-      "evidence": "There is no automated data provenance chain (no download of replication packages, no parsing of tables) for the core effect-size inputs; instead, the script creates the dataset from manually entered published numbers. This is consistent with the manuscript's stated approach (published-estimates MVPF), so not inherently problematic, but it reduces verifiability. A lightweight improvement would be an auxiliary script that downloads the replication archives (Dataverse / Econometric Society) and either (i) re-computes the specific estimates used, or (ii) checks that the hard-coded values match the replication outputs within tolerance.: # This script compiles PUBLISHED treatment effect estimates from peer-reviewed\n# studies.\n...\n# All values below are transcribed from the original publications:\n...\nhaushofer_shapiro_effects <- tibble::tribble(...)\n...\nsave(..., file = file.path(data_dir, \"kenya_uct_data.RData\"))",
-      "confidence": 0.83
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        63,
-        116
-      ],
-      "evidence": "Random number generation is used to propagate uncertainty / build confidence intervals. This is consistent with the manuscript's Monte Carlo / bootstrap description of uncertainty propagation and is not evidence of fabricated empirical data generation. However, the implementation details differ from the manuscript (see METHODOLOGY_MISMATCH finding).: set.seed(42)\nn_boot <- 1000\n...\nspillover_draws <- rnorm(n_boot,\n                         mean = wtp_spillover_per_recipient,\n                         sd = egger_ge_effects$nonrecipient_se[1] * 0.5)\n...\nvat_draws <- rnorm(n_boot,\n                   mean = pv_vat,\n                   sd = consumption_se * kenya_fiscal$vat_rate * 0.5 * 3)\n...\nincome_tax_draws <- rnorm(n_boot,\n                          mean = pv_income_tax,\n                          sd = earnings_se * kenya_fiscal$income_tax_formal * (1 - kenya_fiscal$informal_share) * 5)",
-      "confidence": 0.74
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "03_main_analysis.R",
-      "lines": [
-        63,
-        116
-      ],
-      "evidence": "The manuscript states uncertainty is propagated by drawing (i) treatment effects from normal distributions using reported SEs and (ii) key fiscal parameters (VAT coverage, informality share, admin costs) from beta distributions over specified ranges. The code only draws from normal distributions for spillovers/VAT/income-tax components and keeps VAT coverage, informality share, and admin cost fixed at point values during the CI computation. Therefore, the reported CIs in the manuscript (especially those incorporating parameter uncertainty from beta draws) may not correspond to what this code actually generates.\n\nAdditionally, the spillover SD used in code is inconsistent with constructed spillover WTP: the code uses `egger_ge_effects$nonrecipient_se[1] * 0.5` without PPP conversion or explicit spillover-ratio scaling, while `wtp_spillover_per_recipient` in 02_clean_data.R is computed as (nonrecipient_effect/ppp_factor) * spillover_ratio. This likely mis-scales spillover uncertainty relative to the point estimate.: # Bootstrap parameters (using normal approximation from SEs)\nset.seed(42)\nn_boot <- 1000\n\n# Draw from sampling distributions\n# WTP direct: fixed (cash transfer)\nwtp_direct_draws <- rep(wtp_direct, n_boot)\n\n# Spillover WTP: uncertain\nspillover_draws <- rnorm(n_boot,\n                         mean = wtp_spillover_per_recipient,\n                         sd = egger_ge_effects$nonrecipient_se[1] * 0.5)  # Per recipient\n\n# VAT: depends on consumption effect\nconsumption_se <- egger_ge_effects$recipient_se[1] / kenya_fiscal$ppp_factor\nvat_draws <- rnorm(n_boot,\n                   mean = pv_vat,\n                   sd = consumption_se * kenya_fiscal$vat_rate * 0.5 * 3)  # 3-year PV\n\n# Income tax: depends on earnings effect\nearnings_se <- egger_ge_effects$recipient_se[egger_ge_effects$outcome == \"Wage earnings\"] / kenya_fiscal$ppp_factor\nincome_tax_draws <- rnorm(n_boot,\n                          mean = pv_income_tax,\n                          sd = earnings_se * kenya_fiscal$income_tax_formal * (1 - kenya_fiscal$informal_share) * 5)",
-      "confidence": 0.87
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "02_clean_data.R",
-      "lines": [
-        46,
-        67
-      ],
-      "evidence": "The script includes an ad hoc calculation of the number of spillover households using an assumed 150 households per village and a 0.33 non-recipient rate. While this variable (`n_spillover_hh`) is not subsequently used in the calculations (so it does not affect results), leaving such arbitrary constants in the analysis pipeline can create confusion and raises the risk of later inadvertent use. Consider removing it or deriving it from documented study totals.: # Number of non-recipient households in treatment villages\n# From Egger et al.: ~50% of households in high-saturation villages were non-recipients\n# 328 high-sat villages \u00d7 ~150 HH/village \u00d7 0.33 non-recipient rate\nn_spillover_hh <- study_design$egger_high_sat_villages * 150 * 0.33\n\n# But we express spillover WTP per recipient for comparability\nspillover_ratio <- (1 - study_design$high_saturation_rate) / study_design$high_saturation_rate",
-      "confidence": 0.76
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -97,13 +41,13 @@
     "counts": {
       "CRITICAL": 0,
       "HIGH": 0,
-      "MEDIUM": 1,
-      "LOW": 4
+      "MEDIUM": 0,
+      "LOW": 0
     },
     "one_liner": "Minor issues only",
-    "executive_summary": "Minor code quality issues detected, but no evidence of data fabrication or manipulation.",
+    "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0182_scan.json"
+    "full_report_url": "/scans/apep_0180_v2_scan.json"
   },
   "error": null
 }

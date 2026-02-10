@@ -1,67 +1,11 @@
 {
-  "paper_id": "apep_0154",
-  "scan_date": "2026-02-06T12:53:30.792160+00:00",
+  "paper_id": "apep_0054_v4",
+  "scan_date": "2026-02-10T13:14:01.745703+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        128,
-        166
-      ],
-      "evidence": "The manuscript states that state minimum wage data are incorporated as controls. In the codebase shown, minimum wage data are not actually fetched from a documented source (API/CSV) nor written to disk, and the comment indicates a future/manual construction \"using known values\". This creates a provenance and reproducibility gap for a key control mentioned in the paper.: cat(\"\\nFetching state-level control variables...\\n\")\n\n# ---- State Minimum Wages ----\n# Source: DOL / UC Berkeley Labor Center\n# We'll use a simplified approach with known minimum wages\n\nstate_min_wage <- tibble(\n  statefip = 1:56,\n  state_abbr = c(\"AL\", \"AK\", \"AZ\", \"AR\", \"CA\", \"CO\", \"CT\", \"DE\", \"DC\", \"FL\",\n                 \"GA\", \"HI\", \"ID\", \"IL\", \"IN\", \"IA\", \"KS\", \"KY\", \"LA\", \"ME\",\n                 \"MD\", \"MA\", \"MI\", \"MN\", \"MS\", \"MO\", \"MT\", \"NE\", \"NV\", \"NH\",\n                 \"NJ\", \"NM\", \"NY\", \"NC\", \"ND\", \"OH\", \"OK\", \"OR\", \"PA\", \"RI\",\n                 \"SC\", \"SD\", \"TN\", \"TX\", \"UT\", \"VT\", \"VA\", \"WA\", \"WV\", \"WI\",\n                 \"WY\", NA, NA, NA, NA, NA)\n) %>%\n  filter(!is.na(state_abbr))\n\n# For now, we'll construct minimum wage data in the cleaning script\n# using known values for the analysis period",
-      "confidence": 0.78
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        128,
-        166
-      ],
-      "evidence": "The manuscript claims explicit controls for state minimum wages and discusses concurrent policies. The provided code indicates unemployment controls are intentionally omitted (absorbed by FE, which is fine), but minimum wage controls are referenced without implementation in the shown pipeline. If later scripts (not provided) do not merge a minimum-wage series into regressions, the implemented methodology would be weaker than described.: # Fetch State-Level Controls\n...\n# ---- State Minimum Wages ----\n# Source: DOL / UC Berkeley Labor Center\n# We'll use a simplified approach with known minimum wages\n...\n# For now, we'll construct minimum wage data in the cleaning script\n# using known values for the analysis period\n\n# ---- State Unemployment Rates ----\n# Would fetch from BLS LAUS API\n# For now, we'll use state-year fixed effects which absorb this",
-      "confidence": 0.73
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "07_tables.R",
-      "lines": [
-        95,
-        137
-      ],
-      "evidence": "The key causal estimates (C-S ATT and SE) are extracted from stored model objects (good practice). However, the LaTeX note hard-codes an R-squared value \"0.965\" rather than pulling it from m1. This is not evidence of result tampering for the main estimates, but it is a manual result transcription that can drift from the actual model output and should ideally be computed programmatically.: # (2) C-S Simple ATT\n# Extract from results\ncs_att <- results$att_simple$overall.att\ncs_se <- results$att_simple$overall.se\n...\nnotes = paste0(\n  \"... the high $R^2$ (0.965) reflects 51 state + 10 year fixed effects ...\",\n  \"...\"\n)",
-      "confidence": 0.7
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "05_robustness.R",
-      "lines": [
-        92,
-        134
-      ],
-      "evidence": "A robustness check drops \"border states\" using a hand-constructed, explicitly \"simplified\" list. Because this is a discretionary sample restriction defined by hard-coded state FIPS, it can materially change estimates depending on which states are included/excluded. The manuscript frames this as a spillover check (acceptable), but integrity would be improved by sourcing adjacency from a transparent shapefile/adjacency matrix and listing exactly which controls are dropped in the paper/output.: # Border states (simplified - states adjacent to treated states)\nborder_states <- c(\n  # Border CA: AZ, NV, OR\n  4, 32, 41,\n  # Border CO: AZ, KS, NE, NM, OK, UT, WY\n  4, 20, 31, 35, 40, 49, 56,\n  # Border NY: CT, MA, NJ, PA, VT\n  9, 25, 34, 42, 50,\n  # etc. (simplified)\n  42, 10, 33, 23  # PA, DE, NH, ME\n)",
-      "confidence": 0.74
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "05_robustness.R",
-      "lines": [
-        183,
-        240
-      ],
-      "evidence": "The placebo design filters to years strictly before the earliest real treatment year (income_year < 2021). With g_placebo = g-2, some cohorts have placebo treatment years within 2019\u20132021, but the filter removes 2021 entirely. This may leave very limited or no post-'placebo-treatment' periods for some cohorts, weakening the placebo test. The script prints the placebo result but does not explicitly validate that there are post-placebo periods for treated cohorts; this can lead to an 'all-pre' placebo that mechanically returns ~0 and is then reported as supportive evidence.: # 7. Placebo Test: 2 Years Before Actual Treatment\n...\nstate_year_placebo <- state_year %>%\n  mutate(\n    g_placebo = ifelse(g > 0, g - 2, 0),\n    # Exclude actual post-treatment periods\n    income_year_restricted = income_year\n  ) %>%\n  filter(income_year < min(g[g > 0]))  # Only pre-treatment data\n\nif (nrow(state_year_placebo) > 20) {\n  cs_placebo <- att_gt(\n    yname = \"y\",\n    tname = \"income_year_restricted\",\n    idname = \"statefip\",\n    gname = \"g_placebo\",\n    data = as.data.frame(state_year_placebo),\n    control_group = \"nevertreated\",\n    anticipation = 0,\n    est_method = \"dr\",\n    print_details = FALSE\n  )\n  att_placebo <- aggte(cs_placebo, type = \"simple\")\n  ...\n}",
-      "confidence": 0.66
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -105,13 +49,13 @@
     "counts": {
       "CRITICAL": 0,
       "HIGH": 0,
-      "MEDIUM": 2,
-      "LOW": 3
+      "MEDIUM": 0,
+      "LOW": 0
     },
     "one_liner": "Minor issues only",
-    "executive_summary": "Minor code quality issues detected, but no evidence of data fabrication or manipulation.",
+    "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0154_scan.json"
+    "full_report_url": "/scans/apep_0054_v4_scan.json"
   },
   "error": null
 }

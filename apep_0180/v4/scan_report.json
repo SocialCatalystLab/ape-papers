@@ -1,102 +1,11 @@
 {
-  "paper_id": "apep_0192",
-  "scan_date": "2026-02-06T13:01:41.915284+00:00",
+  "paper_id": "apep_0180_v4",
+  "scan_date": "2026-02-10T13:15:59.546085+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 7,
-  "flags": [
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        79,
-        96,
-        97,
-        109
-      ],
-      "evidence": "Random draws are used to generate a bootstrap/simulation distribution of the MVPF (treatment effects + parameter uncertainty). This is not data fabrication per se because it is explicitly an inference procedure in both code and manuscript (correlated bootstrap). However, it should be carefully labeled as simulation-based inference (which it is).: set.seed(42)\n...\nvat_coverage_draws  <- rbeta(n_boot, 5, 5) * 0.50 + 0.25\ninformal_draws      <- rbeta(n_boot, 8, 2) * 0.35 + 0.60\n...\ndraws_indep <- MASS::mvrnorm(n_boot, mu, sigma_indep)\n...\nspill_draws <- rnorm(n_boot, spillover_mean_usd, spillover_se_usd)",
-      "confidence": 0.93
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        30,
-        52,
-        66,
-        79,
-        90,
-        107
-      ],
-      "evidence": "Treatment effects, SEs, p-values, and calibration parameters are hard-coded as literals rather than computed from microdata. In isolation this can be a red flag, but the manuscript explicitly states the paper uses published treatment effect estimates (and explains why microdata are not pulled programmatically). Under that context this is expected, but it increases transcription-risk and makes auditing dependent on cross-checking against the cited tables.: haushofer_shapiro_effects <- tibble::tribble(\n  ~outcome, ~control_mean, ~treatment_effect, ~se, ~pvalue, ~n_obs,\n  \"Total consumption\",             158,  35,   8, 0.001, 1372,\n  ...\n)\n...\negger_ge_effects <- tibble::tribble(\n  ~outcome, ~recipient_effect, ~recipient_se, ~nonrecipient_effect, ~nonrecipient_se, ~n_villages,\n  \"Consumption\",        293, 62, 245, 78, 653,\n  ...\n)\n...\nkenya_fiscal <- list(\n  vat_rate = 0.16,\n  income_tax_formal = 0.185,\n  informal_share = 0.80,\n  transfer_amount_usd = 1000,\n  admin_cost_rate = 0.15,\n  ppp_factor = 2.515,\n  vat_coverage = 0.50\n)",
-      "confidence": 0.88
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        14,
-        22,
-        30
-      ],
-      "evidence": "Core inputs are not loaded from an external dataset/API; they are manually transcribed into the script. The manuscript explicitly discloses this and provides citations/DOIs. Provenance is therefore documented, but reproducibility depends on correct transcription and should ideally be accompanied by a scripted crosswalk/check (e.g., storing page/table references per number, or including the source tables as archived artifacts).: # This script compiles PUBLISHED treatment effect estimates from peer-reviewed\n# RCTs.\n...\n# All values below are transcribed from original publications:\n#   - Haushofer & Shapiro (2016) QJE Tables 2-4\n#   - Haushofer & Shapiro (2018) working paper\n#   - Egger et al. (2022) Econometrica Tables 2-5",
-      "confidence": 0.83
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        85,
-        123
-      ],
-      "evidence": "Table 3 states the bootstrap draws for treatment effects use Haushofer & Shapiro parameters (\u0394C=35, SE=8; \u0394E=17, SE=7). But the main MVPF computation in 02_clean_data.R and 03_main_analysis.R uses Egger et al. (2022) annualized GE estimates for consumption and wage earnings (293 PPP and 182 PPP converted to USD). This creates a documentation mismatch: the table describing the bootstrap distributions does not match the code that actually generates the MVPF uncertainty.: cat(\"\\\\quad $\\\\Delta C$ (consumption) & \\\\$35 & --- & $N(35, 8^2)$ & Haushofer \\\\& Shapiro (2016) \\\\\\\\\")\ncat(\"\\\\quad $\\\\Delta E$ (earnings) & \\\\$17 & --- & $N(17, 7^2)$ & Haushofer \\\\& Shapiro (2016) \\\\\\\\\")",
-      "confidence": 0.9
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "04_robustness.R",
-      "lines": [
-        78,
-        79,
-        80,
-        81
-      ],
-      "evidence": "In the persistence/decay sensitivity, income-tax PV is computed over 1:years even when years > 5, but the decay term is capped at t=5 via decay_fn(min(t,5)). This is not equivalent to a 5-year earnings horizon; it effectively continues adding discounted earnings-tax flows beyond year 5 (at a fixed year-5 decay level). This can bias the persistence sensitivity results (especially for 10-year cases) relative to what the manuscript describes (earnings persisting over 5 years).: pv_inc <- sum(sapply(1:years, function(t)\n    wage_usd * 0.185 * 0.20 * decay_fn(min(t, 5)) / (1 + r)^t))",
-      "confidence": 0.86
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "HIGH",
-      "file": "04_robustness.R",
-      "lines": [
-        105,
-        106,
-        107
-      ],
-      "evidence": "The formality/informality sensitivity appears to use the wrong retention parameter: `pv_stream(..., 5, 0.25, 0.05)` passes 0.25 as the annual retention rate (gamma), while elsewhere earnings retention is 0.75 (and the comment says 25% annual decay, i.e., retention 0.75). Using 0.25 instead of 0.75 materially shrinks PV income tax recapture, distorting the informality sensitivity results and any downstream summary table built from these objects.: pv_income_tax_new = pv_stream(annual_income_tax, 5, 0.25, 0.05),\nnet_cost_new = 1000 - pv_vat - pv_income_tax_new,",
-      "confidence": 0.91
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "05_figures.R",
-      "lines": [
-        94,
-        95,
-        96,
-        97
-      ],
-      "evidence": "Figure 4's heatmap uses an unexplained hard-coded subtraction of `- 10` in `net_i = 1000 - pv_vat_i - 10` and also uses a simplified PV factor (not the same as the main PV routine). If this figure is presented as quantitatively meaningful sensitivity, it could mislead readers. If intended as illustrative only, it should be aligned with the same PV logic and not include arbitrary constants.: pv_vat_i = consumption_gain_usd * 0.16 * 0.50 * pv_fac * 0.5,\nnet_i = 1000 - pv_vat_i - 10,",
-      "confidence": 0.84
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -112,7 +21,7 @@
     },
     {
       "file": "04_robustness.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "02_clean_data.R",
@@ -128,29 +37,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 3,
-      "LOW": 3
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "suspicious transforms",
-    "executive_summary": "In `04_robustness.R`, the formality/informality sensitivity calls `pv_stream(..., 5, 0.25, 0.05)` with `0.25` in the position used for the annual retention/decay parameter (gamma), which is inconsistent with the retention rate applied elsewhere in the earnings persistence calculations. This likely applies the wrong persistence assumption when discounting projected earnings streams, making the robustness results non-comparable to the main specification and potentially biasing the reported sensitivity estimates.",
-    "top_issues": [
-      {
-        "category": "SUSPICIOUS_TRANSFORMS",
-        "severity": "HIGH",
-        "short": "The formality/informality sensitivity appears to use the ...",
-        "file": "04_robustness.R",
-        "lines": [
-          105,
-          106
-        ],
-        "github_url": "/apep_0192/code/04_robustness.R#L105-L107"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0192_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0180_v4_scan.json"
   },
   "error": null
 }

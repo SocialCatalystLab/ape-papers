@@ -1,80 +1,11 @@
 {
-  "paper_id": "apep_0168",
-  "scan_date": "2026-02-06T12:56:08.671077+00:00",
+  "paper_id": "apep_0054_v9",
+  "scan_date": "2026-02-10T13:14:16.922477+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 13,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        120,
-        170
-      ],
-      "evidence": "The manuscript (paper.tex) studies salary transparency laws using Census QWI (county-quarter-sex) and staggered DiD (Callaway\u2013Sant\u2019Anna) plus a border county-pair design. This script instead fetches CPS ASEC via IPUMS for an Auto-IRA (retirement coverage) project, including a different treatment dataset (auto-IRA program launches) and outcomes (PENSION/retirement coverage). Its presence suggests the repository contains code from another project; if this code is being executed in the paper\u2019s pipeline or is included as part of replication materials, it creates a serious risk that results could be generated from the wrong data/methods or that the workflow is not cleanly scoped to the paper.: # 01_fetch_data.R\n# Fetch CPS ASEC data from IPUMS for Auto-IRA analysis\n...\nextract_def <- define_extract_micro(\n  collection = \"cps\",\n  description = \"CPS ASEC 2010-2024 for Auto-IRA analysis\",\n  samples = paste0(\"cps\", 2010:2024, \"_03s\"),\n  variables = c(... \"PENSION\", ...)\n)\n...\nsubmitted <- submit_extract(extract_def)\n...\ndownload_extract(submitted, download_dir = data_dir)",
-      "confidence": 0.95
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03b_ddd_analysis.R",
-      "lines": [
-        1,
-        35,
-        90
-      ],
-      "evidence": "This DDD design targets Auto-IRA mandate phase-ins by firm size using CPS ASEC-derived outcomes (pension_rate). The manuscript does not describe an Auto-IRA setting, firm-size phase-ins, or a DDD design; it describes QWI wages and staggered adoption across states for salary transparency laws. If this file is part of the intended analysis pipeline, it is inconsistent with the claimed empirical design and could indicate mixing of projects within one codebase without clear separation.: # 03b_ddd_analysis.R\n# Triple-Difference (DDD) Design: Exploiting Firm-Size Phase-In\n# Auto-IRA mandates phase in by firm size...\n...\ndf <- readRDS(file.path(data_dir, \"cps_asec_clean.rds\"))\n...\nddd_full <- feols(\n  pension_rate ~ treat_post_small |\n    state_firmsize + year_firmsize,\n  data = df_cells,\n  weights = ~sum_weight,\n  cluster = ~statefip\n)",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        90,
-        130
-      ],
-      "evidence": "The package loader indicates that an (unprovided) script 00_policy_data.R should generate transparency law timing with \"official citations\". However, in the provided QWI pipeline (e.g., 01_fetch_qwi_fast.R, 01b_fetch_qwi_industry.R) treatment timing is hard-coded via tribble() rather than loaded from transparency_laws.rds. This creates a provenance gap: the canonical, cited treatment-timing source referenced by the repo is not present here, and the analysis relies on manually encoded dates without a documented ingestion step for the legislative sources described in the manuscript.: # IMPORTANT: Treatment timing with official citations is now in 00_policy_data.R\n# Run that script first to create data/transparency_laws.rds with proper provenance.\n...\nif (file.exists(\"data/transparency_laws.rds\")) {\n  transparency_laws <- readRDS(\"data/transparency_laws.rds\")\n  ...\n} else {\n  cat(\"WARNING: data/transparency_laws.rds not found.\\n\")\n  cat(\"Run 00_policy_data.R first to create treatment timing data.\\n\")\n}",
-      "confidence": 0.8
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        20,
-        55
-      ],
-      "evidence": "The table footnote asserts the sample spans 1995\u20132023, but the manuscript and fetch scripts specify 2015Q1\u20132023Q4 (years <- 2015:2023 in 01_fetch_qwi_fast.R and 01b_fetch_qwi_industry.R). This inconsistency is not just cosmetic: it can mislead readers about the pre-period length and identification strength. It should be corrected or programmatically derived from the data.: add_footnote(\"Note: Sample includes all county-quarter-sex observations from 1995-2023.\nNew hire earnings and all earnings in dollars. Employment and hires are quarterly counts.\nTreated states: CA, CO, CT, NV, RI, WA.\",\n               notation = \"none\")",
-      "confidence": 0.9
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "06_tables.R",
-      "lines": [
-        85,
-        150
-      ],
-      "evidence": "The standard error for the Female\u2013Male ATT difference is hard-coded via an independence formula (sqrt(se_f^2 + se_m^2)). This is not a computed covariance-based SE and is generally incorrect when both estimates use the same control group/time periods (likely positively correlated), which can materially change inference. This is not fabrication, but it is a potentially biased/inaccurate inferential shortcut embedded directly in table construction.: SE = c(\n    results_by_sex$Male$overall.se,\n    results_by_sex$Female$overall.se,\n    sqrt(results_by_sex$Male$overall.se^2 + results_by_sex$Female$overall.se^2)\n  )\n...\nadd_footnote(\"... Standard error for difference computed assuming independence.\",",
-      "confidence": 0.85
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "04b_randomization_inference.R",
-      "lines": [
-        60,
-        120
-      ],
-      "evidence": "This script generates random permutations for randomization inference. Random data generation is expected and methodologically appropriate for RI, but (i) the script is for an Auto-IRA CPS analysis, not the salary-transparency QWI study described in the manuscript, and (ii) if run inadvertently as part of the salary-transparency pipeline it would create confusing artifacts and outputs unrelated to the paper.: set.seed(42)\n...\nperm_treated_states <- sample(all_states, n_treated)\nperm_treat_years <- sample(treatment_years, n_treated, replace = TRUE)\n...",
-      "confidence": 0.75
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_qwi_industry.R",
@@ -82,7 +13,7 @@
     },
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -114,7 +45,7 @@
     },
     {
       "file": "03b_ddd_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -130,40 +61,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 2,
-      "LOW": 2
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The repository\u2019s core scripts do not implement the study described in the manuscript: `01_fetch_data.R` retrieves different data than the Census QWI county\u2013quarter\u2013sex panel used for the salary transparency law analysis and does not set up the staggered DiD (Callaway\u2013Sant\u2019Anna) or border county-pair design. Instead, `03b_ddd_analysis.R` runs a triple-differences design around Auto\u2011IRA mandate phase-ins by firm size using CPS ASEC outcomes (e.g., `pension_rate`), a setting and identification strategy that are not described anywhere in the paper.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript (paper.tex) studies salary transparency la...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          1,
-          120
-        ],
-        "github_url": "/apep_0168/code/01_fetch_data.R#L1-L170"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "This DDD design targets Auto-IRA mandate phase-ins by fir...",
-        "file": "03b_ddd_analysis.R",
-        "lines": [
-          1,
-          35
-        ],
-        "github_url": "/apep_0168/code/03b_ddd_analysis.R#L1-L90"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0168_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0054_v9_scan.json"
   },
   "error": null
 }

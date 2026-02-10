@@ -1,143 +1,11 @@
 {
-  "paper_id": "apep_0049",
-  "scan_date": "2026-02-06T12:36:12.345271+00:00",
+  "paper_id": "apep_0049_v1",
+  "scan_date": "2026-02-10T13:13:28.294081+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 6,
-  "flags": [
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        108,
-        109,
-        110,
-        111,
-        112,
-        113,
-        114,
-        115,
-        116,
-        117,
-        118,
-        119
-      ],
-      "evidence": "The script explicitly creates a synthetic/\"placeholder\" funding variable (estimated_funding_per_capita) rather than fetching actual FTA Section 5307 apportionments/NTD funding data. While comments disclose this, the manuscript states: \"I use administrative data on FTA Section 5307 apportionments to confirm the funding discontinuity.\" That administrative data is not fetched here, and the constructed funding variable risks being mistaken for real administrative funding in downstream analysis/figures.: # Placeholder: Create synthetic first-stage data based on known FTA formula\n# The actual analysis would merge real NTD data\n\ncat(\"  Note: Full NTD data requires download from FTA website\\n\")\ncat(\"  Creating funding eligibility indicator based on threshold...\\n\")\n\n# Add funding eligibility to analysis data\nua_analysis <- ua_analysis %>%\n  mutate(\n    fta_5307_eligible = above_threshold,\n    # Estimated funding based on formula (simplified)\n    # Actual formula uses population, low-income population, and density\n    estimated_funding_per_capita = ifelse(above_threshold == 1,\n                                           30 + 0.0002 * (population_2020 - 50000),  # Rough approximation\n                                           0)\n  )",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "HIGH",
-      "file": "05_first_stage_figure.R",
-      "lines": [
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40,
-        41,
-        42
-      ],
-      "evidence": "This figure is generated entirely from simulated data (a deterministic population grid and an assumed $40 per-capita formula). If used as evidence of an empirical first stage, it would be misleading. The caption notes it is calculated as \"~$40 per capita\", but the manuscript text claims use of administrative apportionments to confirm the discontinuity; this script does not use those administrative data.: population_grid <- seq(30000, 70000, by = 100)\n\nfunding_data <- tibble(\n  population = population_grid,\n  running_var = population - 50000,\n  eligible = population >= 50000,\n  # Formula funding: approximately $40 per capita (middle of $30-50 range)\n  per_capita_funding = ifelse(population >= 50000, 40, 0),\n  total_funding_millions = (per_capita_funding * population) / 1e6\n)",
-      "confidence": 0.9
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        176,
-        177,
-        178,
-        179,
-        180,
-        181,
-        182
-      ],
-      "evidence": "Main results are hard-coded into LaTeX tables rather than being programmatically generated from model objects. This is not automatically misconduct, but it creates an integrity risk: numbers can be edited without traceability. Additionally, the reported N (L/R) values appear to be the total counts below/above the threshold in the full merged sample (2128/509), whereas rdrobust typically reports effective sample sizes within the chosen bandwidth; the code (03_main_analysis.R) prints rd_transit$N[1] and rd_transit$N[2], which should generally be far smaller than full-sample counts. This inconsistency raises concerns that table entries may not be directly tied to the computed outputs.: Transit share       & $-0.0014$ & 0.0038 & 0.565 & [$-0.010$, $0.005$] & 13,235 & 2128/509 \\\\\nEmployment rate     & $-0.0178$ & 0.0172 & 0.204 & [$-0.056$, $0.012$] & 16,332 & 2128/509 \\\\\nNo vehicle share    & $-0.0108$ & 0.0135 & 0.291 & [$-0.041$, $0.012$] & 15,064 & 2128/509 \\\\\nLong commute share  & $-0.0093$ & 0.0211 & 0.531 & [$-0.055$, $0.028$] & 19,158 & 2128/509 \\\\",
-      "confidence": 0.85
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "paper.tex",
-      "lines": [
-        287,
-        288,
-        289,
-        290,
-        291,
-        292,
-        293
-      ],
-      "evidence": "Placebo-threshold results are hard-coded in the manuscript. The analysis code (03_main_analysis.R) does run placebo thresholds, but it prints results to console and does not save a placebo-results table to disk. This makes it difficult to verify that the LaTeX values correspond to the code outputs and inputs (bandwidth, sample, kernel, bias correction).: 40,000 & $-0.0001$ & 0.992 \\\\\n45,000 & $+0.0022$ & 0.405 \\\\\n\\textbf{50,000 (actual)} & $\\mathbf{-0.0014}$ & \\textbf{0.565} \\\\\n55,000 & $+0.0008$ & 0.996 \\\\\n60,000 & $-0.0025$ & 0.560 \\\\",
-      "confidence": 0.75
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        55,
-        56,
-        57,
-        58
-      ],
-      "evidence": "The project relies on an absolute local path. This is a reproducibility/provenance risk because external auditors cannot easily re-run without editing paths; it also obscures where data ultimately resides in non-author environments. While not fabrication, it is a common replication failure point.: root_dir <- \"/Users/olafwillner/auto-policy-evals\"\n\ndata_dir <- file.path(root_dir, \"output/paper_65/data\")\nfig_dir <- file.path(root_dir, \"output/paper_65/figures\")\ncode_dir <- file.path(root_dir, \"output/paper_65/code\")",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        131,
-        132,
-        133
-      ],
-      "evidence": "The manuscript asserts use of administrative FTA apportionment data. In the provided code, there is no implemented fetch/clean/merge of apportionment data; instead, 01_fetch_data.R constructs a placeholder estimated funding per capita variable, and 05_first_stage_figure.R constructs an assumed $40 per-capita funding schedule. Without real apportionment data ingestion, the claimed administrative confirmation of the first stage is not supported by the codebase as provided.: Third, I use administrative data on FTA Section 5307 apportionments to confirm the funding discontinuity.",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        146,
-        147,
-        148,
-        149,
-        150,
-        151,
-        152,
-        153,
-        154,
-        155,
-        156
-      ],
-      "evidence": "This script describes a simplified, name-based matching of places to urbanized areas (and even notes it is not production-grade). The manuscript claims ACS outcomes are obtained at the urbanized-area level directly (which is indeed what 02_fetch_ua_characteristics.R does). If 01_fetch_data.R outputs are used anywhere in the paper, the methodology would not match the manuscript description and could introduce substantial measurement error. Even if unused, its presence increases risk of accidental use of the wrong dataset.: # This is a simplified matching based on name similarity\n# Full analysis would use Census geographic relationship files\n...\n# Exact match on name\nua_with_acs <- ua_analysis %>%\n  left_join(\n    acs_place %>% select(name_simple, state_fips, transit_share, unemployment_rate,\n                         no_vehicle_rate, workers_total, labor_force),\n    by = \"name_simple\"\n  )",
-      "confidence": 0.7
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        17,
-        18,
-        19
-      ],
-      "evidence": "The analysis sample drops observations with missing outcomes (complete-case analysis). This is common, but if missingness is related to population around the threshold it could bias results. The manuscript notes dropping missing outcome data, so this is largely consistent; still, documenting missingness patterns near the cutoff would strengthen integrity.: analysis_data <- ua_data %>%\n  filter(!is.na(transit_share), !is.na(employment_rate)) %>%\n  arrange(running_var)",
-      "confidence": 0.6
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "02_fetch_ua_characteristics.R",
@@ -145,7 +13,7 @@
     },
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "00_packages.R",
@@ -157,63 +25,25 @@
     },
     {
       "file": "05_first_stage_figure.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
       "verdict": "CLEAN"
-    },
-    {
-      "file": "paper.tex",
-      "verdict": "SUSPICIOUS"
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 4,
-      "MEDIUM": 3,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "fabricated data; hard-coded results",
-    "executive_summary": "The pipeline does not ingest or merge any real FTA Section 5307 apportionment/NTD funding data; instead, it constructs a synthetic \u201cestimated_funding_per_capita\u201d placeholder and then builds the \u201cfirst stage\u201d figure entirely from simulated inputs (a deterministic population grid and an assumed $40 per-capita rule), which would be misleading if presented as empirical evidence. In addition, the main results reported in `paper.tex` are hard-coded into LaTeX tables rather than being generated from model outputs, making the reported coefficients and standard errors non-reproducible and easy to edit without leaving a trace. These implementation choices directly conflict with the manuscript\u2019s claim to use administrative apportionment data and undermine the credibility of the reported findings.",
-    "top_issues": [
-      {
-        "category": "DATA_FABRICATION",
-        "severity": "HIGH",
-        "short": "The script explicitly creates a synthetic/\"placeholder\" f...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          108,
-          109
-        ],
-        "github_url": "/apep_0049/code/01_fetch_data.R#L108-L119"
-      },
-      {
-        "category": "DATA_FABRICATION",
-        "severity": "HIGH",
-        "short": "This figure is generated entirely from simulated data (a ...",
-        "file": "05_first_stage_figure.R",
-        "lines": [
-          31,
-          32
-        ],
-        "github_url": "/apep_0049/code/05_first_stage_figure.R#L31-L42"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "Main results are hard-coded into LaTeX tables rather than...",
-        "file": "paper.tex",
-        "lines": [
-          176,
-          177
-        ],
-        "github_url": "/apep_0049/code/paper.tex#L176-L182"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0049_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0049_v1_scan.json"
   },
   "error": null
 }

@@ -1,122 +1,11 @@
 {
-  "paper_id": "apep_0171",
-  "scan_date": "2026-02-06T12:56:46.938386+00:00",
+  "paper_id": "apep_0054_v10",
+  "scan_date": "2026-02-10T13:13:43.497255+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 14,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        210
-      ],
-      "evidence": "The manuscript (paper.tex) is about salary transparency laws and QWI new-hire wages (2015Q1\u20132023Q4), but this script fetches CPS ASEC microdata for an Auto-IRA retirement coverage analysis. This is a substantial context mismatch inside the same codebase and raises integrity/reproducibility concerns about which data and scripts actually produced the manuscript results (risk of mixing projects or misattributing outputs).: # =============================================================================\n# 01_fetch_data.R\n# Fetch CPS ASEC data from IPUMS for Auto-IRA analysis\n# =============================================================================\n...\nextract_def <- define_extract_micro(\n  collection = \"cps\",\n  description = \"CPS ASEC 2010-2024 for Auto-IRA analysis\",\n  samples = paste0(\"cps\", 2010:2024, \"_03s\"),\n  variables = c(\n    ...\n    \"PENSION\",\n    ...\n  )\n)\n...\nsubmitted <- submit_extract(extract_def)\nwait_for_extract(submitted, verbose = TRUE)\ndownload_extract(submitted, download_dir = data_dir)",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03b_ddd_analysis.R",
-      "lines": [
-        1,
-        230
-      ],
-      "evidence": "This implements an Auto-IRA DDD design using CPS ASEC pension coverage and firm-size phase-ins. None of this design/data is described in the salary-transparency/QWI manuscript. Presence of a second, unrelated empirical pipeline in the same repository makes it harder to audit that the reported QWI results were produced by the intended scripts and inputs.: # =============================================================================\n# 03b_ddd_analysis.R\n# Triple-Difference (DDD) Design: Exploiting Firm-Size Phase-In\n# =============================================================================\n...\ndf <- readRDS(file.path(data_dir, \"cps_asec_clean.rds\"))\n...\nddd_full <- feols(\n  pension_rate ~ treat_post_small |\n    state_firmsize + year_firmsize,\n  data = df_cells,\n  weights = ~sum_weight,\n  cluster = ~statefip\n)",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "04b_randomization_inference.R",
-      "lines": [
-        1,
-        120
-      ],
-      "evidence": "Randomization inference code is for the Auto-IRA CPS analysis, not the salary-transparency QWI analysis described in paper.tex. This deepens the project-mixing concern and complicates audit trails for the manuscript\u2019s claims.: # =============================================================================\n# 04b_randomization_inference.R\n# Randomization Inference for Auto-IRA Analysis\n# =============================================================================\n...\ndf <- readRDS(file.path(data_dir, \"cps_asec_clean.rds\"))\n...\nset.seed(42)\n...\nperm_treated_states <- sample(all_states, n_treated)\nperm_treat_years <- sample(treatment_years, n_treated, replace = TRUE)\n...\nperm_model <- feols(\n  pension_rate ~ perm_post | state_id + year,\n  data = df_perm,\n  warn = FALSE\n)",
-      "confidence": 0.85
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "04e_power_analysis.R",
-      "lines": [
-        20,
-        60
-      ],
-      "evidence": "Key numerical results (standard errors) are hard-coded rather than read from model objects (e.g., att_overall, twfe_result, border change computation). This can silently desynchronize reported power/MDE claims from the actual estimation outputs if results change. The manuscript emphasizes MDE/power (e.g., MDE=3.9% at 80% power), so this hard-coding directly affects a central interpretation.: # Realized standard errors from main analysis\nse_main <- 0.014      # Main Callaway-Sant'Anna ATT\nse_twfe <- 0.016      # TWFE\nse_male <- 0.016      # Male ATT\nse_female <- 0.010    # Female ATT\nse_gender_diff <- 0.019  # Gender differential\nse_border_change <- 0.025  # Border design (treatment-induced change)",
-      "confidence": 0.9
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "04_robustness.R",
-      "lines": [
-        240,
-        330
-      ],
-      "evidence": "The sensitivity analysis hard-codes the main ATT and SE instead of extracting them from saved objects (e.g., att_overall.rds). This creates an integrity risk: the sensitivity conclusions could remain unchanged even if the underlying estimates differ.: # The main ATT is approximately 0.010 with SE 0.014\nmain_att <- 0.010\nmain_se <- 0.014\n...\ncritical_value <- 1.96 * main_se  # ~0.027",
-      "confidence": 0.8
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        95,
-        120
-      ],
-      "evidence": "The code references a required provenance-building script (00_policy_data.R) that is not included in the provided files. In this repository snapshot, treatment timing provenance is therefore incomplete/uncertain. (Note: other scripts also create/overwrite data/transparency_laws.rds directly, which further weakens provenance control.): if (file.exists(\"data/transparency_laws.rds\")) {\n  transparency_laws <- readRDS(\"data/transparency_laws.rds\")\n  cat(\"Loaded transparency law data from data/transparency_laws.rds\\n\")\n  cat(\"  Treated states:\", sum(transparency_laws$first_treat > 0), \"\\n\")\n} else {\n  cat(\"WARNING: data/transparency_laws.rds not found.\\n\")\n  cat(\"Run 00_policy_data.R first to create treatment timing data.\\n\")\n}",
-      "confidence": 0.75
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_qwi_fast.R",
-      "lines": [
-        165,
-        190
-      ],
-      "evidence": "Treatment timing is created ad hoc inside the QWI fetch script and saved to the same filename (data/transparency_laws.rds) that 00_packages.R claims should come from a separate provenance script with 'official citations'. This creates an audit ambiguity: which version of treatment timing was used for results (and whether it matches the manuscript\u2019s Table of timing).: # Save\nsaveRDS(qwi_clean, \"data/qwi_county_sex.rds\")\nsaveRDS(treat_timing, \"data/transparency_laws.rds\")",
-      "confidence": 0.8
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "06_tables.R",
-      "lines": [
-        70,
-        95
-      ],
-      "evidence": "The table footnote states the sample spans 1995\u20132023, but the QWI fetching scripts use years <- 2015:2023 and the manuscript states 2015Q1\u20132023Q4. This is not a transform per se, but it is a documentation inconsistency that can mislead readers about the sample window and the amount of pre-period data.: add_footnote(\"Note: Sample includes all county-quarter-sex observations from 1995-2023.\nNew hire earnings and all earnings in dollars. Employment and hires are quarterly counts.\nTreated states: CA, CO, CT, NV, RI, WA.\",\n               notation = \"none\")",
-      "confidence": 0.7
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "MEDIUM",
-      "file": "04d_industry_heterogeneity.R",
-      "lines": [
-        120,
-        190
-      ],
-      "evidence": "The script contains narrative 'SUPPORTED/NOT SUPPORTED' logic based on the sign of mean_high vs mean_low, but does not implement or report a formal statistical test for the difference in means across industries (outside the later pooled interaction regression). This can encourage informal, potentially selective interpretation (e.g., emphasizing sign patterns without uncertainty). The manuscript claims mechanism evidence via heterogeneity; this should be backed by clearly reported inference.: cat(\"\\nPrediction P3 (effects larger in high-bargaining):\\n\")\nif (mean_high < mean_low) {\n  cat(\"  SUPPORTED: Effects more negative in high-bargaining industries\\n\")\n  cat(\"  (Consistent with commitment mechanism operating through negotiation)\\n\")\n} else if (abs(mean_high - mean_low) < 0.01) {\n  cat(\"  NOT SUPPORTED: Effects similar across bargaining intensity\\n\")\n  cat(\"  (Suggests commitment mechanism not the dominant channel)\\n\")\n} else {\n  cat(\"  NOT SUPPORTED: Effects less negative in high-bargaining industries\\n\")\n  cat(\"  (Inconsistent with commitment mechanism)\\n\")\n}",
-      "confidence": 0.7
-    },
-    {
-      "category": "STATISTICAL_IMPOSSIBILITY",
-      "severity": "MEDIUM",
-      "file": "03b_ddd_analysis.R",
-      "lines": [
-        175,
-        205
-      ],
-      "evidence": "The reference period is explicitly appended with SE=0 and CI=[0,0]. While reference categories are often normalized to 0, presenting an SE of exactly zero can be misleading if this table/CSV is later used for plotting confidence intervals or interpreted as an estimated parameter. This is in the Auto-IRA pipeline (not the manuscript), but it is still a statistical reporting red flag in the codebase.: ddd_es_coefs <- tibble(\n  event_time = event_times,\n  var_name = event_vars\n) %>%\n  mutate(\n    att = map_dbl(var_name, ~coef(ddd_event)[.x]),\n    se = map_dbl(var_name, ~se(ddd_event)[.x]),\n    ci_lower = att - 1.96 * se,\n    ci_upper = att + 1.96 * se\n  ) %>%\n  # Add reference period\n  bind_rows(tibble(event_time = -1, var_name = \"reference\",\n                   att = 0, se = 0, ci_lower = 0, ci_upper = 0))",
-      "confidence": 0.8
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_qwi_industry.R",
@@ -124,7 +13,7 @@
     },
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -144,7 +33,7 @@
     },
     {
       "file": "04e_power_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04d_industry_heterogeneity.R",
@@ -160,7 +49,7 @@
     },
     {
       "file": "03b_ddd_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -176,51 +65,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 3,
-      "MEDIUM": 6,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch; hard-coded results",
-    "executive_summary": "The codebase does not match the manuscript\u2019s stated topic and data: instead of analyzing salary transparency laws using QWI new\u2011hire wages from 2015Q1\u20132023Q4, key scripts fetch and analyze CPS ASEC microdata for an Auto\u2011IRA retirement/pension coverage study, including a DDD design with firm\u2011size phase\u2011ins that is not described in the paper. In addition, the power analysis script hard-codes key numerical results (e.g., standard errors and derived quantities) rather than computing them from model objects, creating a high risk that reported power/MDE figures are disconnected from the actual estimation outputs.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript (paper.tex) is about salary transparency l...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          1,
-          210
-        ],
-        "github_url": "/apep_0171/code/01_fetch_data.R#L1-L210"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "This implements an Auto-IRA DDD design using CPS ASEC pen...",
-        "file": "03b_ddd_analysis.R",
-        "lines": [
-          1,
-          230
-        ],
-        "github_url": "/apep_0171/code/03b_ddd_analysis.R#L1-L230"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "Key numerical results (standard errors) are hard-coded ra...",
-        "file": "04e_power_analysis.R",
-        "lines": [
-          20,
-          60
-        ],
-        "github_url": "/apep_0171/code/04e_power_analysis.R#L20-L60"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0171_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0054_v10_scan.json"
   },
   "error": null
 }

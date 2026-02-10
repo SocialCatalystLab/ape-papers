@@ -1,67 +1,15 @@
 {
-  "paper_id": "apep_0191",
-  "scan_date": "2026-02-06T13:01:28.912697+00:00",
+  "paper_id": "apep_0185_v7",
+  "scan_date": "2026-02-10T13:16:43.393357+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "02_clean_data.R",
-      "lines": [
-        140,
-        154,
-        189,
-        206
-      ],
-      "evidence": "The manuscript states that population weights (employment) are pre-treatment and time-invariant (\"pre-treatment employment averaged over 2012--2013\") to keep shift-share shares predetermined. The code instead sets pop_proxy = mean(emp) over whatever QWI sample is loaded (implicitly including post-2013, potentially through 2022). That makes the 'shares' potentially post-treatment and mechanically correlated with the outcome process, undermining the shift-share/IV interpretation and potentially biasing estimates.: county_pop <- qwi_raw %>%\n    group_by(county_fips) %>%\n    summarise(pop_proxy = mean(emp, na.rm = TRUE), .groups = \"drop\")\n...\nmutate(sci_pop = sci * pop_proxy)\n...\nmutate(w_pop = sci_pop / total_sci_pop)",
-      "confidence": 0.85
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "HIGH",
-      "file": "02b_add_pop_weights.R",
-      "lines": [
-        33,
-        41,
-        65,
-        78
-      ],
-      "evidence": "Population-weighted exposure is added using pop_proxy computed from the *analysis panel's* employment (emp), averaged across the full panel. Because emp is the main outcome (or directly tied to it), this creates a risk of 'bad control'/mechanical endogeneity: exposure weights depend on the outcome, potentially contaminating both OLS and IV results. This is especially concerning because the paper frames the weighting as capturing information volume with predetermined shares.: county_pop <- panel %>%\n  group_by(county_fips) %>%\n  summarise(pop_proxy = mean(emp, na.rm = TRUE), .groups = \"drop\")\n...\nmutate(sci_pop = sci * pop_proxy)\n...\nmutate(w_pop = sci_pop / total_sci_pop)",
-      "confidence": 0.85
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        244,
-        246,
-        314,
-        321
-      ],
-      "evidence": "The script explicitly indicates it may fetch only a 'subset for demonstration' and also allows a silent fallback to an empty QWI tibble if the API fails. Downstream scripts (02_clean_data.R) then proceed (with uniform population weights, and possibly without outcome data) rather than failing. This makes it hard to verify that the analysis underlying the manuscript (which claims near-universal QWI coverage and 134,317 county-quarter observations) is actually produced from the API pulls in this repository without additional, undocumented data acquisition steps.: # Fetch QWI for sample of years (2012-2022) and quarters\n# Note: Full data would take long; fetching subset for demonstration\n...\nif (length(qwi_list) > 0) {\n  qwi_raw <- bind_rows(qwi_list)\n  ...\n} else {\n  cat(\"  WARNING: QWI API returned no data. Using fallback approach.\\n\")\n  qwi_raw <- tibble()\n}\n...\nif (nrow(qwi_raw) > 0) {\n  saveRDS(qwi_raw, \"../data/raw_qwi.rds\")\n}",
-      "confidence": 0.75
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        126,
-        140,
-        420
-      ],
-      "evidence": "State minimum wage histories are manually hard-coded in the code (as documented in comments). This is not inherently problematic given the manuscript\u2019s stated data provenance (DOL/NCSL/Vaghul-Zipperer), but it does create replication risk unless the curated list is complete and version-controlled against sources (e.g., a raw source file with citations/links per entry). This is an input hard-code rather than a hard-coded regression result.: state_mw_changes <- tribble(\n  ~state_fips, ~state_abbr, ~date, ~min_wage,\n  # California\n  \"06\", \"CA\", \"2014-07-01\", 9.00,\n  ...\n  # Virginia\n  \"51\", \"VA\", \"2021-05-01\", 9.50,\n  \"51\", \"VA\", \"2022-01-01\", 11.00,\n  \"51\", \"VA\", \"2023-01-01\", 12.00\n)",
-      "confidence": 0.7
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "02b_add_pop_weights.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "01_fetch_data.R",
@@ -85,7 +33,7 @@
     },
     {
       "file": "02_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -97,40 +45,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 1,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch; suspicious transforms",
-    "executive_summary": "The code constructs the \u201cpopulation\u201d weights from employment in the analysis panel\u2014averaging employment over the full sample period\u2014rather than using a strictly pre-treatment, time-invariant measure (e.g., 2012\u20132013) as described in the manuscript. Because employment is the main outcome (or tightly linked to it), these weights can be endogenous and mechanically incorporate post-treatment variation, undermining the shift-share requirement that shares be predetermined and making the population-weighted exposure potentially contaminated by treatment effects.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript states that population weights (employment...",
-        "file": "02_clean_data.R",
-        "lines": [
-          140,
-          154
-        ],
-        "github_url": "/apep_0191/code/02_clean_data.R#L140-L206"
-      },
-      {
-        "category": "SUSPICIOUS_TRANSFORMS",
-        "severity": "HIGH",
-        "short": "Population-weighted exposure is added using pop_proxy com...",
-        "file": "02b_add_pop_weights.R",
-        "lines": [
-          33,
-          41
-        ],
-        "github_url": "/apep_0191/code/02b_add_pop_weights.R#L33-L78"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0191_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0185_v7_scan.json"
   },
   "error": null
 }

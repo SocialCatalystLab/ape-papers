@@ -1,130 +1,11 @@
 {
-  "paper_id": "apep_0064",
-  "scan_date": "2026-02-06T12:39:13.069534+00:00",
+  "paper_id": "apep_0062_v2",
+  "scan_date": "2026-02-10T13:14:26.010319+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "03_clean_data.R",
-      "lines": [
-        11
-      ],
-      "evidence": "The script depends on an input file (qcew_gambling.csv) whose creation is not shown in the provided codebase. Another fetch script (02_fetch_qcew.R) writes qcew_panel.csv, not qcew_gambling.csv, implying an undocumented/unused data pipeline step. This breaks replicability and makes it unclear whether the analysis uses the stated BLS QCEW source or a manually-created/edited file.: qcew <- read_csv(\"output/paper_84/data/qcew_gambling.csv\", show_col_types = FALSE)",
-      "confidence": 0.85
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "07_tables.R",
-      "lines": [
-        11,
-        12,
-        13
-      ],
-      "evidence": "Tables are built from analysis_main.csv and cs_results.rds, but the provided analysis script (04_main_analysis.R) reads analysis_panel.csv and saves main_results.rds (not cs_results.rds) plus event_study_coefs.csv. Without the scripts that generate analysis_main.csv and cs_results.rds, the table outputs are not traceable to the estimation code.: df <- read_csv(\"output/paper_84/data/analysis_main.csv\", show_col_types = FALSE)\ncs_results <- readRDS(\"output/paper_84/data/cs_results.rds\")\nrobustness <- readRDS(\"output/paper_84/data/robustness_results.rds\")",
-      "confidence": 0.8
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "04_main_analysis.R",
-      "lines": [
-        47,
-        54,
-        56,
-        61
-      ],
-      "evidence": "The manuscript states inference is based on \"1,000 bootstrap replications for inference, clustering at the state level.\" While bstrap=TRUE and biters=1000 match, this call does not explicitly set cluster variables (e.g., clustervars) or sampling method. The did package often clusters at id by default, but this is not guaranteed/transparent. Given the manuscript\u2019s explicit clustering claim, the code should explicitly specify clustering to ensure the reported SEs match the stated method.: cs_never <- att_gt(\n  yname = \"employment\",\n  tname = \"year\",\n  idname = \"state_id\",\n  gname = \"G\",\n  data = df_clean,\n  control_group = \"nevertreated\",\n  bstrap = TRUE,\n  cband = TRUE,\n  biters = 1000,\n  base_period = \"varying\"\n)",
-      "confidence": 0.65
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "04_main_analysis.R",
-      "lines": [
-        93,
-        101,
-        104
-      ],
-      "evidence": "The manuscript reports a joint pre-trend test p-value (e.g., p=0.92). The code computes a chi-squared statistic assuming independence across pre-period event-study coefficients, which is generally incorrect because these estimates are correlated. This can materially change the p-value and may overstate support for parallel trends. A proper joint test should use the full variance-covariance matrix for the event-study coefficients.: # Simple chi-squared test (assuming independence for approximation)\nchi2_stat <- sum((pre_att / pre_se)^2)\ndf_test <- length(pre_att)\np_pretrend <- pchisq(chi2_stat, df = df_test, lower.tail = FALSE)",
-      "confidence": 0.9
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "04_main_analysis.R",
-      "lines": [
-        35,
-        39
-      ],
-      "evidence": "The main analysis drops all observations with missing employment and all zero employment. Because QCEW suppression/zeros are not random (and the manuscript itself notes differential suppression by treatment status), conditioning on non-suppressed/non-zero cells can introduce selection bias if legalization affects whether employment exceeds suppression thresholds. The manuscript acknowledges this risk, which reduces severity, but the code does not implement alternative treatments of suppressed cells in the main pipeline.: df_clean <- df %>%\n  filter(!is.na(employment), employment > 0)",
-      "confidence": 0.75
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "HIGH",
-      "file": "02_fetch_qcew.R",
-      "lines": [
-        110,
-        112,
-        113,
-        114,
-        116,
-        117,
-        118
-      ],
-      "evidence": "A variable literally labeled as a placeholder is created: employment = establishments_count * avg_weekly_wage. This is not employment and would severely corrupt analysis if used downstream. Even if not used later (since this script writes qcew_panel.csv and other scripts read different files), its presence is an integrity risk: it suggests a possibility of accidental use of fabricated/incorrect outcome construction. At minimum, the placeholder should be removed or renamed to avoid misuse.: employment = as.numeric(qtrly_estabs_count) * as.numeric(avg_wkly_wage),  # Placeholder\nmonth1_emp = as.numeric(month1_emplvl),\nmonth2_emp = as.numeric(month2_emplvl),\nmonth3_emp = as.numeric(month3_emplvl),\navg_emp = (month1_emp + month2_emp + month3_emp) / 3,",
-      "confidence": 0.95
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "02_fetch_qcew.R",
-      "lines": [
-        175,
-        199,
-        204
-      ],
-      "evidence": "This fetch/reshape pipeline drops all suppressed observations before building the panel, and then left-joins into a balanced skeleton. This encodes suppressed values as missing by construction, which is fine if handled carefully, but it is a consequential selection mechanism for the outcome panel. The manuscript discusses suppression and selection concerns, but the code shown here does not implement the manuscript\u2019s promised robustness for alternative suppression treatments within this pipeline (it only prints suppression summaries).: qcew_wide <- qcew_clean %>%\n  filter(!suppressed) %>%\n  select(state_fips, year, quarter, naics, avg_emp, establishments, total_wages, avg_weekly_wage) %>%\n  pivot_wider(",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_figures.R",
-      "lines": [
-        143,
-        157
-      ],
-      "evidence": "The figure labels event time as \"Quarters Relative to Legalization,\" but the paper\u2019s main analysis and tables are described as annual (2014\u20132023), and event-study tables in the manuscript use event times -4..5 in years. This suggests inconsistent time units across scripts (quarter-based vs annual) and raises the risk that figures/tables could be drawn from a different dataset/frequency than the text claims.: es_plot_data <- es_coefs %>%\n  filter(event_time >= -8, event_time <= 12)\n...\n  x = \"Quarters Relative to Legalization\",",
-      "confidence": 0.7
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "00_packages.R",
-      "lines": [
-        44,
-        45
-      ],
-      "evidence": "Hard-coded absolute paths reduce replicability across environments and increase the chance that code runs against untracked local files. This is not fabrication per se, but it complicates auditing and reproduction.: PROJECT_ROOT <- \"/Users/dyanag/auto-policy-evals\"\nPAPER_DIR <- file.path(PROJECT_ROOT, \"output/paper_84\")",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "08_create_figures.R",
-      "lines": [
-        5
-      ],
-      "evidence": "Hard-coded working directory path makes replication environment-specific and can cause scripts to silently pick up local files not created by the repository\u2019s pipeline.: setwd(\"/Users/dyanag/auto-policy-evals/output/paper_84\")",
-      "confidence": 0.9
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "07_tables.R",
@@ -140,11 +21,11 @@
     },
     {
       "file": "02_fetch_qcew.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "01_policy_dates.R",
@@ -160,54 +41,21 @@
     },
     {
       "file": "04_main_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 3,
-      "MEDIUM": 5,
-      "LOW": 2
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "unclear provenance; method mismatch; suspicious transforms",
-    "executive_summary": "The code cannot be fully reproduced because `03_clean_data.R` requires an input file (`qcew_gambling.csv`) whose construction is not shown anywhere in the repository, while the provided fetch script (`02_fetch_qcew.R`) outputs a different file (`qcew_panel.csv`). The main analysis in `04_main_analysis.R` claims inference uses 1,000 bootstrap replications with state-level clustering, but the function call only matches the bootstrap setting/iterations and does not explicitly specify clustering, so the reported standard errors may not align with the manuscript. In addition, `02_fetch_qcew.R` creates an \u201cemployment\u201d variable using `establishments_count * avg_weekly_wage` (explicitly marked as a placeholder), which is not employment and would contaminate downstream results if it is used.",
-    "top_issues": [
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "The script depends on an input file (qcew_gambling.csv) w...",
-        "file": "03_clean_data.R",
-        "lines": [
-          11
-        ],
-        "github_url": "/apep_0064/code/03_clean_data.R#L11"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript states inference is based on \"1,000 bootst...",
-        "file": "04_main_analysis.R",
-        "lines": [
-          47,
-          54
-        ],
-        "github_url": "/apep_0064/code/04_main_analysis.R#L47-L61"
-      },
-      {
-        "category": "SUSPICIOUS_TRANSFORMS",
-        "severity": "HIGH",
-        "short": "A variable literally labeled as a placeholder is created",
-        "file": "02_fetch_qcew.R",
-        "lines": [
-          110,
-          112
-        ],
-        "github_url": "/apep_0064/code/02_fetch_qcew.R#L110-L118"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0064_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0062_v2_scan.json"
   },
   "error": null
 }

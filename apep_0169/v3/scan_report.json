@@ -1,86 +1,11 @@
 {
-  "paper_id": "apep_0175",
-  "scan_date": "2026-02-06T12:57:53.041093+00:00",
+  "paper_id": "apep_0169_v3",
+  "scan_date": "2026-02-10T13:15:48.169475+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 10,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        6,
-        17,
-        60
-      ],
-      "evidence": "The manuscript states the ACS PUMS are accessed through IPUMS (Ruggles et al. 2024) and describes an IPUMS-based sample construction (including restrictions on imputed values, group quarters, etc.). The code instead pulls data from the Census ACS1 PUMS API endpoint (not IPUMS). This is a substantive provenance/method difference because variable availability/definitions, weights, and reproducibility details can differ between IPUMS extracts and Census API PUMS endpoints.: # Fetch ACS PUMS data via Census API\n# ...\nbase_url <- sprintf(\n  \"https://api.census.gov/data/%d/acs/acs1/pums\",\n  year\n)\n...\nresponse <- tryCatch(\n  GET(query_url, timeout(180)),\n  error = function(e) { ... }\n)\n...\nacs_raw <- bind_rows(all_data)",
-      "confidence": 0.85
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "HIGH",
-      "file": "02_clean_data.R",
-      "lines": [
-        95,
-        140,
-        188,
-        232
-      ],
-      "evidence": "The manuscript specifies key sample restrictions that are not implemented in code: (i) restrict to workers with positive earnings and specifically exclude earnings < $1,000 and > $500,000; (ii) exclude group quarters; (iii) exclude imputed values for key variables. The code instead (a) sets negative PINCP to 0, (b) logs earnings with a floor of 1, and (c) applies only age/employment/non-missing restrictions. This can materially change estimates and can induce bias (e.g., including near-zero/zero incomes in logs via log(1)=0, and retaining extreme top-coded/outlier incomes).: earnings = pmax(PINCP, 0),  # Total personal income (includes self-emp income)\nlog_earnings = log(pmax(earnings, 1)),\n...\nacs_analysis <- acs_clean %>%\n  filter(\n    age >= 25 & age <= 54,\n    employed == 1,\n    !is.na(weight) & weight > 0,\n    !is.na(self_employed),\n    !is.na(earnings),\n    !is.na(educ_years)\n  )",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "02_clean_data.R",
-      "lines": [
-        269,
-        294,
-        303
-      ],
-      "evidence": "The cleaned analysis dataset explicitly expects an identifier named `state`, but `02_clean_data.R` never constructs `state` from an ACS variable (e.g., ST) nor validates that the API-returned `state` field exists and matches the intended FIPS coding. This will silently fail or select an unintended column if naming differs, and downstream state-level analysis relies on `state` heavily. Because the manuscript\u2019s state selection is central (10 specific states), this missing explicit construction/validation is a provenance/integrity risk for geographic results.: analysis_vars <- c(\n  # Identifiers\n  \"year\", \"state\",\n  ...\n)\n...\nacs_final <- acs_analysis %>%\n  select(all_of(analysis_vars))",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "00_packages.R",
-      "lines": [
-        1,
-        5,
-        64
-      ],
-      "evidence": "Multiple scripts (00_packages.R, 01_fetch_data.R, 02_clean_data.R, 04_robustness.R, 06_tables.R) are labeled as belonging to a different project (\u201cPaper 154: The Insurance Value of Secondary Employment\u201d) and use variable names like `multiple_jobs` for the treatment. The manuscript is about self-employment penalties using ACS PUMS. While some compatibility renaming is present, this increases the risk that parts of the pipeline (tables/robustness) are still aligned to an MJH/secondary-employment design rather than the self-employment/incorporation design described in the paper.: # Paper 154: The Insurance Value of Secondary Employment\n...\noutput_dir <- \"..\"\nfigure_dir <- file.path(output_dir, \"figures\")\ntable_dir <- file.path(output_dir, \"tables\")\ndata_dir <- file.path(output_dir, \"data\")",
-      "confidence": 0.8
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "02_clean_data.R",
-      "lines": [
-        120,
-        123
-      ],
-      "evidence": "The manuscript defines the COVID period as 2021\u20132022 versus 2019 (and excludes 2020 entirely). The code defines `covid_period` as 2020 or 2021. Given that 2020 is not fetched in `01_fetch_data.R`, this effectively tags only 2021 as COVID period and leaves 2022 as non-COVID, contradicting the manuscript\u2019s definition and potentially affecting adjustment and subgroup comparisons.: year = as.integer(year),\ncovid_period = as.integer(year %in% c(2020, 2021))",
-      "confidence": 0.75
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "MEDIUM",
-      "file": "04_robustness.R",
-      "lines": [
-        1,
-        13,
-        20,
-        168
-      ],
-      "evidence": "The robustness script contains internal comments and interpretations that appear inconsistent with the manuscript\u2019s reported magnitudes (paper reports ~-0.362 log points aggregate penalty; comment uses -0.0577 as if from a different project). This suggests possible copy/paste artifacts and raises the risk that robustness summaries/tables could be generated from different underlying estimates than the manuscript highlights. Not definitive selective reporting by itself, but it warrants checking that `main_results.rds` corresponds to the self-employment/IPW results in the paper.: # Paper 154: Self-Employment Earnings Penalty\n...\n# Note: Treatment is \"multiple_jobs\" which represents self-employment status\n...\n# Convert log point estimate to approximate risk ratio\n# exp(-0.0577) \u2248 0.944, so RR \u2248 0.94 for earnings\nrr <- exp(main_estimate)",
-      "confidence": 0.65
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "09_atlas_figures.R",
@@ -88,7 +13,7 @@
     },
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "08_gender_analysis.R",
@@ -100,7 +25,7 @@
     },
     {
       "file": "00_packages.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "07_state_analysis.R",
@@ -112,7 +37,7 @@
     },
     {
       "file": "02_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -124,51 +49,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 3,
-      "MEDIUM": 3,
+      "HIGH": 0,
+      "MEDIUM": 0,
       "LOW": 0
     },
-    "one_liner": "method mismatch; suspicious transforms",
-    "executive_summary": "The code does not implement the data source and sample construction described in the manuscript: it does not follow the stated IPUMS-based ACS PUMS workflow (including the specific restrictions on imputed values, group quarters, etc.), and key sample restrictions on earnings (e.g., excluding very low and very high earners) and other exclusions described in the text are missing from the cleaning script. Multiple scripts are also labeled as belonging to a different project (\u201cPaper 154: The Insurance Value of Secondary Employment\u201d), indicating possible code reuse/mix-ups and raising doubts that the provided code corresponds to Paper apep_0175.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript states the ACS PUMS are accessed through I...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          1,
-          6
-        ],
-        "github_url": "/apep_0175/code/01_fetch_data.R#L1-L60"
-      },
-      {
-        "category": "SUSPICIOUS_TRANSFORMS",
-        "severity": "HIGH",
-        "short": "The manuscript specifies key sample restrictions that are...",
-        "file": "02_clean_data.R",
-        "lines": [
-          95,
-          140
-        ],
-        "github_url": "/apep_0175/code/02_clean_data.R#L95-L232"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "Multiple scripts (00_packages.R, 01_fetch_data.R, 02_clea...",
-        "file": "00_packages.R",
-        "lines": [
-          1,
-          5
-        ],
-        "github_url": "/apep_0175/code/00_packages.R#L1-L64"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0175_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0169_v3_scan.json"
   },
   "error": null
 }

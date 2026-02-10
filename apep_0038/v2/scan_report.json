@@ -1,96 +1,15 @@
 {
-  "paper_id": "apep_0094",
-  "scan_date": "2026-02-06T12:45:47.942938+00:00",
+  "paper_id": "apep_0038_v2",
+  "scan_date": "2026-02-10T13:13:22.212376+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SEVERE",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "CRITICAL",
-      "file": "01b_create_cached_qcew.R",
-      "lines": [
-        1,
-        60,
-        92,
-        107,
-        110,
-        120,
-        133
-      ],
-      "evidence": "This script explicitly simulates the main outcome (QCEW gambling employment) and mechanically adds a treatment effect that is a direct function of the sports-betting treatment variable (sb_treated) and mobile status. This guarantees a positive post-treatment DiD effect by construction. The manuscript, however, states the primary data source is administrative QCEW from BLS (real data) and reports precise causal estimates; using this simulated data would invalidate the empirical claims if it entered the analysis pipeline. The script also generates placebo outcomes with random draws, meaning placebo results could be artifacts of simulation rather than empirical falsification tests.: qcew_simulated <- expand_grid(\n  state_abbr = all_states,\n  year = 2010:2024\n) %>%\n  ...\n  mutate(\n    # Base employment\n    base_empl = national_empl_thousands * 1000 * base_share,\n\n    # Sports betting effect (post-treatment)\n    sb_treated = !is.na(sb_year_quarter) & year >= floor(sb_year_quarter),\n    years_since_sb = if_else(sb_treated, year - floor(sb_year_quarter), 0),\n\n    # Effect: ~1000-1500 jobs per state, growing over time, larger for mobile\n    sb_effect = if_else(sb_treated,\n                        (800 + 400 * years_since_sb) * (1 + 0.5 * has_mobile),\n                        0),\n\n    # Add noise\n    noise = rnorm(n(), 0, base_empl * 0.05),\n\n    # Final employment\n    empl_7132 = pmax(round(base_empl + sb_effect + noise), 50),\n\n    # Establishments (rough approximation: 1 per 25 employees)\n    estabs_7132 = pmax(round(empl_7132 / 25 + rnorm(n(), 0, 5)), 5),\n\n    # Wages (assume avg $40k salary)\n    wages_7132 = empl_7132 * 40000 * (1 + rnorm(n(), 0, 0.1))\n  )",
-      "confidence": 0.98
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "03_clean_data.R",
-      "lines": [
-        17,
-        23,
-        27,
-        31,
-        35
-      ],
-      "evidence": "The cleaning/analysis pipeline accepts whichever local file exists (qcew_quarterly.csv or qcew_annual.csv) without verifying provenance. Because 01b_create_cached_qcew.R writes ../data/qcew_annual.csv containing simulated data, a user (or CI system) could inadvertently run analyses on fabricated data while the manuscript describes BLS QCEW administrative data. There is no guardrail such as a checksum, source metadata field, or a required download step to prevent simulated data from being used in production results.: # Load QCEW data (try quarterly first, fall back to annual)\nif (file.exists(\"../data/qcew_quarterly.csv\")) {\n  qcew <- read_csv(\"../data/qcew_quarterly.csv\", show_col_types = FALSE)\n  data_freq <- \"quarterly\"\n  message(\"Using quarterly QCEW data\")\n} else if (file.exists(\"../data/qcew_annual.csv\")) {\n  qcew <- read_csv(\"../data/qcew_annual.csv\", show_col_types = FALSE)\n  data_freq <- \"annual\"\n  message(\"Using annual QCEW data\")\n} else {\n  stop(\"No QCEW data found. Run 01_fetch_qcew.R first.\")\n}",
-      "confidence": 0.9
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "01b_create_cached_qcew.R",
-      "lines": [
-        18,
-        42,
-        60
-      ],
-      "evidence": "National employment totals and state shares are hard-coded as inputs to the simulated dataset. Hard-coding inputs is not inherently wrong, but here they drive the generation of the primary outcome and therefore the estimated treatment effects. Given the manuscript frames results as derived from BLS QCEW micro/administrative data, these hard-coded series become problematic if used beyond development. This is best treated as an integrity risk because the numbers can be tuned to match desired effects.: national_employment <- tribble(\n  ~year, ~national_empl_thousands,\n  2010, 155,\n  2011, 153,\n  ...\n  2024, 210\n)\n...\nstate_shares <- tribble(\n  ~state_abbr, ~base_share, ~has_casinos,\n  \"NV\", 0.25, TRUE,\n  \"NJ\", 0.08, TRUE,\n  \"PA\", 0.06, TRUE,\n  ...\n)",
-      "confidence": 0.78
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "04_main_analysis.R",
-      "lines": [
-        88,
-        89,
-        90
-      ],
-      "evidence": "The manuscript reports a joint pre-trend F-test (e.g., F=1.12, p=0.34). The code implements a nonstandard statistic: average of squared t-stats with an F reference distribution using denominator df = Inf. A correct joint test typically requires the variance-covariance matrix of the vector of pre-treatment coefficients (accounting for covariance across event-time estimates), not just marginal SEs. This can materially misstate the joint p-value and therefore the support for parallel trends claimed in the paper.: # Pre-trend test\npre_coeffs <- event_study_results %>% filter(event_time < 0)\npre_trend_fstat <- sum((pre_coeffs$att / pre_coeffs$se)^2) / nrow(pre_coeffs)\npre_trend_pval <- 1 - pf(pre_trend_fstat, nrow(pre_coeffs), Inf)",
-      "confidence": 0.85
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "03_clean_data.R",
-      "lines": [
-        176,
-        177,
-        178,
-        179,
-        180
-      ],
-      "evidence": "The log transform uses log(pmax(empl_7132, 1)), which implicitly top-codes zeros/very small values at 1. For QCEW annual state-level employment in NAICS 7132 zeros are unlikely, so this is probably harmless, but if small states can have suppressed/zero values in real QCEW, this could introduce nontrivial distortion. Not inherently manipulative, but it should be documented if used for inference.: analysis_sample <- analysis_sample %>%\n  group_by(state_abbr) %>%\n  mutate(\n    # Log employment (handling zeros)\n    log_empl_7132 = log(pmax(empl_7132, 1)),\n\n    # Employment growth\n    empl_growth = (empl_7132 - lag(empl_7132)) / lag(empl_7132),\n    ...\n  )",
-      "confidence": 0.6
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "05_robustness.R",
-      "lines": [
-        232,
-        233,
-        234
-      ],
-      "evidence": "Leave-one-out is only computed and saved for the first 10 treated states, while the manuscript states leave-one-out was done for all treated states (and only the first 10 shown for space). This could be a discrepancy if no additional script computes the full leave-one-out. It may be an implementation shortcut, but it reduces transparency if the paper claims a broader check than the code performs.: loo_results <- map_dfr(treated_states[1:min(10, length(treated_states))], function(drop_state) { ... })",
-      "confidence": 0.74
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_create_cached_qcew.R",
-      "verdict": "SEVERE"
+      "verdict": "CLEAN"
     },
     {
       "file": "07_tables.R",
@@ -106,7 +25,7 @@
     },
     {
       "file": "03_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "02_fetch_policy.R",
@@ -126,40 +45,17 @@
     }
   ],
   "summary": {
-    "verdict": "SEVERE",
+    "verdict": "CLEAN",
     "counts": {
-      "CRITICAL": 1,
-      "HIGH": 1,
-      "MEDIUM": 2,
-      "LOW": 2
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "fabricated data; unclear provenance",
-    "executive_summary": "The codebase generates the paper\u2019s key outcome variable by simulating QCEW gambling employment and then mechanically injecting a treatment effect that is explicitly a function of the sports-betting indicator (`sb_treated`) in `01b_create_cached_qcew.R`, making the main result effectively baked into the data. In addition, `03_clean_data.R` silently uses whichever local QCEW file happens to exist (`qcew_quarterly.csv` or `qcew_annual.csv`) without any provenance checks; because the pipeline itself writes `../data/qcew_annual.csv`, it can end up analyzing self-generated data in place of verified external QCEW inputs.",
-    "top_issues": [
-      {
-        "category": "DATA_FABRICATION",
-        "severity": "CRITICAL",
-        "short": "This script explicitly simulates the main outcome (QCEW g...",
-        "file": "01b_create_cached_qcew.R",
-        "lines": [
-          1,
-          60
-        ],
-        "github_url": "/apep_0094/code/01b_create_cached_qcew.R#L1-L133"
-      },
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "The cleaning/analysis pipeline accepts whichever local fi...",
-        "file": "03_clean_data.R",
-        "lines": [
-          17,
-          23
-        ],
-        "github_url": "/apep_0094/code/03_clean_data.R#L17-L35"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0094_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0038_v2_scan.json"
   },
   "error": null
 }

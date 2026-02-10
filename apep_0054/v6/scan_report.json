@@ -1,67 +1,11 @@
 {
-  "paper_id": "apep_0162",
-  "scan_date": "2026-02-06T12:54:57.219875+00:00",
+  "paper_id": "apep_0054_v6",
+  "scan_date": "2026-02-10T13:14:07.791283+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        35,
-        36
-      ],
-      "evidence": "Key headline estimates (ATT, SE, DDD magnitudes, bootstrap p-value, permutation p-value) are embedded as literal numbers in the manuscript text rather than being programmatically inserted from the saved results objects. While it is common to write results in prose, the repository also contains table/figure generation scripts that output LaTeX tables; the presence of many hard-coded numeric results in the manuscript creates a transcription/integrity risk (numbers can drift from what the code actually produces). This is especially salient because the paper claims extensive robustness/inference procedures whose outputs can change with code or data updates.: Using individual-level data from the Current Population Survey Annual Social and Economic Supplement (CPS ASEC, $N = 566{,}844$ unweighted person-years), I find that the Callaway-Sant'Anna ATT on aggregate wages is $-0.0105$ (SE $= 0.0055$), ... women's wages increase by 4.6--6.4 percentage points ... (bootstrap $p = 0.004$ for gender DDD). Fisher randomization inference yields a permutation $p$-value of 0.11;",
-      "confidence": 0.78
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        215,
-        248
-      ],
-      "evidence": "The main results table appears fully hard-coded in paper.tex (coefficients, SEs, N, R-squared). However, the repository also includes 07_tables.R which programmatically produces LaTeX tables (e.g., tables/table2_main_results.tex) from model objects and saved RDS results. If the manuscript is not actually including those generated .tex outputs (e.g., via \\input{tables/table2_main_results.tex}), the displayed results may not be reproducible from code and could diverge from computed outputs.: \\begin{table}[H]\n...\\caption{Effect of Salary Transparency Laws on Log Wages}\n...\nTreated $\\times$ Post & 0.004 & 0.005 & $-0.005$ & $-0.004$ \\\\\n& (0.013) & (0.014) & (0.008) & (0.008) \\\\\n...\nObservations & 510 & 566,844 & 566,844 & 566,844 \\\\\nR-squared & 0.966 & 0.051 & 0.293 & 0.377 \\\\\n\\end{tabular}",
-      "confidence": 0.84
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        270,
-        315
-      ],
-      "evidence": "The gender DDD table is also hard-coded directly in the manuscript. This is a central result with multiple specifications; hard-coding increases risk of selective transcription or mismatch with code-generated estimates. The codebase already supports automated table export via fixest::etable(), so manual numbers are not necessary for reproducibility.: \\begin{table}[H]\n...\\caption{Triple-Difference: Effect on Gender Wage Gap}\n...\nTreated $\\times$ Post & $-0.022$ & $-0.032$*** & $-0.025$*** & \\\\\n& (0.013) & (0.009) & (0.007) & \\\\\nTreated $\\times$ Post $\\times$ Female & 0.060*** & 0.064*** & 0.046*** & 0.050*** \\\\\n& (0.008) & (0.010) & (0.008) & (0.008) \\\\\n...",
-      "confidence": 0.85
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        141,
-        169
-      ],
-      "evidence": "The script creates a placeholder minimum-wage lookup but does not actually fetch minimum wage time series from a documented source/API nor save it as an output used downstream. The manuscript states that minimum wages are incorporated as controls, but in the visible code minimum wage data is neither sourced nor merged into the analysis datasets. This is low-severity here because (i) the minimum wage object is not used downstream in the provided scripts, and (ii) the main identification relies on FE/DiD; however it creates a provenance/reproducibility gap relative to the manuscript claim if minimum wage controls are indeed intended to be included.: # ---- State Minimum Wages ----\n# Source: DOL / UC Berkeley Labor Center\n# We'll use a simplified approach with known minimum wages\n\nstate_min_wage <- tibble(\n  statefip = 1:56,\n  state_abbr = c(\"AL\", \"AK\", \"AZ\", \"AR\", \"CA\", \"CO\", \"CT\", \"DE\", \"DC\", \"FL\",\n                 ...\n                 \"WY\", NA, NA, NA, NA, NA)\n) %>%\n  filter(!is.na(state_abbr))\n\n# For now, we'll construct minimum wage data in the cleaning script\n# using known values for the analysis period",
-      "confidence": 0.67
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        136,
-        178
-      ],
-      "evidence": "The manuscript states: \"I also incorporate state minimum wage data from the Department of Labor to control for concurrent policy changes.\" In the provided code, minimum wage and unemployment rate controls are explicitly not fetched/used (minimum wage is a placeholder; unemployment is omitted by design). If the main analysis scripts (04_main_analysis.R) include these controls, that could resolve the mismatch, but those scripts are not provided here. Based on available files, the implemented pipeline does not yet incorporate minimum wage controls, so the manuscript claim may be overstated or out of sync with the code.: # ---- State Minimum Wages ----\n# Source: DOL / UC Berkeley Labor Center\n# We'll use a simplified approach with known minimum wages\n...\n# For now, we'll construct minimum wage data in the cleaning script\n# using known values for the analysis period\n\n# ---- State Unemployment Rates ----\n# Would fetch from BLS LAUS API\n# For now, we'll use state-year fixed effects which absorb this",
-      "confidence": 0.63
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -98,58 +42,20 @@
     {
       "file": "03_descriptives.R",
       "verdict": "CLEAN"
-    },
-    {
-      "file": "paper.tex",
-      "verdict": "SUSPICIOUS"
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 3,
-      "MEDIUM": 1,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "hard-coded results",
-    "executive_summary": "The manuscript (`paper.tex`) embeds key headline estimates (ATT, standard errors, DDD magnitudes, and bootstrap/permutation p-values) as literal numbers in the text instead of inserting them programmatically from the analysis outputs, making it easy for reported results to drift from what the code actually produces. The main results table and the gender DDD table are also written directly into the LaTeX source with hard-coded coefficients, SEs, and fit statistics, even though the repository includes scripts (e.g., `07_tables.R`) that generate LaTeX tables\u2014creating a clear risk of selective transcription, outdated tables, or mismatches between the paper and the computational pipeline.",
-    "top_issues": [
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "Key headline estimates (ATT, SE, DDD magnitudes, bootstra...",
-        "file": "paper.tex",
-        "lines": [
-          35,
-          36
-        ],
-        "github_url": "/apep_0162/code/paper.tex#L35-L36"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "The main results table appears fully hard-coded in paper....",
-        "file": "paper.tex",
-        "lines": [
-          215,
-          248
-        ],
-        "github_url": "/apep_0162/code/paper.tex#L215-L248"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "The gender DDD table is also hard-coded directly in the m...",
-        "file": "paper.tex",
-        "lines": [
-          270,
-          315
-        ],
-        "github_url": "/apep_0162/code/paper.tex#L270-L315"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0162_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0054_v6_scan.json"
   },
   "error": null
 }

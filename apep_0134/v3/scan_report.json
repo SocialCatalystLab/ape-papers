@@ -1,161 +1,11 @@
 {
-  "paper_id": "apep_0139",
-  "scan_date": "2026-02-06T12:50:24.958690+00:00",
+  "paper_id": "apep_0134_v3",
+  "scan_date": "2026-02-10T13:15:02.491073+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 6,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        120,
-        121,
-        122,
-        123,
-        124
-      ],
-      "evidence": "Key outcome data are loaded from a precompiled CSV (\"data/raw/dohmh_overdose_rates.csv\") that is described as manually extracted from PDFs/EpiQuery, but no extraction/verification script is included in the provided code. This limits reproducibility and makes it hard to audit transcription accuracy, especially because the paper\u2019s identification hinges entirely on these rates.: overdose_rates <- read_csv(\n  file.path(PAPER_DIR, \"data\", \"raw\", \"dohmh_overdose_rates.csv\"),\n  show_col_types = FALSE\n) %>%\n  select(uhf_id, year, od_rate, od_count)",
-      "confidence": 0.78
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03_main_analysis.R",
-      "lines": [
-        187,
-        188,
-        189,
-        190,
-        191,
-        192,
-        193,
-        194,
-        195,
-        196,
-        197,
-        198,
-        199,
-        200,
-        201,
-        202
-      ],
-      "evidence": "The manuscript describes de-meaned synthetic control where weights are chosen by solving the SCM constrained optimization problem (minimizing pre-treatment squared error subject to convex weights). The code instead constructs an 'SCM approximation' using correlation-based ad hoc weights (zeroing negatives, normalizing). This can materially change the counterfactual path, inferred gaps, and any MSPE-based inference tied to the synthetic series. If the paper\u2019s reported SCM results rely on true SCM optimization, this implementation does not match.: # Compute correlation-based weights\ncorrelations <- sapply(control_trends$trend, function(x) {\n  cor(treated_trend, x, use = \"complete.obs\")\n})\ncorrelations[is.na(correlations)] <- 0\ncorrelations[correlations < 0] <- 0  # Only positive correlations\n\n# Normalize to sum to 1\nscm_weights <- correlations / sum(correlations)\nnames(scm_weights) <- control_trends$uhf_name",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03_main_analysis.R",
-      "lines": [
-        246,
-        247,
-        248,
-        249,
-        250,
-        251,
-        252,
-        253,
-        254,
-        255,
-        256,
-        257,
-        258,
-        259
-      ],
-      "evidence": "The paper emphasizes randomization inference based on MSPE ratios from synthetic controls (placebo-in-space SCM). The code\u2019s placebo MSPE ratios are not based on SCM re-estimation for each placebo treated unit; they use the simple mean of other controls as the placebo 'synthetic' (no weights optimization, no matching). This makes the MSPE ratio distribution and the resulting rank/p-value not comparable to standard SCM placebo MSPE-ratio inference described in the manuscript.: # Placebo MSPE ratios for all control units\nplacebo_mspe <- sapply(unique(panel_demeaned$uhf_id[panel_demeaned$treatment_status == \"control\"]),\n                       function(uid) {\n  placebo_actual <- panel_demeaned %>% filter(uhf_id == uid)\n\n  # Leave-one-out synthetic for this placebo\n  other_controls <- panel_demeaned %>%\n    filter(treatment_status == \"control\", uhf_id != uid)\n\n  placebo_synth <- other_controls %>%\n    group_by(year) %>%\n    summarise(synth_dm = mean(od_rate_dm, na.rm = TRUE), .groups = \"drop\")\n\n  compute_mspe(placebo_actual, placebo_synth)\n})",
-      "confidence": 0.92
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03_main_analysis.R",
-      "lines": [
-        78,
-        79,
-        80,
-        81
-      ],
-      "evidence": "The manuscript repeatedly states that the primary analysis uses a restricted donor pool of 5 neighborhoods after excluding adjacent neighborhoods, low-rate neighborhoods, and Staten Island. In code, \"control\" is defined only as 'not treated' and 'not spillover' (adjacent list), but there is no implementation of the low-rate exclusion and no Staten Island exclusion. As written, East Harlem\u2019s donor pool includes all non-spillover controls (including Staten Island and low-rate neighborhoods) unless those exclusions are encoded in the raw CSV or elsewhere (not shown). This is a substantive mismatch that can change estimates and inference.: east_harlem_dm <- panel_demeaned %>%\n  filter(uhf_id == 203 | treatment_status == \"control\")",
-      "confidence": 0.86
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "04_sdid.R",
-      "lines": [
-        149,
-        150,
-        151,
-        152,
-        153,
-        154,
-        155,
-        156,
-        157,
-        158,
-        159,
-        160,
-        161,
-        162,
-        163,
-        164,
-        165,
-        166
-      ],
-      "evidence": "If the synthdid package is unavailable, the code defines 'SDID' as an arbitrary 50/50 average of a simple DiD and an ad hoc SCM-like estimate, with a bootstrap that resamples control units. This is not Synthetic DiD as defined in Arkhangelsky et al. (2021). If any results/claims in the manuscript rely on SDID, this fallback would be methodologically invalid (unless clearly labeled as a rough heuristic, which it is not in outputs saved to sdid_results.rds).: # Manual SDID approximation if package unavailable\nif (!synthdid_available) {\n  ...\n  # SDID is intermediate - use weighted average\n  sdid_estimate <- 0.5 * did_estimate + 0.5 * sc_estimate\n  \n  # Bootstrap SE approximation\n  set.seed(20211130)\n  boot_estimates <- replicate(500, {\n    boot_idx <- sample(control_units, replace = TRUE)\n    ...\n  })\n  sdid_se <- sd(boot_estimates)\n}",
-      "confidence": 0.84
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        151,
-        152,
-        153,
-        154,
-        155,
-        156
-      ],
-      "evidence": "Treatment intensity is hard-coded as 1/12 in 2021. The manuscript notes 2021 is a partial exposure year and often excluded. Hard-coding is not inherently wrong, but it is a strong functional-form assumption about exposure and can affect any models using treatment_intensity. The provided main analysis appears to define treatment start as 2022 for D (gsynth) and post=2022 for DiD, so this variable may be unused; if it is used elsewhere, it should be justified and sensitivity-checked (e.g., 1/12 vs 1/24 depending on outcome timing).: treatment_intensity = case_when(\n  year < 2021 ~ 0,\n  year == 2021 ~ 1/12,  # ~1 month of treatment\n  year >= 2022 ~ 1\n)",
-      "confidence": 0.65
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        154,
-        155,
-        156,
-        157,
-        158,
-        159,
-        160,
-        161,
-        162,
-        163,
-        164
-      ],
-      "evidence": "The code uses random sampling to implement permutation-based randomization inference. This is an acceptable and explicitly-described inferential procedure (not data fabrication). Flagged only because it uses RNG and could be misconstrued without context; here the manuscript clearly discusses randomization inference.: set.seed(20211130)\nn_perms <- 1000\n...\nfor (i in 1:n_perms) {\n  fake_treated <- sample(all_uhfs, 2)\n  permuted_effects[i] <- compute_did(did_data, fake_treated)\n}",
-      "confidence": 0.9
-    },
-    {
-      "category": "STATISTICAL_IMPOSSIBILITY",
-      "severity": "LOW",
-      "file": "05_figures.R",
-      "lines": [
-        93,
-        94,
-        95
-      ],
-      "evidence": "For the omitted/reference year (2021), the plotting data injects a fabricated standard error (0.01) and a degenerate CI [0,0]. While this is only for visualization of the reference point (not an estimated coefficient), it can confuse readers/auditors because it looks like an estimated SE and CI. Prefer leaving SE/CI as NA for the reference period or plotting the point without implying inference.: bind_rows(tibble(year = 2021, event_time = 0, coefficient = 0, se = 0.01,\n                     ci_lower = 0, ci_upper = 0)) %>%\n    arrange(year)",
-      "confidence": 0.72
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -175,7 +25,7 @@
     },
     {
       "file": "03_main_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "05_figures.R",
@@ -183,51 +33,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 3,
-      "MEDIUM": 3,
-      "LOW": 2
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The main analysis code does not implement the synthetic control method as described in the manuscript: it does not clearly perform the constrained SCM optimization with convex weights on de-meaned outcomes to minimize pre-treatment squared error. The placebo-in-space randomization inference is also inconsistent with the paper\u2019s MSPE-ratio procedure because the placebo MSPE ratios are not generated by re-estimating a full SCM for each placebo treated unit. Finally, the code does not adhere to the stated donor-pool restriction to five non-adjacent, non\u2013low-rate neighborhoods (excluding Staten Island), indicating the primary estimates are produced from a different donor set than reported.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript describes de-meaned synthetic control wher...",
-        "file": "03_main_analysis.R",
-        "lines": [
-          187,
-          188
-        ],
-        "github_url": "/apep_0139/code/03_main_analysis.R#L187-L202"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The paper emphasizes randomization inference based on MSP...",
-        "file": "03_main_analysis.R",
-        "lines": [
-          246,
-          247
-        ],
-        "github_url": "/apep_0139/code/03_main_analysis.R#L246-L259"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript repeatedly states that the primary analysi...",
-        "file": "03_main_analysis.R",
-        "lines": [
-          78,
-          79
-        ],
-        "github_url": "/apep_0139/code/03_main_analysis.R#L78-L81"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0139_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0134_v3_scan.json"
   },
   "error": null
 }

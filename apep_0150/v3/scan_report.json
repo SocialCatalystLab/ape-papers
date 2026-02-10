@@ -1,71 +1,15 @@
 {
-  "paper_id": "apep_0157",
-  "scan_date": "2026-02-06T12:54:08.190913+00:00",
+  "paper_id": "apep_0150_v3",
+  "scan_date": "2026-02-10T13:15:38.268026+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 8,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        19,
-        74
-      ],
-      "evidence": "The policy/treatment database (effective dates and cap amounts) is manually hard-coded in the script rather than being loaded from a sourced dataset or a scraped legislative/NCSL file. The manuscript says the policy database is \u201cconstructed from legislative records, NCSL tracker, ADA pages, Beyond Type 1\u201d, which can justify manual compilation, but the code as provided does not include any provenance artifacts (URLs, citations per row, a raw source file, or a build log) to audit the mapping from sources to these entries. This is not necessarily invalid, but it weakens replicability and integrity auditing for treatment timing/amounts.: policy_db <- tribble(\n  ~state_abbr, ~state_name,          ~state_fips, ~effective_date, ~cap_amount,\n  \"CO\",        \"Colorado\",           \"08\",        \"2020-01-01\",    100,\n  \"VA\",        \"Virginia\",           \"51\",        \"2020-07-01\",    50,\n  ...\n  \"LA\",        \"Louisiana\",          \"22\",        \"2024-01-01\",    100\n)\n...\nwrite_csv(policy_db, \"data/policy_database.csv\")",
-      "confidence": 0.78
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        209,
-        338
-      ],
-      "evidence": "The manuscript states that for 2020\u20132023 the analysis \u201caggregate[s] weekly counts to annual counts and compute[s] age-adjusted death rates using Census population denominators.\u201d However, the code does not age-adjust from the weekly data. Instead it (i) computes a crude annual rate from MMWR weekly counts + population and (ii) where available, substitutes an \u201cage-adjusted\u201d rate from CDC dataset 489q-934x that is explicitly \u201c12 months ending with quarter\u201d (a rolling 12-month window) and then filters to Q4, treating that as the year\u2019s annual age-adjusted rate.\n\nThat is a material methodology difference from \u201ccalendar-year annual age-adjusted rates.\u201d A Q4 rolling 12-month rate is not necessarily equal to the calendar-year (Jan\u2013Dec) age-adjusted rate, and could change the outcome definition in the post period in ways that affect DiD estimates (especially near the endpoints). At minimum, this requires explicit documentation and justification in the paper (e.g., demonstrating equivalence or quantifying differences).: # Use Census population estimates to compute crude death rates\n# Then use provisional age-adjusted rates where available\n...\nrecent_provisional <- tryCatch({\n  resp <- GET(\n    \"https://data.cdc.gov/resource/489q-934x.csv\",\n    query = list(\n      `$where` = paste0(\"cause_of_death='Diabetes'\",\n                        \" AND time_period='12 months ending with quarter'\",\n                        \" AND rate_type='Age-adjusted'\"),\n      `$limit` = 50,\n      `$order` = \"year_and_quarter\"\n    ),\n    timeout(120)\n  )\n  ...\n})\n...\nprov_q4 <- recent_provisional %>%\n  filter(grepl(\"Q4\", year_and_quarter)) %>%\n  mutate(year = as.integer(sub(\" Q4\", \"\", year_and_quarter)))\n...\nrecent_rates <- recent_rates %>%\n  mutate(\n    mortality_rate = coalesce(aadr_provisional, crude_rate),\n    data_source = ifelse(!is.na(aadr_provisional),\n                         \"CDC_provisional_489q934x\",\n                         \"CDC_MMWR_muzy_jte6_crude\")\n  )",
-      "confidence": 0.83
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        180,
-        205
-      ],
-      "evidence": "The code assumes that a state-year with annual_deaths aggregated from the weekly MMWR data equal to 0 implies CDC suppression and then drops those observations. While true diabetes deaths at the state-year level are extremely unlikely to be zero, this is still a nontrivial, outcome-dependent dropping rule implemented mechanically. The manuscript discusses suppressed cells (<10) in the provisional data and indicates 16 suppressed state-year cells; this aligns conceptually, but the code\u2019s suppression detection rule is not \u201c<10\u201d and may misclassify missingness as zeros depending on how the API returns suppressed weeks/counts.\n\nRecommended integrity fix: explicitly detect suppression/missing per CDC metadata (or treat zeros as missing and cross-check against expected suppressed jurisdictions/years), and log the exact dropped state-years to a file for auditing.: # Mark suppressed states (deaths = 0 due to weekly suppression)\n  suppressed <- recent_clean %>%\n    filter(mortality_deaths == 0) %>%\n    distinct(state_name) %>%\n    pull(state_name)\n\n  if (length(suppressed) > 0) {\n    cat(\"  Suppressed states (dropped):\", paste(suppressed, collapse = \", \"), \"\\n\")\n    recent_clean <- recent_clean %>% filter(mortality_deaths > 0)\n  }",
-      "confidence": 0.74
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        133,
-        169
-      ],
-      "evidence": "Randomness is used for inference procedures (multiplier/bootstrap in CS-DiD and wild cluster bootstrap). This is appropriate and consistent with the manuscript\u2019s described inference approach; not evidence of data fabrication. Not flagged as problematic, but recorded here because it matches common fabrication heuristics (set.seed + random resampling).: set.seed(142)\ncs_no_covid <- tryCatch({\n  att_gt(\n    ...,\n    bstrap      = TRUE,\n    biters      = 1000\n  )\n}, error = function(e) { ... })\n...\nset.seed(142)\nboot_out <- fwildclusterboot::boottest(\n  twfe_basic,\n  param = \"treated\",\n  clustid = ~state_id,\n  B = 9999,\n  type = \"webb\"\n)",
-      "confidence": 0.92
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        70,
-        86
-      ],
-      "evidence": "Table 1 LaTeX notes claim the source is \u201cCDC WONDER Underlying Cause of Death, 1999\u20132023,\u201d but the data ingestion code shown uses data.cdc.gov endpoints (bi63-dtpu, muzy-jte6, 489q-934x) and Census API, not CDC WONDER. This is a documentation/provenance mismatch. While not necessarily affecting estimation, inaccurate provenance statements are an integrity risk because they impede replication and auditing.: cat(\"\\\\item Source: CDC WONDER Underlying Cause of Death, 1999--2023. \")",
-      "confidence": 0.81
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -97,29 +41,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 3,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "In `01_fetch_data.R`, the workflow does not implement the manuscript\u2019s stated approach for 2020\u20132023 of aggregating weekly death counts to annual totals and then computing age-adjusted death rates using Census population denominators. Instead, the code follows a different processing path for these years, so the reported annual, age-adjusted rates for 2020\u20132023 cannot be reproduced from the code as written and may rely on inconsistent denominators or non-annual (e.g., weekly/partial) aggregation. This methodology mismatch makes the core outcome metrics for the 2020\u20132023 period unreliable relative to the paper\u2019s description.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript states that for 2020\u20132023 the analysis \u201cag...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          209,
-          338
-        ],
-        "github_url": "/apep_0157/code/01_fetch_data.R#L209-L338"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0157_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0150_v3_scan.json"
   },
   "error": null
 }

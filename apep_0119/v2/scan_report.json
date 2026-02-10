@@ -1,45 +1,11 @@
 {
-  "paper_id": "apep_0130",
-  "scan_date": "2026-02-06T12:48:48.597287+00:00",
+  "paper_id": "apep_0119_v2",
+  "scan_date": "2026-02-10T13:14:47.198740+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        18,
-        88
-      ],
-      "evidence": "EERS adoption timing and the never-treated classification are fully hard-coded rather than programmatically fetched from ACEEE/DSIRE/NCSL. This is not inherently wrong (many policy-eval projects hand-code treatment dates), and the manuscript explicitly states treatment coding is compiled from those sources. However, hard-coding makes it easier for inadvertent/intentional miscoding to affect results; for integrity/replicability, a citation-to-row mapping or raw-source snapshot (CSV/PDF scrape notes) would strengthen provenance.: eers_treatment <- tribble(\n  ~state_abbr, ~state_name,           ~eers_year, ~eers_type,\n  \"AZ\",        \"Arizona\",              2010,       \"mandatory\",\n  ...\n  \"WI\",        \"Wisconsin\",           2005,       \"mandatory\"\n)\n\nnever_treated <- tribble(\n  ~state_abbr, ~state_name,\n  \"AL\",        \"Alabama\",\n  ...\n  \"WY\",        \"Wyoming\"\n)\nnever_treated$eers_year <- 0L",
-      "confidence": 0.78
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        240,
-        310
-      ],
-      "evidence": "1990 state populations are hard-coded as a lookup table. The manuscript/data appendix explicitly describes using 1990 Decennial Census counts and linear interpolation for 1990\u20131999, so this is consistent with the paper. Still, the absence of an automated retrieval (or archived source file) reduces auditability; a stored source table (e.g., an included CSV with source citation and extraction date) would be preferable.: census_1990 <- tribble(\n  ~state_fips, ~pop_1990,\n  \"01\", 4040587,\n  \"02\",  550043,\n  ...\n  \"56\",  453588\n)",
-      "confidence": 0.74
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01c_fetch_policy.R",
-      "lines": [
-        14,
-        120
-      ],
-      "evidence": "Policy control variables (RPS, decoupling, building codes) are constructed from hard-coded adoption-year tables without an accompanying fetch/scrape script or embedded citations per row. The manuscript notes these are based on DSIRE/NCSL/ACEEE/DOE sources, which reduces concern, but replication would still benefit from storing the exact underlying source files or adding a documented provenance file (URLs + access dates + notes) so an auditor can verify each adoption year.: # RPS adoption years (mandatory RPS only, from DSIRE/NCSL)\n# These are the first year of a binding mandatory RPS target\nrps_data <- tribble(\n  ~state_abbr, ~rps_year,\n  \"AZ\", 2001,\n  ...\n)\n\n# Electric decoupling adoption years (from ACEEE State Policy Tracker)\ndecoupling_data <- tribble(\n  ~state_abbr, ~decoupling_year,\n  \"CA\", 1982,\n  ...\n)\n\n# Building Energy Codes - Residential (IECC adoption)\nbuilding_code_data <- tribble(\n  ~state_abbr, ~building_code_year,\n  \"CA\", 2010,\n  ...\n)",
-      "confidence": 0.81
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_weather.R",
@@ -84,12 +50,12 @@
       "CRITICAL": 0,
       "HIGH": 0,
       "MEDIUM": 0,
-      "LOW": 3
+      "LOW": 0
     },
     "one_liner": "Minor issues only",
-    "executive_summary": "Minor code quality issues detected, but no evidence of data fabrication or manipulation.",
+    "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0130_scan.json"
+    "full_report_url": "/scans/apep_0119_v2_scan.json"
   },
   "error": null
 }

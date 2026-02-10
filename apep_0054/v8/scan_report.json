@@ -1,99 +1,15 @@
 {
-  "paper_id": "apep_0167",
-  "scan_date": "2026-02-06T12:56:03.710880+00:00",
+  "paper_id": "apep_0054_v8",
+  "scan_date": "2026-02-10T13:14:13.881536+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 10,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        4,
-        82,
-        120
-      ],
-      "evidence": "The manuscript (paper.tex) describes an analysis of salary transparency laws using Census QWI county-quarter(-sex) data (2015Q1\u20132023Q4), Callaway-Sant\u2019Anna staggered DiD, and a border county-pair design. However, this script fetches CPS ASEC data from IPUMS for an Auto-IRA/pension coverage analysis and constructs an Auto-IRA treatment timing table. This is not a robustness check of the QWI analysis; it appears to be an entirely different project\u2019s pipeline included in the same codebase. This creates serious audit risk: it becomes unclear which scripts are actually used to generate the manuscript results, and whether extraneous pipelines influenced reported tables/figures.: # 01_fetch_data.R\n# Fetch CPS ASEC data from IPUMS for Auto-IRA analysis\n...\ntreatment_data <- tibble(\n  statefip = c(41, 17, 6, 9, 24, 8, 51, 23, 10, 34, 50),\n  ...\n)\n...\nextract_def <- define_extract_micro(\n  collection = \"cps\",\n  description = \"CPS ASEC 2010-2024 for Auto-IRA analysis\",\n  samples = paste0(\"cps\", 2010:2024, \"_03s\"),\n  variables = c(..., \"PENSION\", ...)\n)",
-      "confidence": 0.95
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        96,
-        112
-      ],
-      "evidence": "The package/setup script asserts that treatment timing provenance is created in a separate script (00_policy_data.R), but that file is not provided in the materials. In the provided pipeline, treatment timing is instead hard-coded and then saved in 01_fetch_qwi_fast.R. This is not inherently invalid, but it means the intended provenance workflow described in comments cannot be verified from the supplied codebase, and there is no auditable link from treatment timing to cited legal sources within the provided files.: # IMPORTANT: Treatment timing with official citations is now in 00_policy_data.R\n# Run that script first to create data/transparency_laws.rds with proper provenance.\n...\nif (file.exists(\"data/transparency_laws.rds\")) {\n  transparency_laws <- readRDS(\"data/transparency_laws.rds\")\n  ...\n} else {\n  cat(\"WARNING: data/transparency_laws.rds not found.\\n\")\n  cat(\"Run 00_policy_data.R first to create treatment timing data.\\n\")\n}",
-      "confidence": 0.75
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "01_fetch_qwi_fast.R",
-      "lines": [
-        112,
-        125
-      ],
-      "evidence": "Treatment timing is hard-coded in-code via a tribble and written out as data/transparency_laws.rds. This is a hard-coded input (not an output), and the manuscript provides the same timing in the Data section, so this is likely acceptable. However, the absence of a provided provenance script/file (00_policy_data.R) means this timing is not reproducibly traced to sources within the shared code.: treat_timing <- tribble(\n  ~state_fips, ~treat_qtr_num, ~state_abbr,\n  \"08\", 2021 * 4 + 1, \"CO\",   # 2021Q1\n  \"09\", 2021 * 4 + 4, \"CT\",   # 2021Q4\n  \"32\", 2021 * 4 + 4, \"NV\",   # 2021Q4\n  \"44\", 2023 * 4 + 1, \"RI\",   # 2023Q1\n  \"06\", 2023 * 4 + 1, \"CA\",   # 2023Q1\n  \"53\", 2023 * 4 + 1, \"WA\"    # 2023Q1\n)\n...\nsaveRDS(treat_timing, \"data/transparency_laws.rds\")",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        24,
-        33,
-        49,
-        66,
-        84
-      ],
-      "evidence": "Table-generation code contains documentation/metadata inconsistent with the manuscript and (likely) the estimation samples:\n(1) The summary table footnote states the sample is 1995\u20132023, but the manuscript states 2015Q1\u20132023Q4 and the fetch script uses years <- 2015:2023.\n(2) For the main results table, N is reported as nrow(qwi) for Callaway-Sant\u2019Anna and TWFE, but the actual C-S estimation in 03_main_analysis.R uses qwi_panel (collapsed to county-quarter), not the full county-quarter-sex qwi dataset. This can misstate the estimation sample size even if coefficients/SEs are correctly extracted from model objects.\nThese issues are reporting-integrity problems (table labels/notes not matching analysis), not evidence of fabrication, but they require correction for reproducibility.: summary_latex <- summary_stats %>%\n  ... %>%\n  add_footnote(\"Note: Sample includes all county-quarter-sex observations from 1995-2023.\nNew hire earnings and all earnings in dollars. Employment and hires are quarterly counts.\nTreated states: CA, CO, CT, NV, RI, WA.\",\n               notation = \"none\")\n...\nmain_results <- tibble(\n  ...\n  N = c(\n    nrow(qwi),\n    nrow(qwi),\n    nrow(readRDS(\"data/qwi_border.rds\"))\n  ),\n  Clusters = c(\n    n_distinct(qwi$state_fips),\n    n_distinct(qwi$state_fips),\n    nrow(readRDS(\"data/border_pairs.rds\"))\n  )\n)",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        88,
-        107
-      ],
-      "evidence": "The SE for the Female\u2013Male ATT difference is computed assuming independence (sqrt(se_f^2 + se_m^2)). The manuscript reports the gender differential SE and frames inference, but does not state an independence assumption; with the same states, periods, and treatment assignment, the sex-specific ATT estimates are generally correlated. This can materially over- or under-state uncertainty depending on covariance. If the manuscript\u2019s reported SEs were computed differently (e.g., joint bootstrap), the code as written will not reproduce them.: sex_results <- tibble(\n  Sex = c(\"Male\", \"Female\", \"Difference (F-M)\"),\n  ATT = c(\n    results_by_sex$Male$overall.att,\n    results_by_sex$Female$overall.att,\n    results_by_sex$Female$overall.att - results_by_sex$Male$overall.att\n  ),\n  SE = c(\n    results_by_sex$Male$overall.se,\n    results_by_sex$Female$overall.se,\n    sqrt(results_by_sex$Male$overall.se^2 + results_by_sex$Female$overall.se^2)\n  )\n)",
-      "confidence": 0.8
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        138,
-        155
-      ],
-      "evidence": "The placebo construction filters to pre-treatment-only data using qtr_num < min(cohort[cohort>0]), which drops all observations after the earliest treated cohort begins. This is not necessarily wrong for a specific placebo design, but it changes the estimand substantially (placebo is estimated only on an early sub-period) and may not match the manuscript\u2019s description of a placebo '2 years early' across the full panel. Also, as written, the pipeline appears to have a missing pipe/indentation before mutate(), which could cause the code not to run as intended, undermining reproducibility of placebo results.: qwi_placebo <- qwi %>%\n  filter(qtr_num < min(cohort[cohort > 0], na.rm = TRUE)) %>%  # Pre-treatment only\n\nmutate(\n    fake_cohort = case_when(\n      state_fips == \"08\" ~ 2019 * 4 + 1,  # CO: 2 years early\n      state_fips == \"09\" ~ 2019 * 4 + 4,  # CT\n      state_fips == \"32\" ~ 2019 * 4 + 4,  # NV\n      TRUE ~ 0\n    ),\n    fake_post = qtr_num >= fake_cohort & fake_cohort > 0,\n    county_id = as.numeric(factor(county_fips))\n  )",
-      "confidence": 0.7
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        46,
-        64,
-        100
-      ],
-      "evidence": "Randomness is used only for legitimate bootstrap inference (did::att_gt with bstrap=TRUE) and seeds are set for reproducibility. This is not fabrication, but it is noted here because random generation is present in the pipeline and should be clearly tied to inference rather than data creation (which it is).: # Set seed for reproducible bootstrap\nset.seed(20240203)\n...\ncs_result <- att_gt(\n  ...\n  bstrap = TRUE,\n  cband = TRUE,\n  biters = 1000,\n  ...\n)",
-      "confidence": 0.9
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -133,29 +49,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 3,
-      "LOW": 3
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The code in `01_fetch_data.R` does not align with the manuscript\u2019s stated design: instead of assembling the Census QWI county\u2011quarter (optionally sex\u2011disaggregated) panel for 2015Q1\u20132023Q4 and implementing a Callaway\u2013Sant\u2019Anna staggered DiD with a border county\u2011pair approach, the data acquisition/structure in this script is inconsistent with those requirements. This mismatch undermines the ability to reproduce the described salary\u2011transparency analysis because the script is not set up to produce the promised dataset or identification strategy.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript (paper.tex) describes an analysis of salar...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          1,
-          4
-        ],
-        "github_url": "/apep_0167/code/01_fetch_data.R#L1-L120"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0167_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0054_v8_scan.json"
   },
   "error": null
 }

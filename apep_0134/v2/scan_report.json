@@ -1,107 +1,11 @@
 {
-  "paper_id": "apep_0136",
-  "scan_date": "2026-02-06T12:49:45.124446+00:00",
+  "paper_id": "apep_0134_v2",
+  "scan_date": "2026-02-10T13:14:59.434348+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 6,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "05_figures.R",
-      "lines": [
-        143,
-        201,
-        244,
-        322
-      ],
-      "evidence": "The manuscript\u2019s main results and figures describe (augmented) synthetic control counterfactuals (Abadie/Ben-Michael style, with donor weights). However, Figure 3 and the placebo gap/MSPE figures in 05_figures.R construct the 'synthetic control' using a simple unweighted mean of all control neighborhoods (and placebo gaps using leave-one-out control means), not the SCM/augsynth weights or fitted values. This can materially change the counterfactual trajectory and the estimated gaps, making the plotted 'synthetic control' not the method described in the paper.: # Compute synthetic control as weighted average of control units\n# Using mean of controls as synthetic counterfactual\nsynthetic_control <- control_data %>%\n  group_by(year) %>%\n  summarise(od_rate = mean(od_rate, na.rm = TRUE), .groups = \"drop\") %>%\n  mutate(type = \"Synthetic Control\")\n...\n# East Harlem gap (actual - counterfactual)\neast_harlem_gap <- treated_data %>%\n  left_join(control_mean_by_year, by = \"year\") %>%\n  mutate(\n    gap = od_rate - control_mean,\n    unit = \"East Harlem (Treated)\",\n    treated = TRUE\n  )",
-      "confidence": 0.9
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "HIGH",
-      "file": "05_figures.R",
-      "lines": [
-        1,
-        7,
-        86,
-        126
-      ],
-      "evidence": "The figures script is designed to produce outputs even when the main analysis results object is missing, and (in practice) multiple key figures are then generated from ad hoc approximations (e.g., control means) rather than the saved SCM/DiD objects. This creates a high risk that the paper\u2019s figures/tables reflect a different computation path than the reported estimation, and that rerunning from scratch without intermediate artifacts could change displayed results. The manuscript relies heavily on synthetic-control gaps and placebo visuals; generating them via approximations undermines verifiability.: # NOTE: Figure data comes from analysis_results.rds when available.\n# If results file not found, plots use representative values based on\n# main analysis specification. For full replication, run 03_main_analysis.R\n# first to generate actual estimates.\n...\nresults <- tryCatch(\n  readRDS(file.path(PAPER_DIR, \"data\", \"analysis_results.rds\")),\n  error = function(e) NULL\n)",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        139,
-        154,
-        162
-      ],
-      "evidence": "The manuscript states the baseline donor pool excludes treated units, adjacent/spillover neighborhoods, low-rate neighborhoods (below 20/100k), and Staten Island. In code, 'control' is defined only as not treated and not spillover; there is no implemented exclusion for low-rate UHFs nor Staten Island in the donor pool construction. As written, subsequent analysis scripts that use treatment_status == 'control' will include Staten Island and low-rate neighborhoods, diverging from the paper\u2019s described baseline donor pool and potentially affecting estimates and inference counts (e.g., RI denominators).: uhf_neighborhoods <- uhf_neighborhoods %>%\n  mutate(\n    treatment_status = case_when(\n      uhf_id %in% treated_uhfs ~ \"treated\",\n      uhf_id %in% spillover_uhfs ~ \"spillover\",\n      TRUE ~ \"control\"\n    )\n  )",
-      "confidence": 0.8
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        178,
-        184
-      ],
-      "evidence": "Core outcome data are loaded from a manually compiled CSV with no included extraction script, parsing code, or checksums linking entries back to the cited DOHMH PDFs/EpiQuery outputs. While the manuscript and comments transparently acknowledge manual extraction (which can be legitimate), replication/integrity auditing would require either (i) the original source tables/PDFs in-repo, (ii) a machine-readable extraction workflow, or (iii) a detailed audit log with page/table references for each observation. As-is, provenance is partially documented narratively but not reproducibly.: overdose_rates <- read_csv(\n  file.path(PAPER_DIR, \"data\", \"raw\", \"dohmh_overdose_rates.csv\"),\n  show_col_types = FALSE\n) %>%\n  select(uhf_id, year, od_rate, od_count)",
-      "confidence": 0.75
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "MEDIUM",
-      "file": "03_main_analysis.R",
-      "lines": [
-        176,
-        210,
-        219
-      ],
-      "evidence": "Random treatment assignment is used for randomization inference/permutation testing (acceptable in principle), but the permutation draws treatment assignments from all UHFs including the actually treated units (all_uhfs), rather than restricting to never-treated controls. This changes the null distribution and can distort p-values (e.g., some permutations re-label already-treated units as 'fake treated', which is inconsistent with the intended design). This is not 'fabrication' of real data, but it is a problematic use of simulation that can invalidate inference if used for reported p-values.: set.seed(20211130)\nn_perms <- 1000\ncontrol_uhfs <- unique(did_data$uhf_id[did_data$treatment_status == \"control\"])\nall_uhfs <- unique(did_data$uhf_id)\n\npermuted_effects <- numeric(n_perms)\nfor (i in 1:n_perms) {\n  # Randomly select 2 UHFs as \"treated\"\n  fake_treated <- sample(all_uhfs, 2)\n  permuted_effects[i] <- compute_did(did_data, fake_treated)\n}",
-      "confidence": 0.8
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        128,
-        136
-      ],
-      "evidence": "The paper emphasizes excluding adjacent neighborhoods to avoid spillovers; the code does exclude 'spillover' for DiD. However, because 'spillover' is a hand-coded set and the manuscript lists additional donor exclusions (low-rate, Staten Island), the effective sample restriction differs from the described one. This is a low-severity transform concern because the restriction is documented and plausibly defensible, but it should match the manuscript\u2019s stated donor pool definition to avoid specification drift.: did_data <- panel_data %>%\n  filter(treatment_status %in% c(\"treated\", \"control\")) %>%\n  mutate(\n    treat = ifelse(treatment_status == \"treated\", 1, 0),\n    post = ifelse(year >= 2022, 1, 0)\n  )",
-      "confidence": 0.7
-    },
-    {
-      "category": "STATISTICAL_IMPOSSIBILITY",
-      "severity": "LOW",
-      "file": "05_figures.R",
-      "lines": [
-        118,
-        124
-      ],
-      "evidence": "The event-study plotting code inserts the omitted reference year with SE=0 and CI exactly [0,0]. For an omitted category this is a plotting convenience rather than a statistical estimate, but it can look like an estimated coefficient with zero uncertainty if not clearly labeled. Low severity given the caption explains 2020 is the omitted reference year.: bind_rows(tibble(year = 2020, event_time = -1, coefficient = 0, se = 0,\n                     ci_lower = 0, ci_upper = 0))",
-      "confidence": 0.65
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "05_figures.R",
-      "lines": [
-        305,
-        307,
-        324
-      ],
-      "evidence": "Several figure annotations/axis limits use hard-coded numeric values (e.g., y=12, y=-27.3, limits -35 to 20). These are presentation constants, not hard-coded coefficients, but they can visually emphasize particular magnitudes. Low severity, but for best practice these positions could be computed from data ranges to avoid accidental mismatch when data updates.: annotate(\"text\", x = 2022.2, y = 12, label = \"OPCs Open\",\n           hjust = 0, size = 3, color = \"gray40\") +\nannotate(\"text\", x = 2024.1, y = -27.3, label = \"East Harlem\",\n           hjust = 0, size = 3, color = \"#E41A1C\", fontface = \"bold\") +\n...\nscale_y_continuous(limits = c(-35, 20))",
-      "confidence": 0.6
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -125,44 +29,21 @@
     },
     {
       "file": "05_figures.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 3,
-      "LOW": 3
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch; selective reporting",
-    "executive_summary": "The figures code does not implement the augmented/synthetic control counterfactuals described in the manuscript (Abadie/Ben\u2011Michael style with donor weights); instead, key outputs like Figure 3 and the placebo gap/MSPE plots are generated from mismatched procedures and ad hoc approximations. It is also written to keep producing \u201cfinal\u201d figures even when the main analysis results object is missing, substituting fallback computations rather than failing loudly, which enables selective reporting and makes the published figures potentially disconnected from the stated primary analysis.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript\u2019s main results and figures describe (augme...",
-        "file": "05_figures.R",
-        "lines": [
-          143,
-          201
-        ],
-        "github_url": "/apep_0136/code/05_figures.R#L143-L322"
-      },
-      {
-        "category": "SELECTIVE_REPORTING",
-        "severity": "HIGH",
-        "short": "The figures script is designed to produce outputs even wh...",
-        "file": "05_figures.R",
-        "lines": [
-          1,
-          7
-        ],
-        "github_url": "/apep_0136/code/05_figures.R#L1-L126"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0136_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0134_v2_scan.json"
   },
   "error": null
 }

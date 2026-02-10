@@ -1,12 +1,16 @@
 {
-  "paper_id": "apep_0185_v11",
-  "scan_date": "2026-02-10T13:16:11.674550+00:00",
+  "paper_id": "apep_0185_v15",
+  "scan_date": "2026-02-10T13:16:24.435022+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
-  "files_scanned": 11,
+  "files_scanned": 21,
   "flags": [],
   "file_verdicts": [
+    {
+      "file": "09_appendix.R",
+      "verdict": "CLEAN"
+    },
     {
       "file": "02b_add_pop_weights.R",
       "verdict": "CLEAN"
@@ -24,6 +28,18 @@
       "verdict": "CLEAN"
     },
     {
+      "file": "06_heterogeneity.R",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "07_figures.R",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "07_revision_analysis.R",
+      "verdict": "CLEAN"
+    },
+    {
       "file": "04b_mechanisms.R",
       "verdict": "CLEAN"
     },
@@ -36,11 +52,35 @@
       "verdict": "CLEAN"
     },
     {
+      "file": "05_robustness.R",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "03_descriptive.R",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "06b_robustness_tables.R",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "04_main_analysis.R",
+      "verdict": "CLEAN"
+    },
+    {
       "file": "04c_placebo_shocks.R",
       "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "08_revision_figures.R",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "08_tables.R",
       "verdict": "CLEAN"
     },
     {
@@ -63,7 +103,7 @@
     "one_liner": "Minor issues only",
     "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/scans/apep_0185_v11_scan.json"
+    "full_report_url": "/scans/apep_0185_v15_scan.json"
   },
   "error": null
 }

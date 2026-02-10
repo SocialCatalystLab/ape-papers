@@ -1,82 +1,15 @@
 {
-  "paper_id": "apep_0181",
-  "scan_date": "2026-02-06T12:59:08.838335+00:00",
+  "paper_id": "apep_0076_v2",
+  "scan_date": "2026-02-10T13:14:29.468864+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 8,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "00_download_data.R",
-      "lines": [
-        120,
-        170
-      ],
-      "evidence": "The state EITC adoption/refundability and especially the historical generosity series are manually encoded in the script via tribble() rather than being downloaded from a canonical source (Tax Policy Center/NCSL/state agencies). The manuscript states the database is compiled/validated across sources, which can be legitimate, but the codebase lacks a reproducible fetch/scrape step and lacks source-by-cell documentation (e.g., which URL/table supports each state-year rate segment). This is a key input to the main treatment variable (eitc_generosity), so provenance is not fully auditable from code alone.: eitc_policy <- tribble(\n  ~state_abbr, ~state_name, ~eitc_adopted, ~refundable,\n  ...\n)\n\neitc_rates_historical <- tribble(\n  ~state_abbr, ~year_start, ~year_end, ~eitc_pct,\n  ...\n)",
-      "confidence": 0.85
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        230,
-        310
-      ],
-      "evidence": "The incarceration control series is hard-coded (manually typed values) and then used as a control. This is not a regression result, but it is a key covariate series. Because it is hand-entered, it is vulnerable to transcription error and is not reproducibly sourced (no automated download, no checksum, no citation to a specific BJS table/version). The script itself notes it is a simplified proxy, which reduces severity, but it still weakens auditability.: national_incarceration <- tribble(\n  ~year, ~national_incarceration_rate,\n  1987, 228,\n  1988, 244,\n  ...\n  2019, 419\n)\n\nwrite_csv(national_incarceration, file.path(DATA_DIR, \"national_incarceration.csv\"))",
-      "confidence": 0.78
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        140,
-        225
-      ],
-      "evidence": "The manuscript describes robustness checks with time-varying state controls (e.g., unemployment, incarceration rates). In code, state unemployment is only fetched if the user has a FRED API key; otherwise it is silently omitted (unemployment_data <- NULL). Also, incarceration is not state-specific; it is a national series proxy. If the paper presents results as including these controls generally (rather than \u201cwhen available\u201d / \u201cnational proxy\u201d), there is a risk that published \u201ccontrolled\u201d specifications are not reproducible across environments and are not implementing the same control strategy claimed (state-level vs national).: fred_key <- Sys.getenv(\"FRED_API_KEY\")\n\nif (nchar(fred_key) > 0) {\n  fredr_set_key(fred_key)\n  ...\n  unemployment_data <- bind_rows(ur_list)\n  write_csv(unemployment_data, file.path(DATA_DIR, \"state_unemployment.csv\"))\n} else {\n  cat(\"  FRED API key not set. Using fallback controls.\\n\")\n  unemployment_data <- NULL\n}\n...\n# Using national trends as proxy for now\nnational_incarceration <- tribble(\n  ~year, ~national_incarceration_rate,\n  ...\n)",
-      "confidence": 0.82
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        360,
-        390
-      ],
-      "evidence": "Outcomes are log-transformed with a +1 offset (log(rate + 1)). This is common when zeros are possible, but at state-year aggregation crime rates are rarely zero; adding 1 changes the estimand slightly and can matter for very small rates (e.g., murder). This is not inherently problematic, but should be consistently stated in the manuscript (log(1+rate) vs log(rate)) because interpretation differs, especially for low-rate outcomes/placebos.: analysis_data <- analysis_data %>%\n  mutate(\n    log_property_rate = log(property_rate + 1),\n    log_burglary_rate = log(burglary_rate + 1),\n    ...\n  )",
-      "confidence": 0.6
-    },
-    {
-      "category": "STATISTICAL_IMPOSSIBILITY",
-      "severity": "MEDIUM",
-      "file": "03_main_analysis.R",
-      "lines": [
-        240,
-        270
-      ],
-      "evidence": "If the Sun\u2013Abraham ATT standard error is NA, the code replaces it with 0 in the printed summary string. An SE of exactly 0 is statistically implausible and can propagate into downstream tables/figures if reused (even if currently only displayed). At minimum, this can create misleading output and should be replaced with an explicit missing marker (NA/blank) or an error that forces investigation of why the SE is NA.: results_summary <- tibble(\n  Estimator = c(\"TWFE (Binary)\", \"TWFE (Continuous, per 10pp)\",\n                \"Sun-Abraham ATT\", \"Callaway-Sant'Anna ATT\"),\n  Property_Crime = c(\n    ...,\n    sprintf(\"%.3f (%.3f)\", agg_att_coef[\"ATT\"], ifelse(is.na(agg_att_se[\"ATT\"]), 0, agg_att_se[\"ATT\"])),\n    ...\n  )\n)",
-      "confidence": 0.84
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        160,
-        220
-      ],
-      "evidence": "The minimum wage control is constructed from a simplified, partial hand-coded panel with many states missing and placeholders like NA for periods where the state is known to differ from federal (e.g., WA 2001\u20132019). The resulting min_wage uses pmax(federal_mw, state_mw, na.rm=TRUE), which will default to federal minimum wage whenever state_mw is NA\u2014systematically understating minimum wage in many states/years. If \u201cminimum wage controls\u201d are reported as a robustness check, this implementation may not match that claim and can bias the control variable and potentially the treatment coefficient if correlated with adoption.: # State minimum wage above federal (simplified - key states with higher MW)\n# Source: DOL historical tables\n# Note: This is a simplified version - comprehensive data would require DOL API\nstate_mw_premium <- tribble(\n  ~state_abbr, ~year_start, ~year_end, ~state_mw,\n  ...\n  \"WA\", 2001, 2019, NA  # Indexed to inflation, generally higher\n)",
-      "confidence": 0.8
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "00_download_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "01_fetch_data.R",
@@ -108,29 +41,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 4,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "unclear provenance",
-    "executive_summary": "In `00_download_data.R`, key inputs for the paper\u2014state EITC adoption/refundability and especially the historical \u201cgenerosity\u201d series\u2014are manually hard-coded using `tribble()` instead of being downloaded from a canonical, versioned source (e.g., Tax Policy Center or an official dataset). This breaks data provenance and reproducibility because the origin, update date, and any transcription or coding decisions for these policy series are not traceable, making it difficult to verify that the policy measures used in the analysis are accurate and complete.",
-    "top_issues": [
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "The state EITC adoption/refundability and especially the ...",
-        "file": "00_download_data.R",
-        "lines": [
-          120,
-          170
-        ],
-        "github_url": "/apep_0181/code/00_download_data.R#L120-L170"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0181_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0076_v2_scan.json"
   },
   "error": null
 }

@@ -1,111 +1,11 @@
 {
-  "paper_id": "apep_0172",
-  "scan_date": "2026-02-06T12:56:59.988185+00:00",
+  "paper_id": "apep_0054_v11",
+  "scan_date": "2026-02-10T13:13:46.571836+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 14,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        180
-      ],
-      "evidence": "The repository contains substantial code for an Auto-IRA CPS ASEC analysis that is unrelated to the manuscript (which studies salary transparency laws using QWI new-hire earnings). This is not automatically misconduct, but it is an integrity/reproducibility risk because it becomes unclear which scripts are in-scope for the paper and which outputs are produced by which pipeline. In an audit, this raises the possibility of accidental cross-contamination of outputs (tables/figures/results) or cherry-picking across projects unless the repo is clearly partitioned (e.g., separate folders, separate Makefile targets, separate data/figures/tables directories).: # 01_fetch_data.R\n# Fetch CPS ASEC data from IPUMS for Auto-IRA analysis\n...\n# State Auto-IRA Mandate Treatment Data\n...\nextract_def <- define_extract_micro(\n  collection = \"cps\",\n  description = \"CPS ASEC 2010-2024 for Auto-IRA analysis\",\n  samples = paste0(\"cps\", 2010:2024, \"_03s\"),\n  variables = c(..., \"PENSION\", ...)\n)\n...\nsubmitted <- submit_extract(extract_def)\nwait_for_extract(submitted, verbose = TRUE)\ndownload_extract(submitted, download_dir = data_dir)",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03b_ddd_analysis.R",
-      "lines": [
-        1,
-        120
-      ],
-      "evidence": "This is a second, separate estimation pipeline (Auto-IRA DDD using CPS ASEC). It does not match the manuscript\u2019s stated empirical strategy (staggered adoption of salary transparency laws across states using QWI county-quarter-sex data). Having a second unrelated causal design in the same output directories (data/, figures/, tables/) can compromise traceability of manuscript artifacts unless the project is cleanly separated.: # 03b_ddd_analysis.R\n# Triple-Difference (DDD) Design: Exploiting Firm-Size Phase-In\n...\n# Auto-IRA mandates phase in by firm size...\n...\ndf <- readRDS(file.path(data_dir, \"cps_asec_clean.rds\"))\n...\nddd_full <- feols(\n  pension_rate ~ treat_post_small |\n    state_firmsize + year_firmsize,\n  data = df_cells,\n  weights = ~sum_weight,\n  cluster = ~statefip\n)",
-      "confidence": 0.85
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "04b_randomization_inference.R",
-      "lines": [
-        55,
-        150
-      ],
-      "evidence": "Randomization inference uses simulated/permuted treatment assignment. This is an acceptable and standard inference procedure when explicitly framed as such, but it is unrelated to the salary-transparency manuscript\u2019s main pipeline and therefore contributes to the broader repository-scope mismatch risk (i.e., simulated/permuted results exist in the same repo).: set.seed(42)\nn_perms <- 2000\n...\nperm_treated_states <- sample(all_states, n_treated)\nperm_treat_years <- sample(treatment_years, n_treated, replace = TRUE)\n...\nperm_model <- feols(\n  pension_rate ~ perm_post | state_id + year,\n  data = df_perm,\n  warn = FALSE\n)\nperm_atts[i] <- coef(perm_model)[\"perm_post\"]",
-      "confidence": 0.75
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        45,
-        75
-      ],
-      "evidence": "A random seed is set before bootstrap-based inference in did::att_gt(). This is standard/reproducible practice (not fabrication). Included here only because it matches the audit\u2019s \u201cseed + randomness\u201d heuristic; the randomness is clearly tied to bootstrap inference, not data creation.: set.seed(20240203)\n...\ncs_result <- att_gt(\n  ...,\n  bstrap = TRUE,\n  cband = TRUE,\n  biters = 1000,\n  clustervars = \"state_fips\",\n  ...\n)",
-      "confidence": 0.7
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "paper.tex",
-      "lines": [
-        20,
-        80
-      ],
-      "evidence": "Key headline numerical results are hard-coded into the manuscript text. This is common in LaTeX papers, but from an integrity standpoint it weakens the reproducibility link unless the paper is auto-generated from model objects (e.g., using texreg/modelsummary/knitr inline values) or there is a documented table/figure generation pipeline that guarantees these exact numbers. Given that 06_tables.R generates LaTeX tables, it is notable that the narrative numbers appear manually typed rather than dynamically injected. This is not proof of tampering, but it is a medium-risk integrity point because manual transcription is error-prone and can facilitate selective updating.: The commitment mechanism implies wage declines; I find near-zero effects (+1.0\\%, SE=1.4\\%, MDE=3.9\\%).\n...\nThe statewide Callaway-Sant'Anna estimate yields +1.0\\% (SE=1.4\\%).\n...\nThe two-way fixed effects (TWFE) specification produces ... +2.7\\% (SE=1.6\\%).\n...\nThe border county-pair design shows ... +11.5\\% (SE=2.0\\%) ...\n...\nThe treatment-induced change ... only +3.3\\%",
-      "confidence": 0.65
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        95,
-        125
-      ],
-      "evidence": "The codebase references an external script (00_policy_data.R) as the authoritative provenance source for treatment timing, but that script is not included in the provided files. In practice, treatment timing is hard-coded in multiple scripts (e.g., 01_fetch_qwi_fast.R, 01b_fetch_qwi_industry.R) without the \u201cofficial citations\u201d promised by 00_packages.R. This is not necessarily wrong (timing can be hard-coded), but the absence of the promised provenance script and duplication across scripts raises traceability concerns about how treatment dates were verified and kept consistent across analyses.: # IMPORTANT: Treatment timing with official citations is now in 00_policy_data.R\n# Run that script first to create data/transparency_laws.rds with proper provenance.\n...\nif (file.exists(\"data/transparency_laws.rds\")) {\n  transparency_laws <- readRDS(\"data/transparency_laws.rds\")\n  ...\n} else {\n  cat(\"WARNING: data/transparency_laws.rds not found.\\n\")\n  cat(\"Run 00_policy_data.R first to create treatment timing data.\\n\")\n}",
-      "confidence": 0.8
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "06_tables.R",
-      "lines": [
-        25,
-        55
-      ],
-      "evidence": "The Table 1 footnote claims the sample period is 1995\u20132023, but the manuscript and data-fetch scripts specify 2015\u20132023. This looks like a copy/paste/documentation error, not a data manipulation, but it is a credibility issue because it creates ambiguity about what sample was actually used when generating the published tables.: add_footnote(\"Note: Sample includes all county-quarter-sex observations from 1995-2023.\nNew hire earnings and all earnings in dollars. Employment and hires are quarterly counts.\nTreated states: CA, CO, CT, NV, RI, WA.\",\n               notation = \"none\")",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        60,
-        120
-      ],
-      "evidence": "The manuscript\u2019s Table \\ref{tab:main} distinguishes a \u2018Border (Na\u00efve)\u2019 level gap (~0.115) from a \u2018Border (DiD)\u2019 change (~0.033). However, 06_tables.R reports only a single \u2018Border County-Pairs\u2019 coefficient, pulling coef(border_did)[\"postTRUE\"], which corresponds to the DiD-style \u2018change\u2019 specification in 04_robustness.R (pair\u00d7quarter FE with post defined only on treated side). If the paper table includes both border numbers, at least one of them is not being generated by this script. Additionally, N is set to nrow(qwi) for both C-S and TWFE even though those models are estimated on the collapsed county-quarter panel (qwi_panel) in 03_main_analysis.R. This mismatch can lead to incorrect reported sample sizes and undermines table traceability.: main_results <- tibble(\n  Specification = c(\n    \"Callaway-Sant'Anna\",\n    \"TWFE (fixest)\",\n    \"Border County-Pairs\"\n  ),\n  ATT = c(\n    att_overall$overall.att,\n    coef(twfe_result)[\"postTRUE\"],\n    coef(border_did)[\"postTRUE\"]\n  ),\n  SE = c(\n    att_overall$overall.se,\n    se(twfe_result)[\"postTRUE\"],\n    se(border_did)[\"postTRUE\"]\n  ),\n  ...\n  N = c(\n    nrow(qwi),\n    nrow(qwi),\n    nrow(readRDS(\"data/qwi_border.rds\"))\n  )\n)",
-      "confidence": 0.8
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        150,
-        230
-      ],
-      "evidence": "A potentially more favorable specification (excluding CA/WA) is run and then included in the robustness table, which is good. The selective-reporting risk is low here because the script explicitly stores and prints the full robustness table including placebo and border results. Flagged only because exclusion of major treated states is a degree of researcher discretion and should be clearly justified (the manuscript does discuss concurrent policies).: qwi_no_cawa_panel <- qwi %>%\n  filter(!state_fips %in% c(\"06\", \"53\")) %>%\n  ...\n\ntwfe_no_cawa <- feols(\n  log_earn_hire ~ post | county_fips + qtr_num,\n  data = qwi_no_cawa_panel,\n  cluster = \"state_fips\"\n)\n...\nrobustness_table <- tibble(\n  Specification = c(\n    \"Main (C-S)\",\n    \"Border county-pairs\",\n    \"TWFE (all controls)\",\n    \"Exclude CA/WA (TWFE)\",\n    \"Placebo (2 years early)\"\n  ),\n  ATT = c(..., coef(twfe_no_cawa)[\"postTRUE\"], ...)\n)",
-      "confidence": 0.65
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_qwi_industry.R",
@@ -113,7 +13,7 @@
     },
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -149,7 +49,7 @@
     },
     {
       "file": "03b_ddd_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -165,40 +65,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 3,
-      "LOW": 4
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The codebase includes substantial, self-contained analysis pipelines for an Auto-IRA policy study using CPS ASEC data (e.g., `01_fetch_data.R` and a DDD estimation in `03b_ddd_analysis.R`), which are unrelated to the manuscript\u2019s focus on salary transparency laws and QWI new-hire earnings. This mismatch suggests the repository does not implement the paper\u2019s stated empirical strategy (staggered adoption of salary transparency laws across states) and instead contains a different project\u2019s data preparation and causal estimation workflow.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The repository contains substantial code for an Auto-IRA ...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          1,
-          180
-        ],
-        "github_url": "/apep_0172/code/01_fetch_data.R#L1-L180"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "This is a second, separate estimation pipeline (Auto-IRA ...",
-        "file": "03b_ddd_analysis.R",
-        "lines": [
-          1,
-          120
-        ],
-        "github_url": "/apep_0172/code/03b_ddd_analysis.R#L1-L120"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0172_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0054_v11_scan.json"
   },
   "error": null
 }

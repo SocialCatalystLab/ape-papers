@@ -1,98 +1,11 @@
 {
-  "paper_id": "apep_0133",
-  "scan_date": "2026-02-06T12:49:07.544869+00:00",
+  "paper_id": "apep_0088_v6",
+  "scan_date": "2026-02-10T13:14:41.142527+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 14,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "11_didisc_analysis.R",
-      "lines": [
-        169,
-        170,
-        173
-      ],
-      "evidence": "The manuscript describes a dynamic treatment indicator D_ct that switches on only once each canton\u2019s energy law is in force (staggered timing: GR 2011, BE 2012, AG 2013, BL 2016-07, BS 2017-01; with special handling of BS). The DiDisc code instead sets post purely by whether the referendum is labeled 'post' (2016/2017) and treated_post = treated & post, ignoring canton-specific in-force dates entirely. This can materially change the estimand and bias DiDisc results relative to what the paper claims.: panel_df <- panel_df %>%\n  mutate(\n    # For simplicity, use 2010 as the first treatment year (GR adopted)\n    # More sophisticated: use canton-specific adoption years\n    post = period == \"post\",\n    treated_post = treated & post,\n    year = year(votedate)\n  )",
-      "confidence": 0.9
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "MEDIUM",
-      "file": "11_didisc_analysis.R",
-      "lines": [
-        70,
-        79,
-        89,
-        94
-      ],
-      "evidence": "When multiple referendums match the provided text pattern within a month, the script silently selects the first match (votes$id[1]). This introduces researcher discretion/cherry-picking risk, especially for pre/post panels and placebo-style checks. The manuscript lists specific referendums/years; the code should select by exact referendum id/date rather than 'first match'.: if (!is.null(name_pattern)) {\n  votes <- votes %>%\n    filter(str_detect(tolower(name), name_pattern))\n}\n\n# Take first matching vote if multiple\nfirst_vote_id <- votes$id[1]\nvotes <- votes %>% filter(id == first_vote_id)",
-      "confidence": 0.85
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "10_placebo_corrected.R",
-      "lines": [
-        63,
-        66,
-        71,
-        75,
-        82,
-        88
-      ],
-      "evidence": "The placebo script assumes municipality-level outcomes for specific placebo vote_type labels (e.g., 'immigration_2016', 'usr_iii_2017'), but 01_fetch_data.R only constructs vote_type values 'energy_2017', 'nuclear_2016', and 'green_2016' for the panel (plus it stores raw 2000\u20132009 votes separately). Unless other unshown code creates those placebo vote_type labels, this placebo module will typically find nothing and then switch to an ad-hoc fallback ('any non-energy') or even fall back to energy_2017 as a 'demonstration'. That means placebo analyses described in the manuscript could be non-reproducible or not actually executed as intended.: placebo_votes <- c(\"immigration_2016\", \"durchsetzung_2016\",\n                   \"corporate_tax_2017\", \"usr_iii_2017\")\n\n# Filter voting data for placebo votes\nplacebo_data <- voting_data %>%\n  filter(vote_type %in% placebo_votes)\n\nif (nrow(placebo_data) == 0) {\n  cat(\"No placebo referendums found in data. Trying alternative approach...\\n\")\n  # Try to use any non-energy referendums\n  non_energy <- voting_data %>%\n    filter(!grepl(\"energy\", vote_type, ignore.case = TRUE))\n\n  if (nrow(non_energy) > 0) {\n    placebo_data <- non_energy\n    placebo_votes <- unique(non_energy$vote_type)\n    cat(paste(\"Found\", length(placebo_votes), \"non-energy referendums\\n\"))\n  }\n}",
-      "confidence": 0.8
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "MEDIUM",
-      "file": "04_robustness.R",
-      "lines": [
-        47,
-        50,
-        55,
-        59
-      ],
-      "evidence": "Placebo RDDs are restricted to the first 5 unique placebo referendums found, without a principled ordering rule (e.g., pre-registered list, random selection, or choosing all). Depending on the default ordering of 'unique()', different placebos could be run/reported across machines/sessions. This creates avoidable selective reporting risk.: unique_votes <- unique(placebo_energy[, c(\"id\", \"name\", \"votedate\")])\n\nfor (i in 1:min(nrow(unique_votes), 5)) {  # Limit to 5 placebos\n  vote_id <- unique_votes$id[i]\n  vote_name <- unique_votes$name[i]\n  vote_date <- unique_votes$votedate[i]",
-      "confidence": 0.75
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        82,
-        83
-      ],
-      "evidence": "The placebo RDD sample is additionally truncated to |distance| < 30 km. This may be a reasonable bandwidth cap, but it is not clearly tied to the manuscript\u2019s 'MSE-optimal bandwidth' approach and could affect placebo inference. Documenting and harmonizing this cap with the main RDD bandwidth logic would reduce concerns.: vote_analysis <- vote_data %>%\n  left_join(\n    analysis_df %>% select(mun_id, signed_distance_km),\n    by = \"mun_id\"\n  ) %>%\n  filter(!is.na(signed_distance_km)) %>%\n  filter(abs(signed_distance_km) < 30)",
-      "confidence": 0.65
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "04_robustness.R",
-      "lines": [
-        223,
-        224,
-        225
-      ],
-      "evidence": "This robustness model uses an interaction with 'treat', but elsewhere treatment is stored as 'treated'. If 'treat' is not defined in near_border_df, this block will error or (worse) use an unintended variable if one exists. Since the manuscript discusses border-pair/border effects, a broken or inconsistent robustness implementation is an integrity risk unless clarified/fixed.: fe_model <- feols(\n  yes_share ~ signed_distance_km * treat | border_region,\n  data = near_border_df,\n  vcov = \"hetero\"\n)",
-      "confidence": 0.7
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "00_packages.R",
-      "lines": [
-        35
-      ],
-      "evidence": "A global RNG seed is set. This is not fabrication, but it affects any stochastic procedures (permutations, bootstraps) in ways that should be disclosed (e.g., number of permutations/replications and seed) to ensure exact reproducibility. The manuscript reports permutation and wild bootstrap p-values; seed-setting is consistent with reproducibility, not fabrication.: set.seed(20260127)",
-      "confidence": 0.55
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -120,7 +33,7 @@
     },
     {
       "file": "11_didisc_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "07_expanded_analysis.R",
@@ -152,29 +65,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 4,
-      "LOW": 2
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "In `11_didisc_analysis.R`, the treatment variable implementation does not match the paper\u2019s described dynamic indicator \\(D_{ct}\\) that switches on permanently only after each canton\u2019s energy law takes effect with staggered adoption (GR 2011, BE 2012, AG 2013, BL 2016-07, BS 2017-01). Instead of coding a once-switched-on, canton-specific post-law indicator aligned to those effective dates, the script applies a different timing/definition that can misclassify treated periods and undermine the intended difference-in-differences identification. This methodology mismatch makes the reported estimates difficult to interpret as effects of the stated policy rollout.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript describes a dynamic treatment indicator D_...",
-        "file": "11_didisc_analysis.R",
-        "lines": [
-          169,
-          170
-        ],
-        "github_url": "/apep_0133/code/11_didisc_analysis.R#L169-L173"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0133_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0088_v6_scan.json"
   },
   "error": null
 }

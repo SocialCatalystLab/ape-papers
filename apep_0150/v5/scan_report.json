@@ -1,34 +1,11 @@
 {
-  "paper_id": "apep_0166",
-  "scan_date": "2026-02-06T12:56:02.979239+00:00",
+  "paper_id": "apep_0150_v5",
+  "scan_date": "2026-02-10T13:11:56.028454+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
   "files_scanned": 10,
-  "flags": [
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        263,
-        266
-      ],
-      "evidence": "If Census API calls fail for 2020, the code silently substitutes 2021 state populations as 2020 denominators when computing 2020 crude mortality rates. This can bias 2020 rates (especially for fast-growing/declining states) and can differentially affect treated vs control if adoption correlates with population growth patterns. The manuscript emphasizes COVID-era volatility and robustness, but this denominator substitution is not described as a sensitivity check and may affect 2020 (the first treatment year) most.: if (is.null(pop_data[[\"2020\"]]) && !is.null(pop_data[[\"2021\"]])) {\n  cat(\"  Using 2021 population as proxy for 2020\\n\")\n  pop_data[[\"2020\"]] <- pop_data[[\"2021\"]] %>% mutate(year = 2020L)\n}",
-      "confidence": 0.78
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        35,
-        78
-      ],
-      "evidence": "The core treatment timing/cap amount policy database is manually hard-coded in the script rather than being programmatically scraped or imported from a versioned external source. While this is not inherently invalid (and the manuscript documents the underlying sources conceptually), it reduces auditability and increases risk of transcription error without a machine-verifiable provenance trail (e.g., raw source file, citations per row, or checks against NCSL/ADA tracker downloads).: policy_db <- tribble(\n  ~state_abbr, ~state_name,          ~state_fips, ~effective_date, ~cap_amount,\n  \"CO\",        \"Colorado\",           \"08\",        \"2020-01-01\",    100,\n  ...\n  \"LA\",        \"Louisiana\",          \"22\",        \"2024-01-01\",    100\n)\n...\nwrite_csv(policy_db, \"data/policy_database.csv\")",
-      "confidence": 0.7
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_wonder_data.R",
@@ -76,13 +53,13 @@
     "counts": {
       "CRITICAL": 0,
       "HIGH": 0,
-      "MEDIUM": 1,
-      "LOW": 1
+      "MEDIUM": 0,
+      "LOW": 0
     },
     "one_liner": "Minor issues only",
-    "executive_summary": "Minor code quality issues detected, but no evidence of data fabrication or manipulation.",
+    "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0166_scan.json"
+    "full_report_url": "/scans/apep_0150_v5_scan.json"
   },
   "error": null
 }

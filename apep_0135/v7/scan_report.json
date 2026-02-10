@@ -1,122 +1,15 @@
 {
-  "paper_id": "apep_0151",
-  "scan_date": "2026-02-06T12:52:53.912504+00:00",
+  "paper_id": "apep_0135_v7",
+  "scan_date": "2026-02-10T13:15:21.544347+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "00_fetch_data.R",
-      "lines": [
-        78,
-        108,
-        132,
-        156
-      ],
-      "evidence": "The fetch script requires a proprietary local file (modal_age.dta) and stops if it is absent, meaning the core explanatory data are not programmatically retrievable. This is acknowledged as author-provided, but it still breaks end-to-end reproducibility from sources. Moreover, the cleaning script actually expects a different file (modal_age.csv) from a Dropbox link, so the fetch instructions do not match the actual pipeline.: modal_age_path <- file.path(data_dir, \"modal_age.dta\")\n...\nif (file.exists(modal_age_path)) {\n  ...\n} else {\n  ...\n  stop(\"Cannot proceed without modal_age.dta. See instructions above.\")\n}",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "01_clean_data.R",
-      "lines": [
-        43,
-        49
-      ],
-      "evidence": "Core technology data are loaded from a local CSV that is not downloaded anywhere in the provided fetch script (which expects modal_age.dta instead). Provenance is described in comments/manuscript (Dropbox link from Prof. Hassan), but the replication codebase lacks a consistent automated retrieval step and relies on a manually placed file.: tech_raw <- read_csv(\"../data/modal_age.csv\", show_col_types = FALSE)",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_fetch_data.R",
-      "lines": [
-        170,
-        200,
-        214
-      ],
-      "evidence": "Two alternative crosswalk sources/formats are supported in the fetch script (NBER CSV vs Census XLS), but the cleaning script hard-codes reading cbsa_county_crosswalk.csv and then assumes Census-style column names (fipsstatecode, fipscountycode, cbsacode, etc.). If the NBER CSV is what gets downloaded, the expected columns likely will not exist, causing silent failure or incorrect merges depending on how errors are handled downstream.: nber_url <- \"https://data.nber.org/cbsa-csa-fips-county-crosswalk/cbsa2fipsxw.csv\"\n...\nelse if (file.exists(crosswalk_xls_path)) {\n  cat(\"[PRESENT] cbsa_county_crosswalk.xls found, will use existing file\\n\")\n  cat(\"[NOTE] The XLS version from Census will be used by 01_clean_data.R\\n\")\n}",
-      "confidence": 0.75
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        120,
-        122
-      ],
-      "evidence": "The manuscript claims proportional allocation for counties belonging to multiple CBSAs. In the code, CBSA-level vote shares are formed by a simple inner_join of county returns to the crosswalk and then sum() by CBSA-year; there is no population-weight allocation and no handling of multi-assignment beyond whatever is inherent in the crosswalk rows. If a county appears in multiple CBSAs in the crosswalk, its votes will be double-counted rather than proportionally allocated unless the crosswalk itself already encodes weights (none are used). This is a material discrepancy affecting outcome construction.: Some counties belong to multiple CBSAs (typically when a CBSA spans state boundaries); in these cases, we allocate votes proportionally based on population weights.",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_clean_data.R",
-      "lines": [
-        208,
-        216,
-        224
-      ],
-      "evidence": "CBSA aggregation is implemented as an unweighted sum after joining counties to CBSAs. This does not implement the manuscript-described proportional allocation for counties mapping to multiple CBSAs, nor does it apply any population weights for allocation. If the crosswalk includes multiple mappings, the code will mechanically duplicate county totals across CBSAs.: elec_cbsa <- elections %>%\n  inner_join(crosswalk, by = \"county_fips\") %>%\n  group_by(cbsa, cbsa_name, cbsa_type, year) %>%\n  summarize(\n    votes_rep = sum(votes_rep, na.rm = TRUE),\n    votes_dem = sum(votes_dem, na.rm = TRUE),\n    total_votes = sum(total_votes, na.rm = TRUE),\n    n_counties = n(),\n    .groups = \"drop\"\n  )",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_fetch_data.R",
-      "lines": [
-        286,
-        320,
-        352
-      ],
-      "evidence": "2024 election data are not fetched or reproducibly generated; the script only prints instructions. This is partially justified by the manuscript (compiled from certified state results), but from an audit perspective the 2024 outcome data provenance is not fully pinned down in code (no hash, no exact source commit, no transformation script).: if (file.exists(elec_2024_path)) {\n  ...\n} else {\n  cat(\"[MISSING] election_2024.csv not found\\n\")\n  ...\n  cat(\"1. Visit: https://github.com/tonmcg/US_County_Level_Election_Results_08-24\\n\")\n  ...\n}",
-      "confidence": 0.8
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "01_clean_data.R",
-      "lines": [
-        131,
-        139,
-        147
-      ],
-      "evidence": "The 2016 data are keyed on a column named combined_fips, unlike other years which use county_fips. If election_2016.csv does not contain combined_fips (e.g., if produced by 00_fetch_data.R from MIT data, which writes county_fips), county_fips becomes NA and rows may be dropped later during joins/filters. The subsequent distinct() can also drop legitimate duplicates without documenting why duplicates exist, potentially altering aggregation in a non-transparent way.: elec_2016 <- read_csv(\"../data/election_2016.csv\",\n                      show_col_types = FALSE) %>%\n  transmute(\n    county_fips = as.numeric(combined_fips),\n    year = 2016,\n    votes_rep = votes_gop,\n    votes_dem = votes_dem,\n    total_votes = total_votes,\n    rep_share = votes_rep / total_votes,\n    dem_share = votes_dem / total_votes\n  ) %>%\n  distinct(county_fips, .keep_all = TRUE)",
-      "confidence": 0.75
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "01_clean_data.R",
-      "lines": [
-        278,
-        286
-      ],
-      "evidence": "Comment claims terciles are computed \"within year\", but ntile() is applied without grouping by year. This instead creates terciles pooled across all years, which can change interpretation and comparability across years if the technology distribution shifts over time. This is likely a bug/misalignment rather than intentional bias, but it affects the stated construction.: # Technology terciles (within year)\ntech_tercile = ntile(modal_age_mean, 3)",
-      "confidence": 0.8
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "paper.tex",
-      "lines": [
-        250,
-        270,
-        310
-      ],
-      "evidence": "The manuscript contains fully populated numeric tables/statements (coefficients/SEs/correlations) embedded directly in LaTeX. The repository also contains table-generation scripts, which suggests these may be generated, but the provided paper.tex as shown is not clearly wired to \\input{...} the generated tables. This is low-severity because many projects paste generated tables into the manuscript, but from an integrity-audit standpoint it is not verifiable from paper.tex alone that the displayed numbers are programmatically produced in the build.: Modal Technology Age & 0.134*** & 0.117*** & 0.075*** & 0.075*** & 0.033*** \\\\\n& (0.017) & (0.018) & (0.016) & (0.016) & (0.006) \\\\\n... \nThe raw correlation between modal technology age and Republican vote share is 0.16 (p $<$ 0.001)",
-      "confidence": 0.6
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "00_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "00_packages.R",
@@ -128,7 +21,7 @@
     },
     {
       "file": "01_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04_alternative_explanations.R",
@@ -149,58 +42,20 @@
     {
       "file": "04_figures.R",
       "verdict": "CLEAN"
-    },
-    {
-      "file": "paper.tex",
-      "verdict": "SUSPICIOUS"
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 4,
-      "MEDIUM": 3,
-      "LOW": 2
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "unclear provenance; method mismatch",
-    "executive_summary": "The replication workflow depends on proprietary/local inputs that are not programmatically retrieved: `00_fetch_data.R` halts unless a local `modal_age.dta` file is present, and `01_clean_data.R` instead loads core technology data from a separate local CSV that is never downloaded, leaving key explanatory variables without reproducible provenance. The manuscript\u2019s stated method for handling counties that belong to multiple CBSAs (proportional allocation) is not implemented; the code joins counties to the CBSA crosswalk and aggregates with unweighted sums, which can misallocate votes and distort CBSA-level vote shares.",
-    "top_issues": [
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "The fetch script requires a proprietary local file (modal...",
-        "file": "00_fetch_data.R",
-        "lines": [
-          78,
-          108
-        ],
-        "github_url": "/apep_0151/code/00_fetch_data.R#L78-L156"
-      },
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "Core technology data are loaded from a local CSV that is ...",
-        "file": "01_clean_data.R",
-        "lines": [
-          43,
-          49
-        ],
-        "github_url": "/apep_0151/code/01_clean_data.R#L43-L49"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript claims proportional allocation for countie...",
-        "file": "paper.tex",
-        "lines": [
-          120,
-          122
-        ],
-        "github_url": "/apep_0151/code/paper.tex#L120-L122"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0151_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0135_v7_scan.json"
   },
   "error": null
 }

@@ -1,68 +1,11 @@
 {
-  "paper_id": "apep_0140",
-  "scan_date": "2026-02-06T12:50:28.759358+00:00",
+  "paper_id": "apep_0135_v4",
+  "scan_date": "2026-02-10T13:15:11.800214+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 8,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "01_clean_data.R",
-      "lines": [
-        30,
-        72,
-        98,
-        113,
-        128,
-        143
-      ],
-      "evidence": "Core inputs are read from local ../data files (modal_age.dta and multiple election_*.csv plus the CBSA crosswalk), but the repository snapshot provided does not include a dedicated fetch/download script that programmatically retrieves these raw files from the cited sources (Dropbox, Dataverse, DOI replication package, NBER crosswalk). The manuscript describes sources, but reproducibility/integrity auditing generally requires a provenance script (URLs + checksums + exact versions/commit hashes) to verify the raw inputs were not modified.: tech_raw <- read_dta(\"../data/modal_age.dta\")\n...\ncrosswalk <- read_csv(\"../data/cbsa_county_crosswalk.csv\",\n                      show_col_types = FALSE)\n...\nelec_2008 <- read_csv(\"../data/election_2008.csv\",\n                      show_col_types = FALSE)\n...\nelec_2012 <- read_csv(\"../data/election_2012.csv\",\n                      show_col_types = FALSE)\n...\nelec_2016 <- read_csv(\"../data/election_2016.csv\",\n                      show_col_types = FALSE)\n...\nelec_2020 <- read_csv(\"../data/election_2020.csv\",\n                      show_col_types = FALSE)\n...\nelec_2024 <- read_csv(\"../data/election_2024.csv\",\n                      show_col_types = FALSE)",
-      "confidence": 0.78
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "01b_fetch_alternative_controls.R",
-      "lines": [
-        52,
-        58,
-        176,
-        184,
-        195
-      ],
-      "evidence": "The \u201cmoral communalism\u201d construct is generated from existing outcomes/covariates using ad hoc choices (e.g., using log_total_votes as a rurality/urban index; using -n_sectors as 'traditional economy'; setting the education component to exactly 0 when ACS retrieval fails). These are not inherently invalid, but they create sensitivity risks and can unintentionally induce mechanical correlations with the dependent variable (trump_share) because log_total_votes and is_metro are also standard controls in the main regressions. The manuscript notes proxy limitations, which reduces severity, but the code would benefit from (i) explicit pre-specification of the index, (ii) robustness to alternative weights/components, and (iii) avoiding hard fallback constants (0) that change the meaning of the index across runs depending on API availability.: df <- df %>%\n  mutate(\n    urban_index = log_total_votes,\n    traditional_economy = -n_sectors  # Negative because fewer sectors = more traditional\n  )\n...\ndf <- df %>%\n  mutate(\n    rural_index_std = scale(-log_total_votes)[, 1],\n    micro_std = as.numeric(!is_metro),\n    low_edu_std = if (\"college_share\" %in% names(.) && !all(is.na(college_share))) {\n      scale(-college_share)[, 1]\n    } else {\n      0\n    }\n  )\n...\ndf <- df %>%\n  mutate(\n    moral_communalism_proxy = (rural_index_std + micro_std + low_edu_std) / 3\n  )",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "05_tables.R",
-      "lines": [
-        27,
-        55,
-        166,
-        182,
-        195
-      ],
-      "evidence": "The manuscript\u2019s headline design and many tables/figures emphasize pooled 2012\u20132024 analysis and a gains specification centered on the 2012\u21922016 Romney\u2192Trump shift. However, the table-generation script (a) hardcodes the summary-statistics table header to only 2016/2020/2024 (omitting 2012), and (b) defines the gains table around 2016 levels and 2016\u21922020 / 2020\u21922024 gains (Table 6), rather than including the key 2012\u21922016 gains emphasized in paper.tex. This looks like an inconsistency between manuscript narrative/results and the automated tables produced by code, raising a risk that tables in the PDF were manually edited or generated from different code than provided.: # By year\nsummary_by_year <- df %>%\n  group_by(year) %>%\n  summarize(\n    `Trump Vote Share (%)` = sprintf(\"%.1f (%.1f)\", mean(trump_share), sd(trump_share)),\n    `Modal Technology Age` = sprintf(\"%.1f (%.1f)\", mean(modal_age_mean), sd(modal_age_mean)),\n    `N (CBSAs)` = as.character(n_distinct(cbsa)),\n    .groups = \"drop\"\n  )\n...\ncat(\" & 2016 & 2020 & 2024 \\\\\\\\\")\n...\n# Table 6: Gains Analysis (Causal vs Sorting)\n...\ndf_controls <- df %>%\n  filter(year == 2016) %>%\n  select(cbsa, log_total_votes, is_metro)\n...\nm_level <- lm(trump_share_2016 ~ modal_age_mean_2016 + log_total_votes + is_metro, data = df_gains)",
-      "confidence": 0.74
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "05_tables.R",
-      "lines": [
-        21,
-        87,
-        123,
-        158
-      ],
-      "evidence": "The table script\u2019s 'By election year' table only runs/prints 2016/2020/2024, while the manuscript discusses 2012 explicitly (often as a null pre-Trump baseline). This could simply be a documentation/maintenance bug (since other scripts do run 2012-by-year regressions), but as written it creates a risk that the reported table set omits an important pre-period in the automated outputs.: m_2016 <- feols(trump_share ~ modal_age_mean + log_total_votes + is_metro,\n                data = filter(df, year == 2016), vcov = \"hetero\")\nm_2020 <- feols(trump_share ~ modal_age_mean + log_total_votes + is_metro,\n                data = filter(df, year == 2020), vcov = \"hetero\")\nm_2024 <- feols(trump_share ~ modal_age_mean + log_total_votes + is_metro,\n                data = filter(df, year == 2024), vcov = \"hetero\")",
-      "confidence": 0.62
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "00_packages.R",
@@ -74,7 +17,7 @@
     },
     {
       "file": "01_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04_alternative_explanations.R",
@@ -98,29 +41,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 2,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "unclear provenance",
-    "executive_summary": "The data-cleaning pipeline depends on several core input datasets read from local `../data` paths\u2014`modal_age.dta`, multiple `election_*.csv` files, and a CBSA crosswalk\u2014but the repository snapshot does not include these files or any dedicated script to fetch/download them. As a result, the analysis is not self-contained or reproducible from the provided code, and key data provenance (where the inputs come from and how to obtain the exact versions used) is undocumented.",
-    "top_issues": [
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "Core inputs are read from local ../data files (modal_age....",
-        "file": "01_clean_data.R",
-        "lines": [
-          30,
-          72
-        ],
-        "github_url": "/apep_0140/code/01_clean_data.R#L30-L143"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0140_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0135_v4_scan.json"
   },
   "error": null
 }

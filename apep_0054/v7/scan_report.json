@@ -1,77 +1,11 @@
 {
-  "paper_id": "apep_0165",
-  "scan_date": "2026-02-06T12:55:36.277840+00:00",
+  "paper_id": "apep_0054_v7",
+  "scan_date": "2026-02-10T13:14:10.827883+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
   "files_scanned": 7,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_qwi_fast.R",
-      "lines": [
-        114,
-        115,
-        116,
-        117,
-        118,
-        119,
-        120,
-        121,
-        122,
-        123,
-        124
-      ],
-      "evidence": "Treatment timing (the key causal assignment) is hard-coded directly inside the data-fetch script and then saved as the provenance file (data/transparency_laws.rds). The packages script (00_packages.R) claims provenance comes from running 00_policy_data.R, but that script is not present and the actual workflow shown here overwrites/creates the timing file from literals. This is not necessarily wrong, but it weakens provenance and auditability because treatment dates are not programmatically linked to the legislative sources listed in paper.tex.: treat_timing <- tribble(\n  ~state_fips, ~treat_qtr_num, ~state_abbr,\n  \"08\", 2021 * 4 + 1, \"CO\",   # 2021Q1\n  \"09\", 2021 * 4 + 4, \"CT\",   # 2021Q4\n  \"32\", 2021 * 4 + 4, \"NV\",   # 2021Q4\n  \"44\", 2023 * 4 + 1, \"RI\",   # 2023Q1\n  \"06\", 2023 * 4 + 1, \"CA\",   # 2023Q1\n  \"53\", 2023 * 4 + 1, \"WA\"    # 2023Q1\n)\n...\nsaveRDS(treat_timing, \"data/transparency_laws.rds\")",
-      "confidence": 0.78
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "06_tables.R",
-      "lines": [
-        174,
-        175,
-        176,
-        177,
-        178,
-        179,
-        180
-      ],
-      "evidence": "The treatment-timing table (and counts like 'Counties') is manually hard-coded rather than derived from the analysis dataset (qwi_analysis.rds) and the treatment timing object used in estimation. This can create inconsistencies between reported and computed sample composition if the data changes.: timing_table <- tibble(\n  State = c(\"Colorado\", \"Connecticut\", \"Nevada\", \"Rhode Island\",\n            \"California\", \"Washington\"),\n  Abbreviation = c(\"CO\", \"CT\", \"NV\", \"RI\", \"CA\", \"WA\"),\n  `Effective Date` = c(\"January 1, 2021\", \"October 1, 2021\", \"October 1, 2021\",\n                       \"January 1, 2023\", \"January 1, 2023\", \"January 1, 2023\"),\n  Cohort = c(\"2021Q1\", \"2021Q4\", \"2021Q4\", \"2023Q1\", \"2023Q1\", \"2023Q1\"),\n  `Post-Treatment Quarters` = c(12, 9, 9, 4, 4, 4),\n  Counties = c(64, 8, 17, 5, 58, 39)\n)",
-      "confidence": 0.73
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        32,
-        33,
-        34,
-        35,
-        36,
-        37
-      ],
-      "evidence": "The table footnote states the sample is '1995-2023', but the fetch script and the manuscript indicate 2015Q1\u20132023Q4. The code that actually fetches data uses `years <- 2015:2023` (01_fetch_qwi_fast.R). This is a reporting-method mismatch that affects replicability and the paper\u2019s stated sample window.: add_footnote(\"Note: Sample includes all county-quarter-sex observations from 1995-2023.\nNew hire earnings and all earnings in dollars. Employment and hires are quarterly counts.\nTreated states: CA, CO, CT, NV, RI, WA.\",\n               notation = \"none\")",
-      "confidence": 0.86
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        209,
-        210,
-        211,
-        212,
-        213
-      ],
-      "evidence": "This footnote contradicts paper.tex: the manuscript states New York\u2019s law is effective September 2023 (within the sample window) and is excluded for violating never-treated controls with 0\u20131 post quarters; Hawaii is 2024. The code text claims both NY and HI are 2024/outside sample. This is a substantive documentation inconsistency about treatment timing/exclusion logic.: add_footnote(\"Note: Effective date indicates when posting requirements took effect.\nPost-treatment quarters calculated through 2023Q4 (end of sample).\nNY and HI adopted laws effective 2024, outside our sample window.\",\n               notation = \"none\")",
-      "confidence": 0.84
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "06_tables.R",
@@ -107,13 +41,13 @@
     "counts": {
       "CRITICAL": 0,
       "HIGH": 0,
-      "MEDIUM": 3,
-      "LOW": 1
+      "MEDIUM": 0,
+      "LOW": 0
     },
     "one_liner": "Minor issues only",
-    "executive_summary": "Minor code quality issues detected, but no evidence of data fabrication or manipulation.",
+    "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0165_scan.json"
+    "full_report_url": "/scans/apep_0054_v7_scan.json"
   },
   "error": null
 }

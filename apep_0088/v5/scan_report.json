@@ -1,67 +1,11 @@
 {
-  "paper_id": "apep_0132",
-  "scan_date": "2026-02-06T12:48:49.976251+00:00",
+  "paper_id": "apep_0088_v5",
+  "scan_date": "2026-02-10T13:14:38.115419+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 13,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        103,
-        118
-      ],
-      "evidence": "If the BFS/swissdd fetch for 2000\u20132009 referendums fails, the script silently writes an empty tibble to placebo_votes_raw.rds. Downstream scripts (e.g., 04_robustness.R) will then run with zero placebo votes and may skip placebo diagnostics without hard failure. This can mask missing data provenance/availability problems and makes it easy for the pipeline to produce incomplete diagnostics while still generating outputs.: } else {\n  # Create empty placeholder to prevent downstream errors\n  placebo_votes_raw <- tibble()\n  saveRDS(placebo_votes_raw, file.path(data_dir, \"placebo_votes_raw.rds\"))\n  message(\"   Created empty placebo_votes_raw.rds (fetch failed)\")\n}",
-      "confidence": 0.82
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "11_didisc_analysis.R",
-      "lines": [
-        176,
-        193
-      ],
-      "evidence": "The manuscript describes time-varying treatment coding (treatment turns on when each canton's law is in force) and notes staggered timing issues. This DiDisc implementation does not use canton-specific adoption/entry-into-force timing; it sets post based only on whether the referendum is labeled \"post\" and multiplies by a time-invariant canton-level treated indicator. This miscodes treatment status for referendums where some 'treated' cantons were not yet treated (especially relevant for Basel-Stadt in 2016, and more generally for any timing-sensitive DiDisc interpretation). As written, the DiDisc estimates in this script are not implementing the time-varying TreatedPost described in the paper.: panel_df <- panel_df %>%\n  mutate(\n    # For simplicity, use 2010 as the first treatment year (GR adopted)\n    # More sophisticated: use canton-specific adoption years\n    post = period == \"post\",\n    treated_post = treated & post,\n    year = year(votedate)\n  )",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "07_expanded_analysis.R",
-      "lines": [
-        86,
-        168
-      ],
-      "evidence": "The manuscript emphasizes a 'corrected sample construction' where the running variable is distance to each municipality's *own* canton treated-control border (and restricting to municipalities adjacent to their own treated-control border). This script constructs distance to a union of all treated-control internal borders (via get_policy_border) and then signs it by treated status. That is not the same as 'distance to own canton border' and can reintroduce the pre-correction problem the manuscript describes (a municipality\u2019s nearest segment of the treated-control union border might not correspond to its own canton's treated-control border segment). If 07_expanded_analysis.R is used to generate any headline RDD numbers/figures, they may not match the corrected method described in the paper.: # Load voting data (using data_dir from 00_packages.R)\nvoting_data <- readRDS(file.path(data_dir, \"voting_data.rds\"))\n...\n# Compute centroids and distances\n...\n# CRITICAL FIX: Use get_policy_border() to compute ONLY internal canton borders\n...\nmutate(\n  dist_to_border = as.numeric(st_distance(centroid, border)) / 1000,  # km\n  distance_to_border = ifelse(treated, dist_to_border, -dist_to_border)\n)",
-      "confidence": 0.74
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "MEDIUM",
-      "file": "10_placebo_corrected.R",
-      "lines": [
-        52,
-        83
-      ],
-      "evidence": "The script expects placebo referendums with specific vote_type values (immigration/corporate tax/etc.), but the provided data construction in 01_fetch_data.R only fetches energy_2017 plus two energy/environment votes (nuclear_2016, green_2016). As a result, the placebo module often finds no placebo outcomes and then falls back to 'any non-energy referendums' (which may still be empty) or to using the main energy vote 'for demonstration'. This creates a risk that placebo robustness checks are not actually executed as described, while the pipeline still completes and produces saved outputs.: placebo_votes <- c(\"immigration_2016\", \"durchsetzung_2016\",\n                   \"corporate_tax_2017\", \"usr_iii_2017\")\n\n# Filter voting data for placebo votes\nplacebo_data <- voting_data %>%\n  filter(vote_type %in% placebo_votes)\n\nif (nrow(placebo_data) == 0) {\n  cat(\"No placebo referendums found in data. Trying alternative approach...\\n\")\n  # Try to use any non-energy referendums\n  non_energy <- voting_data %>%\n    filter(!grepl(\"energy\", vote_type, ignore.case = TRUE))\n\n  if (nrow(non_energy) > 0) {\n    placebo_data <- non_energy\n    placebo_votes <- unique(non_energy$vote_type)\n    cat(paste(\"Found\", length(placebo_votes), \"non-energy referendums\\n\"))\n  }\n}",
-      "confidence": 0.84
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "00b_verify_treatment.R",
-      "lines": [
-        33,
-        176
-      ],
-      "evidence": "Treatment assignment inputs (adoption/entry_force dates and URLs) are manually enumerated in a tribble rather than programmatically pulled from the cited external sources. The manuscript explicitly frames this as 'verified treatment' with sources, which reduces concern, but from an integrity standpoint this is still a manual, hard-coded treatment table that should be cross-checked against the referenced legal sources in replication.: treatment_verification <- tribble(\n  ~canton_id, ~canton_abbr, ~law_title, ~sr_number, ~adoption_date, ~entry_force_date, ~lexfind_url, ~notes,\n  ...\n)\n...\nmutate(\n  treated = !is.na(entry_force_date) & entry_force_date < \"2017-05-21\",\n  verified = !is.na(lexfind_url)\n)",
-      "confidence": 0.67
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -89,7 +33,7 @@
     },
     {
       "file": "11_didisc_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "07_expanded_analysis.R",
@@ -117,29 +61,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 3,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The DiDisc script `11_didisc_analysis.R` does not implement the manuscript\u2019s stated time\u2011varying, canton\u2011specific treatment coding where treatment turns on when each canton\u2019s law comes into force. Instead, the setup effectively treats exposure in a way that ignores or collapses staggered adoption timing, so the estimator is not aligned with the described methodology and can yield biased or uninterpretable treatment effects under staggered policy implementation.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript describes time-varying treatment coding (t...",
-        "file": "11_didisc_analysis.R",
-        "lines": [
-          176,
-          193
-        ],
-        "github_url": "/apep_0132/code/11_didisc_analysis.R#L176-L193"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0132_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0088_v5_scan.json"
   },
   "error": null
 }

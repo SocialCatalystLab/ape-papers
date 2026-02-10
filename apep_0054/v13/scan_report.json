@@ -1,67 +1,11 @@
 {
-  "paper_id": "apep_0176",
-  "scan_date": "2026-02-06T12:57:55.671541+00:00",
+  "paper_id": "apep_0054_v13",
+  "scan_date": "2026-02-10T13:13:52.642021+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
   "overall_verdict": "CLEAN",
   "files_scanned": 14,
-  "flags": [
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "04e_power_analysis.R",
-      "lines": [
-        44,
-        55
-      ],
-      "evidence": "The border (change) standard error used for MDE/power calculations can default to a hard-coded value (0.025) when intermediate files are missing or not in the expected format. This can materially change reported MDEs and related narrative claims about detectability/power. The manuscript emphasizes MDE=3.9%; if that figure depends on this fallback path, it would be non-reproducible from the estimation code alone.: if (file.exists(\"data/border_es_results.rds\")) {\n  border_es <- readRDS(\"data/border_es_results.rds\")\n  # Extract SE from the post-treatment period (event_time >= 0)\n  # The border change SE is approximated from the first post-treatment coefficient\n  post_period <- border_es %>% filter(event_time == 0)\n  if (nrow(post_period) > 0 && \"se\" %in% names(border_es)) {\n    se_border_change <- post_period$se[1]\n  } else {\n    se_border_change <- 0.025  # Fallback estimate\n  }\n} else {\n  # Fallback: estimate from border event study covariance\n  se_border_change <- 0.025  # Conservative estimate\n}",
-      "confidence": 0.78
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "00_packages.R",
-      "lines": [
-        97,
-        111
-      ],
-      "evidence": "The code expects a separate script (00_policy_data.R) to create data/transparency_laws.rds, but that script is not included among the provided files. Treatment timing is instead hard-coded inside 01_fetch_qwi_fast.R and saved to transparency_laws.rds there. This is likely benign, but the declared provenance pathway is inconsistent with the actual provided code path, which can hinder full reproduction/audit trails.: if (file.exists(\"data/transparency_laws.rds\")) {\n  transparency_laws <- readRDS(\"data/transparency_laws.rds\")\n  cat(\"Loaded transparency law data from data/transparency_laws.rds\\n\")\n  cat(\"  Treated states:\", sum(transparency_laws$first_treat > 0), \"\\n\")\n} else {\n  cat(\"WARNING: data/transparency_laws.rds not found.\\n\")\n  cat(\"Run 00_policy_data.R first to create treatment timing data.\\n\")\n}",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        120
-      ],
-      "evidence": "The repository contains substantial code for a different project (Auto-IRA CPS ASEC analysis) that is unrelated to the manuscript (salary transparency laws using Census QWI county-quarter-sex data). This is not evidence of wrongdoing, but it creates audit/reproducibility risk: readers could run the wrong pipeline or mistakenly attribute results to the wrong data source.: # Fetch CPS ASEC data from IPUMS for Auto-IRA analysis\n...\nextract_def <- define_extract_micro(\n  collection = \"cps\",\n  description = \"CPS ASEC 2010-2024 for Auto-IRA analysis\",\n  samples = paste0(\"cps\", 2010:2024, \"_03s\"),\n  variables = c(\n    ...\n    \"PENSION\",\n    ...\n  )\n)",
-      "confidence": 0.83
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "06_tables.R",
-      "lines": [
-        33,
-        45
-      ],
-      "evidence": "The table footnote hard-codes a sample window of \"1995-2023\", which conflicts with the manuscript's stated analysis window (2015Q1\u20132023Q4). This looks like a templating/copy-paste artifact rather than intentional manipulation, but it is a misleading hard-coded descriptive statement that could mask sample restrictions if not corrected.: add_footnote(\"Note: Sample includes all county-quarter-sex observations from 1995-2023.\nNew hire earnings and all earnings in dollars. Employment and hires are quarterly counts.\nTreated states: CA, CO, CT, NV, RI, WA.\",\n               notation = \"none\")",
-      "confidence": 0.75
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        171,
-        198
-      ],
-      "evidence": "The robustness suite includes an exclusion that changes the estimate toward marginal significance (excluding CA/WA). The manuscript discloses this as the only marginally significant spec, which mitigates concern. Still, the codebase does not show a systematic pre-registered specification set; readers should verify that other exclusion/alternative-control experiments were not run but omitted.: qwi_no_cawa_panel <- qwi %>%\n  filter(!state_fips %in% c(\"06\", \"53\")) %>%\n  group_by(county_fips, state_fips, qtr_num, cohort) %>%\n  summarise(\n    log_earn_hire = log(weighted.mean(EarnHirAS, Emp, na.rm = TRUE)),\n    .groups = \"drop\"\n  )\n...\ntwfe_no_cawa <- feols(\n  log_earn_hire ~ post | county_fips + qtr_num,\n  data = qwi_no_cawa_panel,\n  cluster = \"state_fips\"\n)",
-      "confidence": 0.6
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_qwi_industry.R",
@@ -125,13 +69,13 @@
     "counts": {
       "CRITICAL": 0,
       "HIGH": 0,
-      "MEDIUM": 1,
-      "LOW": 4
+      "MEDIUM": 0,
+      "LOW": 0
     },
     "one_liner": "Minor issues only",
-    "executive_summary": "Minor code quality issues detected, but no evidence of data fabrication or manipulation.",
+    "executive_summary": "No significant issues detected in the code.",
     "top_issues": [],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0176_scan.json"
+    "full_report_url": "/scans/apep_0054_v13_scan.json"
   },
   "error": null
 }

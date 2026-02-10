@@ -1,121 +1,11 @@
 {
-  "paper_id": "apep_0173",
-  "scan_date": "2026-02-06T12:57:09.271981+00:00",
+  "paper_id": "apep_0169_v2",
+  "scan_date": "2026-02-10T13:15:44.828857+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 7,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03_main_analysis.R",
-      "lines": [
-        86,
-        105,
-        109,
-        127
-      ],
-      "evidence": "The manuscript repeatedly describes the estimates as \u201cdoubly robust inverse probability weighting\u201d / \u201cdoubly robust IPW\u201d. The implementation in 03_main_analysis.R is IPW only (propensity score weights + weighted outcome regression on treatment alone). There is no outcome model combined with the propensity model (e.g., AIPW/DR estimator), no cross-fitting, and no augmentation term. This is a substantive mismatch because DR claims are stronger than plain IPW in terms of robustness to misspecification.: ps_ate <- weightit(\n  ps_formula,\n  data = cps_complete,\n  method = \"ps\",\n  estimand = \"ATE\"\n)\n...\nm_ate_earn <- lm(log_earnings ~ multiple_jobs, data = cps_complete, weights = ipw_ate)\nres_ate_earn <- compute_ipw_results(m_ate_earn, \"multiple_jobs\", nrow(cps_complete))",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "02_clean_data.R",
-      "lines": [
-        112,
-        116,
-        122
-      ],
-      "evidence": "The manuscript defines the primary outcome as log annual earnings computed by summing wage/salary and self-employment income components (and discusses setting zero/negative earnings to $1 before logging). The cleaning code instead uses PINCP (total personal income), which can include non-labor income (e.g., transfers, interest/dividends, retirement income), not just earned income. This can materially change the estimand and interpretation (returns to self-employment vs. differences in total income).: # Use PINCP (total personal income) to capture both wage and self-employment income\n# WAGP only captures wage/salary income, missing self-employment income\nwage_income = WAGP,\ntotal_income = PINCP,\n...\nearnings = pmax(PINCP, 0),  # Total personal income (includes self-emp income)\nlog_earnings = log(pmax(earnings, 1)),",
-      "confidence": 0.85
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "02_clean_data.R",
-      "lines": [
-        112,
-        116,
-        220
-      ],
-      "evidence": "Using PINCP (total personal income) as \u201cearnings\u201d and then constructing income quartiles/credit-constraint proxies from it can introduce bias if non-labor income differs systematically by self-employment type (e.g., business owners with capital income). This is not necessarily improper, but it is a consequential transformation that diverges from the paper\u2019s stated \u201ctotal wage + self-employment income\u201d concept and can affect both outcome and heterogeneity definitions.: earnings = pmax(PINCP, 0),  # Total personal income (includes self-emp income)\n...\nmutate(\n  income_quartile = ntile(earnings, 4)\n)",
-      "confidence": 0.75
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "02_clean_data.R",
-      "lines": [
-        147,
-        148
-      ],
-      "evidence": "The manuscript states the analysis uses ACS years 2019, 2021, 2022 (excluding 2020) and defines a COVID-affected period as 2021\u20132022. The code defines covid_period as 2020\u20132021. Given 2020 is not fetched in 01_fetch_data.R, this effectively flags only 2021 (not 2022) as COVID period. This mis-coding can affect propensity score models and reported covariate definitions relative to the manuscript.: year = as.integer(year),\ncovid_period = as.integer(year %in% c(2020, 2021))",
-      "confidence": 0.8
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        206,
-        247,
-        530,
-        706
-      ],
-      "evidence": "Key numerical results (point estimates, confidence intervals, model coefficients) are directly embedded in the LaTeX manuscript tables and narrative. The provided codebase does not generate these exact tables for this manuscript (the table/figure scripts appear to target a different project framing\u2014see other findings), so there is no demonstrated programmatic link from model objects to the numbers in paper.tex. This is not proof of wrongdoing, but it is an integrity risk because results could be manually edited without detection unless a reproducible table pipeline exists for this paper.: Incorporated self-employed workers---...---show an earnings \\textit{premium} ... ($+0.069$ log points, 95\\% CI: [$+0.058$, $+0.079$])...\n...\nSelf-Employed & $-$0.362*** & $-$0.161*** & $-$1.60*** \\\\\n              & [$-$0.371, $-$0.354] & [$-$0.164, $-$0.159] & [$-$1.69, $-$1.51] \\\\\n...\nIntercept & $-$4.521 & 0.045 \\\\\nAge & 0.098 & 0.002 \\\\\n...",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "06_tables.R",
-      "lines": [
-        1,
-        17,
-        90,
-        112
-      ],
-      "evidence": "The manuscript is about ACS PUMS (IPUMS) 2019\u20132022 and self-employment decomposition by incorporation status. However, 06_tables.R is labeled and formatted for a different paper (\u201cInsurance Value of Secondary Employment\u201d), and its table notes claim \u201cCPS ASEC, 2015-2024\u201d and \u201cAIPW with 5-fold cross-fitting\u201d. The main analysis code (03_main_analysis.R) does not implement cross-fitting AIPW and does not use CPS ASEC. This suggests the table-generation pipeline is not aligned with paper.tex and may produce outputs with incorrect labels/method descriptions.: # Generate publication-quality tables\n# Paper 154: The Insurance Value of Secondary Employment\n...\n\"\\\\item \\\\textit{Notes:} Sample includes employed workers aged 25-54 from the CPS ASEC, 2015-2024. \"\n...\n\"\\\\item \\\\textit{Notes:} Estimates from augmented inverse probability weighting (AIPW) with 5-fold cross-fitting. \"",
-      "confidence": 0.95
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "05_figures.R",
-      "lines": [
-        1,
-        28,
-        58,
-        96
-      ],
-      "evidence": "Figures are generated with captions/subtitles referencing CPS ASEC time series (2015\u20132024) and AIPW estimation, which conflicts with the manuscript context (ACS PUMS 2019, 2021, 2022; IPW; incorporation split). This undermines reproducibility/integrity because the plotting scripts can generate polished outputs that appear to match a different study than the one described in paper.tex.: # Generate publication-quality figures\n# Paper 154: The Insurance Value of Secondary Employment\n...\ncaption = \"Source: Current Population Survey ASEC. Shaded area shows 95% confidence interval.\"\n...\nsubtitle = \"Doubly robust AIPW estimates with 95% confidence intervals\"",
-      "confidence": 0.95
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        10,
-        14
-      ],
-      "evidence": "Downstream scripts rely on precomputed .rds artifacts (cps_with_pscore.rds, main_results.rds, etc.). While these are produced by 03_main_analysis.R in this repo, the table/figure scripts\u2019 labels suggest a different upstream dataset (CPS ASEC). If the actual artifacts in data_dir were created outside this pipeline, provenance could be unclear. This is a medium-risk provenance issue driven by internal inconsistency rather than absence of any data-fetching code.: cps <- readRDS(file.path(data_dir, \"cps_with_pscore.rds\"))\nmain_results <- readRDS(file.path(data_dir, \"main_results.rds\"))",
-      "confidence": 0.65
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "03_main_analysis.R",
-      "lines": [
-        430,
-        435
-      ],
-      "evidence": "The code computes both ATE and ATT for the aggregate treatment but then saves \u201cmain_results.rds\u201d containing only ATE (ATT dropped). If the manuscript claims both estimands are reported, this would be selective output. In paper.tex, emphasis is mostly on ATE, so severity is low, but it is still a pattern where multiple estimands are computed and only one is propagated to downstream tables/figures.: # Main results (for backward compatibility)\nmain_results <- aggregate_results %>%\n  filter(estimand == \"ATE\") %>%\n  select(-estimand)",
-      "confidence": 0.6
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -123,7 +13,7 @@
     },
     {
       "file": "06_tables.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "00_packages.R",
@@ -135,67 +25,29 @@
     },
     {
       "file": "02_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "05_figures.R",
-      "verdict": "SUSPICIOUS"
-    },
-    {
-      "file": "paper.tex",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 5,
-      "MEDIUM": 3,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch; hard-coded results",
-    "executive_summary": "The analysis scripts do not implement the methods and data construction described in the manuscript: the \u201cdoubly robust IPW/AIPW\u201d estimator is actually plain IPW in `03_main_analysis.R`, and the primary outcome definition (log annual earnings built from wage/salary plus self-employment income with zero/negative values handled as described) is not reflected in `02_clean_data.R`. The LaTeX paper hard-codes key numerical results rather than generating them from the provided code, and the table/figure scripts (`06_tables.R`, `05_figures.R`) appear to be from a different project (CPS ASEC 2015\u20132024, \u201cInsurance Value\u2026\u201d formatting, AIPW captions) rather than the stated ACS PUMS 2019\u20132022 self-employment/incorporation analysis, undermining reproducibility and consistency.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript repeatedly describes the estimates as \u201cdou...",
-        "file": "03_main_analysis.R",
-        "lines": [
-          86,
-          105
-        ],
-        "github_url": "/apep_0173/code/03_main_analysis.R#L86-L127"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript defines the primary outcome as log annual ...",
-        "file": "02_clean_data.R",
-        "lines": [
-          112,
-          116
-        ],
-        "github_url": "/apep_0173/code/02_clean_data.R#L112-L122"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "Key numerical results (point estimates, confidence interv...",
-        "file": "paper.tex",
-        "lines": [
-          206,
-          247
-        ],
-        "github_url": "/apep_0173/code/paper.tex#L206-L706"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0173_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0169_v2_scan.json"
   },
   "error": null
 }

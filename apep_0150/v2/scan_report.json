@@ -1,179 +1,11 @@
 {
-  "paper_id": "apep_0152",
-  "scan_date": "2026-02-06T12:52:55.429949+00:00",
+  "paper_id": "apep_0150_v2",
+  "scan_date": "2026-02-10T13:15:35.123817+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 8,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        18,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40,
-        41,
-        42,
-        43
-      ],
-      "evidence": "The policy adoption database (effective dates, cap amounts, and included states) is manually entered as a hard-coded tribble rather than being fetched from a documented source file/API. The manuscript says the policy database is compiled from NCSL/ADA/legislative records, which can justify manual construction, but the code provides no reproducible provenance (no citations per row, no raw scrape, no link to a source file) and therefore cannot be independently verified or audited for transcription errors.: policy_db <- tribble(\n  ~state_abbr, ~state_name,          ~state_fips, ~effective_date, ~cap_amount,\n  \"CO\",        \"Colorado\",           \"08\",        \"2020-01-01\",    100,\n  \"VA\",        \"Virginia\",           \"51\",        \"2020-07-01\",    50,\n  ...\n  \"LA\",        \"Louisiana\",          \"22\",        \"2024-01-01\",    100\n)",
-      "confidence": 0.82
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        205,
-        206,
-        207,
-        208,
-        209,
-        210,
-        211,
-        212,
-        213,
-        214,
-        215,
-        216,
-        217,
-        218,
-        219,
-        220,
-        221,
-        222,
-        223,
-        224,
-        225,
-        226,
-        227,
-        228,
-        229,
-        230,
-        231,
-        232,
-        233,
-        234,
-        235,
-        236,
-        237,
-        238,
-        239,
-        240,
-        241,
-        242,
-        243,
-        244,
-        245,
-        246,
-        247,
-        248,
-        249,
-        250,
-        251,
-        252,
-        253,
-        254,
-        255,
-        256,
-        257,
-        258,
-        259,
-        260
-      ],
-      "evidence": "The manuscript states that for 2020\u20132023 provisional mortality data, weekly counts are aggregated to annual counts and 'compute age-adjusted death rates using Census population denominators.' In the code, if the provisional age-adjusted rate (AADR) is unavailable, the script falls back to a crude death rate computed from total deaths / total population * 100,000 (not age-adjusted). This creates a mixed outcome series: some state-years are age-adjusted and others are crude. That can change the estimand relative to the paper\u2019s stated outcome definition (age-adjusted mortality rate), and can introduce differential measurement error correlated with suppression/missingness in the provisional AADR source.: # For states with population data, compute crude rate\nrecent_rates <- recent_rates %>%\n  mutate(\n    crude_rate = ifelse(!is.na(population) & population > 0,\n                        (mortality_deaths / population) * 100000,\n                        NA_real_)\n  )\n...\n# Use provisional AADR as the primary rate where available\n# Fall back to crude rate\nrecent_rates <- recent_rates %>%\n  mutate(\n    mortality_rate = coalesce(aadr_provisional, crude_rate),\n    data_source = ifelse(!is.na(aadr_provisional),\n                         \"CDC_provisional_489q934x\",\n                         \"CDC_MMWR_muzy_jte6_crude\")\n  )",
-      "confidence": 0.84
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "HIGH",
-      "file": "02_clean_data.R",
-      "lines": [
-        208,
-        209,
-        210,
-        211,
-        212,
-        213,
-        214,
-        215
-      ],
-      "evidence": "The transformation labeled as a 'COVID death rate per 100,000' is implemented as covid_deaths / 100, which is not a rate and does not use population denominators. This is a substantial scaling error (units become 'hundreds of deaths', not deaths per 100k). Because COVID controls are used in preferred/robustness specifications, this mis-scaling can materially affect coefficient interpretation and potentially the degree of covariate adjustment (magnitude/conditioning). The manuscript claims the control is 'rescaled to deaths per 100,000', so this is also a manuscript\u2013code inconsistency unless population normalization happens elsewhere (not shown in provided code).: panel <- panel %>%\n    left_join(covid_deaths, by = c(\"state_fips\", \"year\")) %>%\n    mutate(\n      # Pre-COVID years (before 2020) have zero COVID deaths by definition\n      covid_deaths = ifelse(year < 2020, 0L, covid_deaths),\n      # For 2020+ observations: keep NA if API returned NA (do NOT hard-code to 0)\n      # Rescale to per 100,000 for interpretable coefficients\n      covid_death_rate = covid_deaths / 100  # per 100K (raw counts are ~tens of thousands)\n    )",
-      "confidence": 0.9
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        155,
-        156,
-        157,
-        158,
-        159,
-        160,
-        161,
-        162,
-        163,
-        164
-      ],
-      "evidence": "Observations are dropped based directly on the realized outcome value (mortality_deaths == 0). The comment assumes zeros indicate suppression, but this is a strong assumption that should be validated (e.g., by checking suppression flags/metadata or distinguishing true zeros from suppressed/missing). Dropping based on outcome can bias estimates if zero counts are real in some state-years (unlikely for large states, but possible for small jurisdictions or some causes). A safer practice would be to treat such cells as missing only when suppression is confirmed via source documentation/flags.: # Mark suppressed states (deaths = 0 due to weekly suppression)\n  suppressed <- recent_clean %>%\n    filter(mortality_deaths == 0) %>%\n    distinct(state_name) %>%\n    pull(state_name)\n\n  if (length(suppressed) > 0) {\n    cat(\"  Suppressed states (dropped):\", paste(suppressed, collapse = \", \"), \"\\n\")\n    recent_clean <- recent_clean %>% filter(mortality_deaths > 0)\n  }",
-      "confidence": 0.74
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        170,
-        171,
-        172,
-        173,
-        174,
-        175,
-        176,
-        177
-      ],
-      "evidence": "The robustness script labels the cancer placebo as 'Cancer Mortality 25\u201364' but uses mortality_rate_cancer merged from the NCHS 'Leading Causes of Death' dataset without an age restriction in the fetch step (01_fetch_data.R uses cause_name='Cancer' with no age filter; this dataset is typically all-ages age-adjusted rates). This is likely a documentation bug rather than misconduct, but it is a code\u2013label inconsistency that can mislead readers about what placebo outcome was tested.: cat(\"=== 6. Placebo: Cancer Mortality 25-64   ===\\n\")\n...\nplacebo_cancer_twfe <- tryCatch({\n  feols(\n    mortality_rate_cancer ~ treated | state_id + year,\n    data = panel_cancer,\n    cluster = ~state_id\n  )\n}, error = function(e) { ... })",
-      "confidence": 0.78
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        404,
-        405,
-        406,
-        407,
-        408,
-        409,
-        410,
-        411,
-        412,
-        413
-      ],
-      "evidence": "This script generates a randomized placebo-in-time assignment for a falsification test. This is not fabrication of main analysis data and is consistent with the manuscript\u2019s description of placebo-in-time tests, but it is nonetheless a deliberate simulated treatment assignment. For audit clarity, it would be better to set a seed immediately before the assignment and/or explicitly randomize via sample() (currently it assigns the first half of states in whatever ordering distinct(state_id) returns, which can be non-random across runs if underlying ordering changes).: never_treated <- panel %>%\n  filter(first_treat == 0) %>%\n  distinct(state_id) %>%\n  mutate(fake_treat = ifelse(row_number() <= n()/2, 2015L, 0L))\n...\nplacebo_time_data <- panel %>%\n  filter(first_treat == 0) %>%\n  left_join(never_treated, by = \"state_id\") %>%\n  mutate(fake_treated = as.integer(fake_treat > 0 & year >= fake_treat))",
-      "confidence": 0.67
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
@@ -193,7 +25,7 @@
     },
     {
       "file": "02_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -209,29 +41,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 3,
-      "LOW": 2
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "suspicious transforms",
-    "executive_summary": "In `02_clean_data.R`, the code labels a variable as \u201cCOVID death rate per 100,000\u201d but computes it as `covid_deaths / 100`, which is merely a rescaling of raw deaths and not a population-standardized rate. Because it omits any population denominator and applies an incorrect scaling factor, the resulting values are misinterpretable and can materially distort comparisons and downstream statistical results that rely on per-capita mortality rates.",
-    "top_issues": [
-      {
-        "category": "SUSPICIOUS_TRANSFORMS",
-        "severity": "HIGH",
-        "short": "The transformation labeled as a 'COVID death rate per 100...",
-        "file": "02_clean_data.R",
-        "lines": [
-          208,
-          209
-        ],
-        "github_url": "/apep_0152/code/02_clean_data.R#L208-L215"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0152_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0150_v2_scan.json"
   },
   "error": null
 }

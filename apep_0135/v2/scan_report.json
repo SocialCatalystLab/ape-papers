@@ -1,76 +1,11 @@
 {
-  "paper_id": "apep_0137",
-  "scan_date": "2026-02-06T12:49:45.844867+00:00",
+  "paper_id": "apep_0135_v2",
+  "scan_date": "2026-02-10T13:15:05.657600+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 6,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_clean_data.R",
-      "lines": [
-        26,
-        55,
-        85,
-        96,
-        108,
-        121
-      ],
-      "evidence": "Key inputs are read from local/relative paths (../data/*.dta, ../data/*.csv) but the provided codebase contains no corresponding fetch/download script (e.g., from Dropbox/Dataverse/DOI/GitHub) or checksum/version pinning. The manuscript describes URLs/DOIs, but without code to retrieve exact versions, reproduction and auditability of the analytic dataset is weakened.: tech_raw <- read_dta(\"../data/modal_age.dta\")\n...\ncrosswalk <- read_csv(\"../data/cbsa_county_crosswalk.csv\",\n                      show_col_types = FALSE)\n...\nelec_2012 <- read_csv(\"../data/election_2012.csv\",\n                      show_col_types = FALSE)\n...\nelec_2016 <- read_csv(\"../data/election_2016.csv\",\n                      show_col_types = FALSE)\n...\nelec_2020 <- read_csv(\"../data/election_2020.csv\",\n                      show_col_types = FALSE)\n...\nelec_2024 <- read_csv(\"../data/election_2024.csv\",\n                      show_col_types = FALSE)",
-      "confidence": 0.78
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "01_clean_data.R",
-      "lines": [
-        62,
-        94,
-        107
-      ],
-      "evidence": "FIPS codes are converted to numeric in both crosswalk and election files. While merging numeric-to-numeric is consistent internally, representing identifiers as numeric can drop leading zeros and can introduce accidental mismatches if any upstream file stores FIPS as character with formatting differences. This is mainly a reproducibility/robustness concern (risk of silent merge loss) rather than clear p-hacking; keeping FIPS as fixed-width character is typically safer.: mutate(\n    county_fips = paste0(\n      str_pad(fipsstatecode, 2, pad = \"0\"),\n      str_pad(fipscountycode, 3, pad = \"0\")\n    ) %>% as.numeric(),\n    cbsa = as.numeric(cbsacode)\n  )\n...\nelec_2012 <- read_csv(\"../data/election_2012.csv\", ...) %>%\n  transmute(\n    county_fips = as.numeric(county_fips),\n...\nelec_2016 <- read_csv(\"../data/election_2016.csv\", ...) %>%\n  transmute(\n    county_fips = as.numeric(combined_fips),",
-      "confidence": 0.66
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "05_tables.R",
-      "lines": [
-        32,
-        63,
-        242,
-        251
-      ],
-      "evidence": "The manuscript\u2019s core design and headline result emphasize a 2012 pre-Trump baseline and the 2012\u21922016 'Romney-to-Trump' gains specification. However, the table-generation script (05_tables.R) (i) hard-codes the summary table header to only 2016/2020/2024 (omitting 2012 entirely) and (ii) constructs the 'Gains Analysis' table around 2016 levels and 2016\u21922020 and 2020\u21922024 gains only, using 2016 controls\u2014there is no 2012\u21922016 gains table produced here. This is a substantive mismatch between the manuscript\u2019s stated empirical strategy/results and what the automated table pipeline outputs.: cat(\" & 2016 & 2020 & 2024 \\\\\\\\\")\n...\ncat(sprintf(\"Trump Vote Share (\\\\%%) & %s & %s & %s \\\\\\\\\",\n            summary_by_year$`Trump Vote Share (%)`[1],\n            summary_by_year$`Trump Vote Share (%)`[2],\n            summary_by_year$`Trump Vote Share (%)`[3]))\n...\n# Table 6: Gains Analysis (Causal vs Sorting)\n...\ndf_controls <- df %>%\n  filter(year == 2016) %>%\n  select(cbsa, log_total_votes, is_metro)\n...\nmodelsummary(\n  list(\"Level (2016)\" = m_level, \"Gain (2016-20)\" = m_gain1, \"Gain (2020-24)\" = m_gain2),",
-      "confidence": 0.86
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "HIGH",
-      "file": "03_robustness.R",
-      "lines": [
-        134,
-        166,
-        185
-      ],
-      "evidence": "The robustness script explicitly estimates the manuscript\u2019s key '2012\u21922016 gains on 2012 tech age' model (m_gain0) and prints it to console, but that result is not saved into a model object file for later use (main_models.rds) and is not carried into the paper\u2019s LaTeX table pipeline (05_tables.R), which instead reports only within-Trump gains (2016\u21922020, 2020\u21922024). Given the manuscript highlights the 2012\u21922016 gains result as central, the fact that it is computed but not integrated into the reproducible output tables is consistent with a selective-reporting risk (or at minimum a broken reporting pipeline).: cat(\"Key question: Does tech age predict GAINS in GOP support from 2012->2016?\\n\")\n...\nm_gain0 <- lm(gop_gain_2012_2016 ~ modal_age_mean_2012 + log_total_votes + is_metro,\n              data = df_gains)\n...\nprint(summary(m_gain0)$coefficients)",
-      "confidence": 0.84
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "05_tables.R",
-      "lines": [
-        30,
-        37,
-        44
-      ],
-      "evidence": "Table 1 is partially hard-coded (explicit year labels 2016/2020/2024 and positional indexing [1],[2],[3]) rather than being programmatically aligned to the years present in df. If df contains 2012 (as in the manuscript and data-cleaning code), this hard-coding can silently omit or mis-order year-specific statistics and produce a table inconsistent with the analysis sample described in the manuscript.: sink(\"../tables/tab1_summary.tex\")\ncat(\"\\\\begin{table}[htbp]\\n\")\n...\ncat(\" & 2016 & 2020 & 2024 \\\\\\\\\")\n...\ncat(sprintf(\"N (CBSAs) & %s & %s & %s \\\\\\\\\n\",\n            summary_by_year$`N (CBSAs)`[1],\n            summary_by_year$`N (CBSAs)`[2],\n            summary_by_year$`N (CBSAs)`[3]))",
-      "confidence": 0.8
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "00_packages.R",
@@ -86,11 +21,11 @@
     },
     {
       "file": "03_robustness.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "05_tables.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04_figures.R",
@@ -98,40 +33,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 2,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch; selective reporting",
-    "executive_summary": "The table-generation code in `05_tables.R` does not consistently implement the manuscript\u2019s stated core design\u2014anchoring on a 2012 pre-Trump baseline and the 2012\u21922016 \u201cRomney-to-Trump\u201d gains specification\u2014so the headline results being tabulated can reflect a different or altered methodology than what the paper describes. In `03_robustness.R`, the key \u201c2012\u21922016 gains on 2012 tech age\u201d model (`m_gain0`) is estimated and printed to the console but not saved alongside other models for later table/figure production, enabling selective reporting where the main claimed robustness result is not reproducibly incorporated into the reported outputs.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript\u2019s core design and headline result emphasiz...",
-        "file": "05_tables.R",
-        "lines": [
-          32,
-          63
-        ],
-        "github_url": "/apep_0137/code/05_tables.R#L32-L251"
-      },
-      {
-        "category": "SELECTIVE_REPORTING",
-        "severity": "HIGH",
-        "short": "The robustness script explicitly estimates the manuscript...",
-        "file": "03_robustness.R",
-        "lines": [
-          134,
-          166
-        ],
-        "github_url": "/apep_0137/code/03_robustness.R#L134-L185"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0137_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0135_v2_scan.json"
   },
   "error": null
 }

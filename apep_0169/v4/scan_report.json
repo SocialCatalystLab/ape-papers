@@ -1,97 +1,11 @@
 {
-  "paper_id": "apep_0177",
-  "scan_date": "2026-02-06T12:58:21.285102+00:00",
+  "paper_id": "apep_0169_v4",
+  "scan_date": "2026-02-10T13:14:39.174230+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 16,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "08_gender_analysis.R",
-      "lines": [
-        1,
-        20,
-        117,
-        154,
-        193
-      ],
-      "evidence": "The manuscript describes an ACS PUMS (IPUMS) analysis of self-employment (incorporated vs unincorporated) using IPW. The code instead repeatedly refers to an object named `cps` loaded from `cps_analysis.rds` and uses `multiple_jobs` as the treatment indicator (a name strongly associated with a different project: multiple job holding). While the script also uses `incorporated`/`unincorporated`, the treatment naming and file naming are inconsistent with the manuscript\u2019s ACS/PUMS framing and with `01_fetch_data.R` (which produces `acs_pums_raw.rds`). This raises a serious risk that the executed analysis is not the one described in paper.tex (or that datasets/variables were repurposed without clear documentation).: cps <- readRDS(file.path(data_dir, \"cps_analysis.rds\"))\n...\n# PART 1: Aggregate Self-Employment Effects by Gender\n...\nresult <- estimate_gender_effect(gender_data)\n...\n# PART 2: Incorporated Effects by Gender\n...\nfilter(multiple_jobs == 0 | incorporated == 1) %>%\nmutate(treatment = incorporated)\n...\n# PART 3: Unincorporated Effects by Gender\n...\nfilter(multiple_jobs == 0 | unincorporated == 1) %>%\nmutate(treatment = unincorporated)",
-      "confidence": 0.83
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "07_state_analysis.R",
-      "lines": [
-        1,
-        12,
-        74,
-        150,
-        216
-      ],
-      "evidence": "Same core mismatch as in the gender script: the paper is about ACS PUMS self-employment effects, but the analysis is performed on `cps_analysis.rds` with a treatment variable `multiple_jobs`. Without a provided transformation script linking `acs_pums_raw.rds` to `cps_analysis.rds` and defining `multiple_jobs` as self-employment, it is unclear whether the code estimates the manuscript\u2019s estimand (self-employment vs wage work) or something else.: cps <- readRDS(file.path(data_dir, \"cps_analysis.rds\"))\n...\n# PART 1: STATE-LEVEL AGGREGATE SELF-EMPLOYMENT EFFECTS\n...\nresult <- estimate_state_effect(state_data)\n...\n# PART 2: STATE-LEVEL INCORPORATED SELF-EMPLOYMENT EFFECTS\n... filter(multiple_jobs == 0 | incorporated == 1) %>% mutate(treatment = incorporated)\n...\n# PART 3: STATE-LEVEL UNINCORPORATED SELF-EMPLOYMENT EFFECTS\n... filter(multiple_jobs == 0 | unincorporated == 1) %>% mutate(treatment = unincorporated)",
-      "confidence": 0.82
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "08_gender_analysis.R",
-      "lines": [
-        10
-      ],
-      "evidence": "Key analytic dataset `cps_analysis.rds` is used, but no code is provided in the supplied files that constructs it from the ACS PUMS data fetched in `01_fetch_data.R` (which saves `acs_pums_raw.rds`/`.csv`). This breaks the reproducible provenance chain from the documented source (ACS PUMS) to the analysis dataset used for all main results/figures.: cps <- readRDS(file.path(data_dir, \"cps_analysis.rds\"))",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "07_state_analysis.R",
-      "lines": [
-        10
-      ],
-      "evidence": "Same missing provenance issue for state-level results. Since `09_atlas_figures.R` reads `state_results.rds` produced by this script, the entire 'atlas' depends on an upstream dataset that is not constructed anywhere in the provided code.: cps <- readRDS(file.path(data_dir, \"cps_analysis.rds\"))",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        9,
-        10
-      ],
-      "evidence": "Tables are generated from pre-saved RDS objects (`cps_with_pscore.rds`, `main_results.rds`, etc.) whose creation scripts are not included in the provided files. This prevents verifying that reported table entries are computed from raw ACS PUMS and that the weighting/estimation matches paper.tex.: cps <- readRDS(file.path(data_dir, \"cps_with_pscore.rds\"))\nmain_results <- readRDS(file.path(data_dir, \"main_results.rds\"))",
-      "confidence": 0.78
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "paper.tex",
-      "lines": [
-        175,
-        330,
-        420,
-        520
-      ],
-      "evidence": "All main quantitative results in the LaTeX tables (point estimates, confidence intervals, significance stars, N by subsample/state) are typed as literals in the manuscript rather than being programmatically inserted from model objects or exported table files. This is not automatically wrongdoing, but it is an integrity risk because the provided codebase does not show a verifiable pipeline that generates these exact values and inserts them into the manuscript.: Self-Employed & $-$0.362*** & $-$0.161*** & $-$1.60*** \\\\\n              & [$-$0.371, $-$0.354] & [$-$0.164, $-$0.159] & [$-$1.69, $-$1.51] \\\\\n...\nIncorporated Self-Emp. & +0.069*** ...\n...\nFlorida & $-$0.264*** & +0.087*** & $-$0.578*** & 153,970 \\\\\n...\nSelf-Employed & $-$0.267*** & $-$0.477*** \\\\",
-      "confidence": 0.74
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        62,
-        98,
-        130
-      ],
-      "evidence": "This script fetches ACS PUMS from the Census API and saves `acs_pums_raw.rds`, which matches the manuscript\u2019s stated data source. However, none of the main analysis scripts provided use `acs_pums_raw.rds` directly, and no processing/cleaning script is included that transforms this raw ACS data into the analysis datasets actually used (`cps_analysis.rds`, `cps_with_pscore.rds`). The provenance is therefore incomplete end-to-end.: # Fetch ACS PUMS data via Census API\n...\nacs_raw <- bind_rows(all_data)\n...\nsaveRDS(acs_raw, output_file)\nwrite_csv(acs_raw, file.path(data_dir, \"acs_pums_raw.csv\"))",
-      "confidence": 0.8
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "09_atlas_figures.R",
@@ -103,7 +17,7 @@
     },
     {
       "file": "08_gender_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -131,7 +45,7 @@
     },
     {
       "file": "07_state_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04_validity_tests.R",
@@ -159,50 +73,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 4,
-      "MEDIUM": 3,
+      "HIGH": 0,
+      "MEDIUM": 0,
       "LOW": 0
     },
-    "one_liner": "method mismatch; unclear provenance",
-    "executive_summary": "The analysis scripts for the key results (gender and state) do not implement the manuscript\u2019s described ACS PUMS/IPUMS self-employment design with incorporated vs. unincorporated outcomes and IPW; instead they load a prebuilt `cps_analysis.rds` dataset and analyze a CPS-style object (`cps`) using a treatment variable `multiple_jobs`, which is a different methodology and target. The provenance of this central analytic dataset is missing: none of the provided code constructs `cps_analysis.rds` from the ACS PUMS data fetched in `01_fetch_data.R`, so the reported gender/state estimates (and downstream atlas figures relying on `state_results.rds`) depend on an undocumented, non-reproducible upstream dataset.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript describes an ACS PUMS (IPUMS) analysis of ...",
-        "file": "08_gender_analysis.R",
-        "lines": [
-          1,
-          20
-        ],
-        "github_url": "/apep_0177/code/08_gender_analysis.R#L1-L193"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "Same core mismatch as in the gender script",
-        "file": "07_state_analysis.R",
-        "lines": [
-          1,
-          12
-        ],
-        "github_url": "/apep_0177/code/07_state_analysis.R#L1-L216"
-      },
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "Key analytic dataset `cps_analysis.rds` is used, but no c...",
-        "file": "08_gender_analysis.R",
-        "lines": [
-          10
-        ],
-        "github_url": "/apep_0177/code/08_gender_analysis.R#L10"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0177_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0169_v4_scan.json"
   },
   "error": null
 }

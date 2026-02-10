@@ -1,69 +1,11 @@
 {
-  "paper_id": "apep_0141",
-  "scan_date": "2026-02-06T12:50:32.700403+00:00",
+  "paper_id": "apep_0135_v5",
+  "scan_date": "2026-02-10T13:15:14.911049+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_fetch_data.R",
-      "lines": [
-        246,
-        282,
-        313
-      ],
-      "evidence": "The pipeline does not programmatically fetch/construct the 2024 county election file; it only prints instructions. This creates a provenance gap (and a reproducibility risk) for a key outcome year used in the manuscript. The manuscript states 2024 is compiled from official returns/GitHub, which partly mitigates the concern, but without a scripted download + checksum/pin, the exact input used cannot be independently verified.: if (file.exists(elec_2024_path)) {\n  ...\n} else {\n  cat(\"[MISSING] election_2024.csv not found\\n\")\n  cat(\"\\nThe 2024 election data is compiled from certified state results.\\n\")\n  ...\n  cat(\"1. Visit: https://github.com/tonmcg/US_County_Level_Election_Results_08-24\\n\")\n  ...\n  cat(\"3. Format with columns: county_fips, votes_gop, votes_dem, total_votes\\n\")\n}",
-      "confidence": 0.86
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "00_fetch_data.R",
-      "lines": [
-        86,
-        125,
-        153
-      ],
-      "evidence": "The core technology dataset (modal_age.dta) is not downloaded from a public URL; it must be obtained from an author and manually placed in ../data. The manuscript acknowledges this provenance (author-provided replication file), so this is not inherently an integrity issue, but it does limit third-party reproducibility unless the file is redistributed with the replication package and/or an access protocol is documented.: cat(\"\\nThis dataset is obtained from Prof. Tarek Hassan (Boston University)\\n\")\n...\nstop(\"Cannot proceed without modal_age.dta. See instructions above.\")",
-      "confidence": 0.83
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_clean_data.R",
-      "lines": [
-        105,
-        123
-      ],
-      "evidence": "Potential variable-name mismatch: 00_fetch_data.R creates election_2016.csv from MIT data using columns including `county_fips`, `votes_gop`, `votes_dem`, `total_votes` (no `combined_fips`). But 01_clean_data.R reads election_2016.csv and tries to use `combined_fips`. If the actual file is the MIT-derived one, this will error or produce NAs, altering the 2016 aggregation/sample and therefore the main results (the manuscript emphasizes 2016 effects and gains 2012\u21922016). This needs reconciliation: either ensure election_2016.csv has `combined_fips` (and document source) or change this to `county_fips` to match the fetch script output.: elec_2016 <- read_csv(\"../data/election_2016.csv\",\n                      show_col_types = FALSE) %>%\n  transmute(\n    county_fips = as.numeric(combined_fips),\n    year = 2016,\n    votes_rep = votes_gop,\n    votes_dem = votes_dem,\n    total_votes = total_votes,\n    rep_share = votes_rep / total_votes,\n    dem_share = votes_dem / total_votes\n  ) %>%\n  distinct(county_fips, .keep_all = TRUE)",
-      "confidence": 0.9
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "MEDIUM",
-      "file": "05_tables.R",
-      "lines": [
-        33,
-        74
-      ],
-      "evidence": "Table 1 is hard-coded to display only 2016/2020/2024, even though the manuscript\u2019s core analysis explicitly includes 2012 (and uses 2012 as the pre-Trump baseline). This creates a presentation mismatch risk (omitting a key year from summary stats) and could be perceived as selective reporting if 2012 looks different (the manuscript indeed argues 2012 is near-zero). If omission is intentional (space/format), it should be explained and/or 2012 should be included consistently.: cat(\" & 2016 & 2020 & 2024 \\\\\\\\\")\n...\ncat(sprintf(\"Trump Vote Share (\\\\%%) & %s & %s & %s \\\\\\\\\",\n            summary_by_year$`Trump Vote Share (%)`[1],\n            summary_by_year$`Trump Vote Share (%)`[2],\n            summary_by_year$`Trump Vote Share (%)`[3]))",
-      "confidence": 0.84
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "05_tables.R",
-      "lines": [
-        33,
-        83
-      ],
-      "evidence": "The LaTeX table is populated by positional indexing `[1]`, `[2]`, `[3]` rather than explicitly filtering/sorting for years 2016/2020/2024. If `summary_by_year` ordering changes (e.g., includes 2012, or is not sorted), the table can silently mislabel statistics under the wrong year columns\u2014effectively hard-coding reported values into the wrong headings. This is not fabrication, but it is an integrity risk for reported results and should be rewritten to join on year values explicitly (e.g., `filter(year==2016)` etc.).: summary_by_year <- df %>%\n  group_by(year) %>%\n  summarize(\n    `Trump Vote Share (%)` = sprintf(\"%.1f (%.1f)\", mean(trump_share), sd(trump_share)),\n    `Modal Technology Age` = sprintf(\"%.1f (%.1f)\", mean(modal_age_mean), sd(modal_age_mean)),\n    `N (CBSAs)` = as.character(n_distinct(cbsa)),\n    .groups = \"drop\"\n  )\n...\ncat(sprintf(\"Trump Vote Share (\\\\%%) & %s & %s & %s \\\\\\\\\",\n            summary_by_year$`Trump Vote Share (%)`[1],\n            summary_by_year$`Trump Vote Share (%)`[2],\n            summary_by_year$`Trump Vote Share (%)`[3]))",
-      "confidence": 0.82
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "00_fetch_data.R",
@@ -79,7 +21,7 @@
     },
     {
       "file": "01_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04_alternative_explanations.R",
@@ -103,29 +45,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 3,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The data pipeline is internally inconsistent: `00_fetch_data.R` generates `election_2016.csv` with MIT-derived columns like `county_fips`, `votes_gop`, `votes_dem`, and `total_votes`, but `01_clean_data.R` appears to clean/merge using a different identifier (`combined_fips`) that is not produced by the fetch step. This variable-name/ID mismatch can cause failed joins or silent row drops, meaning downstream results may be based on incomplete or misaligned election data rather than the intended county-level totals.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "Potential variable-name mismatch",
-        "file": "01_clean_data.R",
-        "lines": [
-          105,
-          123
-        ],
-        "github_url": "/apep_0141/code/01_clean_data.R#L105-L123"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0141_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0135_v5_scan.json"
   },
   "error": null
 }

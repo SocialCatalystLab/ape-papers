@@ -1,99 +1,15 @@
 {
-  "paper_id": "apep_0160",
-  "scan_date": "2026-02-06T12:54:45.355148+00:00",
+  "paper_id": "apep_0149_v4",
+  "scan_date": "2026-02-10T13:15:31.104941+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 7,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        15,
-        16,
-        44,
-        45
-      ],
-      "evidence": "Manuscript states \u201c2020 excluded due to non-standard data collection\u201d, but the fetch script requests ACS PUMS for all years 2017\u20132024, which includes 2020. Downstream scripts (02_clean_data.R, 03_main_analysis.R, 04_robustness.R) do not filter out 2020 either. If the API returns 2020 data, the analysis contradicts the paper\u2019s stated sample years and could change estimates and inference.: years <- 2017:2024\n...\nurl <- paste0(base_url, \"?get=\", vars, \"&SEX=2&AGEP=18:44&ucgid=0100000US\")",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "02_clean_data.R",
-      "lines": [
-        43,
-        44,
-        50,
-        51
-      ],
-      "evidence": "The manuscript describes treatment coding using a July 1 \u201chalf-year\u201d rule (treated in year t if effective date \u2264 July 1 of year t), and discusses partial-year exposure/attenuation. The code instead uses only an adopt_year (no month/day) and codes treatment as 1 for all observations with year >= adopt_year. This can misclassify treatment in adoption years (and potentially shift cohort/event time), affecting CS-DiD cohort assignment (G_s) and the post-PHE specifications.: treated = as.integer(!is.na(adopt_year) & adopt_year <= max_sample_year & year >= adopt_year),\nfirst_treat = ifelse(is.na(adopt_year) | adopt_year > max_sample_year, 0, adopt_year)",
-      "confidence": 0.8
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        78,
-        79,
-        80,
-        81,
-        82
-      ],
-      "evidence": "Treatment adoption data are manually encoded in the script (state FIPS, adopt_year, mechanism) without a machine-readable source file or scraper, even though the manuscript cites CMS/KFF/state announcements. This is not inherently wrong, but it weakens reproducibility and makes it harder to audit whether adoption dates match cited sources (and whether any dates were adjusted post hoc).: treatment_dates <- tribble(\n  ~state_fips, ~state_abbr, ~adopt_year, ~mechanism,\n  17, \"IL\", 2021, \"Waiver\",\n  ...\n)",
-      "confidence": 0.75
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        420,
-        421,
-        430,
-        431,
-        432,
-        433,
-        434
-      ],
-      "evidence": "Monte Carlo simulation generates synthetic data, but it is explicitly labeled as an attenuation calibration/numerical integration and is not used as analysis data in regressions. This appears consistent with the manuscript\u2019s description and is not evidence of fabricating empirical results.: set.seed(42)\nn_sim <- 100000\n\nsim_survey_month <- sample(1:12, n_sim, replace = TRUE)\nsim_birth_month_ago <- sample(1:12, n_sim, replace = TRUE)",
-      "confidence": 0.9
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "02_clean_data.R",
-      "lines": [
-        50,
-        51,
-        52
-      ],
-      "evidence": "The manuscript\u2019s PHE discussion is month-specific (continuous enrollment until May 11, 2023) and repeatedly flags 2023 as a mixed year. The code only uses year-based indicators (post_phe = year >= 2023) and does not implement any adjustment for partial 2023 exposure beyond later robustness restrictions. This is not necessarily wrong, but it means the main \u201cpost-PHE\u201d logic in variable construction is coarser than the institutional timing described, and readers could infer a finer alignment than is implemented.: phe_period = as.integer(year >= 2020 & year <= 2022),\npost_phe = as.integer(year >= 2023),\ntreated_post_phe = as.integer(treated == 1 & post_phe == 1)",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        583,
-        584,
-        585,
-        586,
-        587,
-        588
-      ],
-      "evidence": "The manuscript describes \u201cformal joint tests\u201d of DDD pre-trends. The implemented joint test uses a diagonal variance approximation (ignores covariance across event-time estimates), which can materially misstate the joint p-value relative to a full covariance-based Wald test. This is a methodological simplification that should be disclosed or replaced with a covariance-aware test if available from the estimator output.: V_pre <- diag(pre_coefs$se^2)  # diagonal approximation\nwald_stat <- t(beta_pre) %*% solve(V_pre) %*% beta_pre",
-      "confidence": 0.7
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -121,29 +37,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 2,
-      "LOW": 3
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The code does not implement the manuscript\u2019s stated exclusion of 2020 (\u201cexcluded due to non-standard data collection\u201d): `01_fetch_data.R` requests ACS PUMS for every year 2017\u20132024, explicitly including 2020, and the downstream pipeline (e.g., `02_clean_data.R`, `03_main\u2026`) proceeds on that full set. As written, the analyses are likely incorporating 2020 observations despite the paper claiming they were omitted, creating a direct methodology mismatch that can change estimates and conclusions.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "Manuscript states \u201c2020 excluded due to non-standard data...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          15,
-          16
-        ],
-        "github_url": "/apep_0160/code/01_fetch_data.R#L15-L45"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0160_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0149_v4_scan.json"
   },
   "error": null
 }

@@ -1,83 +1,15 @@
 {
-  "paper_id": "apep_0143",
-  "scan_date": "2026-02-06T12:51:07.333039+00:00",
+  "paper_id": "apep_0135_v6",
+  "scan_date": "2026-02-10T13:15:18.163326+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "00_fetch_data.R",
-      "lines": [
-        112,
-        150,
-        257,
-        270
-      ],
-      "evidence": "Two key inputs are not fetched from a stable, verifiable public source within the replication pipeline: (i) modal_age.dta is a private author-provided file; (ii) election_2024.csv is expected to be manually provided/constructed. The manuscript acknowledges these sources, but from an integrity/reproducibility standpoint this is still a material provenance gap unless the replication package includes the exact raw files (or an immutable archive + checksums) and clear construction steps for 2024.: if (file.exists(modal_age_path)) {\n  ...\n} else {\n  cat(\"[MISSING] modal_age.dta not found in data directory\\n\")\n  cat(\"\\nThis dataset is obtained from Prof. Tarek Hassan (Boston University)\\n\")\n  ...\n  stop(\"Cannot proceed without modal_age.dta. See instructions above.\")\n}\n...\nif (file.exists(elec_2024_path)) {\n  ...\n} else {\n  cat(\"[MISSING] election_2024.csv not found\\n\")\n  cat(\"\\nThe 2024 election data is compiled from certified state results.\\n\")\n  ...\n  cat(\"3. Format with columns: county_fips, votes_gop, votes_dem, total_votes\\n\")\n}",
-      "confidence": 0.88
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_clean_data.R",
-      "lines": [
-        103,
-        120,
-        162,
-        170,
-        173
-      ],
-      "evidence": "The cleaning code assumes the 2016 election file contains a column `combined_fips`. However, 00_fetch_data.R (process_mit_data) generates election_2016.csv with `county_fips`, not `combined_fips`. Unless election_2016.csv is sourced from a different GitHub dataset (as described in the manuscript) with `combined_fips`, this will either error or silently create NA county_fips (dropping observations on join with the crosswalk). This is a serious pipeline inconsistency that can change the sample and results.: # 2016 election\nelec_2016 <- read_csv(\"../data/election_2016.csv\",\n                      show_col_types = FALSE) %>%\n  transmute(\n    county_fips = as.numeric(combined_fips),\n    year = 2016,\n    votes_rep = votes_gop,\n    votes_dem = votes_dem,\n    total_votes = total_votes,\n    rep_share = votes_rep / total_votes,\n    dem_share = votes_dem / total_votes\n  ) %>%\n  distinct(county_fips, .keep_all = TRUE)",
-      "confidence": 0.93
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_fetch_data.R",
-      "lines": [
-        189,
-        208,
-        214,
-        221
-      ],
-      "evidence": "The manuscript states 2016/2020/2024 returns come from Tony McGovern GitHub compilations (and/or Bursztyn et al. replication files), but the fetch script preferentially creates 2016 and 2020 from the MIT Dataverse file (unless those files already exist). This makes the actual provenance of 2016/2020 ambiguous and dependent on local file presence, which undermines auditability unless the repository pins exactly which source files are included and used.: mit_url <- \"https://dataverse.harvard.edu/api/access/datafile/4299753\"\n...\nfor (yr in c(2008, 2012, 2016, 2020)) {\n  out_path <- file.path(data_dir, sprintf(\"election_%d.csv\", yr))\n  ...\n  yr_data <- mit_raw %>%\n    filter(year == yr) %>%\n    select(county_fips, year, party, candidatevotes, totalvotes) %>%\n    ...\n  write_csv(yr_data, out_path)\n}",
-      "confidence": 0.78
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "05_tables.R",
-      "lines": [
-        33,
-        63,
-        68,
-        71,
-        76
-      ],
-      "evidence": "Table 1 is manually assembled with hard-coded column headers (2016/2020/2024) and positional indexing ([1],[2],[3]) that assumes `summary_by_year` is ordered exactly as expected. If df contains 2012 as in the manuscript, or if grouping order changes, the table can silently misreport year-specific statistics (wrong year matched to a column). This is not fabrication, but it is a hard-coding pattern that can produce incorrect reported results without failing.: sink(\"../tables/tab1_summary.tex\")\ncat(\"\\\\begin{table}[htbp]\\\\n\")\n...\ncat(\" & 2016 & 2020 & 2024 \\\\\\\\n\")\n...\ncat(sprintf(\"Trump Vote Share (\\\\%%) & %s & %s & %s \\\\\\\\n\",\n            summary_by_year$`Trump Vote Share (%)`[1],\n            summary_by_year$`Trump Vote Share (%)`[2],\n            summary_by_year$`Trump Vote Share (%)`[3]))\n...",
-      "confidence": 0.86
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "04_alternative_explanations.R",
-      "lines": [
-        198,
-        206,
-        209,
-        214
-      ],
-      "evidence": "In the gains analysis, time-varying controls (log_total_votes, is_metro) are converted to constants using `first()` after sorting is not explicitly enforced in this script (relies on incoming df order). If df is not consistently ordered by year within cbsa, `first()` could pick an arbitrary year\u2019s value, altering controls and potentially the gains regression. Likely minor, but it is safer to explicitly `arrange(cbsa, year)` before taking `first()` or choose a specific baseline year\u2019s control values.: df_gains <- df %>%\n  ...\n  group_by(cbsa) %>%\n  mutate(\n    log_total_votes_const = first(log_total_votes),\n    is_metro_const = first(is_metro)\n  ) %>%\n  ungroup() %>%\n  ...\n  pivot_wider(...)",
-      "confidence": 0.74
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "00_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "00_packages.R",
@@ -89,7 +21,7 @@
     },
     {
       "file": "01_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04_alternative_explanations.R",
@@ -113,40 +45,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 2,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "unclear provenance; method mismatch",
-    "executive_summary": "The replication pipeline relies on key inputs that are not obtained from stable, verifiable public sources: `modal_age.dta` is a private author-provided file, and `election_2024.csv` is treated as a local/manual input rather than being fetched reproducibly. In addition, the data-cleaning script is internally inconsistent with the data-fetching step\u2014`01_clean_data.R` expects a `combined_fips` column in the 2016 election data, but `00_fetch_data.R` produces `election_2016.csv` with `county_fips` instead, so the cleaning step cannot run as written.",
-    "top_issues": [
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "Two key inputs are not fetched from a stable, verifiable ...",
-        "file": "00_fetch_data.R",
-        "lines": [
-          112,
-          150
-        ],
-        "github_url": "/apep_0143/code/00_fetch_data.R#L112-L270"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The cleaning code assumes the 2016 election file contains...",
-        "file": "01_clean_data.R",
-        "lines": [
-          103,
-          120
-        ],
-        "github_url": "/apep_0143/code/01_clean_data.R#L103-L173"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0143_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0135_v6_scan.json"
   },
   "error": null
 }

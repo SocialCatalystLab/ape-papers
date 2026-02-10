@@ -1,60 +1,15 @@
 {
-  "paper_id": "apep_0161",
-  "scan_date": "2026-02-06T12:54:54.728632+00:00",
+  "paper_id": "apep_0150_v4",
+  "scan_date": "2026-02-10T13:15:41.579982+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 9,
-  "flags": [
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "HIGH",
-      "file": "01b_fetch_wonder_data.R",
-      "lines": [
-        220,
-        279
-      ],
-      "evidence": "If the CDC WONDER API queries fail, the script generates a synthetic/proxy \"working-age\" outcome by mechanically scaling the all-ages series using hard-coded national shares (0.30 and 0.52). This is not \"real\" working-age mortality from CDC WONDER and could materially change identification/power and the interpretation of the DiD estimates. While the code prints warnings and labels the source as \"ALLAGES_SCALED_FALLBACK\", nothing in the codebase shown prevents downstream scripts from treating this fallback as the primary outcome if the API is blocked. The manuscript explicitly claims the primary outcome is constructed from CDC WONDER age-restricted data; if the fallback was ever used to produce results/figures, the empirical claims would be inconsistent with the stated data source.: if (is.null(d76_processed) && is.null(d176_processed)) {\n  cat(\"\\n=== WARNING: CDC WONDER API unavailable ===\\n\")\n  cat(\"Constructing working-age proxy from existing all-ages data.\\n\")\n  ...\n  # Apply a working-age scaling factor based on CDC vital statistics\n  # Working-age (25-64) diabetes deaths are ~30% of all-age diabetes deaths\n  ...\n  WORKING_AGE_DEATH_SHARE <- 0.30  # Approximate from national data\n  WORKING_AGE_POP_SHARE   <- 0.52  # Share of total pop aged 25-64\n\n  working_age_fallback <- allages %>%\n    mutate(\n      wa_deaths = round(mortality_deaths * WORKING_AGE_DEATH_SHARE),\n      wa_crude_rate = mortality_rate * (WORKING_AGE_DEATH_SHARE / WORKING_AGE_POP_SHARE),\n      is_suppressed = FALSE,\n      data_source = \"ALLAGES_SCALED_FALLBACK\"\n    ) %>%\n    rename(\n      deaths = wa_deaths,\n      crude_rate = wa_crude_rate\n    )",
-      "confidence": 0.78
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "01b_fetch_wonder_data.R",
-      "lines": [
-        246,
-        252
-      ],
-      "evidence": "Hard-coded scaling constants are used to construct the fallback proxy working-age outcome. These are not model results per se, but they directly determine the constructed outcome level and therefore any estimated treatment effects if the fallback path is triggered. The manuscript does not describe any such scaling procedure for the primary outcome (it describes direct WONDER extraction), so these constants should not affect reported results; nevertheless, they represent a pathway for non-reproducible, assumption-driven outcome construction.: WORKING_AGE_DEATH_SHARE <- 0.30  # Approximate from national data\nWORKING_AGE_POP_SHARE   <- 0.52  # Share of total pop aged 25-64",
-      "confidence": 0.72
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_data.R",
-      "lines": [
-        33,
-        92
-      ],
-      "evidence": "The policy adoption database is manually entered (hard-coded) rather than being fetched from a machine-readable source. This is common/acceptable when legislative dates are curated, and the manuscript documents the sources (NCSL/ADA/Beyond Type 1/state laws). However, for auditability it would be stronger to include (i) a citation/URL per row or (ii) a raw-source scrape plus a reconciliation step, or at minimum a separate documentation file listing sources for each state.: policy_db <- tribble(\n  ~state_abbr, ~state_name,          ~state_fips, ~effective_date, ~cap_amount,\n  \"CO\",        \"Colorado\",           \"08\",        \"2020-01-01\",    100,\n  ...\n  \"LA\",        \"Louisiana\",          \"22\",        \"2024-01-01\",    100\n)",
-      "confidence": 0.7
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01b_fetch_wonder_data.R",
-      "lines": [
-        220,
-        279
-      ],
-      "evidence": "The manuscript\u2019s core contribution is using age-restricted (25\u201364) mortality from CDC WONDER as the primary outcome. The code contains an explicit alternative path that would instead use a scaled all-ages series as a proxy outcome. If the WONDER query fails (rate limits / agreement / network), the analysis could proceed with an outcome that does not match the described methodology. Because this mismatch is conditional, it is not automatically an integrity violation, but it is a material risk to reproducibility and to the truth of the manuscript claims unless the run logs (or saved raw WONDER extracts) are archived and verified.: cat(\"Constructing working-age proxy from existing all-ages data.\\n\")\ncat(\"This is a CONSERVATIVE FALLBACK - age-restricted data would be preferable.\\n\\n\")\n...\nwa_crude_rate = mortality_rate * (WORKING_AGE_DEATH_SHARE / WORKING_AGE_POP_SHARE)",
-      "confidence": 0.75
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_wonder_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "01_fetch_data.R",
@@ -90,29 +45,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 1,
-      "MEDIUM": 2,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "fabricated data",
-    "executive_summary": "The code in `01b_fetch_wonder_data.R` silently substitutes real CDC WONDER results with a synthetic \u201cworking-age\u201d outcome whenever the API queries fail, by mechanically scaling the all-ages time series using hard-coded national shares (0.30 and 0.52). This fallback fabricates key outcome data rather than retrieving it from the source, and it can change empirical results without clear disclosure or a reproducible link to the underlying CDC WONDER query.",
-    "top_issues": [
-      {
-        "category": "DATA_FABRICATION",
-        "severity": "HIGH",
-        "short": "If the CDC WONDER API queries fail, the script generates ...",
-        "file": "01b_fetch_wonder_data.R",
-        "lines": [
-          220,
-          279
-        ],
-        "github_url": "/apep_0161/code/01b_fetch_wonder_data.R#L220-L279"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0161_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0150_v4_scan.json"
   },
   "error": null
 }

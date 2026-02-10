@@ -1,94 +1,11 @@
 {
-  "paper_id": "apep_0174",
-  "scan_date": "2026-02-06T12:57:36.305436+00:00",
+  "paper_id": "apep_0054_v12",
+  "scan_date": "2026-02-10T13:13:49.615373+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 14,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        1,
-        70,
-        115,
-        160
-      ],
-      "evidence": "The manuscript studies salary transparency laws using Census QWI (county-quarter-sex, 2015\u20132023) and DiD estimators. This script instead fetches CPS ASEC via IPUMS for an Auto-IRA mandate analysis (retirement coverage outcome PENSION, 2010\u20132024). Its presence in the same codebase as the QWI analysis indicates the repository mixes at least two distinct projects. This creates a serious risk of running/using the wrong pipeline, and makes it harder to audit that the manuscript results are fully reproducible from the relevant scripts alone.: # 01_fetch_data.R\n# Fetch CPS ASEC data from IPUMS for Auto-IRA analysis\n...\nextract_def <- define_extract_micro(\n  collection = \"cps\",\n  description = \"CPS ASEC 2010-2024 for Auto-IRA analysis\",\n  samples = paste0(\"cps\", 2010:2024, \"_03s\"),\n  variables = c(\n    ...\n    \"PENSION\",\n    ...\n  )\n)\n...\nsubmitted <- submit_extract(extract_def)\n...",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "03b_ddd_analysis.R",
-      "lines": [
-        1,
-        10,
-        30,
-        70
-      ],
-      "evidence": "This implements a triple-difference design for Auto-IRA mandates using CPS ASEC (pension_rate, firm size phase-in). The manuscript does not analyze Auto-IRA programs or CPS ASEC, and instead focuses on QWI and salary transparency laws. This reinforces that multiple unrelated analyses coexist, increasing reproducibility and integrity risk (accidental cross-use of outputs, stale files, or wrong tables/figures).: # 03b_ddd_analysis.R\n# Triple-Difference (DDD) Design: Exploiting Firm-Size Phase-In\n...\n# Auto-IRA mandates phase in by firm size...\n...\ndf <- readRDS(file.path(data_dir, \"cps_asec_clean.rds\"))\n...\nddd_full <- feols(\n  pension_rate ~ treat_post_small |\n    state_firmsize + year_firmsize,\n  data = df_cells,\n  weights = ~sum_weight,\n  cluster = ~statefip\n)\n...",
-      "confidence": 0.9
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        95,
-        120
-      ],
-      "evidence": "The code references a provenance-generating script (\"00_policy_data.R\") that is not included among the provided files, while simultaneously relying on an RDS file that may be precomputed. In the provided pipeline, other scripts (e.g., 01_fetch_qwi_fast.R) also write a treatment-timing object to data/transparency_laws.rds. This ambiguity (multiple potential generators + missing referenced script) weakens provenance traceability for a key research input (treatment timing). The manuscript provides legislative citations, which helps substantively, but the computational provenance is still unclear without the missing script or a single authoritative source-of-truth file.: if (file.exists(\"data/transparency_laws.rds\")) {\n  transparency_laws <- readRDS(\"data/transparency_laws.rds\")\n  cat(\"Loaded transparency law data from data/transparency_laws.rds\\n\")\n  cat(\"  Treated states:\", sum(transparency_laws$first_treat > 0), \"\\n\")\n} else {\n  cat(\"WARNING: data/transparency_laws.rds not found.\\n\")\n  cat(\"Run 00_policy_data.R first to create treatment timing data.\\n\")\n}\n",
-      "confidence": 0.75
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "04e_power_analysis.R",
-      "lines": [
-        30,
-        55,
-        70
-      ],
-      "evidence": "A key inferential quantity used for MDE/power reporting (the border 'change' standard error) can be hard-coded to 0.025 depending on file availability/structure. If the border event-study file is missing or does not match expected columns, the script silently uses the fallback literal. This can directly affect reported MDEs/power statements. The manuscript emphasizes MDE values as an important interpretive contribution, so this fallback should be eliminated or made explicit (e.g., stop with an error if inputs are missing; or compute SE from saved model vcov deterministically).: # Border change SE from border analysis (if available, otherwise use estimate)\nif (file.exists(\"data/border_es_results.rds\")) {\n  ...\n  if (nrow(post_period) > 0 && \"se\" %in% names(border_es)) {\n    se_border_change <- post_period$se[1]\n  } else {\n    se_border_change <- 0.025  # Fallback estimate\n  }\n} else {\n  # Fallback: estimate from border event study covariance\n  se_border_change <- 0.025  # Conservative estimate\n}\n",
-      "confidence": 0.85
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "04_robustness.R",
-      "lines": [
-        120,
-        135
-      ],
-      "evidence": "The placebo sample is restricted to periods strictly before the earliest real treatment (qtr_num < min(cohort>0)). This is a defensible design-validation approach, but it changes the estimand relative to the main analysis by excluding later cohorts entirely and limiting the time window. If reported as a placebo '2 years early' test, it should be clearly described as an early-window placebo rather than a full-sample reassignment placebo. (The manuscript does describe placebo tests generally; this is a minor clarity concern.): qwi_placebo <- qwi %>%\n  filter(qtr_num < min(cohort[cohort > 0], na.rm = TRUE)) %>%\n  mutate(\n    fake_cohort = case_when(\n      state_fips == \"08\" ~ 2019 * 4 + 1,\n      state_fips == \"09\" ~ 2019 * 4 + 4,\n      state_fips == \"32\" ~ 2019 * 4 + 4,\n      TRUE ~ 0\n    ),\n    fake_post = qtr_num >= fake_cohort & fake_cohort > 0,\n    county_id = as.numeric(factor(county_fips))\n  )\n",
-      "confidence": 0.7
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "LOW",
-      "file": "01_fetch_qwi_fast.R",
-      "lines": [
-        95,
-        140
-      ],
-      "evidence": "Treatment timing is hard-coded in-script rather than loaded from a single documented data file. Given the manuscript provides legislative citations and the dates are plausible, this is not inherently suspicious, but it reduces reproducibility/auditability (risk of accidental edits across scripts). Prefer a single treatment-timing file with citations and have all scripts read it.: # Treatment timing\ntreat_timing <- tribble(\n  ~state_fips, ~treat_qtr_num, ~state_abbr,\n  \"08\", 2021 * 4 + 1, \"CO\",\n  \"09\", 2021 * 4 + 4, \"CT\",\n  \"32\", 2021 * 4 + 4, \"NV\",\n  \"44\", 2023 * 4 + 1, \"RI\",\n  \"06\", 2023 * 4 + 1, \"CA\",\n  \"53\", 2023 * 4 + 1, \"WA\"\n)\n",
-      "confidence": 0.8
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "LOW",
-      "file": "06_tables.R",
-      "lines": [
-        30,
-        55
-      ],
-      "evidence": "The table footnote states the sample is 1995\u20132023, which contradicts the manuscript's stated sample period (2015Q1\u20132023Q4) and the fetch scripts (years <- 2015:2023). This looks like a copy/paste or template artifact rather than manipulation of results, but it is an integrity-relevant documentation inconsistency that should be corrected.: add_footnote(\"Note: Sample includes all county-quarter-sex observations from 1995-2023.\nNew hire earnings and all earnings in dollars. ...\",\n               notation = \"none\")\n",
-      "confidence": 0.85
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_qwi_industry.R",
@@ -96,7 +13,7 @@
     },
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "06_tables.R",
@@ -132,7 +49,7 @@
     },
     {
       "file": "03b_ddd_analysis.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -148,40 +65,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 2,
-      "LOW": 3
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The code does not match the paper\u2019s stated data and research design: `01_fetch_data.R` pulls CPS ASEC microdata via IPUMS and is written around an Auto\u2011IRA mandate setting, whereas the manuscript claims to use Census QWI county\u2011quarter\u2011sex data (2015\u20132023) to study salary transparency laws with DiD estimators. Likewise, `03b_ddd_analysis.R` implements a triple\u2011difference model for Auto\u2011IRA mandates (e.g., pension participation outcomes and firm\u2011size phase\u2011ins) rather than analyzing salary transparency policies using QWI and the described DiD framework.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript studies salary transparency laws using Cen...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          1,
-          70
-        ],
-        "github_url": "/apep_0174/code/01_fetch_data.R#L1-L160"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "This implements a triple-difference design for Auto-IRA m...",
-        "file": "03b_ddd_analysis.R",
-        "lines": [
-          1,
-          10
-        ],
-        "github_url": "/apep_0174/code/03b_ddd_analysis.R#L1-L70"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0174_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0054_v12_scan.json"
   },
   "error": null
 }

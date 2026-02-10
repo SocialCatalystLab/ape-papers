@@ -1,126 +1,15 @@
 {
-  "paper_id": "apep_0088",
-  "scan_date": "2026-02-06T12:44:06.930487+00:00",
+  "paper_id": "apep_0088_v1",
+  "scan_date": "2026-02-10T13:14:32.049080+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 11,
-  "flags": [
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        246,
-        262
-      ],
-      "evidence": "If the Overpass API call fails, the script fabricates a fallback 'minimal dispensary dataset' with four hand-entered locations. This can materially change distance-to-dispensary measures and any conclusions relying on dispensary proximity. The manuscript frames dispensary data as coming from OpenStreetMap (N=1,399); silently substituting four points is inconsistent with that description and is a serious integrity risk unless explicitly handled and disclosed (e.g., aborting analysis or clearly marking outputs as non-replicated/debug).: if (httr::status_code(response) == 200) {\n  ...\n} else {\n  cat(\"Warning: OSM query failed. Status:\", httr::status_code(response), \"\\n\")\n\n  # Create minimal dispensary dataset from known locations\n  known_dispensaries <- data.frame(\n    name = c(\"Trinidad Dispensary\", \"Fort Collins Dispensary\", \"Ontario Dispensary\", \"Spokane Dispensary\"),\n    lat = c(37.169, 40.585, 44.025, 47.658),\n    lon = c(-104.500, -105.084, -116.963, -117.426)\n  )\n  dispensaries_sf <- st_as_sf(known_dispensaries, coords = c(\"lon\", \"lat\"), crs = 4326)\n  saveRDS(dispensaries_sf, \"../data/dispensaries_sf.rds\")\n  cat(\"Created minimal dispensary dataset with known locations.\\n\")\n}",
-      "confidence": 0.93
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "06_tables_v2.R",
-      "lines": [
-        22,
-        63
-      ],
-      "evidence": "Key summary-statistics entries (single-vehicle and rural shares) are hard-coded numeric literals labeled 'approximate' rather than computed from the dataset. The manuscript presents these as data-derived summary statistics (Table \\ref{tab:summary}), so hard-coding undermines reproducibility and opens the door to transcription/manipulation errors.: summary_df <- data.frame(\n  Statistic = c(\"N Crashes\", \"Alcohol Involvement (%)\", \"Nighttime (%)\", \"Weekend (%)\", \"Single Vehicle (%)\", \"Rural (%)\"),\n  All = c(\n    format(nrow(crashes), big.mark = \",\"),\n    sprintf(\"%.1f\", mean(crashes$alcohol_involved) * 100),\n    sprintf(\"%.1f\", mean(crashes$is_nighttime, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", mean(crashes$is_weekend, na.rm = TRUE) * 100),\n    sprintf(\"%.1f\", 48.3),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 42.1)   # approximate rural rate\n  ),\n  Legal = c(\n    ...\n    sprintf(\"%.1f\", 47.8),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 38.9)   # approximate rural rate\n  ),\n  Prohibition = c(\n    ...\n    sprintf(\"%.1f\", 49.5),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 50.4)   # approximate rural rate\n  ),\n  Border150km = c(\n    ...\n    sprintf(\"%.1f\", 49.1),  # approximate single vehicle rate\n    sprintf(\"%.1f\", 55.2)   # approximate rural rate\n  )\n)",
-      "confidence": 0.92
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "06_tables_v2.R",
-      "lines": [
-        73,
-        104
-      ],
-      "evidence": "This script fabricates non-baseline RDD estimates/SEs by multiplying the baseline estimate and SE by arbitrary constants (e.g., 1.2, 0.75, 0.43) and hard-codes p-values and N. These are presented as if they were results from separate rdrobust runs in the manuscript's main results table. This is a major integrity failure unless this file is explicitly unused/obsolete; as written it will output tables inconsistent with computed models.: rdd_results <- data.frame(\n  Specification = c(\"Baseline\", \"Quadratic\", \"0.5x BW\", \"1.5x BW\", \"2x BW\"),\n  Estimate = c(\n    sprintf(\"%.3f\", main_results$main_estimate),\n    sprintf(\"%.3f\", main_results$main_estimate * 1.2),\n    sprintf(\"%.3f\", main_results$main_estimate * 1.3),\n    sprintf(\"%.3f\", main_results$main_estimate * 0.75),\n    sprintf(\"%.3f\", main_results$main_estimate * 0.43)\n  ),\n  SE = c(\n    sprintf(\"(%.3f)\", main_results$main_se),\n    sprintf(\"(%.3f)\", main_results$main_se * 1.4),\n    sprintf(\"(%.3f)\", main_results$main_se * 1.44),\n    sprintf(\"(%.3f)\", main_results$main_se * 0.83),\n    sprintf(\"(%.3f)\", main_results$main_se * 0.71)\n  ),\n  pvalue = c(\"0.127\", \"0.173\", \"0.158\", \"0.163\", \"0.347\"),\n  Bandwidth = c(\n    sprintf(\"%.1f\", main_results$optimal_bandwidth),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 1.37),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 0.5),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 1.5),\n    sprintf(\"%.1f\", main_results$optimal_bandwidth * 2)\n  ),\n  N = c(1446, 2093, 562, 2275, 2888)\n)",
-      "confidence": 0.97
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "MEDIUM",
-      "file": "06_tables_v2.R",
-      "lines": [
-        125,
-        137
-      ],
-      "evidence": "The 'Weekend Night' distance-to-dispensary coefficient/SE are hard-coded (0.003, 0.025) and N is also hard-coded (1358) rather than extracted from a model object. The manuscript reports a weekend-night specification in the distance table; hard-coding prevents verification.: dist_results <- data.frame(\n  Specification = c(\"All Crashes\", \"Nighttime\", \"Daytime\", \"Weekend Night\"),\n  Coefficient = c(sprintf(\"%.3f\", coef_all), sprintf(\"%.3f\", coef_night), sprintf(\"%.3f\", coef_day), \"0.003\"),\n  SE = c(sprintf(\"(%.3f)\", se_all), sprintf(\"(%.3f)\", se_night), sprintf(\"(%.3f)\", se_day), \"(0.025)\"),\n  N = c(n_all, n_night, n_day, 1358),\n  MeanAlcohol = c(\"28.0%\", \"45.2%\", \"20.5%\", \"51.3%\")\n)",
-      "confidence": 0.88
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        150,
-        214
-      ],
-      "evidence": "The pipeline can proceed even if DRUNK_DR is absent (it is set to NA). Downstream scripts treat drunk_dr as the alcohol outcome input (e.g., alcohol_involved = as.integer(drunk_dr >= 1)). The manuscript states alcohol involvement comes from FARS DRUNK_DR. If the chosen API endpoint does not return DRUNK_DR, the analysis may collapse (dropping all rows) or produce undefined behavior. There is no implemented merge of FARS accident/vehicle/person files (as described in the manuscript), so the provenance of the key outcome variable is fragile and may depend on undocumented API fields.: # Handle DRUNK_DR column (may be named differently)\nif (!\"drunk_dr\" %in% names(fars_clean)) {\n  ...\n  } else {\n    # If no alcohol variable, set to NA for now\n    fars_clean$drunk_dr <- NA\n    cat(\"Warning: No DRUNK_DR column found. Will need person-level data.\\n\")\n  }\n}\n...\n# Filter to valid coordinates\nfars_clean <- fars_clean %>%\n  filter(!is.na(lat) & !is.na(lon)) %>%\n  ...\n# Convert to sf object\ncrashes_sf <- st_as_sf(fars_clean, coords = c(\"lon\", \"lat\"), crs = 4326)\n...\nsaveRDS(crashes_sf, \"../data/crashes_sf.rds\")",
-      "confidence": 0.77
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        14,
-        33
-      ],
-      "evidence": "The manuscript explicitly defines treatment as time-varying for California (legal only after Jan 2018) and Nevada (legal only after Jul 2017), and says crashes in those states prior to those dates are coded as control. The code assigns CA and NV as 'Legal' for all years (static by FIPS). This directly conflicts with the paper's stated identification strategy and affects both the running variable sign and the treatment indicator.: prohibition_fips <- c(\"04\", \"16\", \"20\", \"30\", \"31\", \"35\", \"49\", \"56\")\nlegal_fips <- c(\"06\", \"08\", \"32\", \"41\", \"53\")\n...\nstates_sf <- states_sf %>%\n  mutate(\n    legal_status = case_when(\n      STATEFP %in% legal_fips ~ \"Legal\",\n      TRUE ~ \"Prohibition\"\n    )\n  )",
-      "confidence": 0.95
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "02_clean_data.R",
-      "lines": [
-        17,
-        64
-      ],
-      "evidence": "The manuscript describes constructing border segments as a function of crash date (three regimes) and computing signed distance to the nearest relevant legal\u2013prohibition border at that time. The code instead unions a single set of borders (computed from static 2019 legal/prohibition assignment) and uses the static state-level 'legal_status' to sign the distance. There is no crash-date-specific border set, so the running variable does not match the paper's described time-varying spatial RDD.: # Combine all borders into single multilinestring\nall_borders <- borders_sf %>%\n  st_union() %>%\n  st_sf()\n...\n# Determine sign based on legal status\nlegal_status <- point_sf$legal_status\n...\nsigned_dist <- ifelse(legal_status == \"Legal\", -dist_km, dist_km)",
-      "confidence": 0.93
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "MEDIUM",
-      "file": "07_distance_analysis.R",
-      "lines": [
-        88,
-        112
-      ],
-      "evidence": "Post-treatment status is constructed using an imputed mid-year crash date (July 1) based only on the crash year, despite the manuscript\u2019s emphasis on timing (e.g., Nevada July 2017, California Jan 2018). This coarse timing can misclassify treatment in partial years and attenuate or distort temporal placebo logic. This is not outright invalid, but it should be justified and sensitivity-checked (e.g., using actual crash month/day if available).: mutate(\n  treatment_date = sapply(NAME, get_treatment_date) %>% as.Date(origin = \"1970-01-01\"),\n  crash_date = as.Date(paste(year, \"07\", \"01\", sep = \"-\")),  # Mid-year approximation\n  post_treatment = as.integer(crash_date >= treatment_date),\n  log_dist = log(dist_to_disp_km + 1),\n  alcohol_involved = as.integer(drunk_dr >= 1)\n)",
-      "confidence": 0.74
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "MEDIUM",
-      "file": "06_tables.R",
-      "lines": [
-        86,
-        133
-      ],
-      "evidence": "Significance stars are hard-coded into the LaTeX output (e.g., always '**' for several columns and '*' for one), rather than being computed from p-values. Given the manuscript\u2019s main finding is not statistically significant (p=0.127), hard-coded stars can misrepresent inference if this table is used in the paper build.: cat(sprintf(\"Legal Cannabis Access & %.4f** & %.4f** & %.4f** & %.4f* & %.4f** \\\\\\\\\\n\",\n            rdd_linear$coef[1], rdd_quad$coef[1], rdd_uniform$coef[1],\n            rdd_50bw$coef[1], rdd_200bw$coef[1]),\n    file = \"../tables/tab02_main_results.tex\", append = TRUE)",
-      "confidence": 0.86
-    },
-    {
-      "category": "DATA_FABRICATION",
-      "severity": "LOW",
-      "file": "00_packages.R",
-      "lines": [
-        53,
-        55
-      ],
-      "evidence": "A global seed is set. This is usually fine, but the project also uses random sampling for plotting (e.g., sample_n in figure scripts). If any random procedure affected analytic outputs (not just visuals), it should be explicitly documented. In the provided code, the clearest random use is visualization subsampling and permutation inference, which is acceptable.: # Set seed for reproducibility\nset.seed(20260130)",
-      "confidence": 0.55
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "05_figures_v2.R",
@@ -136,7 +25,7 @@
     },
     {
       "file": "06_tables_v2.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "04_robustness.R",
@@ -148,7 +37,7 @@
     },
     {
       "file": "02_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "07_distance_analysis.R",
@@ -164,51 +53,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 5,
-      "MEDIUM": 4,
-      "LOW": 1
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "fabricated data; hard-coded results",
-    "executive_summary": "The code can materially alter or invent key inputs and outputs: when the Overpass API call fails it substitutes a hand-entered \u201cminimal dispensary dataset\u201d of four locations, which can change distance-to-dispensary measures and downstream conclusions. Core reported results are not reproducible from the data because important table entries and multiple non-baseline RDD estimates/SEs, p-values, and sample sizes are hard-coded or generated by arbitrary multipliers rather than computed. The implemented treatment and border-distance construction also diverge from the manuscript\u2019s time-varying legality and date-specific border-regime definitions, meaning the estimands in code do not match what the paper claims to estimate.",
-    "top_issues": [
-      {
-        "category": "DATA_FABRICATION",
-        "severity": "HIGH",
-        "short": "If the Overpass API call fails, the script fabricates a f...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          246,
-          262
-        ],
-        "github_url": "/apep_0088/code/01_fetch_data.R#L246-L262"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "Key summary-statistics entries (single-vehicle and rural ...",
-        "file": "06_tables_v2.R",
-        "lines": [
-          22,
-          63
-        ],
-        "github_url": "/apep_0088/code/06_tables_v2.R#L22-L63"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "This script fabricates non-baseline RDD estimates/SEs by ...",
-        "file": "06_tables_v2.R",
-        "lines": [
-          73,
-          104
-        ],
-        "github_url": "/apep_0088/code/06_tables_v2.R#L73-L104"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0088_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0088_v1_scan.json"
   },
   "error": null
 }

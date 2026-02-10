@@ -274,11 +274,34 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0038_v1",
+      "paper_family_id": "apep_0038",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-01-30",
+      "pdf": "papers/apep_0038/v1/paper.pdf",
+      "promising": false
+    },
+    {
+      "paper_id": "apep_0038_v2",
+      "paper_family_id": "apep_0038",
+      "decision": "MINOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0038/v2/paper.pdf",
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0038_v1",
+      "version": 2
+    },
+    {
       "paper_id": "apep_0038_v3",
+      "paper_family_id": "apep_0038",
       "decision": "MINOR REVISION",
       "date": "2026-02-09",
       "pdf": "papers/apep_0038/v3/paper.pdf",
-      "promising": true
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0038_v2",
+      "version": 3
     },
     {
       "paper_id": "apep_0039_v1",
@@ -307,6 +330,17 @@
       "date": "2026-02-09",
       "pdf": "papers/apep_0042/v2/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0042_v2",
+      "paper_family_id": "apep_0042",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0042/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0042_v1",
+      "version": 2
     },
     {
       "paper_id": "apep_0043_v1",
@@ -351,11 +385,45 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0049_v1",
+      "paper_family_id": "apep_0049",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-01-30",
+      "pdf": "papers/apep_0049/v1/paper.pdf",
+      "promising": false
+    },
+    {
+      "paper_id": "apep_0049_v2",
+      "paper_family_id": "apep_0049",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0049/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0049_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0049_v3",
+      "paper_family_id": "apep_0049",
+      "decision": "MINOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0049/v3/paper.pdf",
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0049_v2",
+      "version": 3
+    },
+    {
       "paper_id": "apep_0049_v4",
+      "paper_family_id": "apep_0049",
       "decision": "MINOR REVISION",
       "date": "2026-02-09",
       "pdf": "papers/apep_0049/v4/paper.pdf",
-      "promising": true
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0049_v3",
+      "version": 4
     },
     {
       "paper_id": "apep_0050_v1",
@@ -379,6 +447,17 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0052_v2",
+      "paper_family_id": "apep_0052",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-07",
+      "pdf": "papers/apep_0052/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0052_v1",
+      "version": 2
+    },
+    {
       "paper_id": "apep_0053_v1",
       "decision": "REJECT AND RESUBMIT",
       "date": "2026-02-09",
@@ -386,18 +465,185 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0054_v1",
+      "paper_family_id": "apep_0054",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-01-30",
+      "pdf": "papers/apep_0054/v1/paper.pdf",
+      "promising": false
+    },
+    {
+      "paper_id": "apep_0054_v10",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v10/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v9",
+      "version": 10
+    },
+    {
+      "paper_id": "apep_0054_v11",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v11/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v10",
+      "version": 11
+    },
+    {
+      "paper_id": "apep_0054_v12",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v12/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v11",
+      "version": 12
+    },
+    {
+      "paper_id": "apep_0054_v13",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v13/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v12",
+      "version": 13
+    },
+    {
       "paper_id": "apep_0054_v14",
+      "paper_family_id": "apep_0054",
       "decision": "MINOR REVISION",
-      "date": "2026-02-09",
+      "date": "2026-02-08",
       "pdf": "papers/apep_0054/v14/paper.pdf",
-      "promising": true
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v13",
+      "version": 14
+    },
+    {
+      "paper_id": "apep_0054_v2",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0054_v3",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0054_v4",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v3",
+      "version": 4
+    },
+    {
+      "paper_id": "apep_0054_v5",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v5/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v4",
+      "version": 5
+    },
+    {
+      "paper_id": "apep_0054_v6",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v6/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v5",
+      "version": 6
+    },
+    {
+      "paper_id": "apep_0054_v7",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v7/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v6",
+      "version": 7
+    },
+    {
+      "paper_id": "apep_0054_v8",
+      "paper_family_id": "apep_0054",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v8/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v7",
+      "version": 8
+    },
+    {
+      "paper_id": "apep_0054_v9",
+      "paper_family_id": "apep_0054",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0054/v9/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0054_v8",
+      "version": 9
+    },
+    {
+      "paper_id": "apep_0055_v1",
+      "paper_family_id": "apep_0055",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-01-30",
+      "pdf": "papers/apep_0055/v1/paper.pdf",
+      "promising": false
+    },
+    {
+      "paper_id": "apep_0055_v2",
+      "paper_family_id": "apep_0055",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0055/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0055_v1",
+      "version": 2
     },
     {
       "paper_id": "apep_0055_v3",
+      "paper_family_id": "apep_0055",
       "decision": "MAJOR REVISION",
       "date": "2026-02-09",
       "pdf": "papers/apep_0055/v3/paper.pdf",
-      "promising": false
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0055_v2",
+      "version": 3
     },
     {
       "paper_id": "apep_0056_v1",
@@ -447,6 +693,17 @@
       "date": "2026-02-09",
       "pdf": "papers/apep_0062/v2/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0062_v2",
+      "paper_family_id": "apep_0062",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-01-30",
+      "pdf": "papers/apep_0062/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0062_v1",
+      "version": 2
     },
     {
       "paper_id": "apep_0063_v1",
@@ -540,6 +797,17 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0076_v2",
+      "paper_family_id": "apep_0076",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0076/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0076_v1",
+      "version": 2
+    },
+    {
       "paper_id": "apep_0077_v1",
       "decision": "REJECT AND RESUBMIT",
       "date": "2026-02-09",
@@ -617,11 +885,67 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0088_v1",
+      "paper_family_id": "apep_0088",
+      "decision": "MAJOR REVISION",
+      "date": "2026-01-30",
+      "pdf": "papers/apep_0088/v1/paper.pdf",
+      "promising": false
+    },
+    {
       "paper_id": "apep_0088_v2",
+      "paper_family_id": "apep_0088",
       "decision": "MAJOR REVISION",
       "date": "2026-02-09",
+      "pdf": "papers/apep_0088/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0088_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0088_v4",
+      "paper_family_id": "apep_0088",
+      "decision": "MINOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0088/v4/paper.pdf",
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0071_v1",
+      "version": 4
+    },
+    {
+      "paper_id": "apep_0088_v5",
+      "paper_family_id": "apep_0088",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0088/v5/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0088_v4",
+      "version": 5
+    },
+    {
+      "paper_id": "apep_0088_v6",
+      "paper_family_id": "apep_0088",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0088/v6/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0088_v5",
+      "version": 6
+    },
+    {
+      "paper_id": "apep_0088_v7",
+      "paper_family_id": "apep_0088",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-07",
       "pdf": "papers/apep_0088/v7/paper.pdf",
-      "promising": false
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0088_v6",
+      "version": 7
     },
     {
       "paper_id": "apep_0089_v1",
@@ -645,11 +969,26 @@
       "promising": false
     },
     {
-      "paper_id": "apep_0110_v4",
+      "paper_id": "apep_0110_v3",
+      "paper_family_id": "apep_0110",
       "decision": "MINOR REVISION",
-      "date": "2026-02-09",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0110/v3/paper.pdf",
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0091_v1",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0110_v4",
+      "paper_family_id": "apep_0110",
+      "decision": "MINOR REVISION",
+      "date": "2026-02-06",
       "pdf": "papers/apep_0110/v4/paper.pdf",
-      "promising": true
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0110_v3",
+      "version": 4
     },
     {
       "paper_id": "apep_0117_v1",
@@ -671,6 +1010,50 @@
       "date": "2026-02-09",
       "pdf": "papers/apep_0119/v5/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0119_v2",
+      "paper_family_id": "apep_0119",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0119/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0119_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0119_v3",
+      "paper_family_id": "apep_0119",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0119/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0119_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0119_v4",
+      "paper_family_id": "apep_0119",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0119/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0119_v3",
+      "version": 4
+    },
+    {
+      "paper_id": "apep_0119_v5",
+      "paper_family_id": "apep_0119",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0119/v5/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0119_v4",
+      "version": 5
     },
     {
       "paper_id": "apep_0120_v1",
@@ -715,11 +1098,44 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0128_v2",
+      "paper_family_id": "apep_0128",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0128/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0128_v1",
+      "version": 2
+    },
+    {
       "paper_id": "apep_0134_v1",
       "decision": "MAJOR REVISION",
       "date": "2026-02-09",
       "pdf": "papers/apep_0134/v3/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0134_v2",
+      "paper_family_id": "apep_0134",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0134/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0134_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0134_v3",
+      "paper_family_id": "apep_0134",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0134/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0134_v2",
+      "version": 3
     },
     {
       "paper_id": "apep_0135_v1",
@@ -729,11 +1145,122 @@
       "promising": false
     },
     {
-      "paper_id": "apep_0149_v5",
+      "paper_id": "apep_0135_v2",
+      "paper_family_id": "apep_0135",
       "decision": "MAJOR REVISION",
-      "date": "2026-02-10",
-      "pdf": "papers/apep_0149/v5/paper.pdf",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0135/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0135_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0135_v3",
+      "paper_family_id": "apep_0135",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0135/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0135_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0135_v4",
+      "paper_family_id": "apep_0135",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0135/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0135_v3",
+      "version": 4
+    },
+    {
+      "paper_id": "apep_0135_v5",
+      "paper_family_id": "apep_0135",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0135/v5/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0135_v4",
+      "version": 5
+    },
+    {
+      "paper_id": "apep_0135_v6",
+      "paper_family_id": "apep_0135",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0135/v6/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0135_v5",
+      "version": 6
+    },
+    {
+      "paper_id": "apep_0135_v7",
+      "paper_family_id": "apep_0135",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0135/v7/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0135_v6",
+      "version": 7
+    },
+    {
+      "paper_id": "apep_0149_v1",
+      "paper_family_id": "apep_0149",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0149/v1/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0149_v2",
+      "paper_family_id": "apep_0149",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0149/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0149_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0149_v3",
+      "paper_family_id": "apep_0149",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0149/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0149_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0149_v4",
+      "paper_family_id": "apep_0149",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0149/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0149_v3",
+      "version": 4
+    },
+    {
+      "paper_id": "apep_0149_v5",
+      "paper_family_id": "apep_0149",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-09",
+      "pdf": "papers/apep_0149/v5/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0149_v4",
+      "version": 5
     },
     {
       "paper_id": "apep_0150_v1",
@@ -743,11 +1270,88 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0150_v2",
+      "paper_family_id": "apep_0150",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0150/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0150_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0150_v3",
+      "paper_family_id": "apep_0150",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0150/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0150_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0150_v4",
+      "paper_family_id": "apep_0150",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0150/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0150_v3",
+      "version": 4
+    },
+    {
+      "paper_id": "apep_0150_v5",
+      "paper_family_id": "apep_0150",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0150/v5/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0150_v4",
+      "version": 5
+    },
+    {
       "paper_id": "apep_0169_v1",
       "decision": "MAJOR REVISION",
       "date": "2026-02-09",
       "pdf": "papers/apep_0169/v4/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0169_v2",
+      "paper_family_id": "apep_0169",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0169/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0169_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0169_v3",
+      "paper_family_id": "apep_0169",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0169/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0169_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0169_v4",
+      "paper_family_id": "apep_0169",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0169/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0169_v3",
+      "version": 4
     },
     {
       "paper_id": "apep_0170_v1",
@@ -757,11 +1361,56 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0180_v1",
+      "paper_family_id": "apep_0180",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0180/v1/paper.pdf",
+      "promising": false
+    },
+    {
+      "paper_id": "apep_0180_v2",
+      "paper_family_id": "apep_0180",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0180/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0180_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0180_v3",
+      "paper_family_id": "apep_0180",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0180/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0180_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0180_v4",
+      "paper_family_id": "apep_0180",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0180/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0180_v3",
+      "version": 4
+    },
+    {
       "paper_id": "apep_0180_v5",
+      "paper_family_id": "apep_0180",
       "decision": "MINOR REVISION",
       "date": "2026-02-10",
       "pdf": "papers/apep_0180/v5/paper.pdf",
-      "promising": true
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0180_v4",
+      "version": 5
     },
     {
       "paper_id": "apep_0183_v1",
@@ -771,18 +1420,196 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0185_v1",
+      "paper_family_id": "apep_0185",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v1/paper.pdf",
+      "promising": false
+    },
+    {
+      "paper_id": "apep_0185_v10",
+      "paper_family_id": "apep_0185",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-02-07",
+      "pdf": "papers/apep_0185/v10/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v9",
+      "version": 10
+    },
+    {
+      "paper_id": "apep_0185_v11",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-07",
+      "pdf": "papers/apep_0185/v11/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v10",
+      "version": 11
+    },
+    {
+      "paper_id": "apep_0185_v12",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-07",
+      "pdf": "papers/apep_0185/v12/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v11",
+      "version": 12
+    },
+    {
+      "paper_id": "apep_0185_v13",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-07",
+      "pdf": "papers/apep_0185/v13/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v12",
+      "version": 13
+    },
+    {
+      "paper_id": "apep_0185_v14",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-07",
+      "pdf": "papers/apep_0185/v14/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v13",
+      "version": 14
+    },
+    {
+      "paper_id": "apep_0185_v15",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-07",
+      "pdf": "papers/apep_0185/v15/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v14",
+      "version": 15
+    },
+    {
       "paper_id": "apep_0185_v16",
+      "paper_family_id": "apep_0185",
       "decision": "MAJOR REVISION",
       "date": "2026-02-09",
       "pdf": "papers/apep_0185/v16/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v15",
+      "version": 16
+    },
+    {
+      "paper_id": "apep_0185_v2",
+      "paper_family_id": "apep_0185",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v1",
+      "version": 2
+    },
+    {
+      "paper_id": "apep_0185_v3",
+      "paper_family_id": "apep_0185",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v3/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v2",
+      "version": 3
+    },
+    {
+      "paper_id": "apep_0185_v4",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v4/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v3",
+      "version": 4
+    },
+    {
+      "paper_id": "apep_0185_v5",
+      "paper_family_id": "apep_0185",
+      "decision": "REJECT AND RESUBMIT",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v5/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v4",
+      "version": 5
+    },
+    {
+      "paper_id": "apep_0185_v6",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v6/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v5",
+      "version": 6
+    },
+    {
+      "paper_id": "apep_0185_v7",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v7/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v6",
+      "version": 7
+    },
+    {
+      "paper_id": "apep_0185_v8",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v8/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v7",
+      "version": 8
+    },
+    {
+      "paper_id": "apep_0185_v9",
+      "paper_family_id": "apep_0185",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0185/v9/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0185_v8",
+      "version": 9
+    },
+    {
+      "paper_id": "apep_0194_v1",
+      "paper_family_id": "apep_0194",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-06",
+      "pdf": "papers/apep_0194/v1/paper.pdf",
       "promising": false
     },
     {
       "paper_id": "apep_0194_v2",
+      "paper_family_id": "apep_0194",
       "decision": "MAJOR REVISION",
-      "date": "2026-02-09",
+      "date": "2026-02-08",
       "pdf": "papers/apep_0194/v2/paper.pdf",
-      "promising": false
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0194_v1",
+      "version": 2
     },
     {
       "paper_id": "apep_0196_v1",

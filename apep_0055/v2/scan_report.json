@@ -1,140 +1,15 @@
 {
-  "paper_id": "apep_0179",
-  "scan_date": "2026-02-06T12:58:33.486564+00:00",
+  "paper_id": "apep_0055_v2",
+  "scan_date": "2026-02-10T13:14:22.974473+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 11,
-  "flags": [
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "paper.tex",
-      "lines": [
-        55,
-        226,
-        235,
-        260
-      ],
-      "evidence": "The manuscript repeatedly states the analysis uses only the 2023 natality files (N\u22481.64M). Multiple code scripts are written to download/process 2016\u20132023 and figures are explicitly labeled \u201c2016-2023\u201d, creating a material mismatch between described data window and implemented (or at least labeled) data window. If the code is actually run with multiple years present, the results in the manuscript (sample size, effect magnitudes, and standard errors) may not correspond to what the code produces.: Using a regression discontinuity design and universe data from the 2023 CDC Natality files covering 1.64 million births...\n...\nThe empirical analysis uses data from the CDC Natality Public Use Files for 2023...\n...\nThe final analysis sample contains 1,639,017 births...",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "01_fetch_data.R",
-      "lines": [
-        14,
-        16
-      ],
-      "evidence": "The fetch script is configured to download 2016\u20132023 natality files, which conflicts with the paper\u2019s claim of using only 2023. This is not inherently wrong, but it requires clear manuscript alignment (e.g., multi-year pooled analysis) and consistent reporting of sample size and captions.: years <- 2016:2023\n\nfor (year in years) {",
-      "confidence": 0.8
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "HIGH",
-      "file": "02_clean_data.R",
-      "lines": [
-        40,
-        43,
-        124,
-        129
-      ],
-      "evidence": "The cleaning script pools all available years 2016\u20132023 into one combined dataset. Unless only the 2023 file exists locally, this will generate an 8-year pooled sample that contradicts the manuscript\u2019s single-year design and reported N=1,639,017. Because the code uses a 'skip if file not found' pattern, the actual year coverage becomes dependent on what happens to be present in the data directory, which is a reproducibility/integrity risk unless explicitly controlled (e.g., forcing year==2023).: years <- 2016:2023\nall_data <- list()\n\nfor (year in years) {\n  dta_path <- file.path(data_dir, sprintf(\"natality%dus.dta\", year))\n  ...\n  all_data[[as.character(year)]] <- dt\n}\n\n# Combine all years\nnatality <- rbindlist(all_data)",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "05_figures.R",
-      "lines": [
-        47,
-        102,
-        169,
-        243
-      ],
-      "evidence": "All main figure captions hard-code the data window as 2016\u20132023, which conflicts with the paper\u2019s claim of 2023-only. Even if only 2023 is present and thus used, the figures would be mislabeled. If multiple years are present, the manuscript is mislabeled. Either way, this is a substantive reporting inconsistency.: caption = \"Data: CDC Natality Public Use Files, 2016-2023. Dashed line indicates age 26 cutoff.\"\n...\ncaption = \"Data: CDC Natality 2016-2023. Shaded regions show 95% CI for local polynomial.\"\n...\ncaption = \"Data: CDC Natality 2016-2023. These covariates are determined before age 26.\"\n...\ncaption = \"Data: CDC Natality 2016-2023.\"",
-      "confidence": 0.9
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "paper.tex",
-      "lines": [
-        318,
-        364,
-        380
-      ],
-      "evidence": "The manuscript claims (i) a Koles\u00e1r-Rothe-type discrete-running-variable inference procedure and (ii) permutation-based local randomization inference with 1,000 permutations. In the provided code, discrete-RV inference is not implemented beyond standard rdrobust calls, and the 'local randomization' section uses simple difference-in-means plus t-tests (no permutation test, no rdlocrand randomization inference calls). This is a mismatch between described and implemented inference.: First, I implement the variance estimator of \\citet{kolesar2018}...\nSecond, I conduct local randomization inference ... uses permutation methods...\nThe permutation p-value is less than 0.001, based on 1,000 random permutations...",
-      "confidence": 0.8
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "03_main_analysis.R",
-      "lines": [
-        118,
-        136,
-        143
-      ],
-      "evidence": "The code labels a section as 'Local Randomization Inference' but implements standard two-sample t-tests rather than randomization inference/permutation p-values as described in the manuscript. This affects how readers should interpret p-values and robustness claims for the discrete running variable setting.: # Alternative: Local Randomization Inference\n# For discrete running variable, local randomization may be more appropriate\n...\n# T-test\ntt <- t.test(df_narrow[[outcome]] ~ df_narrow$above_26)",
-      "confidence": 0.85
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "00_packages.R",
-      "lines": [
-        79,
-        82,
-        84,
-        88
-      ],
-      "evidence": "Reproducibility depends on the working directory at runtime. If executed from different directories, 'proj_root' may resolve incorrectly, leading the scripts to silently read/write different 'data/' folders. This can make it unclear which raw natality files were actually used and can allow inadvertent mixing of datasets across runs/machines unless execution is standardized (e.g., using here::here() or an explicit project-root sentinel file).: proj_root <- normalizePath(file.path(getwd(), \"..\"), mustWork = FALSE)\n...\ndata_dir <- file.path(proj_root, \"data\")\n...\ndir.create(data_dir, showWarnings = FALSE, recursive = TRUE)",
-      "confidence": 0.65
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "07_tables.R",
-      "lines": [
-        71,
-        88,
-        93,
-        135
-      ],
-      "evidence": "Table 1 is written to a .tex file via sink(), but Table 2 and later tables are printed to the console (no sink()) while the script claims they are 'saved'. This can lead to situations where the manuscript tables are manually copied/edited (increasing transcription risk) rather than programmatically written to the repo.: sink(file.path(tables_dir, \"table1_summary.tex\"))\n...\n# Table 2: Main RDD Results\n...\ncat(\"\\n\\\\begin{table}[H]\\n\")\n...\ncat(\"Table 2 saved.\\n\")",
-      "confidence": 0.75
-    },
-    {
-      "category": "SELECTIVE_REPORTING",
-      "severity": "LOW",
-      "file": "07_tables.R",
-      "lines": [
-        171,
-        176
-      ],
-      "evidence": "In the robustness table printout, the 'Robust SE' column is left blank ('& &'), which can cause incomplete LaTeX tables and potentially encourage manual patching. Not an integrity violation by itself, but it weakens the audit trail from model objects to reported tables.: cat(sprintf(\"%d years & %s & %.4f & & [%.4f, %.4f] \\\\\\\\\\n\",\n              bw_table$Bandwidth[i],\n              format(bw_table$N[i], big.mark=\",\"),\n              bw_table$RD_Estimate[i],\n              bw_table$CI_Lower[i],\n              bw_table$CI_Upper[i]))",
-      "confidence": 0.7
-    },
-    {
-      "category": "SUSPICIOUS_TRANSFORMS",
-      "severity": "LOW",
-      "file": "02_clean_data.R",
-      "lines": [
-        103,
-        106,
-        109,
-        115
-      ],
-      "evidence": "Recodes are plausible but depend on correct codebook interpretation. In particular, 'us_born := (mbstate_rec <= 56)' assumes the coding scheme maps US states/DC to <=56 and everything else to foreign/territory; if territories are coded within this range or if 'mbstate_rec' includes special codes, misclassification could affect heterogeneity/covariate balance claims. This is a low-severity item: the transforms are not outcome-dependent and look like standard cleaning, but they should be documented/validated against the natality codebook.: dt[, us_born := as.integer(mbstate_rec <= 56)]  # US states/DC\n...\ndt[meduc %in% c(9, 99), meduc := NA]\ndt[, college := as.integer(meduc >= 6)]  # Bachelor's or higher\n...\ndt[precare5 %in% c(6, 9), precare5 := NA]\ndt[, early_prenatal := as.integer(precare5 == 1)]  # First trimester",
-      "confidence": 0.55
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01_fetch_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "07_tables.R",
@@ -162,7 +37,7 @@
     },
     {
       "file": "02_clean_data.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "03_main_analysis.R",
@@ -175,58 +50,20 @@
     {
       "file": "05_figures.R",
       "verdict": "CLEAN"
-    },
-    {
-      "file": "paper.tex",
-      "verdict": "SUSPICIOUS"
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 3,
-      "MEDIUM": 4,
-      "LOW": 3
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
     },
-    "one_liner": "method mismatch",
-    "executive_summary": "The manuscript claims the analysis uses only the 2023 natality files (N\u22481.64M), but the codebase is built to download, process, and analyze pooled natality data from 2016\u20132023. Specifically, `01_fetch_data.R` is configured to fetch all years 2016\u20132023 and `02_clean_data.R` combines all available years into a single dataset, while the paper/figures are labeled \u201c2016\u20132023,\u201d creating a direct mismatch between the stated sample and what the scripts will actually generate unless only the 2023 file is present locally.",
-    "top_issues": [
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The manuscript repeatedly states the analysis uses only t...",
-        "file": "paper.tex",
-        "lines": [
-          55,
-          226
-        ],
-        "github_url": "/apep_0179/code/paper.tex#L55-L260"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The fetch script is configured to download 2016\u20132023 nata...",
-        "file": "01_fetch_data.R",
-        "lines": [
-          14,
-          16
-        ],
-        "github_url": "/apep_0179/code/01_fetch_data.R#L14-L16"
-      },
-      {
-        "category": "METHODOLOGY_MISMATCH",
-        "severity": "HIGH",
-        "short": "The cleaning script pools all available years 2016\u20132023 i...",
-        "file": "02_clean_data.R",
-        "lines": [
-          40,
-          43
-        ],
-        "github_url": "/apep_0179/code/02_clean_data.R#L40-L129"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0179_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0055_v2_scan.json"
   },
   "error": null
 }

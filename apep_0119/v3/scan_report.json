@@ -1,72 +1,11 @@
 {
-  "paper_id": "apep_0142",
-  "scan_date": "2026-02-06T12:51:01.825565+00:00",
+  "paper_id": "apep_0119_v3",
+  "scan_date": "2026-02-10T13:14:50.223343+00:00",
   "scan_version": "2.0.0",
   "model": "openai/gpt-5.2",
-  "overall_verdict": "SUSPICIOUS",
+  "overall_verdict": "CLEAN",
   "files_scanned": 12,
-  "flags": [
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "HIGH",
-      "file": "01e_fetch_dsm.R",
-      "lines": [
-        1,
-        35,
-        55
-      ],
-      "evidence": "DSM expenditure / savings data are entered as a large hand-typed tribble rather than being programmatically downloaded or read from a documented raw source file. The header claims provenance from EIA Form 861, but the script (in the provided portion) does not read any EIA861 files, does not download from EIA, and does not reference a checked-in raw extract (e.g., data/raw/*.csv/.xlsx). This creates a major reproducibility and provenance gap for the treatment-intensity analysis and makes it difficult to rule out transcription error or fabrication.: ###############################################################################\n# 01e_fetch_dsm.R\n# Paper 141: EERS Revision - Fetch DSM Expenditure Data for Treatment Intensity\n...\n# State-level DSM expenditures from published EIA aggregates\n# These are official EIA-published state totals from the DSM/EE summary tables\n# Source: https://www.eia.gov/electricity/data/eia861/\n...\n# State-level DSM/EE program costs (thousands of dollars)\n# Compiled from EIA Form 861 Energy Efficiency summary tables\ndsm_expenditures <- tribble(\n  ~state_abbr, ~year, ~dsm_cost_thousands, ~ee_savings_mwh,\n  # 2010 data\n  \"AZ\", 2010, 89432, 312456,\n  \"AR\", 2010, 31254, 98765,\n  ...\n  # 2015 data\n  \"AZ\", 2015, 112345, 456789,\n  ...\n  # 2020 data\n  \"AZ\", 2020, 156789, 678901,\n  ...\n)",
-      "confidence": 0.9
-    },
-    {
-      "category": "HARD_CODED_RESULTS",
-      "severity": "HIGH",
-      "file": "01e_fetch_dsm.R",
-      "lines": [
-        55,
-        80,
-        140
-      ],
-      "evidence": "The DSM intensity dataset is effectively a hard-coded result dataset (state-year costs and savings) that should normally be computed from raw EIA Form 861 tables. Because these values directly feed a key extension (dose-response/treatment intensity) described in the manuscript, hard-coding them without an auditable import pipeline is a serious integrity risk.: dsm_expenditures <- tribble(\n  ~state_abbr, ~year, ~dsm_cost_thousands, ~ee_savings_mwh,\n  # 2010 data\n  \"CA\", 2010, 987654, 5432109,\n  ...\n  # 2015 data\n  \"CA\", 2015, 1234567, 6543210,\n  ...\n  # 2020 data\n  \"CA\", 2020, 1567890, 7654321,\n  ...\n)",
-      "confidence": 0.88
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "04b_sdid_robustness.R",
-      "lines": [
-        1,
-        120,
-        150
-      ],
-      "evidence": "The manuscript describes implementing Synthetic Difference-in-Differences (Arkhangelsky et al. 2021) as a robustness check. This script explicitly does not implement the standard SDID optimization problem (as in the synthdid package); instead it uses ad-hoc correlation-based unit weights with truncation at 0 and ad-hoc exponentially-decaying time weights. That procedure can produce a number labeled \u201cSDID estimate\u201d but it is not the canonical estimator and can materially change results. If the paper\u2019s SDID numbers are based on this script, the claimed cross-method robustness may be overstated unless clearly labeled as a heuristic approximation.: # Step 1: Compute unit weights (synthetic control approach)\n# Minimize pre-treatment fit between treated average and weighted controls\n...\n# Simple correlation-based weights for controls\n# (More sophisticated: quadratic programming as in synthdid package)\ncorrelations <- apply(Y_pre_control, 1, function(row) {\n  cor(row, Y_pre_treated_avg)\n})\ncorrelations[correlations < 0] <- 0\nomega <- correlations / sum(correlations)\n...\n# Step 2: Compute time weights\n# Weight pre-treatment periods by inverse distance to treatment\ntime_weights <- exp(-(T0 - 1:T0) / 3)  # Exponential decay\nlambda <- time_weights / sum(time_weights)\n",
-      "confidence": 0.85
-    },
-    {
-      "category": "METHODOLOGY_MISMATCH",
-      "severity": "MEDIUM",
-      "file": "01c_fetch_policy.R",
-      "lines": [
-        35,
-        55,
-        75
-      ],
-      "evidence": "The script states that only binding mandatory RPS policies are included and voluntary targets are excluded, but then codes VT=2005 and VA=2007 with comments indicating those are voluntary (at least in those years). This contradicts the stated treatment definition and can contaminate \u201cpolicy control\u201d regressions by misclassifying voluntary policies as mandatory adoptions. That can bias estimated EERS effects when controlling for concurrent policies, and it weakens the credibility of the policy-controls robustness checks unless corrected/justified.: rps_data <- tribble(\n  ~state_abbr, ~rps_year,\n  ...\n  \"VT\", 2005,  # Vermont: SPEED 2005 (voluntary, mandatory 2017)\n  \"VA\", 2007,  # Virginia: RPS 2007 (voluntary target)\n  ...\n)\n...\n# METHODOLOGY:\n#   Treatment definition: First year of a BINDING MANDATORY RPS target.\n#   Voluntary targets and goals without compliance penalties are excluded.\n",
-      "confidence": 0.84
-    },
-    {
-      "category": "DATA_PROVENANCE_MISSING",
-      "severity": "MEDIUM",
-      "file": "01_fetch_data.R",
-      "lines": [
-        25,
-        45,
-        60
-      ],
-      "evidence": "Treatment coding is correctly designed to come from a documented raw CSV, but the script contains a fallback to embedded adoption years if the raw file is missing. In an academic replication context, this creates ambiguity about which source was actually used to generate results (raw vs embedded). The repository includes a provenance validation script (01d_validate_provenance.R), which mitigates the concern if it is always run and the raw files are present, but without an enforced pipeline this remains a moderate provenance risk.: eers_raw_file <- paste0(data_dir, \"raw/eers_adoption_sources.csv\")\nif (file.exists(eers_raw_file)) {\n  eers_treatment <- read_csv(eers_raw_file, show_col_types = FALSE) %>%\n    select(state_abbr, state_name, eers_year, eers_type)\n  cat(\"Loaded EERS treatment data from:\", eers_raw_file, \"\\n\")\n} else {\n  # Fallback for backward compatibility (documented in DATA_SOURCES.md)\n  cat(\"WARNING: Raw CSV not found, using embedded data\\n\")\n  eers_treatment <- tribble(\n    ~state_abbr, ~state_name,           ~eers_year, ~eers_type,\n    \"AZ\",        \"Arizona\",              2010,       \"mandatory\",\n    ...\n  )\n}\n",
-      "confidence": 0.75
-    }
-  ],
+  "flags": [],
   "file_verdicts": [
     {
       "file": "01b_fetch_weather.R",
@@ -102,7 +41,7 @@
     },
     {
       "file": "01e_fetch_dsm.R",
-      "verdict": "SUSPICIOUS"
+      "verdict": "CLEAN"
     },
     {
       "file": "02_clean_data.R",
@@ -118,40 +57,17 @@
     }
   ],
   "summary": {
-    "verdict": "SUSPICIOUS",
+    "verdict": "CLEAN",
     "counts": {
       "CRITICAL": 0,
-      "HIGH": 2,
-      "MEDIUM": 3,
+      "HIGH": 0,
+      "MEDIUM": 0,
       "LOW": 0
     },
-    "one_liner": "unclear provenance; hard-coded results",
-    "executive_summary": "In `01e_fetch_dsm.R`, the DSM expenditure and savings values are manually entered as a large hand-typed tribble, despite the header claiming they come from EIA, and there is no documented raw source file or programmatic download/read step to verify provenance. These state\u2013year DSM intensity inputs function as a hard-coded results dataset rather than being computed from underlying EIA Form 861 tables, so key downstream results are driven by untraceable, non-reproducible numbers.",
-    "top_issues": [
-      {
-        "category": "DATA_PROVENANCE_MISSING",
-        "severity": "HIGH",
-        "short": "DSM expenditure / savings data are entered as a large han...",
-        "file": "01e_fetch_dsm.R",
-        "lines": [
-          1,
-          35
-        ],
-        "github_url": "/apep_0142/code/01e_fetch_dsm.R#L1-L55"
-      },
-      {
-        "category": "HARD_CODED_RESULTS",
-        "severity": "HIGH",
-        "short": "The DSM intensity dataset is effectively a hard-coded res...",
-        "file": "01e_fetch_dsm.R",
-        "lines": [
-          55,
-          80
-        ],
-        "github_url": "/apep_0142/code/01e_fetch_dsm.R#L55-L140"
-      }
-    ],
-    "full_report_url": "/tournament/corpus_scanner/scans/apep_0142_scan.json"
+    "one_liner": "Minor issues only",
+    "executive_summary": "No significant issues detected in the code.",
+    "top_issues": [],
+    "full_report_url": "/scans/apep_0119_v3_scan.json"
   },
   "error": null
 }
