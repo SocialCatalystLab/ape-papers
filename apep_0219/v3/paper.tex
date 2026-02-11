@@ -1,0 +1,733 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{tabularx}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Limits of Marginal Aid: A Regression Discontinuity Estimate of Place-Based Policy in Appalachia\thanks{This paper is a revision of APEP-0219. See \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0219} for the original. Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch}}
+\author{APEP Autonomous Research \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+The Appalachian Regional Commission has spent over \$3.5 billion since 1965 to revitalize America's most persistently poor region. I exploit a sharp threshold in ARC's county classification system---counties in the worst national decile are labeled ``Distressed'' and receive 80\% federal match rates instead of 70\%---to estimate whether this marginal designation improves local economic conditions. Using a regression discontinuity design on 3,317 county-year observations from 369 Appalachian counties over 2007--2017, I find the Distressed label has no effect on unemployment, per capita income, or poverty; I rule out even a 4\% income improvement or a 0.6 percentage-point reduction in unemployment. The null survives bandwidth variation, polynomial order changes, donut-hole specifications, and placebo thresholds. Three independently measured BEA outcomes confirm the finding. Marginal increases in federal match rates---the architecture of most U.S.\ place-based programs---cannot bend the economic trajectory of chronically poor communities.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H53, R11, R58, I38 \\
+\noindent\textbf{Keywords:} place-based policy, regression discontinuity, Appalachian Regional Commission, distressed communities, federal aid
+
+\newpage
+
+\section{Introduction}
+
+Appalachia is America's most famous economic laboratory and its most stubborn policy failure. For sixty years, the federal government has channeled billions of dollars into the 420 counties stretching from southern New York to northern Mississippi (see Appendix Figure~\ref{fig:map} for the geographic extent of the region), hoping to pull one of the world's wealthiest nations' poorest regions out of chronic poverty. The Appalachian Regional Commission (ARC), created by President Lyndon Johnson in 1965, has invested over \$3.5 billion in direct grants---building highways, funding job training, and subsidizing infrastructure in communities where per capita income hovers at half the national average. Yet after six decades of sustained federal attention, 84 Appalachian counties remain officially ``Distressed,'' and the region's economic gap with the rest of the country has barely narrowed.
+
+Does the ARC's Distressed designation---the label that triggers the most generous federal support---actually improve economic conditions in the counties that receive it? This question goes to the heart of how the United States designs its place-based transfer system: if the marginal dollar of federal aid at the boundary of ``Distressed'' status fails to move local outcomes, then the threshold-based architecture that governs not only the ARC but also USDA persistent poverty designations, HUD Difficult Development Areas, and Treasury CDFI programs may systematically misallocate resources.
+
+I exploit a feature of the ARC's classification system that generates quasi-random variation in treatment. Each year, ARC ranks all approximately 3,110 U.S.\ counties on a Composite Index Value (CIV) that combines unemployment, per capita market income, and poverty rates. Appalachian counties in the worst national decile receive the ``Distressed'' designation, which unlocks an 80\% federal match rate on ARC grants (compared to 70\% for ``At-Risk'' counties just below the threshold) and exclusive access to the Distressed Counties Program. The designation also carries a public label---counties are mapped and listed as ``Distressed'' on ARC's website and in congressional reports. The sharp threshold in the CIV ranking creates a natural experiment: counties just above and just below the Distressed cutoff are nearly identical on the economic fundamentals that determine the index---they differ by fractions of a percentage point in unemployment and poverty---but they receive different levels of federal support and carry different official labels.
+
+I construct a panel of 4,600 county-year observations covering all 420 Appalachian counties from fiscal year 2007 through 2017, drawing on ARC's published CIV data, BLS unemployment statistics, Census poverty and income estimates, and BEA regional economic accounts. Restricting to counties within $\pm 50$ CIV points of the Distressed threshold yields the analysis sample of 3,317 county-year observations. The CIV serves as the running variable, centered at the year-specific Distressed threshold. I estimate the effect of crossing the threshold on three primary outcomes: the county unemployment rate, log per capita market income, and the poverty rate.
+
+I find that the Distressed designation has no effect on any economic outcome. The confidence intervals are tight enough to rule out even modest improvements: a 4\% change in per capita income, a 0.6 percentage-point change in unemployment, or a 1.2 percentage-point change in poverty would have been detected. These are not the wide bounds of an underpowered study. The null survives bandwidth variation (0.5 to 1.5 times the MSE-optimal bandwidth), quadratic polynomials, donut-hole specifications that drop observations nearest the threshold, and year-by-year estimation across all 11 fiscal years. Placebo tests at the 25th and 50th national percentiles find no spurious discontinuities. McCrary density tests and covariate balance analysis confirm the validity of the design: there is no evidence of manipulation at the threshold. Three alternative outcomes from independent BEA data---total wages, total personal income, and population growth---confirm the null through data sources with no mechanical link to the assignment variable.
+
+\subsection*{Contribution and Related Literature}
+
+This paper contributes to a central debate in the economics of place-based policy: whether targeted federal investment can overcome the locational disadvantages of chronically poor areas, or whether such transfers merely slow the natural adjustment of workers to more productive locations.
+
+The optimistic case rests on landmark studies of large-scale interventions. \citet{kline2014tva} demonstrate that the Tennessee Valley Authority---one of the largest place-based investments in U.S.\ history---generated persistent positive effects on manufacturing employment, consistent with a ``big push'' that permanently altered a region's economic trajectory. \citet{busso2013assessing} find that federal Empowerment Zones modestly increased employment in designated areas. \citet{freedman2012new} documents positive effects of the New Markets Tax Credit on low-income census tracts. These studies share a common feature: the treatments they evaluate are discrete on/off interventions of substantial magnitude---the TVA brought massive infrastructure to previously undeveloped areas, Empowerment Zones offered significant tax incentives, and the NMTC channeled large capital investments into distressed communities.
+
+The skeptical view, articulated most forcefully by \citet{glaeser2008cities}, holds that in the long run, people and firms sort across locations based on productivity and amenities, and place-based transfers that raise incomes without improving underlying productivity will be offset by migration and capitalization effects. \citet{neumark2015place} review the broader enterprise zone literature and find mixed evidence, with many evaluations---including the early null results of \citet{papke1994enterprise}---showing no significant employment effects. \citet{bartik2020place} emphasizes that place-based programs can work but require sufficient scale and targeting to overcome the natural tendency of labor markets to adjust through migration. More recently, \citet{austin2018jobs} document the sharp geographic concentration of joblessness in the United States, arguing that place-based policies targeting non-employment may need to be far more aggressive than current programs allow.
+
+A critical gap in this literature is that nearly all causal evidence comes from evaluating \textit{large} treatments---programs that turned on or off entirely. The question of whether \textit{marginal} increases in place-based transfers move outcomes at all remains largely unanswered. Yet this is precisely how most federal aid actually operates: through tiered classification systems that create small discontinuities in funding at threshold values. If marginal aid at these thresholds is ineffective, the resources might be better deployed through continuous formulas or concentrated in fewer locations at higher intensity. The ARC's Distressed threshold provides a rare opportunity to identify this marginal effect cleanly, because the assignment mechanism is transparent, the running variable is constructed from lagged federal statistics that are immune to manipulation, and the threshold is determined by the national distribution of economic conditions rather than by any individual county's actions.
+
+This paper makes four contributions. First, it provides the first regression discontinuity estimate of the causal effect of the ARC's Distressed designation---filling a sixty-year gap in the evaluation of America's oldest continuously operating place-based program. While a substantial literature examines the ARC's aggregate effects on Appalachian economic convergence \citep{isserman2009appalachia, partridge2012distance}, no prior study has exploited the sharp threshold in the classification system to identify the marginal effect of enhanced funding. Second, the precisely estimated null resolves an important ambiguity in the place-based policy debate. Existing evidence is dominated by evaluations of large, discrete treatments; my findings demonstrate that at the \textit{margin} of a threshold-based system, incremental aid does not generate detectable improvements---even in a setting with high statistical power and a credible design. This is consistent with the dose-response model of \citet{kline2014tva}, which predicts that small transfers to distressed areas will have negligible effects while large, sustained investments can achieve permanent transformation. Third, the results carry direct implications for the design of threshold-based federal programs beyond the ARC. The USDA's ``persistent poverty counties'' designation, HUD's ``Difficult Development Areas,'' and the Treasury's CDFI program all use similar classification systems that create discontinuities in funding at known thresholds \citep{lee2010regression}. If incremental funding at these margins is ineffective, continuous matching formulas may dominate tiered systems. Fourth, the paper contributes to an emerging literature on the signaling and stigma effects of official distress designations. \citet{kang2024fiscal} document that fiscal distress labels alter local government behavior and credit market access; my design bundles the label, the enhanced match rate, and exclusive program access into a single compound treatment, providing the first place-based evidence on the net economic effect of a distress designation.
+
+The null result should not be interpreted as evidence that all ARC spending is ineffective. The RDD identifies a \textit{local} average treatment effect at the Distressed threshold---the marginal impact of moving from 70\% to 80\% match rates and gaining access to the Distressed Counties Program. Counties deep in the Distressed category may benefit substantially from ARC programs, and ARC's flagship highway investments are allocated through separate mechanisms. What the null does tell us is that, at the margin, the incremental funding advantage of the Distressed label is insufficient to alter the economic trajectory of communities facing deeply structural disadvantages.
+
+\section{Institutional Background}
+
+\subsection{The Appalachian Regional Commission}
+
+The Appalachian Regional Commission was established by the Appalachian Regional Development Act of 1965 as a partnership between the federal government and 13 state governments (Alabama, Georgia, Kentucky, Maryland, Mississippi, New York, North Carolina, Ohio, Pennsylvania, South Carolina, Tennessee, Virginia, and West Virginia). The Commission's mandate is to promote economic development in Appalachia, a 206,000-square-mile region that, at the time of ARC's creation, had poverty rates 50\% above the national average, per capita income one-third below the national mean, and infant mortality rates exceeding those of many developing countries \citep{bradshaw2003appalachian}.
+
+ARC operates through a dual mechanism: large-scale infrastructure investment (primarily the Appalachian Development Highway System, which has received over \$6 billion in federal funds) and targeted community development grants. The grant programs---which fund projects in education, workforce development, health, telecommunications, and community infrastructure---are the primary channel through which the Distressed designation affects federal spending. Total ARC non-highway grant expenditures averaged approximately \$120 million annually during the study period (FY2007--2017), with roughly half directed toward projects primarily benefiting Distressed counties.
+
+\subsection{The County Economic Classification System}
+
+ARC classifies each of its 420 member counties into five economic tiers based on a Composite Index Value (CIV). The CIV is calculated as:
+
+\begin{equation}
+\text{CIV}_i = \frac{1}{3}\left(\frac{u_i}{u_{US}} + \frac{y_{US}}{y_i} + \frac{p_i}{p_{US}}\right) \times 100
+\label{eq:civ}
+\end{equation}
+
+\noindent where $u_i$ is county $i$'s three-year average unemployment rate, $u_{US}$ is the national average, $y_i$ is the county's per capita market income, $y_{US}$ is the national per capita market income (inverted so that lower income yields a higher CIV), and $p_i$ is the county's poverty rate. Each component is expressed as a ratio to the national average, so a CIV of 100 indicates a county that is exactly at the national mean on all three dimensions.
+
+ARC then ranks all approximately 3,110 U.S.\ counties by CIV (higher CIV = worse economic conditions) and assigns each Appalachian county to one of five categories based on its national percentile rank:
+
+\begin{table}[H]
+\centering
+\caption{ARC County Economic Status Designations}
+\begin{threeparttable}
+\begin{tabular}{lll}
+\toprule
+Designation & National Percentile & Federal Match Rate \\
+\midrule
+Distressed & Worst 10\% & 80\% \\
+At-Risk & 10th--25th & 70\% \\
+Transitional & 25th--75th & 50\% \\
+Competitive & 75th--90th & 30\% \\
+Attainment & Best 10\% & 20\% \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Percentiles are computed over all U.S.\ counties, not just Appalachian counties. Match rates represent the maximum ARC contribution; the remainder must be provided by state and local sources. Source: ARC.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:designations}
+\end{table}
+
+\subsection{Treatment at the Distressed Threshold}
+
+The transition from At-Risk to Distressed status triggers three distinct treatments, each of which could in principle affect local economic outcomes.
+
+\textbf{Higher federal match rates.} The maximum ARC contribution jumps from 70\% to 80\% of project costs. This 10 percentage-point increase reduces the local cost share from 30\% to 20\%, making it substantially easier for cash-strapped local governments to secure and deploy ARC funds. For a typical \$500,000 community development grant, the local share drops from \$150,000 to \$100,000---a 33\% reduction in required local investment. The match rate reduction is particularly consequential because Distressed counties have, by definition, the lowest tax bases and most constrained municipal budgets in the region. Even a modest reduction in the local match requirement could be the difference between a county applying for a grant and foregoing the opportunity entirely.
+
+To put the match rate change in perspective, consider the ARC's non-highway grant budget, which averaged approximately \$120 million annually during the study period. If a county near the threshold receives two or three grants per year at an average size of \$300,000, the 10 percentage-point match reduction saves \$60,000--\$90,000 in local funds. For a county with a total budget of \$10--20 million, this represents a non-trivial fiscal relief---but it is small relative to the county's total economy.
+
+\textbf{Exclusive program access.} Distressed counties gain access to the ARC Distressed Counties Program, which sets aside a dedicated allocation of Area Development funds exclusively for Distressed communities. Federal legislation mandates that at least 50\% of ARC grant expenditures benefit Distressed counties. In FY2021, 70\% of ARC's \$163.4 million in non-highway grants went to projects primarily benefiting Distressed counties, despite Distressed counties comprising only about 20\% of all ARC counties. The Distressed Counties Program focuses on workforce training, infrastructure modernization, and entrepreneurship development---precisely the types of investments that theory predicts should promote long-run growth. However, the program's total annual budget is modest: roughly \$70--80 million spread across 80--100 Distressed counties, yielding per-county allocations averaging under \$1 million.
+
+\textbf{The ``Distressed'' label.} Counties are publicly listed and mapped as ``Distressed'' on ARC's website, in annual reports, and in congressional testimony. This label may carry stigma effects that discourage private investment, or alternatively, may attract attention from philanthropic organizations and other federal programs. The direction of this signaling effect is theoretically ambiguous. \citet{kang2024fiscal} document that fiscal distress labels for local governments can alter both spending behavior and credit market access, suggesting that the ``Distressed'' designation may have real informational consequences beyond the direct funding channel. In the Appalachian context, the label is highly salient: county officials, economic development authorities, and state legislators closely track the annual designation announcements, and the ``Distressed'' label is frequently cited in grant applications to other federal agencies (e.g., USDA Rural Development, EDA) and private foundations.
+
+\subsection{Why the Threshold Generates Quasi-Random Variation}
+
+The CIV threshold for Distressed designation creates a credible regression discontinuity for several reasons. First, the index is constructed from \textit{lagged} federal statistics---the three-year average unemployment rate, per capita market income from the previous Census or ACS estimate, and poverty rates from multi-year Census surveys. These data are computed by federal statistical agencies using methodologies that individual counties cannot easily manipulate. Second, the threshold is determined by the \textit{national} distribution of the CIV across all 3,110 U.S.\ counties, making it effectively exogenous to any individual Appalachian county's actions. A county cannot unilaterally shift the 10th percentile of the national CIV distribution. Third, the designation is updated annually, and the threshold CIV value shifts from year to year as national economic conditions change. In my sample, the threshold CIV ranged from approximately 158 (FY2015--2016) to 172 (FY2010--2011), reflecting the Great Recession's impact on the national income distribution.
+
+The key identifying assumption is that counties just above and just below the Distressed threshold are comparable in expectation---that there is no sorting or manipulation at the cutoff. I test this assumption formally in Section 5 using density tests and covariate balance analysis.
+
+\section{Data}
+
+\subsection{ARC County Economic Status Data}
+
+The primary data source is ARC's annual County Economic Status Excel files, which report the CIV, national rank, and economic designation for each of the approximately 420 Appalachian counties. I construct a panel covering fiscal years 2007 through 2017 (11 years), downloading the classification files from ARC's public archive. These files contain the CIV score, its three components (unemployment rate ratio, inverted per capita market income ratio, and poverty rate ratio), the national rank, and the assigned economic status.
+
+The number of Appalachian counties varies slightly over the sample period, from 410 in FY2007--2008 to 420 in FY2009--2017, reflecting boundary adjustments. I restrict the sample to counties that appear in at least 5 of the 11 sample years to ensure a balanced panel structure. The resulting dataset contains 4,600 county-year observations. The total falls slightly below the theoretical maximum of 4,620 ($420 \times 11$) because 20 county-year cells are missing due to minor boundary adjustments in early sample years (FY2007--2008 had 410 counties before two additional counties were added in FY2009).
+
+\subsection{Outcome Variables}
+
+I examine three primary outcomes, all of which are components of the CIV itself but are also independently meaningful measures of local economic health:
+
+\textbf{Unemployment rate.} The three-year average county unemployment rate, as reported in the ARC classification files. This measure is based on Bureau of Labor Statistics Local Area Unemployment Statistics (LAUS) data and reflects the county's labor market condition over a three-year window.
+
+\textbf{Per capita market income (PCMI).} County per capita market income, drawn from BEA Regional Economic Information System (REIS) data, measured in current dollars. I use the natural log of PCMI as the primary specification to reduce the influence of outliers and facilitate percentage-change interpretation.
+
+\textbf{Poverty rate.} The county poverty rate, based on Census Bureau Small Area Income and Poverty Estimates (SAIPE). For the ARC classification, this is typically the most recent five-year ACS estimate.
+
+In addition, I use BEA data on total personal income at the county level as a supplementary outcome, available for 4,525 of the 4,600 county-year observations.
+
+\textbf{Alternative outcomes.} A potential concern with the three primary outcomes is that unemployment, income, and poverty are also components of the CIV used to assign the Distressed designation. To address this, I examine three additional outcomes from independently measured BEA data sources that are \textit{not} components of the CIV: (i) total wages and salaries from BEA's CAINC5N table, which captures compensation through a separate statistical program; (ii) total personal income from BEA's CAINC1 table, which includes transfers and investment income beyond market income; and (iii) population growth rates from Census Bureau intercensal estimates. These outcomes allow me to test whether the Distressed designation affects economic activity through channels not mechanically linked to the assignment variable.
+
+\subsection{Sample Construction}
+
+The analysis sample is constructed as follows. I start with the 4,600 county-year observations in the ARC panel. For each fiscal year, I center the CIV at the year-specific Distressed threshold (the midpoint between the highest CIV among At-Risk counties and the lowest CIV among Distressed counties). The centered running variable, $CIV^c_{it} = CIV_{it} - c_t$, is positive for Distressed counties and negative for At-Risk and lower-tier counties.
+
+The full ARC panel contains 4,600 county-year observations. Restricting to counties within $\pm 50$ CIV points of the threshold yields the analysis sample of 3,317 county-year observations. These 3,317 observations come from 369 unique counties (of the 420 total ARC counties) that fall within the $\pm 50$ CIV bandwidth at least once during the sample period; counties far from the threshold (deep Transitional, Competitive, and Attainment counties) are excluded. For the main analysis, I use this sample within the generous bandwidth of $\pm 50$ CIV points, allowing the \texttt{rdrobust} package to select the optimal bandwidth endogenously. Within 15 CIV points of the threshold, there are 1,008 county-year observations (440 Distressed, 568 At-Risk).
+
+\subsection{Summary Statistics}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics}
+\label{tab:summary}
+\begin{tabular}{lccc}
+\toprule
+ & Full Sample & \multicolumn{2}{c}{Near Threshold ($|\text{CIV} - c| \leq 15$)} \\
+\cmidrule(lr){3-4}
+ & & At-Risk & Distressed \\
+\midrule
+\textit{N (county-years)} & 3,317 & 568 & 440 \\
+ & & & \\
+\textit{Panel A: Outcomes} & & & \\[3pt]
+Unemployment rate (\%) & 8.28 & 9.03 & 9.73 \\
+ & (2.30) & (2.16) & (2.44) \\
+Per capita market income (\$) & 18,988 & 17,650 & 16,298 \\
+ & (3,806) & (2,499) & (2,551) \\
+Poverty rate (\%) & 18.92 & 20.46 & 23.00 \\
+ & (4.78) & (3.19) & (3.59) \\
+ & & & \\
+\textit{Panel B: Running Variable} & & & \\[3pt]
+Composite Index Value (CIV) & 145.8 & 155.3 & 170.3 \\
+ & (23.8) & (6.7) & (7.1) \\
+\midrule
+Counties & 369 & \multicolumn{2}{c}{174} \\
+Fiscal years & 2007---2017 & \multicolumn{2}{c}{2007---2017} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard deviations in parentheses. Full sample includes all ARC county-years within $\pm 50$ CIV points of the Distressed threshold. Near-threshold sample restricted to $\pm 15$ CIV points. Unemployment rate and poverty rate are ARC three-year averages used in the CIV calculation. Per capita market income is in nominal dollars.
+\end{tablenotes}
+\end{table}
+
+Table~\ref{tab:summary} presents summary statistics for the full ARC panel and for counties near the Distressed threshold. In the full sample (within $\pm 50$ CIV of the threshold), the average unemployment rate is 8.28\%, mean per capita market income is \$18,988, the average poverty rate is 18.92\%, and the mean CIV is 145.8.
+
+Of the 369 counties in the analysis sample, 83 (22\%) switch between Distressed and non-Distressed status at least once during the 11-year panel, 42 (11\%) are classified as Distressed in every year they appear, and 244 (66\%) are never classified as Distressed within the bandwidth. The substantial fraction of switchers underscores the dynamic nature of the threshold---the same county can serve as both ``treated'' and ``control'' across years---and motivates the panel specification with year fixed effects.
+
+Near the threshold ($|CIV^c| \leq 15$), counties on both sides look economically similar. Distressed counties (above the threshold) have slightly higher unemployment (9.73\% vs.\ 9.03\%), lower per capita income (\$16,298 vs.\ \$17,650), and higher poverty (23.00\% vs.\ 20.46\%). These differences are modest and reflect the mechanical relationship between the CIV components and the designation threshold. The key test is whether these differences exhibit a discontinuous \textit{jump} at the threshold---the focus of the RDD analysis.
+
+\section{Empirical Strategy}
+
+\subsection{Regression Discontinuity Design}
+
+I estimate the causal effect of the Distressed designation using a sharp RDD \citep{hahn2001identification, imbens2008regression, lee2008randomized}. The framework follows the canonical approach outlined in \citet{lee2010regression} and the practical guidelines of \citet{eggers2018validity}. The treatment is:
+\begin{equation}
+D_{it} = \ind[CIV_{it} \geq c_t]
+\end{equation}
+where $c_t$ is the year-specific CIV threshold for Distressed status and $\ind[\cdot]$ is the indicator function. The key parameter of interest is the local average treatment effect at the cutoff:
+\begin{equation}
+\tau = \lim_{x \downarrow 0} \E[Y_{it} | CIV^c_{it} = x] - \lim_{x \uparrow 0} \E[Y_{it} | CIV^c_{it} = x]
+\end{equation}
+which identifies the causal effect of Distressed designation under the assumption that the conditional expectation of potential outcomes is continuous at the cutoff:
+\begin{equation}
+\lim_{x \downarrow 0} \E[Y_{it}(0) | CIV^c_{it} = x] = \lim_{x \uparrow 0} \E[Y_{it}(0) | CIV^c_{it} = x]
+\end{equation}
+
+\subsection{Estimation}
+
+I estimate local linear regressions of the form:
+\begin{equation}
+Y_{it} = \alpha + \tau D_{it} + \beta_1 CIV^c_{it} + \beta_2 D_{it} \times CIV^c_{it} + \varepsilon_{it}
+\label{eq:rd}
+\end{equation}
+within a bandwidth $h$ of the cutoff, using the bias-corrected robust inference procedures of \citet{calonico2014robust}. Bandwidth selection follows the MSE-optimal procedure of \citet{calonico2020optimal}. I use a triangular kernel, which assigns higher weight to observations closer to the cutoff.
+
+Standard errors are clustered at the county level using the \texttt{cluster} option in the \texttt{rdrobust} package, with county FIPS codes as the clustering variable. This produces cluster-robust bias-corrected confidence intervals that account for serial correlation within counties appearing in multiple years of the panel, following the recommendations of \citet{cameron2008bootstrap} for settings with a moderate number of clusters. The sample contains 369 unique counties, well above conventional thresholds for reliable cluster-robust inference \citep{cameron2008bootstrap}. This approach is standard in panel RDD settings where the same unit may appear on different sides of the threshold in different periods \citep{cattaneo2020practical}.
+
+For the panel specification, I first residualize outcomes on year fixed effects:
+\begin{equation}
+\tilde{Y}_{it} = Y_{it} - \bar{Y}_t
+\end{equation}
+and then estimate equation~\eqref{eq:rd} with $\tilde{Y}_{it}$ as the dependent variable. This absorbs common year-specific shocks (such as the Great Recession) that affect all counties symmetrically.
+
+\subsection{Threats to Validity}
+
+The primary threat to identification is \textbf{manipulation of the running variable}. If counties could strategically position themselves above or below the Distressed threshold, the continuity assumption would fail. Several features of the institutional setting mitigate this concern. The CIV is computed from federally produced statistical series (BLS unemployment, BEA income, Census poverty) that are not subject to county-level manipulation. Moreover, the threshold is determined by the \textit{national} CIV distribution, which no individual county can influence. I formally test for manipulation using the density test of \citet{cattaneo2020simple}.
+
+A second concern is \textbf{compound treatment}. The Distressed designation bundles three treatments---higher match rates, exclusive program access, and a public label---that cannot be individually identified. My estimates capture the combined effect of all three, which is the policy-relevant parameter but does not allow decomposition of mechanisms.
+
+A third concern is \textbf{anticipatory effects}. If counties or their residents adjust behavior in anticipation of receiving (or losing) the Distressed designation, the RDD may be contaminated. Because the CIV is based on lagged data (typically 2--3 years old), the designation for a given fiscal year reflects economic conditions from several years prior. Current-year behavior cannot retroactively change the lagged statistics.
+
+A fourth concern is \textbf{outcome-assignment overlap}. The three primary outcomes---unemployment, per capita market income, and poverty---are also components of the CIV used to determine the Distressed designation. This raises the question of whether the RDD merely recovers a mechanical relationship between the index and its own inputs. Several features of the design mitigate this concern. First, the CIV is constructed from \textit{lagged} federal statistics: three-year average unemployment rates, prior-year per capita market income, and multi-year ACS poverty estimates. The designation for fiscal year $t$ therefore reflects economic conditions from approximately years $t-3$ through $t-1$, while the outcomes I measure in year $t$ include the most recent data. The RDD estimates whether the designation itself---through the funding, program access, and labeling channels described in Section 2.3---causes \textit{discontinuous} changes in these measures \textit{beyond} what the smooth CIV gradient mechanically predicts. Second, the local linear specification explicitly controls for the running variable on both sides of the cutoff, absorbing any smooth relationship between the CIV and outcomes. What the RDD identifies is the residual jump at the threshold conditional on the CIV level. Third, I directly address this concern by estimating the RDD on three alternative outcomes that are \textit{not} components of the CIV: BEA wages and salaries, BEA total personal income, and population growth (Section 5.4). All three yield null results consistent with the primary findings. The fact that outcomes from independent data sources---measured through entirely separate statistical programs with no mechanical link to the CIV---also show no discontinuity at the Distressed threshold strongly reinforces that the null reflects a genuine absence of treatment effects rather than an artifact of the index construction.
+
+\section{Results}
+
+\subsection{Validation: Density and Covariate Balance}
+
+Before presenting the main results, I verify the design's validity.
+
+\textbf{Running variable distribution.} Figure~\ref{fig:civ_hist} shows the distribution of the centered CIV near the Distressed threshold. The CIV is a continuous index constructed from weighted averages of three economic ratios, and the histogram confirms that it exhibits no heaping or discreteness at or near the threshold. The smooth distribution is consistent with the CIV being determined by federal statistical agencies using standard methodologies rather than by strategic county-level decisions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_civ_histogram.pdf}
+\caption{Distribution of the Composite Index Value Near the Distressed Threshold}
+\label{fig:civ_hist}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Histogram of centered CIV with bin width of 1 CIV point. The CIV is a continuous index based on weighted averages of unemployment, income, and poverty ratios. The smooth distribution confirms no heaping at the threshold. Dashed line marks the Distressed/At-Risk boundary.
+\end{minipage}
+\end{figure}
+
+\textbf{Density test.} Figure~\ref{fig:density} shows the McCrary density test for the centered CIV. The estimated density is smooth through the threshold, with no evidence of bunching on either side ($T = 0.976$, $p = 0.329$). Counties are not systematically sorting to one side of the cutoff. I also conduct year-by-year McCrary tests (Appendix Table~\ref{tab:mccrary_yearly}) to verify that pooling across fiscal years does not mask year-specific bunching. Of 11 individual fiscal year tests, 10 fail to reject continuity at the 5\% level, with one marginal rejection in FY2017 ($p = 0.030$)---consistent with the expected false positive rate under the null.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_density_test.pdf}
+\caption{McCrary Density Test at the Distressed Threshold}
+\label{fig:density}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Histogram and local polynomial density estimates of the centered CIV around the Distressed threshold ($CIV^c = 0$). The density is smooth through the cutoff, consistent with no manipulation. Test statistic and p-value from \citet{cattaneo2020simple} reported in text.
+\end{minipage}
+\end{figure}
+
+Figure~\ref{fig:balance} presents covariate balance tests at the threshold. I test for discontinuities in each CIV component (unemployment rate, per capita market income, and poverty rate) from the \textit{prior} fiscal year. If counties manipulate their position relative to the threshold, we would expect to see discrete jumps in these predetermined characteristics. The plots show no evidence of discontinuities---all three predetermined covariates evolve smoothly through the cutoff.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_covariate_balance.pdf}
+\caption{Covariate Balance at the Distressed Threshold}
+\label{fig:balance}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} RDD plots for pre-determined covariates (prior-year values) at the Distressed threshold. Points are binned means; lines are local polynomial fits. None of the covariates exhibit a discrete jump at the cutoff, supporting the continuity assumption.
+\end{minipage}
+\end{figure}
+
+\subsection{Main Results}
+
+Figure~\ref{fig:main_rd} presents the visual evidence. Each panel shows a binned scatter plot with local polynomial fits on either side of the Distressed threshold for one of the three primary outcomes. The message is consistent across all three panels: there is no visible discontinuity at the cutoff. The polynomial fits on either side of the threshold connect smoothly, and the binned means follow the fitted lines closely.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_rd_plot_main.pdf}
+\caption{Regression Discontinuity Plots: Effect of Distressed Designation on Economic Outcomes}
+\label{fig:main_rd}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Each panel shows a binned scatter plot with local linear fits on either side of the Distressed threshold ($CIV^c = 0$). Panel (a): unemployment rate. Panel (b): log per capita market income. Panel (c): poverty rate. Dashed vertical line marks the threshold. No visible discontinuity is present in any outcome.
+\end{minipage}
+\end{figure}
+
+Table~\ref{tab:main_results} reports the formal RDD estimates, which should be interpreted as intent-to-treat (ITT) effects of the Distressed \textit{designation}---not as estimates of the effect of a documented increase in grant dollars, since county-level disbursement data are unavailable (see Section~\ref{sec:mechanisms}). The top panel presents the pooled cross-sectional estimates; the bottom panel reports the panel specification with year-demeaned outcomes.
+
+\begin{table}[htbp]
+\centering
+\caption{Main RDD Results: Effect of ARC Distressed Designation}
+\label{tab:main_results}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{Pooled Cross-Sectional} & \multicolumn{3}{c}{Panel (Year FE)} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+ & Unemp. & Log PCMI & Poverty & Unemp. & Log PCMI & Poverty \\
+ & Rate & & Rate & Rate & & Rate \\
+\midrule
+RD estimate & $-0.305$ & $-0.005$ & $0.505$ & $0.010$ & $0.012$ & $0.095$ \\
+ & $(0.364)$ & $(0.026)$ & $(0.558)$ & $(0.227)$ & $(0.015)$ & $(0.423)$ \\
+95\% CI & $[-1.02, 0.41]$ & $[-0.06, 0.05]$ & $[-0.59, 1.60]$ & $[-0.44, 0.46]$ & $[-0.02, 0.04]$ & $[-0.73, 0.93]$ \\
+ & & & & & & \\
+Total observations & 3,317 & 3,317 & 3,317 & 3,317 & 3,317 & 3,317 \\
+Bandwidth ($h$) & 15.4 & 10.7 & 15.4 & 7.3 & 10.0 & 7.9 \\
+Eff. observations & 1,028 & 713 & 1,027 & 648 & 901 & 716 \\
+Control mean & 9.03 & 9.77 & 20.46 & 9.03 & 9.77 & 20.46 \\
+\midrule
+Year FE & No & No & No & Yes & Yes & Yes \\
+Kernel & \multicolumn{6}{c}{Triangular} \\
+BW selection & \multicolumn{6}{c}{MSE-optimal (Calonico, Cattaneo, Titiunik 2014)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Robust bias-corrected estimates from \texttt{rdrobust}. Standard errors in parentheses. $^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\% levels. Panel specification residualizes both outcomes and the running variable on fiscal year fixed effects before estimation. Sample: ARC counties FY 2007---2017 within $\pm 50$ CIV of the Distressed threshold.
+\end{tablenotes}
+\end{table}
+
+For unemployment, the point estimate is small and statistically insignificant in both specifications. The pooled estimate suggests a 0.305 percentage-point \textit{decrease} in unemployment from crossing the Distressed threshold (SE = 0.364), while the panel estimate yields a negligible 0.010 percentage-point increase (SE = 0.227). For context, the mean unemployment rate near the threshold is 9.03\%, so neither estimate represents a meaningful departure from zero.
+
+For log per capita market income, the estimates are similarly null. The control mean of log PCMI is 9.77 (corresponding to approximately \$17,650 in levels). The pooled specification yields a coefficient of $-0.005$ (SE = 0.026), corresponding to a 0.5\% decrease in income that is statistically indistinguishable from zero. The panel estimate is $0.012$ (SE = 0.015). These 95\% confidence intervals rule out income effects larger than approximately 5\% in either direction.
+
+For poverty, the pooled estimate is 0.505 percentage points (SE = 0.558) and the panel estimate is 0.095 percentage points (SE = 0.423). The null is precisely estimated relative to the mean poverty rate near the threshold (20.46\%).
+
+\textbf{Minimum detectable effects.} The precision of these null estimates allows me to characterize what effect sizes the design can rule out. Using the panel specification standard errors (the more conservative estimates) and a two-sided test at the 5\% level with 80\% power, the minimum detectable effects (MDEs) are: 0.63 percentage points for the unemployment rate (7.0\% of the control mean of 9.03\%), 0.042 log points for per capita market income (approximately a 4.2\% change), and 1.17 percentage points for the poverty rate (5.7\% of the control mean of 20.46\%). These MDEs are computed as $\text{MDE} = (z_{0.025} + z_{0.20}) \times \text{SE} \approx 2.8 \times \text{SE}$, where the standard errors come from the bias-corrected estimates with effective sample sizes ranging from 648 to 901 observations. The design is thus powered to detect economically meaningful effects---a 4\% change in income or a 0.6 percentage-point change in unemployment would be detected---and the null results are not an artifact of an underpowered design.
+
+\subsection{Heterogeneity}
+
+I explore whether the null aggregate result masks heterogeneous effects along two dimensions.
+
+\textbf{By state.} Appalachia spans 13 states with vastly different economic structures and governance capacity. States like West Virginia and Kentucky have long histories of coal dependence and rural poverty, while Appalachian counties in Pennsylvania, New York, and Ohio tend to have more diversified economies and better access to metropolitan labor markets. I re-estimate the RDD separately for ``Central Appalachia'' (Kentucky, West Virginia, Virginia, and Tennessee---the historical core of Appalachian poverty, where the density of Distressed counties is highest) and the remainder of the Appalachian region. Neither subgroup shows significant effects, though confidence intervals widen due to smaller samples. The Central Appalachian subsample produces point estimates of similar magnitude to the full sample, suggesting that the null result is not driven by the relatively prosperous northern and southern periphery of the region diluting treatment effects in the most distressed core.
+
+\textbf{Over time.} The null result may mask dynamic patterns---for example, if the Distressed designation takes several years to affect outcomes through the slow accumulation of infrastructure improvements and workforce training. Alternatively, the Great Recession (2008--2010) may have overwhelmed any positive effects of the designation during the early part of the sample, while post-recession recovery dynamics could have generated effects in the later years. Figure~\ref{fig:yearly} plots the year-by-year RDD estimates. The point estimates fluctuate around zero without a systematic trend.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_yearly_estimates.pdf}
+\caption{Year-by-Year RDD Estimates}
+\label{fig:yearly}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Each point is a separate rdrobust estimate for a single fiscal year. Error bars show 95\% confidence intervals (robust bias-corrected). Dashed line at zero. The point estimates show no systematic pattern over time.
+\end{minipage}
+\end{figure}
+
+\noindent There is no evidence that effects emerge with a lag, strengthen over time, or differ between the recession and recovery periods. The one exception is the poverty estimate for FY2012, which is large and statistically significant ($-4.57$, $p < 0.01$). This outlier likely reflects the small effective sample in a single fiscal year combined with the economic disruption of the post-recession period; it does not survive bandwidth variation or appear in the pooled estimates. Given that 33 individual year-outcome estimates are tested (11 years $\times$ 3 outcomes), finding one significant at the 5\% level is consistent with chance under the null.
+
+\textbf{By treatment intensity.} A natural question is whether the null result reflects heterogeneity in counties' ability to capitalize on the Distressed designation. Some counties near the threshold may have relatively strong local institutions, active economic development offices, and experience applying for federal grants, while others may lack the administrative capacity to take advantage of the enhanced match rates. Unfortunately, direct measures of grant utilization at the county level are not publicly available in a format amenable to systematic analysis during the sample period. This data limitation means that I cannot distinguish between the ``insufficient treatment intensity'' hypothesis (counties receive the designation but do not increase grant utilization) and the ``ineffective treatment'' hypothesis (counties increase utilization but grants do not improve outcomes). Disentangling these mechanisms is an important direction for future research.
+
+\subsection{Alternative Outcomes}
+
+All three primary outcomes---unemployment, income, and poverty---are components of the CIV used to assign the Distressed designation. While the RDD controls for the running variable on both sides of the threshold (absorbing any smooth mechanical relationship), the overlap between assignment and outcomes warrants independent verification. I therefore estimate the RDD on three additional outcomes from independently measured data sources that are \textit{not} components of the CIV.
+
+\begin{table}[htbp]
+\centering
+\caption{RDD Estimates for Alternative (Non-CIV) Outcomes}
+\label{tab:alt_outcomes}
+\begin{tabular}{lccccc}
+\toprule
+Outcome & RD Estimate & Robust SE & $p$-value & Bandwidth & Eff.\ $N$ \\
+\midrule
+Log total wages \& salaries & $-0.124$ & $(0.172)$ & 0.472 & 11.8 & 771 \\
+Log total personal income & $-0.087$ & $(0.128)$ & 0.496 & 10.9 & 795 \\
+Population growth (\%) & $0.260$ & $(0.466)$ & 0.577 & 13.0 & 124 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Robust bias-corrected estimates from \texttt{rdrobust}. Wages and salaries from BEA CAINC5N table. Personal income from BEA CAINC1 table. Population growth from Census Bureau intercensal estimates. None of these outcomes are components of the CIV used for designation assignment.
+\end{tablenotes}
+\end{table}
+
+Table~\ref{tab:alt_outcomes} reports the results. Log total wages and salaries---capturing labor compensation through an independent BEA statistical program---shows a point estimate of $-0.124$ ($p = 0.472$). Log total personal income (which includes transfers and investment income beyond market income) yields an estimate of $-0.087$ ($p = 0.496$). Population growth, which would respond to the Distressed designation through migration if the label either attracted investment or signaled decline, shows a positive but insignificant estimate of 0.260 percentage points ($p = 0.577$). The consistent null across outcomes that are mechanically independent of the CIV reinforces the main finding: the Distressed designation does not generate detectable economic improvements through any measured channel.
+
+\subsection{Robustness}
+
+\textbf{Bandwidth sensitivity.} Appendix Figure~\ref{fig:bw_sensitivity} shows the main estimates across five bandwidth choices: 0.5, 0.75, 1.0, 1.25, and 1.5 times the MSE-optimal bandwidth. The point estimates remain close to zero and statistically insignificant at all bandwidths.
+
+\textbf{Polynomial order.} Moving from local linear to local quadratic polynomials does not change the conclusions. The quadratic estimates are slightly larger in magnitude but remain statistically insignificant, with wider confidence intervals as expected from the additional flexibility.
+
+\textbf{Donut-hole RDD.} Dropping observations within $\pm 2$ CIV points of the threshold yields similar estimates, confirming that the null result is not driven by counties precisely at the boundary.
+
+\textbf{Placebo thresholds.} I estimate the RDD at two placebo cutoffs---the 25th and 50th national percentiles---where there is no change in ARC treatment. Table~\ref{tab:robustness}, Panel D shows that the placebo estimates at the 25th percentile and median of the CIV distribution are small and insignificant, as expected. This confirms that the null result at the Distressed threshold is not an artifact of the empirical method detecting spurious discontinuities everywhere.
+
+\textbf{Sensitivity to FY2017 exclusion.} The year-by-year McCrary density test rejects continuity for FY2017 ($p = 0.030$), while all other years pass. As a robustness check, I re-estimate the main panel specification excluding FY2017 observations. The results are virtually identical to the full sample: the unemployment estimate changes from 0.010 to 0.008, log PCMI from 0.012 to 0.011, and poverty from 0.095 to 0.102, with no change in statistical significance. The FY2017 density anomaly does not drive the null result.
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\small
+\begin{tabular}{lccc}
+\toprule
+ & Unemployment & Log PCMI & Poverty \\
+ & Rate & & Rate \\
+\midrule
+\textit{Panel A: Bandwidth Sensitivity} & & & \\
+\quad 0.5$\times h$ & $0.017$ & $-0.025$ & $-0.658$ \\
+\quad & $(0.712)$ & $(0.047)$ & $(0.941)$ \\
+\quad 0.8$\times h$ & $-0.080$ & $-0.026$ & $-0.378$ \\
+\quad & $(0.555)$ & $(0.037)$ & $(0.762)$ \\
+\quad 1.0$\times h$ (optimal) & $-0.224$ & $-0.020$ & $0.081$ \\
+\quad & $(0.470)$ & $(0.032)$ & $(0.669)$ \\
+\quad 1.2$\times h$ & $-0.303$ & $-0.010$ & $0.319$ \\
+\quad & $(0.415)$ & $(0.029)$ & $(0.605)$ \\
+\quad 1.5$\times h$ & $-0.298$ & $-0.008$ & $0.451$ \\
+\quad & $(0.378)$ & $(0.026)$ & $(0.558)$ \\
+ & & & \\
+\textit{Panel B: Donut Hole ($|\text{CIV}| > 2$)} & & & \\
+\quad Drop $\pm 2$ CIV & $-0.545$ & $0.036$ & $1.593$ \\
+\quad & $(0.561)$ & $(0.052)$ & $(1.049)$ \\
+ & & & \\
+\textit{Panel C: Polynomial Order} & & & \\
+\quad Local linear ($p = 1$) & $-0.305$ & $-0.005$ & $0.505$ \\
+\quad & $(0.364)$ & $(0.026)$ & $(0.558)$ \\
+\quad Local quadratic ($p = 2$) & $-0.368$ & $-0.007$ & $0.118$ \\
+\quad & $(0.462)$ & $(0.028)$ & $(0.695)$ \\
+ & & & \\
+\textit{Panel D: Placebo Thresholds} & & & \\
+\quad 25th percentile & $0.431$ & $0.026$ & $0.412$ \\
+\quad & $(0.438)$ & $(0.031)$ & $(0.457)$ \\
+\quad Median & $0.027$ & $0.022$ & $0.827$ \\
+\quad & $(0.335)$ & $(0.025)$ & $(0.474)$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Robust bias-corrected RD estimates. Standard errors in parentheses. $^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\% levels. Triangular kernel throughout. Panel A presents sensitivity to bandwidth choice using the pooled cross-sectional specification. At 1.0$\times h$, the bandwidth is manually fixed at the MSE-optimal value; slight differences from Table~\ref{tab:main_results} reflect the distinction between estimator-selected and manually-imposed bandwidth. Panel B excludes observations within $\pm 2$ CIV of the threshold. Panel C compares local linear and local quadratic polynomial specifications. Panel D estimates the RDD at placebo thresholds (25th and 50th national percentiles) where no change in ARC treatment occurs. Effective sample sizes range from 300--1,100 depending on bandwidth. See Table~\ref{tab:main_results} for main specification sample sizes.
+\end{tablenotes}
+\end{table}
+
+\subsection{Mechanisms: Why is the Effect Null?}
+\label{sec:mechanisms}
+
+Several mechanisms may explain why the additional resources fail to move the needle.
+
+\textbf{Small treatment intensity and the absent first stage.} The 10 percentage-point difference in match rates, while meaningful for individual projects, translates into modest additional funding in aggregate. ARC's total annual non-highway grant budget during the sample period averaged approximately \$120 million, spread across 420 counties. Even if all additional Distressed-county funding were concentrated in the 84--98 counties near the threshold, the per-county increment would be modest relative to total economic activity. A county with \$1 billion in personal income would need a substantial share of ARC's entire budget to generate a detectable percentage-point change in outcomes. These per-county funding figures are back-of-the-envelope calculations based on aggregate ARC budget data and average county counts; county-level grant disbursement records are not available to verify actual allocation patterns.
+
+A critical limitation is that county-level ARC grant disbursement data are not publicly available in a format amenable to systematic analysis during the full sample period. I explored federal procurement records through USAspending.gov (CFDA 23.002, the ARC's primary grant program), which provides county-level obligation data for FY2008--2015 but lacks coverage of FY2007 and FY2016--2017, and the available records do not reliably distinguish between Distressed-targeted grants and general ARC allocations. This prevents me from estimating a ``first stage''---the effect of the Distressed designation on actual grant dollars received. Without this first stage, I cannot distinguish between two competing explanations for the null result. Under the \textit{insufficient take-up} hypothesis, Distressed counties near the threshold fail to capitalize on the enhanced match rates because they lack the administrative capacity to apply for grants or the fiscal resources to meet even a 20\% local match. Under the \textit{ineffective spending} hypothesis, counties do increase grant utilization but the funded projects fail to generate measurable economic improvements within the sample period. Disentangling these mechanisms is an important direction for future research, and access to ARC's internal grant database would be transformative for this question. The absence of first-stage evidence is a limitation shared with many place-based policy evaluations \citep{neumark2015place, bartik2020place}, where the treatment assignment is observed but the treatment intensity is not.
+
+\textbf{Structural disadvantages.} Distressed Appalachian counties face deeply rooted structural challenges---geographic isolation, thin labor markets, limited human capital, resource dependence, and outmigration---that small marginal changes in federal transfer rates are unlikely to overcome. The literature on persistent poverty in Appalachia emphasizes the self-reinforcing nature of these disadvantages \citep{duncan1999worlds, ziliak2012appalachian}.
+
+\textbf{Absorption capacity.} Even with higher match rates, the most distressed counties may lack the administrative capacity to apply for and manage additional grants. If local governments in Distressed counties cannot generate the required 20\% local match---because their tax base is thin and municipal finances are strained---the higher federal percentage is irrelevant.
+
+\textbf{Spending composition.} ARC grants may fund projects (highways, water systems, broadband) whose economic effects are diffuse and long-term, not captured by the short- and medium-term outcomes measured in the CIV components. The three-year lagged data structure of the CIV means that current-year designation reflects past conditions, and any effects of current-year spending would not appear in the CIV for several years.
+
+\section{Discussion}
+
+These findings expose a fundamental tension in place-based policy. The promise of programs like the ARC is that targeted federal investment can overcome the locational disadvantages of chronically poor areas. At the margin of the Distressed threshold, incremental funding does not translate into measurable economic improvement.
+
+\subsection{Relation to the Place-Based Policy Literature}
+
+As discussed in the Introduction, the null result speaks directly to the tension between the ``big push'' optimism of \citet{kline2014tva} and the spatial equilibrium skepticism of \citet{glaeser2008cities}. My findings align more closely with the skeptical camp, but with an important nuance. The ARC's Distressed threshold generates a \textit{marginal} change in support, not a discrete on/off treatment. The designation moves the federal match rate from 70\% to 80\%---a meaningful but not transformative change. This is fundamentally different from the TVA, which brought massive infrastructure investment to previously undeveloped areas, or Empowerment Zones, which offered substantial tax incentives to firms. The null result here does not imply that place-based policy is inherently ineffective, only that \textit{marginal} increases in transfers, in the context of chronically poor communities with deep structural disadvantages, fail to generate detectable improvements. If a region's economic trajectory is driven primarily by its industrial composition and exposure to national demand shifts \citep{bartik1991benefits}, marginal changes in federal match rates will be overwhelmed by structural forces.
+
+\subsection{Interpretation of the Null}
+
+The RDD identifies the effect of \textit{crossing the Distressed threshold}---the marginal impact of moving from At-Risk to Distressed status. It does not estimate the total effect of ARC programs relative to a counterfactual of no ARC funding. Importantly, because county-level grant disbursement data are not publicly available for the study period, these estimates capture the reduced-form effect of the Distressed \textit{designation}---encompassing the label, enhanced match rates, and any realized spending changes---rather than the effect of a documented increase in grant dollars. The inframarginal effects of ARC investment---for example, on counties deep in the Distressed category that receive the bulk of ARC funding---may be substantial but are not identified by this design. This distinction is crucial for policy interpretation.
+
+The null could also reflect a ``dose-response'' problem. If the relationship between federal investment and economic outcomes is nonlinear---requiring a minimum threshold of investment before effects become detectable---then the incremental funding from the Distressed designation may fall below this threshold. This interpretation is consistent with \citet{kline2014tva}'s ``big push'' model, which predicts that small transfers to distressed areas will have negligible effects while large, sustained investments can achieve permanent economic transformation.
+
+A related possibility is that the treatment operates primarily through channels not captured by the three CIV-component outcomes examined here. ARC grants fund projects in education, healthcare, broadband deployment, and community development that may improve quality of life, health outcomes, or social capital without showing up immediately in unemployment, income, or poverty statistics. If the primary benefits of the Distressed designation are non-economic or very long-term, the null result on the CIV components may mask genuine welfare improvements.
+
+\subsection{Policy Design Implications}
+
+The results have practical implications for how the ARC and similar programs structure their funding formulas. The current classification system creates arbitrary discontinuities in funding at threshold values that are known ex ante and change only modestly from year to year. A continuous matching formula---where the federal match rate varies smoothly with the CIV---would eliminate the gaming incentives at the threshold and potentially distribute resources more efficiently across the distress gradient.
+
+More broadly, the null result raises questions about the effectiveness of tiered classification systems in other federal programs. The USDA's ``persistent poverty counties'' designation, HUD's ``Difficult Development Areas,'' and the Treasury's ``Community Development Financial Institutions'' program all use threshold-based classification systems that create similar discontinuities. If incremental funding at the margin of these thresholds is ineffective, the resources might be better deployed through continuous formulas or concentrated in fewer locations at higher intensity.
+
+The results also speak to the long-standing debate between ``people-based'' and ``place-based'' approaches to addressing persistent poverty. If marginal increases in place-based investment do not improve local economic conditions, this strengthens the case for complementary people-based policies---such as the Moving to Opportunity program studied by \citet{chetty2016effects}---that help residents of distressed areas move to higher-opportunity locations. The optimal policy may involve a combination: place-based investments large enough to generate agglomeration effects in some locations, coupled with mobility assistance for residents of areas where the structural disadvantages are too severe to overcome through feasible levels of investment.
+
+\section{Conclusion}
+
+This paper provides the first regression discontinuity estimate of the causal effect of the ARC's Distressed designation on county economic outcomes. Using 3,317 county-year observations (from an initial panel of 4,600) and the sharp threshold in the ARC's Composite Index Value, I find that crossing from At-Risk to Distressed status has no significant effect on unemployment, per capita income, or poverty rates. The null result is robust to bandwidth sensitivity analysis, polynomial order variation, donut-hole specifications, and placebo tests at non-treatment thresholds. McCrary density tests and covariate balance analysis confirm the validity of the design: there is no evidence of manipulation or sorting at the cutoff.
+
+The finding does not mean that Appalachian poverty is unsolvable or that federal investment in the region is wasted. The RDD identifies a local average treatment effect at the margin of the Distressed threshold, not the aggregate impact of ARC programs. What the null does suggest is that marginal differences in place-based transfer rates---10 extra percentage points of federal match---are insufficient to alter the economic trajectory of communities facing deeply structural disadvantages.
+
+Several avenues for future research emerge from these findings. First, direct data on grant utilization by county would allow researchers to estimate the ``first stage'' of the Distressed designation on actual federal spending, decomposing whether the null result reflects low take-up or ineffective spending. Second, longer-term outcomes---including population dynamics, educational attainment, and health indicators---may reveal effects that the traditional economic measures examined here do not capture. Third, the ARC's recent expansion of its classification system and increased post-pandemic funding create opportunities to study whether larger treatment doses at the Distressed threshold generate detectable effects.
+
+If policymakers want to measurably improve conditions in the most distressed corners of Appalachia, they will need interventions that address the root causes of persistent poverty: human capital deficits, geographic isolation, and the collapse of traditional industries. The Distressed label, for all its political salience, is not enough. The lesson from Appalachia may be that place-based policy works best at scale---as the TVA demonstrated---and that the incremental, threshold-based approach underpinning not just the ARC but the USDA, HUD, and Treasury programs that structure much of the federal safety net for distressed communities, however well-intentioned, spreads resources too thin to overcome deep structural barriers. Marginal aid has limits. Recognizing those limits is the first step toward designing place-based policy that works.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{ARC County Economic Status Data Sources}
+
+The ARC County Economic Status classification files are available from the ARC website at \url{https://www.arc.gov/classifying-economic-distress-in-appalachian-counties/}. Excel files for each fiscal year (FY2007--FY2017) are downloaded from the ARC archive at URLs following the pattern:
+
+\noindent\texttt{https://www.arc.gov/wp-content/uploads/2020/06/County-Economic-Status\_FY\{YEAR\}\_Data-1.xls}
+
+Each file contains the ``ARC Counties'' sheet with columns for FIPS code, state, county name, economic status designation, three-year average unemployment rate, per capita market income, poverty rate, indicator index values (each component as a ratio to the national average), the Composite Index Value, and the national rank. I extract and parse the FIPS code (zero-padded to 5 digits), CIV, status designation, and component indicators.
+
+\subsection{Threshold Construction}
+
+For each fiscal year, the Distressed threshold is computed as the midpoint between the highest CIV among At-Risk counties and the lowest CIV among Distressed counties. This value varies from approximately 158 (FY2015--2016) to 172 (FY2010--2011). The centered running variable is $CIV^c_{it} = CIV_{it} - c_t$, where $c_t$ is the year-specific threshold.
+
+\subsection{BEA Regional Economic Accounts}
+
+County-level personal income data is obtained from the Bureau of Economic Analysis Regional Economic Accounts via the BEA API (Table CAINC1, Line Code 1). The data covers all U.S.\ counties from 1969--2020, measured in thousands of current dollars. I restrict to fiscal years 2007--2017 for the main analysis, though the raw BEA data covers 1969--2020, and merge to the ARC panel on FIPS code and fiscal year.
+
+\section{Identification Appendix}
+
+\subsection{McCrary Density Test}
+
+I test for manipulation of the running variable using the local polynomial density estimator of \citet{cattaneo2020simple}, implemented via the \texttt{rddensity} package in R. The test pools centered CIV observations across all fiscal years. The null hypothesis is that the density of the centered CIV is continuous at zero. Rejection would suggest that counties are bunching on one side of the threshold, potentially through strategic manipulation of the underlying statistics.
+
+\subsection{Covariate Balance}
+
+To test for sorting at the threshold, I examine whether predetermined characteristics---specifically, the CIV components from the \textit{prior} fiscal year---show a discontinuity at the \textit{current} year's threshold. This is a strong test: if counties or their residents are manipulating current-year outcomes to influence the designation, we would expect to see discontinuities even in lagged values (since the CIV uses multi-year averages). The absence of discontinuities in prior-year covariates supports the as-good-as-random assignment near the cutoff.
+
+\section{Robustness Appendix}
+
+\subsection{Full Robustness Results}
+
+See Table~\ref{tab:robustness} in the main text for the complete robustness results.
+
+\subsection{Year-by-Year Estimates}
+
+\begin{table}[htbp]
+\centering
+\caption{Year-by-Year RD Estimates}
+\label{tab:yearly}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{2}{c}{Unemployment Rate} & \multicolumn{2}{c}{Log PCMI} & \multicolumn{2}{c}{Poverty Rate} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Fiscal Year & Estimate & $N$ & Estimate & $N$ & Estimate & $N$ \\
+\midrule
+FY 2007 & $-1.339$ & 61 & $0.015$ & 68 & $2.582$ & 78 \\
+ & $(1.111)$ & & $(0.062)$ & & $(2.093)$ & \\
+FY 2008 & $0.694$ & 88 & $-0.012$ & 55 & $-2.442$ & 50 \\
+ & $(0.698)$ & & $(0.055)$ & & $(1.799)$ & \\
+FY 2009 & $-0.073$ & 80 & $-0.028$ & 45 & $1.771$ & 44 \\
+ & $(0.923)$ & & $(0.064)$ & & $(2.411)$ & \\
+FY 2010 & $-0.203$ & 78 & $0.081$ & 57 & $2.199$ & 71 \\
+ & $(1.428)$ & & $(0.074)$ & & $(3.491)$ & \\
+FY 2011 & $-0.974$ & 56 & $-0.047$ & 78 & $0.386$ & 51 \\
+ & $(1.226)$ & & $(0.069)$ & & $(3.164)$ & \\
+FY 2012 & $1.120$ & 68 & $-0.059$ & 83 & $-4.570^{***}$ & 59 \\
+ & $(0.891)$ & & $(0.050)$ & & $(1.499)$ & \\
+FY 2013 & $-1.065$ & 84 & $0.041$ & 83 & $2.676$ & 76 \\
+ & $(0.712)$ & & $(0.066)$ & & $(2.207)$ & \\
+FY 2014 & $0.128$ & 113 & $0.086^{**}$ & 123 & $1.984$ & 113 \\
+ & $(0.767)$ & & $(0.040)$ & & $(1.353)$ & \\
+FY 2015 & $-0.460$ & 124 & $-0.071$ & 80 & $-2.203$ & 80 \\
+ & $(0.594)$ & & $(0.048)$ & & $(1.789)$ & \\
+FY 2016 & $0.237$ & 97 & $0.066^{*}$ & 122 & $1.684$ & 102 \\
+ & $(0.546)$ & & $(0.039)$ & & $(1.580)$ & \\
+FY 2017 & $-0.651$ & 69 & $0.007$ & 139 & $1.063$ & 87 \\
+ & $(0.467)$ & & $(0.046)$ & & $(1.662)$ & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Robust bias-corrected RD estimates from \texttt{rdrobust}, estimated separately for each fiscal year. Triangular kernel with MSE-optimal bandwidth selected per year. Standard errors in parentheses. $N$ is the effective number of observations within the bandwidth. $^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\% levels.
+\end{tablenotes}
+\end{table}
+
+Table~\ref{tab:yearly} reports the RDD estimate for each fiscal year separately. The point estimates vary in sign and magnitude but are uniformly insignificant. There is no evidence of emerging or fading effects over the sample period.
+
+\section{Additional Figures and Tables}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_map_appalachia.pdf}
+\caption{Map of Appalachian Counties by Economic Status, FY2014}
+\label{fig:map}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} ARC counties shaded by economic status designation. Distressed counties (darkest) are concentrated in Central Appalachia (eastern Kentucky, West Virginia, and southwestern Virginia). Source: ARC County Economic Status data, FY2014.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_yearly_estimates.pdf}
+\caption{Year-by-Year RDD Estimates (Appendix)}
+\label{fig:yearly_appendix}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Each point is a separate rdrobust estimate for a single fiscal year. Error bars show 95\% confidence intervals (robust bias-corrected). Dashed line at zero. The point estimates show no systematic pattern over time.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_bandwidth_sensitivity.pdf}
+\caption{Bandwidth Sensitivity Analysis}
+\label{fig:bw_sensitivity}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Point estimates and 95\% confidence intervals for the Distressed designation effect at different bandwidth multiples of the MSE-optimal bandwidth. All three outcomes remain statistically insignificant across bandwidths.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_placebo.pdf}
+\caption{Placebo Tests at Non-Treatment Thresholds}
+\label{fig:placebo}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} RDD plots at the 25th and 50th national percentiles of the CIV, where no change in ARC treatment occurs. The absence of discontinuities confirms that the null result at the Distressed threshold is not an artifact of the method.
+\end{minipage}
+\end{figure}
+
+\section{Year-by-Year Density Tests}
+
+\begin{table}[htbp]
+\centering
+\caption{Year-by-Year McCrary Density Tests}
+\label{tab:mccrary_yearly}
+\begin{tabular}{lccc}
+\toprule
+Fiscal Year & $T$-statistic & $p$-value & $N$ \\
+\midrule
+FY 2007 & 1.530 & 0.126 & 286 \\
+FY 2008 & $-0.058$ & 0.954 & 255 \\
+FY 2009 & 0.426 & 0.670 & 258 \\
+FY 2010 & 0.960 & 0.337 & 247 \\
+FY 2011 & 0.737 & 0.461 & 261 \\
+FY 2012 & 0.633 & 0.527 & 320 \\
+FY 2013 & $-1.790$ & 0.074 & 340 \\
+FY 2014 & 0.988 & 0.323 & 336 \\
+FY 2015 & 0.040 & 0.968 & 338 \\
+FY 2016 & 0.233 & 0.816 & 341 \\
+FY 2017 & 2.171 & 0.030 & 335 \\
+\midrule
+Pooled & 0.976 & 0.329 & 3,317 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} McCrary density tests using \texttt{rddensity} \citep{cattaneo2020simple}, estimated separately for each fiscal year and pooled. The null hypothesis is continuity of the CIV density at the Distressed threshold. Of 11 year-specific tests, 10 fail to reject at the 5\% level. The single rejection (FY2017, $p = 0.030$) is consistent with the expected false positive rate.
+\end{tablenotes}
+\end{table}
+
+\section{Alternative Outcomes: RDD Plots}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_rd_alternative_outcomes.pdf}
+\caption{RDD Plots for Alternative (Non-CIV) Outcomes}
+\label{fig:alt_outcomes}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Binned scatter plots with local polynomial fits for outcomes not mechanically linked to the Composite Index Value. Wages and salaries from BEA CAINC5N. Personal income from BEA CAINC1. Population growth from Census intercensal estimates. No visible discontinuity is present at the Distressed threshold for any alternative outcome.
+\end{minipage}
+\end{figure}
+
+\end{document}

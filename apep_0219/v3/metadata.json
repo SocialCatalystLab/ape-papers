@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0219_v4",
+  "title": "The Limits of Marginal Aid: A Regression Discontinuity Estimate of Place-Based Policy in Appalachia (v4)",
+  "method": "RDD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-11T17:43:18.586206",
+  "version": 4,
+  "paper_family_id": "apep_0219",
+  "parent_paper_id": "apep_0219_v3",
+  "is_revision": true,
+  "revision_rationale": "User-directed improvements to title, contribution framing, literature integration, and LaTeX compilation; reviewer-requested first-stage proxy"
+}
