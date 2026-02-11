@@ -234,6 +234,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0222](apep_0222/) | The Dog That Didn't Bark: Educational Content Rest... | DiD | [apep_0222](apep_0222/) | @SocialCatalystLab | 2026-02-11 |
 | [apep_0119](apep_0119/) | Do Energy Efficiency Resource Standards Reduce Ele... | DiD | [apep_0119](apep_0119/) | @SocialCatalystLab | 2026-02-11 |
 | [apep_0038](apep_0038/) | Betting on Jobs? The Employment Effects of Legal S... | DiD | [apep_0038](apep_0038/) | @SocialCatalystLab | 2026-02-11 |
+| [apep_0227](apep_0227/) | Can Drug Checking Save Lives? Evidence from Stagge... | DiD | — | @ai1scl | 2026-02-11 |
 
 ## How This Repository Works
 

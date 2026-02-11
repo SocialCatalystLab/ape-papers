@@ -1,0 +1,36 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:twfe} TWFE Estimates: Effect of FTS Legalization on Overdose Deaths}
+   \bigskip
+   \centering
+   \begin{tabular}{lccc}
+      \toprule
+       & \multicolumn{2}{c}{rate\_synth\_opioid} & log\_rate\_synth\\
+                                & (1)           & (2)           & (3)\\  
+      \midrule 
+      FTS Legal                 & 2.526$^{*}$   & 2.550$^{**}$  & -0.2239\\   
+                                & (1.263)       & (1.191)       & (0.3370)\\   
+      Naloxone Access Law       &               & -0.3182       &   \\   
+                                &               & (3.270)       &   \\   
+      Medicaid Expanded         &               & -4.004$^{*}$  &   \\   
+                                &               & (2.307)       &   \\   
+      Poverty Rate              &               & -105.8        &   \\   
+                                &               & (126.9)       &   \\   
+      Unemployment Rate         &               & -106.2        &   \\   
+                                &               & (90.91)       &   \\   
+       \\
+      Observations              & 423           & 423           & 423\\  
+      Within R$^2$              & 0.01112       & 0.04432       & 0.00186\\  
+       \\
+      state\_abb fixed effects  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+      year fixed effects        & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+      \bottomrule
+   \end{tabular}
+   
+   \par \raggedright 
+   Clustered standard errors at state level in parentheses.\\
+   All specifications include state and year fixed effects.\\
+   Column (3) uses log(rate + 0.1) as the dependent variable.
+\end{table}
+
+

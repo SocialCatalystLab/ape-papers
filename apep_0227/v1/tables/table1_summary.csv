@@ -1,0 +1,4 @@
+Group,N,Synth. Opioid Rate,All Drug Rate,Cocaine Rate,Stimulant Rate,Poverty Rate,Unemp. Rate,Population (M)
+Pre-treatment (2013-2017),141,9.73 (11.49),20.85 (9.46),2.32 (3.49),1.51 (2.46),0.139 (0.030),0.055 (0.012),6.72 (7.36)
+Post-treatment (treated),92,29.24 (14.09),38.15 (14.99),11.08 (9.03),9.26 (8.50),0.126 (0.028),0.059 (0.015),6.06 (6.20)
+Post-treatment (never-treated),30,8.75 (9.38),18.28 (8.25),1.84 (2.32),4.90 (4.29),0.119 (0.013),0.040 (0.010),8.42 (10.92)

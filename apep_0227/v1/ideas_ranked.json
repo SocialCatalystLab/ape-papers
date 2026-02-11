@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-02-11T15:24:40.209210",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3392,
+    "output_tokens": 5096,
+    "total_tokens": 8488
+  },
+  "ideas_file": "/Users/ai1/auto-policy-evals/output/apep_0225/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Fentanyl Test Strip Legalization and Synthetic Opioid Overdose Deaths",
+      "score": 76,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "State IVF Insurance Mandates and Fertility Patterns",
+      "score": 64,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "State Surprise Medical Billing Protections and Emergency Care Utilization",
+      "score": 57,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "The CROWN Act and Black Labor Market Outcomes",
+      "score": 55,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 5,
+      "title": "State E-Verify Mandates and Agricultural Labor Markets",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

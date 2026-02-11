@@ -1,0 +1,4 @@
+Specification,ATT,SE,95\% CI,RI p-value
+CS-DiD (never-treated),2.348,0.553,"[1.265, 3.432]",0.4500
+CS-DiD (not-yet-treated),1.407,0.487,"[0.452, 2.362]",---
+"CS-DiD (log, never-treated)",-0.9996,0.1453,"[-1.2844, -0.7148]",---
