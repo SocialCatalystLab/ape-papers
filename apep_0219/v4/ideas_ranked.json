@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-11T09:09:56.301402",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2688,
+    "output_tokens": 2567,
+    "total_tokens": 5255
+  },
+  "ideas_file": "output/apep_0217/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "The Distress Label Trap \u2014 Does ARC's \"Distressed\" Designation Help or Harm Appalachian Counties?",
+      "score": 68,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Does Superfund Listing Improve Community Health? Revisiting the HRS Score Threshold with an Environmental Justice Lens",
+      "score": 60,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Flood Zone Mandates and Credit Access \u2014 An NFIP Boundary Discontinuity Design",
+      "score": 48,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

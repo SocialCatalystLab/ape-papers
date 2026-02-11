@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+\centering
+\caption{Main RDD Results: Effect of ARC Distressed Designation}
+\label{tab:main_results}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{Pooled Cross-Sectional} & \multicolumn{3}{c}{Panel (Year FE)} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+ & Unemp. & Log PCMI & Poverty & Unemp. & Log PCMI & Poverty \\
+ & Rate & & Rate & Rate & & Rate \\
+\midrule
+RD estimate & $-0.305$ & $-0.005$ & $0.505$ & $0.010$ & $0.012$ & $0.095$ \\
+ & $(0.364)$ & $(0.026)$ & $(0.558)$ & $(0.227)$ & $(0.015)$ & $(0.423)$ \\
+ & & & & & & \\
+Bandwidth ($h$) & 15.4 & 10.7 & 15.4 & 7.3 & 10.0 & 7.9 \\
+Eff. observations & 1,028 & 713 & 1,027 & 648 & 901 & 716 \\
+Control mean & 9.03 & 9.77 & 20.46 & 9.03 & 9.77 & 20.46 \\
+\midrule
+Year FE & No & No & No & Yes & Yes & Yes \\
+Kernel & \multicolumn{6}{c}{Triangular} \\
+BW selection & \multicolumn{6}{c}{MSE-optimal (Calonico, Cattaneo, Titiunik 2014)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Robust bias-corrected estimates from \texttt{rdrobust}. Standard errors in parentheses. $^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\% levels. Panel specification residualizes both outcomes and the running variable on fiscal year fixed effects before estimation. Sample: ARC counties FY 2007---2017 within $\pm 50$ CIV of the Distressed threshold.
+\end{tablenotes}
+\end{table}

@@ -1,0 +1,38 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\small
+\begin{tabular}{lccc}
+\toprule
+ & Unemployment & Log PCMI & Poverty \\
+ & Rate & & Rate \\
+\midrule
+\textit{Panel A: Bandwidth Sensitivity} & & & \\
+\quad 0.5$\times h$ & $0.017$ & $-0.025$ & $-0.658$ \\
+\quad & $(0.712)$ & $(0.047)$ & $(0.941)$ \\
+\quad 0.8$\times h$ & $-0.080$ & $-0.026$ & $-0.378$ \\
+\quad & $(0.555)$ & $(0.037)$ & $(0.762)$ \\
+\quad Optimal bandwidth (1.0$\times h$) & $-0.224$ & $-0.020$ & $0.081$ \\
+\quad & $(0.470)$ & $(0.032)$ & $(0.669)$ \\
+\quad 1.2$\times h$ & $-0.303$ & $-0.010$ & $0.319$ \\
+\quad & $(0.415)$ & $(0.029)$ & $(0.605)$ \\
+\quad 1.5$\times h$ & $-0.298$ & $-0.008$ & $0.451$ \\
+\quad & $(0.378)$ & $(0.026)$ & $(0.558)$ \\
+ & & & \\
+\textit{Panel B: Donut Hole ($|\text{CIV}| > 2$)} & & & \\
+\quad Drop $\pm 2$ CIV & $-0.545$ & $0.036$ & $1.593$ \\
+\quad & $(0.561)$ & $(0.052)$ & $(1.049)$ \\
+ & & & \\
+\textit{Panel C: Polynomial Order} & & & \\
+\quad Local linear ($p = 1$) & $-0.305$ & $-0.005$ & $0.505$ \\
+\quad & $(0.364)$ & $(0.026)$ & $(0.558)$ \\
+\quad Local quadratic ($p = 2$) & $-0.368$ & $-0.007$ & $0.118$ \\
+\quad & $(0.462)$ & $(0.028)$ & $(0.695)$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Robust bias-corrected RD estimates. Standard errors in parentheses. $^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\% levels. Triangular kernel throughout. Panel A varies the bandwidth relative to the MSE-optimal ($h$). Panel B excludes observations within $\pm 2$ CIV of the threshold. Panel C compares local linear and local quadratic polynomial specifications.
+\end{tablenotes}
+\end{table}

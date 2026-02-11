@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\caption{Covariate Balance at the Distressed Threshold}
+\label{tab:balance}
+\begin{tabular}{lccccc}
+\toprule
+Predetermined Variable & RD Estimate & Robust SE & $p$-value & Bandwidth & Eff. $N$ \\
+\midrule
+Lagged Unemployment Rate & $-0.019$ & $(0.390)$ & 0.961 & 16.4 & 993 \\
+Lagged PCMI ($) & $380.525$ & $(421.323)$ & 0.366 & 12.4 & 757 \\
+Lagged Poverty Rate & $0.964$ & $(0.665)$ & 0.147 & 14.6 & 904 \\
+\midrule
+McCrary density test & $T = 0.976$ & & 0.329 & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Tests for discontinuities in predetermined (lagged) county characteristics at the ARC Distressed threshold. Robust bias-corrected estimates from \texttt{rdrobust} with triangular kernel and MSE-optimal bandwidth. Lagged variables are the previous fiscal year's values. The McCrary test uses \texttt{rddensity} to test for manipulation of the running variable. $^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\% levels. A null result (insignificant) supports the validity of the RD design.
+\end{tablenotes}
+\end{table}

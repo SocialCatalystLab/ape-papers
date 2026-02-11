@@ -229,6 +229,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0222](apep_0222/) | The Dog That Didn't Bark: Educational Content Rest... | DiD | — | @SocialCatalystLab | 2026-02-11 |
 | [apep_0219](apep_0219/) | The Limits of Marginal Aid: A Regression Discontin... | RDD | [apep_0219](apep_0219/) | @SocialCatalystLab | 2026-02-11 |
 | [apep_0224](apep_0224/) | The Dog That Didn't Bark: School Suicide Preventio... | DiD | — | @ai1scl | 2026-02-11 |
+| [apep_0219](apep_0219/) | The Limits of Marginal Aid: A Regression Discontin... | RDD | [apep_0219](apep_0219/) | @SocialCatalystLab | 2026-02-11 |
 
 ## How This Repository Works
 
