@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness: Alternative Specifications for Log Employment}
+\label{tab:robustness}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & Estimate & SE & 95\% CI & p-value \\
+\midrule
+CS (never-treated) & 0.0228 & (0.0197) & [-0.0157, 0.0614] & 0.246 \\
+CS (not-yet-treated) & 0.0210 & (0.0173) & [-0.0130, 0.0550] & 0.226 \\
+TWFE & 0.1089** & (0.0441) & [0.0225, 0.1954] & 0.017 \\
+Sun-Abraham & 0.0226 & (0.0173) & [-0.0112, 0.0564] & 0.197 \\
+Triple-Diff (K--12 vs HC) & 0.0808* & (0.0419) & [-0.0014, 0.1629] & 0.060 \\
+CS: Broad Educ. (NAICS 61) & 0.0084 & (0.0117) & [-0.0145, 0.0314] & 0.471 \\
+CS: Strong laws only & 0.0444 & (0.0441) & & 0.314 \\
+CS: Moderate/weak only & 0.0115 & (0.0162) & & 0.477 \\
+\midrule
+Fisher exact p-value & \multicolumn{4}{c}{0.007 (1,000 permutations)} \\
+MDE (80\% power) & \multicolumn{4}{c}{0.0551 log points} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} All specifications use log employment in K--12 schools (NAICS 6111) as the outcome. Standard errors clustered at the state level. CS = \citet{callaway2021difference}. TWFE = two-way fixed effects with state and quarter FE. Sun-Abraham = \citet{sun2021estimating} interaction-weighted estimator. Triple-diff compares K--12 schools vs.~healthcare within the same state-quarter. ``Broad Educ.'' uses NAICS 61 (all educational services) for comparison with the narrower 6111 estimate. MDE = minimum detectable effect at 80\% power and 5\% significance ($\text{MDE} = 2.8 \times \text{SE}$). Fisher p-value from 1,000 permutations of treatment assignment. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

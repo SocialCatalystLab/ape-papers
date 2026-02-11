@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Placebo Tests: Effect of Education Content Laws on Non-Education Sectors}
+\label{tab:placebo}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Sector (NAICS) & ATT & SE & p-value \\
+\midrule
+K--12 Schools (6111) --- \textit{Treated} & 0.0228 & (0.0197) & 0.246 \\
+Broad Education (61) & 0.0084 & (0.0117) & 0.471 \\
+\midrule
+Healthcare (62) & 0.0091 & (0.0068) & 0.180 \\
+Retail (44-45) & 0.0105* & (0.0061) & 0.088 \\
+Manufacturing (31-33) & 0.0080 & (0.0056) & 0.148 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} All specifications use Callaway-Sant'Anna (2021) with never-treated control and log employment as the outcome. Treatment coding assigns education content restriction law dates to all sectors within the state. Non-education sectors should show null effects under valid identification. ``Broad Education'' uses NAICS 61 (all educational services) vs.~the primary NAICS 6111 (K--12 schools only). $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

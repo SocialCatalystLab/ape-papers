@@ -1733,6 +1733,17 @@
       "promising": false
     },
     {
+      "paper_id": "apep_0222_v2",
+      "paper_family_id": "apep_0222",
+      "decision": "MINOR REVISION",
+      "date": "2026-02-11",
+      "pdf": "papers/apep_0222/v2/paper.pdf",
+      "promising": true,
+      "is_revision": true,
+      "parent_paper_id": "apep_0222_v2",
+      "version": 3
+    },
+    {
       "paper_id": "apep_0224_v1",
       "paper_family_id": "apep_0224",
       "decision": "MAJOR REVISION",

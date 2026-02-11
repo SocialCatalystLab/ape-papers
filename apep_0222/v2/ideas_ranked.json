@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-11T13:31:42.324403",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2522,
+    "output_tokens": 4055,
+    "total_tokens": 6577
+  },
+  "ideas_file": "output/apep_0221/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Educational Content Restriction (\u201cDivisive Concepts\u201d) Laws and Teacher Labor Markets",
+      "score": 72,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "State Noncompete Agreement Bans and Business Dynamism",
+      "score": 61,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "State Anti-ESG Legislation and Public Sector Financial Outcomes",
+      "score": 35,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

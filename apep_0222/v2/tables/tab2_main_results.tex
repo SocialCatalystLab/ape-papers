@@ -1,0 +1,39 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of Educational Content Restriction Laws on K--12 School Labor Markets}
+\label{tab:main_results}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+ & Log Emp. & Sep. Rate & Log Earn. & Hire Rate \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Callaway-Sant'Anna (2021)}} \\[3pt]
+ATT & 0.0228 & 0.0031 & -0.0125 & 0.0059 \\
+ & (0.0197) & (0.0071) & (0.0102) & (0.0093) \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel B: TWFE (state + quarter FE)}} \\[3pt]
+Treat & 0.1089** & -0.0018 & 0.0141 & -0.0051 \\
+ & (0.0441) & (0.0021) & (0.0136) & (0.0032) \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel C: Triple-Difference (K--12 vs. Healthcare)}} \\[3pt]
+DDD & 0.0808* & -0.0035 & 0.0131 & -0.0056 \\
+ & (0.0419) & (0.0024) & (0.0142) & (0.0033) \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel D: Female Share (K--12 Schools)}} \\[3pt]
+CS ATT & \multicolumn{4}{c}{-0.0004} \\
+ & \multicolumn{4}{c}{(0.0017)} \\
+TWFE & \multicolumn{4}{c}{0.0013} \\
+ & \multicolumn{4}{c}{(0.0032)} \\
+\midrule
+N (Panel A/B) & \multicolumn{4}{c}{1,978 state-quarters} \\
+N (Panel C) & \multicolumn{4}{c}{3,969 state-quarter-industries} \\
+Clustering & \multicolumn{4}{c}{State} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors clustered at the state level in parentheses. Panel A reports the overall ATT from \citet{callaway2021difference} using never-treated states as the comparison group. Panel B reports TWFE estimates with state and quarter fixed effects. Panel C reports triple-difference estimates comparing K--12 schools (NAICS 6111) to healthcare (NAICS 62) within the same state-quarter, with state$\times$industry, industry$\times$quarter, and state$\times$quarter fixed effects. Panel D reports the effect on female employment share in K--12 schools using both CS and TWFE estimators. $^{*}$ $p<0.10$, $^{**}$ $p<0.05$, $^{***}$ $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
