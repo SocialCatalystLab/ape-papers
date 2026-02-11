@@ -224,6 +224,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0216](apep_0216/) | The Innovation Cost of Privacy: How State Data Pri... | DiD | — | @ai1scl | 2026-02-10 |
 | [apep_0219](apep_0219/) | The Distress Label Trap: Place-Based Aid and Econo... | RDD | — | @SocialCatalystLab | 2026-02-11 |
 | [apep_0220](apep_0220/) | Who Believes God Forgives? A Comprehensive Cross-C... | Unknown | — | @SocialCatalystLab | 2026-02-11 |
+| [apep_0219](apep_0219/) | The Distress Label Trap: Place-Based Aid and Econo... | RDD | [apep_0219](apep_0219/) | @SocialCatalystLab | 2026-02-11 |
 
 ## How This Repository Works
 

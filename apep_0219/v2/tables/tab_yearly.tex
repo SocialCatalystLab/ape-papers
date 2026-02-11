@@ -1,0 +1,39 @@
+\begin{table}[htbp]
+\centering
+\caption{Year-by-Year RD Estimates}
+\label{tab:yearly}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{2}{c}{Unemployment Rate} & \multicolumn{2}{c}{Log PCMI} & \multicolumn{2}{c}{Poverty Rate} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Fiscal Year & Estimate & $N$ & Estimate & $N$ & Estimate & $N$ \\
+\midrule
+FY 2007 & $-1.339$ & 61 & $0.015$ & 68 & $2.582$ & 78 \\
+ & $(1.111)$ & & $(0.062)$ & & $(2.093)$ & \\
+FY 2008 & $0.694$ & 88 & $-0.012$ & 55 & $-2.442$ & 50 \\
+ & $(0.698)$ & & $(0.055)$ & & $(1.799)$ & \\
+FY 2009 & $-0.073$ & 80 & $-0.028$ & 45 & $1.771$ & 44 \\
+ & $(0.923)$ & & $(0.064)$ & & $(2.411)$ & \\
+FY 2010 & $-0.203$ & 78 & $0.081$ & 57 & $2.199$ & 71 \\
+ & $(1.428)$ & & $(0.074)$ & & $(3.491)$ & \\
+FY 2011 & $-0.974$ & 56 & $-0.047$ & 78 & $0.386$ & 51 \\
+ & $(1.226)$ & & $(0.069)$ & & $(3.164)$ & \\
+FY 2012 & $1.120$ & 68 & $-0.059$ & 83 & $-4.570^{***}$ & 59 \\
+ & $(0.891)$ & & $(0.050)$ & & $(1.499)$ & \\
+FY 2013 & $-1.065$ & 84 & $0.041$ & 83 & $2.676$ & 76 \\
+ & $(0.712)$ & & $(0.066)$ & & $(2.207)$ & \\
+FY 2014 & $0.128$ & 113 & $0.086^{**}$ & 123 & $1.984$ & 113 \\
+ & $(0.767)$ & & $(0.040)$ & & $(1.353)$ & \\
+FY 2015 & $-0.460$ & 124 & $-0.071$ & 80 & $-2.203$ & 80 \\
+ & $(0.594)$ & & $(0.048)$ & & $(1.789)$ & \\
+FY 2016 & $0.237$ & 97 & $0.066^{*}$ & 122 & $1.684$ & 102 \\
+ & $(0.546)$ & & $(0.039)$ & & $(1.580)$ & \\
+FY 2017 & $-0.651$ & 69 & $0.007$ & 139 & $1.063$ & 87 \\
+ & $(0.467)$ & & $(0.046)$ & & $(1.662)$ & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Robust bias-corrected RD estimates from \texttt{rdrobust}, estimated separately for each fiscal year. Triangular kernel with MSE-optimal bandwidth selected per year. Standard errors in parentheses. $N$ is the effective number of observations within the bandwidth. $^{***}$, $^{**}$, $^{*}$ denote significance at 1\%, 5\%, 10\% levels.
+\end{tablenotes}
+\end{table}
