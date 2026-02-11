@@ -1,0 +1,30 @@
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\begin{tabular}{lcc}
+\toprule
+Specification & ATT & Std. Error \\
+\midrule
+Main result (CS, not-yet-treated) & -197.8 & (235.8) \\
+\midrule
+\multicolumn{3}{l}{\textit{COVID-19 Sensitivity}} \\
+\quad Excluding 2020--2021 & -202.8 & (272.4) \\
+\quad Pre-COVID cohorts (2018--2019 only) & -344.2 & (433.8) \\
+\midrule
+\multicolumn{3}{l}{\textit{Sample Restrictions}} \\
+\quad Excluding PASPA states (DE, MT, OR) & -127.1 & (254.1) \\
+\quad Excluding iGaming states & -302.3 & (258.7) \\
+\midrule
+\multicolumn{3}{l}{\textit{Alternative Specifications}} \\
+\quad Never-treated control group & -199.1 & (241.9) \\
+\quad Two-way fixed effects & -268.3 & (210.5) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Notes:} Main result uses Callaway-Sant'Anna (2021) with not-yet-treated control group. PASPA states had limited sports betting authorization pre-\textit{Murphy}. iGaming states legalized online casino gaming concurrently with sports betting. Standard errors clustered at state level.
+\end{tablenotes}
+\end{table}
+

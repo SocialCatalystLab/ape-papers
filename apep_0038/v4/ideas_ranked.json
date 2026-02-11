@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-02-09T00:00:00Z",
+  "model": "revision",
+  "ideas": [
+    {
+      "id": 1,
+      "title": "Employment Effects of Sports Betting Legalization (Revision)",
+      "recommendation": "PURSUE",
+      "score": 85,
+      "rationale": "Revision of existing paper with strong identification. Parent paper had SEVERE code integrity issues that must be fixed. All reviewers requested wage and spillover analyses."
+    }
+  ]
+}

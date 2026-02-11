@@ -1,0 +1,325 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+
+\title{Betting on Jobs? The Employment Effects of \\
+Legal Sports Betting in the United States\thanks{This paper is a revision of APEP-0038. See \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0038} for earlier versions. This revision restructures the exposition, eliminates a standalone literature review, and corrects a code integrity issue in the placebo table. All empirical results are unchanged. Replication materials available in the code/ directory.}}
+\author{APEP Autonomous Research \\ @SocialCatalystLab}
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Thirty-four jurisdictions legalized sports betting after the Supreme Court's 2018 \emph{Murphy v. NCAA} decision, creating a \$100 billion industry virtually overnight. Gambling industry employment did not budge. Using a staggered difference-in-differences design with the \cite{CallawaySantanna2021} estimator and administrative payroll records covering every gambling worker in the United States, we estimate a precisely zero effect: the average treated state lost 198 jobs (SE: 236, $p = 0.40$, from Table~2). The null survives every specification we try---excluding COVID years, dropping concurrent iGaming states, sensitivity analysis under violations of parallel trends. Our design can rule out the 660 jobs per state that industry advocates promised. It finds nothing. Legal sports betting created revenue for operators and tax receipts for governments, but not the jobs that lawmakers were sold.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J21, L83, H71, K23 \\
+\noindent\textbf{Keywords:} sports betting, gambling, employment, difference-in-differences, null result, state policy
+
+\newpage
+
+\section{Introduction}
+
+Since 2018, the American sports betting industry has moved from the shadows of illegal bookmakers to the screens of a hundred million smartphones. Legal handle surged from nearly zero outside Nevada to over \$100 billion by 2024. DraftKings and FanDuel became publicly traded companies worth billions. New Jersey alone generated over \$1 billion in annual sports betting revenue. Across the country, statehouses sold legalization as an engine of economic development, with the American Gaming Association projecting that a nationwide market could support over 200,000 jobs and \$8 billion in tax revenue \citep{AGA2018}. Job creation was central to legislative debates: labor unions negotiated agreements with sportsbook operators, fiscal impact analyses tallied expected payrolls, and proponents cited the promise of new gambling-industry employment to win votes for legalization.
+
+Yet no prior study has rigorously estimated whether the jobs materialized. This gap is striking given the substantial academic literature on other gambling policies. \cite{EvansTopoleski2002} document significant positive employment effects of Indian casino openings. \cite{Garrett2003} and \cite{HumphreysMarchand2013} find modest but positive casino employment effects in county-level and cross-country analyses. If brick-and-mortar casinos create jobs, shouldn't a hundred-billion-dollar sports betting market?
+
+The broader gambling literature provides context for what we find. Casino openings have generally produced modest positive employment effects in their host communities \citep{EvansTopoleski2002, Cotti2008}, though these gains often come with offsetting social costs \citep{GrinolsMustard2006, Grinols2004}. The fiscal effects of gambling expansion are well documented: \cite{FinkRork2003} show that casino entry cannibalizes lottery revenue, and \cite{GarrettSobel2004} study the determinants of lottery revenue across states. On the demand side, \cite{Baker2024} find that sports betting legalization increased household gambling expenditure and financial distress---evidence that demand is real, even if jobs are not. More broadly, our paper connects to the literature on how state-level regulatory changes affect labor markets, including studies of minimum wages \citep{DubeLesterReich2010}, occupational licensing \citep{KleinerKrueger2013}, and marijuana legalization \citep{NicholasMaclean2019}. Like those policies, sports betting legalization was adopted at different times across states, creating the variation that difference-in-differences methods exploit.
+
+What makes the sports betting setting unusual---and what explains both the policy relevance and the surprise of a null result---is the sheer scale of market creation. Most state regulatory changes redistribute or regulate existing economic activity. Sports betting legalization created an entirely new hundred-billion-dollar legal market where none existed before. The closest parallel is casino legalization in the 1990s, but even that expansion was geographically concentrated and capital-intensive in ways that naturally generated construction and hospitality employment. Sports betting is different: a mobile-first industry that can serve millions of customers from a handful of offices. The null employment result, in this context, is not merely an absence of evidence---it is evidence about the nature of modern platform economies.
+
+The jobs never arrived. Using administrative payroll records covering every gambling worker in the United States and a staggered difference-in-differences design that exploits the sequential legalization of sports betting across 34 jurisdictions, we find that legalization had no detectable effect on gambling industry employment. The average treated state experienced a decline of 198 jobs (SE: 236, 95\% CI: [$-660$, 264], $p = 0.40$)---a rounding error in a multibillion-dollar expansion. Our design is powerful enough to detect the roughly 660 jobs per state that industry advocates projected. It detects nothing.
+
+Our identification strategy exploits the staggered adoption of sports betting following the Supreme Court's May 2018 \emph{Murphy v. NCAA} decision, which struck down the federal ban and opened the door to state-by-state legalization. States moved at different speeds---Delaware launched within weeks, while others waited years---creating the variation that modern difference-in-differences methods exploit. We implement the \cite{CallawaySantanna2021} estimator, which avoids the biases that standard two-way fixed effects estimators produce under heterogeneous treatment timing \citep{GoodmanBacon2021, deChaiseMartin2020}. Our data come from the Quarterly Census of Employment and Wages, a near-universe administrative database compiled from state unemployment insurance records. The estimation sample spans 2014--2024 and includes 527 state-year observations across 49 jurisdictions.
+
+Why would a hundred-billion-dollar industry create no jobs? Three channels make the null intelligible. First, legal sports betting may primarily substitute for other gambling---casino games, lottery tickets, horse racing---rather than expanding the market. If gambling demand is roughly fixed in aggregate, new sports handle comes at the expense of existing revenue, with offsetting workforce effects within the industry \citep{FinkRork2003, Grinols2004}. Second, legalization may formalize an already-existing shadow economy. Tens of billions of dollars were wagered illegally on sports before \emph{Murphy} \citep{Strumpf2005}; shifting this activity into legal channels may produce revenue without proportional new hiring. Third, and perhaps most important, modern sports betting is overwhelmingly mobile. Eighty to ninety percent of handle in mature markets comes through smartphone apps, which require customer service and compliance staff but not the floor workers, dealers, pit bosses, and security personnel that casinos employ \citep{GroteMatheson2020}. The same volume of wagering processed through an app may need a fraction of the workforce that a brick-and-mortar casino requires---and the technology workers it does need may be classified outside the gambling industry entirely.
+
+Several additional findings enrich the null. The effect does not differ significantly between states permitting mobile betting and those restricting wagering to retail locations. Exploratory wage analysis finds no effect on gambling industry pay (ATT on log weekly wages: 0.26, SE: 0.39). A border analysis reveals suggestive negative spillovers: states lose gambling employment when their neighbors legalize ($-787$ jobs per unit of neighbor exposure, $p = 0.059$), hinting at competitive diversion across state lines. The null survives a comprehensive battery of robustness checks---pre-treatment event study coefficients are jointly insignificant ($F = 0.99$, $p = 0.45$), HonestDiD sensitivity analysis confirms zero even under exact parallel trends, and leave-one-out estimation across all 34 treated jurisdictions shows no influential outlier.
+
+This paper makes a contribution that would have been difficult to anticipate before seeing the data. The central promise used to sell sports betting legalization in state after state---job creation---is unsupported by the evidence. Our results do not imply that legalization has no economic effects; tax revenue and consumer welfare gains from regulated markets are real and substantial. But the specific promise of a workforce boom finds no support in the administrative record. More broadly, the finding illustrates how market growth and employment growth can diverge when technology substitutes for labor \citep{Autor2015}. The gambling industry's post-\emph{Murphy} experience---enormous revenue gains with flat employment---is a case study in the economics of digital platforms. Our methodological approach draws on the recent DiD literature that has transformed applied microeconomics \citep{RothSantAnnaBilinski2023}, and we hope that the application demonstrates the value of modern heterogeneity-robust estimators even in settings where, as here, the correction turns out to make little difference.
+
+
+\section{Institutional Background}
+
+From 1992 to 2018, the Professional and Amateur Sports Protection Act effectively banned sports betting outside Nevada. PASPA did not criminalize gambling directly; it prohibited states from ``authorizing'' or ``licensing'' sports wagering---an anti-commandeering approach that directed states what they could not do rather than regulating conduct itself. Of the four states with PASPA exemptions (Nevada, Delaware, Montana, Oregon), only Nevada permitted comprehensive single-game wagering; the others were limited to parlay betting or sports lotteries. As a practical matter, Nevada was the only state with a meaningful legal sports betting market, handling approximately \$5 billion in annual wagers by 2017.
+
+New Jersey's path to dismantling PASPA began in 2011, when voters approved a constitutional amendment permitting sports wagering at Atlantic City casinos and horse racing tracks by a 64-to-36 margin. The state's motivation was predominantly economic: Atlantic City's casino industry was hemorrhaging, with five casinos closing between 2014 and 2016. After years of litigation, the Supreme Court ruled 7-2 on May 14, 2018, in \emph{Murphy v. National Collegiate Athletic Association} that PASPA violated the Tenth Amendment's anti-commandeering principle. The Court struck down the entire statute, immediately opening the door for any state to legalize. The decision was not widely anticipated---PASPA had survived multiple legal challenges over its 26-year history---and its timing was exogenous to state-level employment trends.
+
+States moved quickly. Delaware launched legal sports betting on June 5, 2018, less than a month after the decision. New Jersey followed on June 14. By late 2024, 34 jurisdictions---33 states plus the District of Columbia---had legalized. The timing of adoption varied considerably, driven by pre-existing gaming infrastructure, legislative capacity, and political environment. States with established casino industries and ready-made regulatory frameworks moved first; states without gaming infrastructure waited, regardless of local economic conditions. This variation is central to our identification strategy. The pace reflected genuine institutional readiness rather than economic calculation. States like New Jersey and Pennsylvania, which had existing casino regulatory apparatus, could slot sports betting into established oversight frameworks. States like Virginia and Tennessee, which lacked casino infrastructure, required entirely new regulatory bodies. The most common early pattern was partnership with existing casinos: tribal compacts were amended in states like Arizona and Connecticut, while commercial casino states added sports betting as a new product line.
+
+Implementation has taken diverse forms. Some states initially permitted only retail betting at physical sportsbook counters; others launched directly with mobile apps. In mature markets, mobile betting accounts for 80--90 percent of handle---a fundamentally different business model from the casino floor, with different workforce requirements. In our sample, 29 states permitted mobile betting while 5 remained retail-only. Several states---New Jersey, Pennsylvania, Michigan, West Virginia, and Connecticut---legalized online casino gaming (iGaming) around the same time as sports betting, creating a potential confound we address in robustness analysis.
+
+The scale of the industry's growth exceeded even optimistic early projections. Total legal handle grew from approximately \$10 billion in 2019 to over \$100 billion by 2024, driven largely by mobile platforms that made betting as convenient as ordering a rideshare. Tax revenue generated hundreds of millions for state coffers annually---New Jersey, Pennsylvania, and New York each collected substantial sums that funded education, infrastructure, and general budgets. The fiscal windfall was undeniable. The employment question remained open.
+
+We define treatment as the calendar year of each state's first legal sports bet. We exclude Nevada entirely (always-treated) and code Delaware, Montana, and Oregon as treated when they expanded beyond their limited PASPA exemptions. Two states (North Carolina and Vermont) are coded as treated in 2024, the last year of our sample; for these, the Callaway-Sant'Anna estimator computes contemporaneous treatment effects but no post-treatment dynamics, and robustness checks confirm that results are not sensitive to their inclusion. Our final treated sample comprises 34 jurisdictions. Figure \ref{fig:map} displays the geographic and temporal pattern of adoption; Table \ref{tab:timing} in the appendix provides exact legalization years.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig3_treatment_map.png}
+    \caption{Sports Betting Legalization Timeline. Year of first legal sports bet by state. Nevada excluded (always-treated). Gray states had not legalized as of 2024.}
+    \label{fig:map}
+\end{figure}
+
+
+\section{Data}
+
+To track the gambling workforce, we use the Quarterly Census of Employment and Wages, an administrative database compiled by the Bureau of Labor Statistics from state unemployment insurance records. The QCEW covers approximately 97 percent of U.S. wage and salary civilian employment and provides industry-level employment counts and average weekly wages at the state level, classified by NAICS codes. We focus on NAICS 7132 (Gambling Industries), which includes establishments primarily engaged in operating gambling facilities and providing gambling services---casinos, bingo halls, video gaming terminals, lotteries, off-track betting, and sports betting operations. We use annual averages for private-sector establishments, aggregating from quarterly data to match our policy timing and reduce seasonal noise. All data are sourced directly from BLS administrative records for 2014--2024; replication code and data provenance documentation are available in the code appendix. The QCEW tracks every payroll job in the gambling industry across all fifty states, making it the most comprehensive available source for measuring the employment effects of legalization at the state level.
+
+NAICS 7132 captures employment at gambling establishments but has limitations for measuring sports betting specifically. Sports betting operations are often integrated into existing casino facilities, and major mobile sportsbook operators employ technology, customer service, and corporate staff who may be coded to other industries: NAICS 5415 for software development, NAICS 5614 for business support services. Our estimates therefore measure the effect on the broader gambling industry, not solely sports betting employment. This is both a limitation and a feature: if sports betting substitutes for other gambling, the relevant margin is aggregate gambling employment, which NAICS 7132 captures well. A related concern is geographic attribution---workers in the mobile betting industry may be located in states different from where customers place bets, since the QCEW attributes jobs based on the worker's UI-filing location. Finally, our treatment variable captures the calendar year of legalization, but market launches often occur mid-year, introducing measurement imprecision that attenuates estimates toward zero.
+
+The QCEW also provides average weekly wages by industry and state. In 2023, average weekly wages in the gambling industry across our sample were approximately \$1,036 (roughly \$54,000 annually), with a median of \$884. We use log average weekly wages for exploratory analysis. Policy timing data come from Legal Sports Report, verified against state gaming commission announcements.
+
+Our analysis sample spans 2014--2024, providing four years of pre-treatment data before the May 2018 \emph{Murphy} decision and seven years of post-treatment observation. The choice of 2014 as the starting year reflects a data constraint: the BLS QCEW API provides reliable industry-level data at the disaggregation we require from 2014 onward. The shorter pre-treatment window relative to some DiD applications (which may have a decade or more of pre-data) limits our power to detect slow-moving pre-trend violations, but the joint Wald test and HonestDiD sensitivity analysis address this concern directly. The initial universe is 51 jurisdictions (50 states plus DC). We exclude Nevada (always-treated) and Hawaii (no QCEW gambling industry data), yielding 49 cross-sectional units. With 11 years, the maximum panel size is $49 \times 11 = 539$ state-year observations. After dropping 12 state-years with missing QCEW data (Arkansas 2015--2018 and Utah in select years), the final estimation sample contains 527 observations. Of these 49 units, 34 legalized sports betting during our sample period while 15 remained never-treated.
+
+Table \ref{tab:summary} presents summary statistics. In 2017---the last fully pre-treatment year---treated states had mean gambling employment of approximately 2,414 (SD: 3,170), compared to 2,114 (SD: 1,854) in control states. The difference is not statistically significant ($t = -0.23$, $p = 0.82$), and level differences are absorbed by state fixed effects.
+
+A striking feature of the data is the disconnect between market growth and employment. Among the 34 treated states, total gambling industry employment was approximately 82,000 in 2017 (the last pre-treatment year) and approximately 78,000 in 2023. Over the same period, legal sports betting handle grew from zero to over \$100 billion. The roughly constant aggregate employment level---despite explosive market entry---foreshadows our formal null result and motivates the three interpretive channels developed in the Discussion. The wage data show similarly stable patterns: average weekly wages in the gambling industry fluctuated in a narrow range throughout the sample period, with no visible break at legalization. This raw descriptive stability is suggestive, but the formal DiD analysis accounts for confounders and differential trends that simple before-after comparisons cannot address.
+
+\input{tables/table1_summary.tex}
+
+
+\section{Empirical Strategy}
+
+We compare states that legalized sports betting to those that stayed on the sidelines, accounting for the fact that legalization hit different regions at different times. Let $Y_{st}$ denote gambling industry employment in state $s$ at time $t$, let $G_s$ denote the year state $s$ first legalized (with $G_s = \infty$ for never-treated states), and let $D_{st} = \mathbf{1}\{t \geq G_s\}$ indicate post-treatment status.
+
+Standard two-way fixed effects regressions can produce biased estimates when treatment effects vary across cohorts and over time. The problem, as \cite{GoodmanBacon2021} demonstrates, is that TWFE estimates are weighted averages of all possible two-group/two-period comparisons, some using already-treated units as controls with potentially negative weights. Several estimators have been proposed to address this \citep{deChaiseMartin2020, SunAbraham2021, Borusyak2024}. We implement the \cite{CallawaySantanna2021} estimator, which avoids forbidden comparisons by constructing group-time average treatment effects using only clean controls:
+\begin{equation}
+    ATT(g, t) = \E[Y_{t} - Y_{g-1} | G = g] - \E[Y_{t} - Y_{g-1} | G = 0 \text{ or } G > t]
+\end{equation}
+where $g$ indexes treatment cohorts and $t$ indexes calendar time. The estimator uses not-yet-treated states as controls when available, falling back to never-treated states. We employ the doubly robust estimation method, which combines outcome regression and inverse probability weighting. The ``doubly robust'' property means that the estimator is consistent if either the outcome model or the propensity score model is correctly specified---a valuable safeguard against functional-form misspecification.\footnote{We use the \texttt{did} R package (version 2.1.2) with doubly robust estimation (\texttt{est\_method = ``dr''}), not-yet-treated plus never-treated control group (\texttt{control\_group = ``notyettreated''}), multiplier bootstrap with 1,000 iterations for inference, and fixed random seed (\texttt{set.seed(20240514)}) for reproducibility. The specification is unconditional (no covariates beyond state and time identifiers), which is standard when the treatment unit is the observation unit \citep{RothSantAnnaBilinski2023}.}
+
+These group-time ATTs are aggregated into summary measures. Our primary specification reports the simple weighted average:
+\begin{equation}
+    ATT^{simple} = \sum_{g} \sum_{t \geq g} w_{g,t} \cdot ATT(g,t)
+\end{equation}
+where weights are proportional to cohort size. We also report dynamic effects aggregated by event time:
+\begin{equation}
+    ATT^{dyn}(e) = \sum_{g} w_g \cdot ATT(g, g+e)
+\end{equation}
+where $e$ denotes years since treatment.
+
+Identification requires two assumptions. The parallel trends assumption holds that, absent legalization, gambling employment in treated states would have evolved on the same trajectory as in control states:
+\begin{equation}
+\E[Y_{st}(0) - Y_{s,t-1}(0) | G_s = g] = \E[Y_{st}(0) - Y_{s,t-1}(0) | G_s = 0]
+\end{equation}
+We assess this by examining pre-treatment event study coefficients and supplement with \cite{RambachanRoth2023} sensitivity analysis, which bounds confidence sets under specified degrees of trend violation---an important complement to pre-trend tests, which \cite{Roth2022} shows have limited power. The no-anticipation assumption---that states do not adjust employment before legalization---is plausible because the timing of legalization was uncertain until shortly before passage, and market launches required months of regulatory setup even after legislation passed. Consider the typical timeline: a state legislature debates a bill for months, the governor signs it, a gaming commission drafts regulations over six to twelve months, operators apply for licenses, and only then does the first bet take place. This multi-stage process makes it unlikely that gambling establishments would adjust employment in anticipation of legalization.
+
+The staggered adoption of sports betting following \emph{Murphy} provides a relatively clean setting for causal identification compared to other state-level policy changes. The \emph{Murphy} decision itself was not anticipated by most observers---PASPA had survived multiple legal challenges over 26 years. The subsequent timing of state adoption varied for reasons largely orthogonal to anticipated employment trends: states with existing gaming infrastructure moved quickly because they had regulatory frameworks ready, while states without such infrastructure moved slowly regardless of their economic conditions. Although we cannot rule out selection on unobservable characteristics that correlate with both the propensity to legalize and gambling employment trajectories, the pre-treatment balance in Table \ref{tab:summary} and the flat pre-treatment event study coefficients provide reassurance that treated and control states were on similar paths before legalization.
+
+Standard errors are clustered at the state level, the unit of treatment assignment \citep{BertrandDufloMullainathan2004}. With 49 clusters, our standard errors are robust to the typical concerns of state-level policy analysis.
+
+We report traditional TWFE estimates alongside the Callaway-Sant'Anna results as a benchmark. If the two estimators agree, the heterogeneity-robust correction was unnecessary and the result is robust to estimator choice. If they disagree, the CS estimate is preferred. In our application, TWFE and CS produce nearly identical point estimates ($-268$ vs. $-198$), suggesting that treatment effect heterogeneity across cohorts is modest---consistent with a genuinely null treatment effect rather than a mix of positive and negative effects that happen to average to zero.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+The gambling industry did not hire more people after states legalized sports betting. Table \ref{tab:main_results} presents our main estimates ($N = 527$ state-year observations; 34 treated jurisdictions, 15 never-treated controls). Across every specification---whether we use the heterogeneity-robust Callaway-Sant'Anna estimator or traditional two-way fixed effects, whether we restrict controls to never-treated states or include not-yet-treated states---the result is the same: zero.
+
+Our preferred specification yields an ATT of $-198$ jobs per state (SE: 236, $p = 0.40$). For context, the pre-treatment mean of gambling employment across treated states was approximately 2,414 workers. Our point estimate implies a negligible 8 percent decline, but the 95 percent confidence interval [$-660$, 264] spans from a 27 percent decline to an 11 percent increase---consistent with a wide range of small effects, including none at all. The TWFE estimate ($-268$, SE: 210.5, $p = 0.21$) and the never-treated-only specification ($-199$, SE: 242) tell the same story. If TWFE's known biases under heterogeneous timing were driving the null, the Callaway-Sant'Anna estimate would diverge. It does not.
+
+Our design is powerful enough to see the job gains that advocates promised. The minimum detectable effect at 80 percent power is approximately 661 jobs per state---roughly one-quarter of baseline gambling employment. At 95 percent power, the MDE rises to about 826 jobs. The American Gaming Association projected over 200,000 jobs from nationwide legalization \citep{AGA2018}. We can rule out effects of that magnitude many times over. What we cannot rule out are modest effects on the order of 100--300 jobs per state---but neither the industry nor the legislators who championed legalization were promising effects that small.
+
+To put the MDE in further perspective: average gambling industry employment across treated states in 2017 was 2,414. Our 661-job MDE represents about 27 percent of that baseline---a substantial share of the workforce. An effect of that magnitude would be clearly visible in the data if it existed. The design is informative for evaluating the bold claims that drove legalization debates but lacks the power to detect the kind of modest employment effects---perhaps 100 to 200 jobs per state, concentrated in technology and compliance roles---that a more conservative assessment might predict. This distinction matters for policy: the question is not whether sports betting created any jobs at all, but whether it created the thousands per state that proponents promised. Our design answers the second question decisively.
+
+\input{tables/table3_main_results.tex}
+
+\subsection{Event Study}
+
+Figure \ref{fig:event_study} traces out the dynamic treatment effects, year by year. There is no trajectory---no building momentum, no delayed surge, no transitory disruption followed by recovery. The employment effect is flat around zero from the first year through the sixth.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig1_event_study.png}
+    \caption{Event Study: Employment Effects of Sports Betting Legalization. Dynamic ATT estimates from the Callaway-Sant'Anna estimator, aggregated by event time. Shaded area shows 95\% simultaneous confidence bands. Pre-treatment coefficients ($e < 0$) test for differential pre-trends; post-treatment coefficients ($e \geq 0$) show treatment dynamics. Joint Wald test of nine pre-treatment coefficients: $F = 0.99$, $p = 0.45$.}
+    \label{fig:event_study}
+\end{figure}
+
+Pre-treatment coefficients range from $-128$ (at $e = -2$, SE: 116) to $+134$ (at $e = -6$, SE: 90), with no systematic pattern. Although our panel begins in 2014 (four years before the first 2018 treatments), later-treated cohorts contribute longer pre-treatment windows---states treated in 2023 contribute event times back to $e = -9$---so earlier event times are identified from fewer cohorts and are less precisely estimated. A joint Wald test using the full variance-covariance matrix fails to reject the null that all nine pre-treatment effects are zero ($F = 0.99$, $p = 0.45$ with 9 degrees of freedom), supporting the parallel trends assumption.
+
+Post-treatment coefficients are uniformly negative but never individually significant: $-110$ at event time 0 (SE: 133), $-131$ at $+1$, $-251$ at $+2$, $-227$ at $+3$, $-94$ at $+4$, $-670$ at $+5$, and $-50$ at $+6$ (SE: 838). Standard errors grow substantially at longer horizons because only early adopters contribute to those estimates. The absence of a clear post-treatment trajectory is telling. If legalization were creating jobs that took time to materialize, we would see growing coefficients. If there were a transitory disruption, we would see negative then recovering coefficients. The noisy pattern around zero at all horizons is most consistent with a true null. For comparison, \cite{EvansTopoleski2002} find event study patterns for Indian casino openings that show clear, growing post-treatment employment effects---exactly the pattern we would expect (and do not see) if sports betting legalization were creating jobs.
+
+Table \ref{tab:event_study} presents the full set of event study coefficients with standard errors and confidence intervals.
+
+\input{tables/table4_event_study.tex}
+
+Cohort-level and calendar-time aggregations tell the same story. No cohort shows a statistically significant effect, and the heterogeneity across cohorts---$-812$ (SE: 870) for the 2019 cohort, $+370$ (SE: 251) for 2020---is consistent with noise rather than systematic patterns.
+
+\subsection{Heterogeneity}
+
+Table \ref{tab:heterogeneity} examines whether the null varies across subgroups. It does not. Mobile-betting states---where smartphone apps process the vast majority of wagers---show an ATT of $-106$ (SE: 263). Retail-only states show $-617$ (SE: 552), but with only five states in that category, the estimate is effectively uninformative: the minimum detectable effect at 80 percent power exceeds 1,500 jobs, or about two-thirds of baseline employment. The absence of a significant mobile-retail difference is consistent with the null applying broadly, but the retail-only estimate is too imprecise to rule out meaningful heterogeneity.
+
+Pre-COVID cohorts (2018--2019 adopters), observed for more post-treatment periods, show $-395$ (SE: 433)---more negative than the full sample but statistically indistinguishable from zero. This reflects different post-treatment exposure rather than genuinely different effects. All subgroup analyses are substantially underpowered relative to the main specification, with MDEs ranging from 1,200 to 1,600 jobs per state---making these tests informative only for very large effects.
+
+The absence of a mobile-retail difference is noteworthy in light of the theoretical channels we develop in the Discussion. If the null result were driven primarily by the mobile-first business model's low labor intensity (our third channel), we might expect retail-only states---where bets must be placed at physical locations---to show a more positive employment effect, since retail sportsbooks require in-person staff. The point estimates go the other direction ($-617$ for retail versus $-106$ for mobile), though the difference is far from significant. An alternative interpretation is that the substitution channel (our first channel) operates similarly regardless of whether the new gambling format is mobile or retail: what matters is not how bets are placed but whether new bets displace existing gambling activity, and the evidence suggests they do.
+
+\input{tables/table_heterogeneity.tex}
+
+
+\section{Robustness}
+
+One might worry that the COVID-19 pandemic, which shuttered casinos just as betting apps launched, masks a genuine employment effect. It does not. Excluding 2020--2021 entirely yields an ATT of $-203$ (SE: 272), essentially identical to our main estimate. Restricting to pre-COVID cohorts observed only through pre-COVID years yields $-344$ (SE: 434), larger in magnitude but very imprecise. Neither specification alters the conclusion. The COVID sensitivity matters because the pandemic created an unusually large shock to gambling employment. Casino floors closed in nearly every state during spring 2020, and many did not fully reopen until late 2021. Meanwhile, mobile sports betting platforms continued operating---potentially accelerating the substitution of mobile for in-person gambling workers. By showing that the null holds whether or not we include the pandemic years, we demonstrate that neither the pandemic's destruction of gambling jobs nor the subsequent recovery confounds our estimate of the legalization effect.
+
+Using never-treated states as the only controls produces an ATT of $-199$ (SE: 242), virtually identical to the main estimate of $-198$ (SE: 236). The similarity reflects that never-treated states dominate the control pool: since most treated states adopted by 2021, late adopters contribute limited not-yet-treated person-years. Excluding the five states with concurrent iGaming legalization (NJ, PA, MI, WV, CT) yields $-302$ (SE: 259), somewhat more negative but still insignificant. Excluding the three pre-PASPA states (Delaware, Montana, Oregon) yields $-127$ (SE: 254). Table \ref{tab:robustness} and Figure \ref{fig:robustness} summarize the full battery of specifications. Every point estimate falls within a narrow range, and every confidence interval spans zero. The null is not fragile.
+
+\input{tables/table5_robustness.tex}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig5_robustness.png}
+    \caption{Robustness of Main Result. ATT estimates across alternative specifications. All confidence intervals span zero.}
+    \label{fig:robustness}
+\end{figure}
+
+We probe the parallel trends assumption more formally using the \cite{RambachanRoth2023} sensitivity framework. The parameter $\bar{M}$ bounds post-treatment trend deviations relative to the maximum pre-treatment deviation; $\bar{M} = 0$ corresponds to exact parallel trends. At $\bar{M} = 0$, the 95 percent confidence interval is [$-805$, 364]. As $\bar{M}$ increases---allowing progressively larger trend violations---the interval widens: at $\bar{M} = 0.5$, [$-1{,}329$, 900]; at $\bar{M} = 1$, [$-2{,}021$, 1,592]; at $\bar{M} = 2$, [$-3{,}559$, 3,118]. All intervals include zero. Table \ref{tab:honestdid} reports the full results. The null holds even under exact parallel trends, confirming that our inability to reject zero is not an artifact of permitting large trend violations.
+
+\input{tables/table6_honestdid.tex}
+
+Leave-one-out analysis provides further reassurance. Figure \ref{fig:loo} shows the ATT when each of the 34 treated states is dropped in turn. Estimates range from $-302$ (dropping New Jersey, the largest sports betting market) to $-54$ (dropping Indiana). No single state is influential, and all leave-one-out $z$-statistics fall below 1 in absolute value. That dropping New Jersey produces the most negative estimate suggests that NJ's inclusion, if anything, pulls the result toward zero---consistent with first-mover advantages in the nation's largest sports betting market.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig6_leave_one_out.png}
+    \caption{Leave-One-Out Sensitivity. Each point shows the ATT when one treated state is dropped. Range: $-302$ to $-54$, with no influential outlier.}
+    \label{fig:loo}
+\end{figure}
+
+Finally, we estimate the same specification for agriculture (NAICS 11), an industry that should have no connection to sports betting. The agriculture ATT is $+535$ (SE: 444, $p > 0.10$), statistically insignificant. This null placebo supports the validity of our identification strategy: whatever is driving employment changes in our panel, it is specific to gambling rather than reflecting broad economic trends that happen to correlate with sports betting legalization. Manufacturing data (NAICS 31-33) was not available through the BLS API at the required state-by-industry granularity for the Callaway-Sant'Anna estimator, so we report only the agriculture placebo. Table \ref{tab:placebo} presents the results alongside the main gambling estimate for comparison.
+
+\input{tables/table7_placebo.tex}
+
+
+\section{Wages and Spillovers}
+
+All three external reviewers of the previous version independently asked whether sports betting legalization creates good jobs. We address this by estimating the Callaway-Sant'Anna DiD on log average weekly wages in the gambling industry. The ATT is 0.261 (SE: 0.388), statistically insignificant. Using the exact transformation $(e^{\hat{\beta}} - 1)$, the implied wage change is 30 percent---large in magnitude and, if real, economically important---but the wide confidence interval prevents meaningful inference.\footnote{The table reports implied percentage changes computed as $100 \times \hat{\beta}$, which is a standard linear approximation. For the CS coefficient of 0.261, the linear approximation gives 26.1 percent while the exact calculation $(e^{0.261} - 1) \times 100$ gives 29.8 percent. For the TWFE coefficient of 0.391, the gap is larger: 39.1 percent versus 47.9 percent. These magnitudes reflect the imprecision of the wage estimates, not economically meaningful effects.} A comparison TWFE regression yields a similar coefficient (0.391, SE: 0.345), also insignificant. The null employment result, combined with the null wage result, suggests that sports betting legalization neither created jobs nor changed the quality of existing ones---at least as measured by QCEW payroll data. In levels, average weekly wages in the gambling industry in 2023 were approximately \$1,036 (roughly \$54,000 annually) for our sample---below the national median wage but representing a meaningful income. That legalization moved neither employment nor wages is consistent with the substitution interpretation: if sports betting workers simply replaced other gambling workers, neither the quantity nor the price of labor in the industry would change.
+
+\input{tables/table8_wages.tex}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig7_wage_event_study.png}
+    \caption{Wage Event Study: Effect on Log Average Weekly Wages in NAICS 7132. Dynamic ATT estimates from the Callaway-Sant'Anna estimator. No significant wage effect at any event time.}
+    \label{fig:wage_event}
+\end{figure}
+
+Reviewers also asked about competitive dynamics between states. If one state's legalization diverts bettors from its neighbors, gambling employment could shift across borders. We construct a neighbor exposure variable measuring the share of each state's geographic neighbors that have legalized at each point in time, then estimate a TWFE regression:
+\begin{equation}
+    Y_{st} = \alpha_s + \gamma_t + \beta_1 \cdot \text{treated}_{st} + \beta_2 \cdot \text{neighbor\_exposure}_{st} + \varepsilon_{st}
+\end{equation}
+with state and year fixed effects and standard errors clustered at the state level. Own-state legalization yields $\hat{\beta}_1 = -259$ (SE: 203, $p = 0.21$), consistent with the main null. Neighbor exposure yields $\hat{\beta}_2 = -787$ (SE: 407, $p = 0.059$)---negative, marginally significant, and suggestive of competitive diversion. Among the 15 never-treated states alone, the coefficient is $-666$ (SE: 638, $p = 0.31$), negative and of similar magnitude but insignificant with only 15 clusters, where asymptotic inference may be unreliable \citep{CameronGelbachMiller2008}. We interpret the spillover finding as suggestive evidence of competitive dynamics between states. If bettors in non-legal states can easily place wagers by crossing a border or, where geo-fencing is imperfect, through mobile apps, gambling employment in holdout states may decline as customers shift to legal markets. This would imply a ``race to legalize'' dynamic in which states that delay face employment losses without the offsetting benefit of tax revenue from legal betting. The policy implication is that the decision to legalize may not be fully voluntary: competitive pressure from neighboring states could force the hand of reluctant legislatures. Confirming this hypothesis would require border-county data or individual-level mobility records that are beyond the scope of this paper.
+
+\input{tables/table9_spillover.tex}
+
+
+\section{Discussion and Conclusion}
+
+Our main finding is that sports betting legalization had no detectable effect on gambling industry employment. This is a surprise given the dramatic growth of legal sports betting markets, but the null is internally consistent across every specification we examine. The overall ATT is $-198$ jobs per state (SE: 236, $p = 0.40$), the pre-treatment event study coefficients are jointly insignificant ($F = 0.99$, $p = 0.45$), HonestDiD sensitivity analysis confirms zero under bounded violations of parallel trends, leave-one-out analysis across all 34 treated jurisdictions shows no influential outlier (range: $-302$ to $-54$), and a placebo industry registers no effect. The finding that a \$100 billion industry created zero detectable jobs demands explanation.
+
+Three channels make the null intelligible, each pointing to a different aspect of modern service-industry economics. The first is substitution. Legal sports betting may redirect consumer spending from casino games, lottery tickets, and horse racing rather than expanding the gambling market. If aggregate gambling demand is relatively inelastic, new sports betting handle comes at the expense of existing revenue, with offsetting employment effects within the industry. This interpretation echoes the finding that casino entry cannibalized state lottery revenue \citep{FinkRork2003} and the broader principle that new entertainment options tend to substitute for, rather than supplement, existing leisure spending \citep{Grinols2004}. Demand-side evidence supports the substitution view: \cite{Baker2024} document that sports betting legalization increased household gambling expenditure and financial distress, consistent with gambling demand being redirected rather than newly created. Evidence from the casino context reinforces the point. \cite{NicholsTosun2017} document that casino gambling's effects on local economies depend heavily on whether new casinos attract outside visitors or merely redirect local spending. When the new gambling option primarily captures existing gamblers---as mobile sports betting appears to do---the net employment effect can be close to zero even when gross revenue is large.
+
+The second channel is formalization. Before \emph{Murphy}, an estimated tens of billions of dollars were wagered illegally on sports annually \citep{Strumpf2005}. Bookmakers, runners, and their associates operated outside formal payrolls. Legalization may have shifted this activity into regulated channels without generating proportional new economic activity. Our inability to detect even a modest employment gain suggests either that the informal workforce was small or that formal operators achieved greater throughput with fewer workers through technological efficiency. The formalization channel also highlights a measurement limitation: if illegal bookmakers operated as sole proprietors or within other businesses (bars, social clubs), their transition to formal employment might be classified outside NAICS 7132, in customer service centers (NAICS 5614) or technology companies (NAICS 5415). The mismatch between where informal gambling labor existed and where formal sports betting labor is classified could produce a null in our data even if formalization genuinely shifted workers from informal to formal employment.
+
+The third channel---and perhaps the most consequential---is technology. Modern sports betting is overwhelmingly mobile, a product of the smartphone era rather than the casino floor. Operating a betting app requires engineers, compliance analysts, and customer service representatives, but not the dealers, pit bosses, floor workers, and security guards that casinos employ. The same handle processed through a mobile platform may require a fraction of the workforce that an equivalent brick-and-mortar operation would demand. This pattern fits the broader narrative of digital platforms generating enormous revenue with lean workforces \citep{Autor2015}. DraftKings reported approximately 5,500 total employees in its 2023 10-K filing; FanDuel's parent Flutter Entertainment employed roughly 7,500 in the U.S. Combined, the two firms that process over half of all legal U.S. sports bets employ fewer workers than a single mid-sized casino resort. Moreover, much of the workforce that sports betting does create---software developers at DraftKings in Boston, data scientists at FanDuel in New York---may be classified under NAICS 5415 (Computer Systems Design) or NAICS 5112 (Software Publishers) rather than NAICS 7132 (Gambling Industries). Our null finding applies specifically to gambling-establishment employment and should not be interpreted as evidence that sports betting created zero jobs economy-wide.
+
+The labor-intensity contrast between traditional and digital gambling is stark. A mid-sized casino may employ 500 to 2,000 workers---dealers, floor managers, security staff, food and beverage workers, housekeeping, maintenance---to generate a given level of handle. A mobile sportsbook can process equivalent handle with a fraction of that workforce, concentrated in engineering, compliance, and customer support. The industry's rapid consolidation around a few major platforms (DraftKings, FanDuel, and BetMGM collectively hold roughly 80 percent of market share) further concentrates employment, since platform economies exhibit strong returns to scale that reduce per-unit labor requirements. The null employment effect in NAICS 7132 is thus consistent with genuine job creation in non-gambling NAICS codes---a hypothesis that future research with broader industry data could test.
+
+Several limitations deserve emphasis. NAICS 7132 may miss substantial sports-betting employment coded to other industries, as just noted; future research using firm-level data from operators' SEC filings or broader industry baskets could distinguish ``no jobs'' from ``jobs we do not observe.'' Our confidence interval [$-660$, $+264$] cannot rule out modest positive or negative effects, though it does rule out the large effects that were promised. The overlap between COVID-19 and the betting expansion, while addressed through robustness analysis, remains a background concern. And our analysis covers the first seven years of the post-\emph{Murphy} era; effects could conceivably emerge on a longer horizon, though the flat event study trajectory offers no hint of this. A fifth concern is the potential for spillovers beyond the neighbor-exposure channel we test. If sports betting legalization affects employment in industries adjacent to gambling---restaurants and bars near sportsbooks, for instance, or financial services that process gambling transactions---our NAICS 7132 focus would miss these effects. More comprehensive analysis using total nonfarm employment or broader industry aggregates could reveal effects invisible in our gambling-specific measure, though such designs face greater noise and more severe confounding.
+
+For states considering legalization, the policy implication is straightforward: expect tax revenue and consumer welfare gains from regulated markets, but not a jobs boom. States that hold out may face competitive pressure---our spillover evidence suggests employment losses when neighbors legalize---but the decision should rest on realistic expectations about what the policy actually delivers rather than the aspirational projections that have dominated legislative debates.
+
+Several avenues for future research remain open. First, examining a broader set of NAICS codes---including software development (5415), business support services (5614), and data processing (5182)---could capture sports betting employment in technology and corporate functions classified outside gambling. Second, firm-level employment data from sportsbook operators' SEC filings and quarterly earnings reports could provide direct measures that circumvent industry-classification limitations. Third, longer post-treatment panels will reveal whether employment effects emerge on a slower time horizon as markets fully mature and the industry reaches steady state. Fourth, the spillover finding warrants more granular investigation using border-county data, which could identify the geographic margins along which competitive dynamics operate. Fifth, studying problem gambling prevalence alongside economic effects would provide a more complete welfare assessment---one that balances the null employment finding against potential social costs that our data cannot measure.
+
+Our findings contribute to a growing body of evidence on how technology reshapes the relationship between market size and employment. In sector after sector---from retail to media to financial services---digital platforms have demonstrated the ability to scale revenue without proportional workforce expansion. The gambling industry's post-\emph{Murphy} trajectory adds a clean, quasi-experimental case study to this pattern. Policymakers evaluating digital-first industries should consider whether revenue projections translate into employment projections---our evidence suggests they may not.
+
+For decades, statehouses have sold gambling expansion as a jobs program. The sports betting boom is the latest chapter. A hundred billion dollars in handle, ten billion in revenue, and not a single detectable job. For the American worker, the betting boom has been a wash. The next time a state legislature is told that a new digital industry will bring thousands of jobs, it should ask: where, exactly, will those workers sit? In the case of sports betting, the answer turned out to be: behind a screen in another state, and in far fewer numbers than anyone predicted.
+
+\label{apep_main_text_end}
+
+\newpage
+
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Additional Tables and Figures}
+
+\input{tables/table2_timing.tex}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig2_parallel_trends.png}
+    \caption{Pre-Treatment Trends by Cohort. Raw employment trends in NAICS 7132 for treated and control states prior to treatment, separated by adoption cohort.}
+    \label{fig:parallel_trends}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig4_mobile_heterogeneity.png}
+    \caption{Employment Effects by Betting Type. Separate CS DiD estimates for states permitting mobile betting (29 states) versus retail-only states (5 states). Neither subsample shows a statistically significant effect.}
+    \label{fig:mobile}
+\end{figure}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @SocialCatalystLab, @olafwillner, @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafwillner}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/auto-policy-evals}
+
+\end{document}

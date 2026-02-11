@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0038_v5",
+  "title": "Betting on Jobs? The Employment Effects of Legal Sports Betting in the United States (v5)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-11T19:41:00.819181",
+  "version": 5,
+  "paper_family_id": "apep_0038",
+  "parent_paper_id": "apep_0038_v4",
+  "is_revision": true,
+  "revision_rationale": "Major prose overhaul (Shleifer-style), fix code integrity (hard-coded significance stars in placebo table), exhibit restructuring"
+}

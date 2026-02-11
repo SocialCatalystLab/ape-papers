@@ -1,0 +1,28 @@
+
+\begin{table}[htbp]
+\centering
+\caption{Effect of Sports Betting Legalization on Gambling Industry Employment}
+\label{tab:main_results}
+\begin{tabular}{lccc}
+\toprule
+& (1) & (2) & (3) \\
+& CS (Not-Yet-Treated) & CS (Never-Treated) & TWFE \\
+\midrule
+Sports Betting Legal & -197.8 & -199.1 & -268.3 \\
+& (235.8) & (241.9) & (210.5) \\
+& [-659.9, 264.3] & [-673.3, 275.0] & \\
+\midrule
+Pre-trend F-test & 0.99 & --- & --- \\
+Pre-trend p-value & 0.450 & --- & --- \\
+\midrule
+Treated states & 34 & 34 & 34 \\
+Control states & 15 & 15 & 49 \\
+Observations & 527 & 527 & 527 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Notes:} Column (1) reports the Callaway-Sant'Anna (2021) average treatment effect on the treated using not-yet-treated states as controls. Column (2) uses never-treated states only. Column (3) reports the traditional two-way fixed effects estimate for comparison. Standard errors clustered at state level in parentheses; 95\% confidence interval in brackets. Pre-trend test is joint Wald test of pre-treatment event study coefficients using full variance-covariance matrix. * p<0.10, ** p<0.05, *** p<0.01.
+\end{tablenotes}
+\end{table}
+
