@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0238_v5",
+  "title": "Demand Recessions Scar, Supply Recessions Don't: Evidence from State Labor Markets (v5)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-12T16:56:55.900274",
+  "version": 5,
+  "paper_family_id": "apep_0238",
+  "parent_paper_id": "apep_0238_v4",
+  "is_revision": true,
+  "revision_rationale": "Two-pillar revision: (1) Fix code scanner integrity flags \u2014 implement LP controls described in Eq.(1), fix hardcoded N, document rescaling, fix horizon mismatch; (2) The Shleifer cut \u2014 restructure 68-"
+}

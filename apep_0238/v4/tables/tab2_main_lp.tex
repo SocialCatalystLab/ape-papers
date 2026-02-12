@@ -1,0 +1,31 @@
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Employment Response to Recession Exposure}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+& $h=3$ & $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel A: Great Recession --- Housing price instrument}} \\[3pt]
+& $-0.0081$ & $-0.0229^{**}$ & $-0.0435^{*}$ & $-0.0444$ & $-0.0507$ & $-0.0527$ & $-0.0489$ & $-0.0507$ & $-0.0229$ \\
+& (0.0052) & (0.0098) & (0.0220) & (0.0365) & (0.0417) & (0.0466) & (0.0514) & (0.0561) & (0.0530) \\
+& [0.038] & [0.000] & [0.015] & [0.089] & [0.098] & [0.148] & [0.244] & [0.290] & [0.615] \\
+$R^2$ & 0.394 & 0.369 & 0.321 & 0.311 & 0.286 & 0.265 & 0.218 & 0.183 & 0.270  \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel B: COVID Recession --- Bartik instrument}} \\[3pt]
+& $0.7034^{**}$ & $0.4631^{**}$ & $0.2907$ & $0.0375$ & $-0.0120$ & $-0.0601$ & --- & --- & --- \\
+& (0.3153) & (0.1766) & (0.1861) & (0.1044) & (0.0859) & (0.0952) & & & \\
+& [0.005] & [0.008] & [0.032] & [0.671] & [0.891] & [0.493] & & & \\
+$R^2$ & 0.520 & 0.581 & 0.471 & 0.611 & 0.725 & 0.759 & & &  \\
+\midrule
+$N$ & \multicolumn{9}{c}{50 (GR) / 50 (COVID)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of log employment change (relative to recession peak) on recession exposure at horizon $h$ months. Negative $\hat{\beta}_h$ indicates employment decline relative to the pre-recession level. Panel A uses the 2003--2006 housing price boom as the exposure measure for the Great Recession; Panel B uses the Bartik-predicted employment shock for COVID. COVID horizons beyond $h=48$ are not reported because the post-peak observation window extends only 52 months (through June 2024). Robust (HC1) standard errors in parentheses. Permutation $p$-values in brackets; 1,000 random reassignments of the state-level exposure measure. $R^2$ reported without brackets. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}
