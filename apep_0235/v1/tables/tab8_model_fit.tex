@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering
+\caption{Model vs. Data: Employment Responses (\% Deviation)}
+\label{tab:model_fit}
+\begin{threeparttable}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{2}{c}{Goods} & \multicolumn{2}{c}{Services} & \multicolumn{2}{c}{Aggregate} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Month & Data & Model & Data & Model & Data & Model \\
+\midrule
+0 & -0.517 & \textbf{0.000} & -0.876 & \textbf{0.000} & -0.710 & \textbf{0.000} \\
+3 & 0.393 & \textbf{-1.254} & -0.464 & \textbf{-0.323} & -0.358 & \textbf{-0.475} \\
+6 & 0.585 & \textbf{-1.896} & -0.926 & \textbf{-0.496} & -0.669 & \textbf{-0.724} \\
+12 & -1.811 & \textbf{-2.246} & -0.703 & \textbf{-0.605} & -0.783 & \textbf{-0.872} \\
+24 & -2.761 & \textbf{-1.782} & 1.149 & \textbf{-0.516} & 0.234 & \textbf{-0.722} \\
+36 & 2.298 & \textbf{-1.206} & 3.552 & \textbf{-0.378} & 2.755 & \textbf{-0.513} \\
+48 & 1.706 & \textbf{-0.791} & 2.237 & \textbf{-0.270} & 1.279 & \textbf{-0.355} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Goods and Services data columns report simple (unweighted) averages of individual industry local projection estimates within each sector. Aggregate data column reports the LP estimate for total nonfarm payrolls (PAYEMS). Because the aggregate LP uses a different dependent variable than the sectoral average, these may differ. Model columns report impulse responses from the calibrated two-sector NK-DMP model to a 25bp (annualized) monetary tightening shock. All values in percentage deviations from steady state. Individual industry LPs are imprecisely estimated, particularly at long horizons, and positive values at $h \geq 36$ reflect estimation noise.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

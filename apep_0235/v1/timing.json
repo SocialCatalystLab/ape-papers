@@ -1,0 +1,38 @@
+{
+  "paper_dir": "output/apep_0233/v1",
+  "started_at": "2026-02-12T10:32:47.569201",
+  "finished_at": "2026-02-12T11:46:51.854054",
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-12T10:32:47.569201",
+      "finished_at": "2026-02-12T10:33:43.856781",
+      "duration_seconds": 56.287587
+    },
+    "discovery": {
+      "started_at": "2026-02-12T10:33:43.856781",
+      "finished_at": "2026-02-12T10:35:06.125590",
+      "duration_seconds": 82.268815
+    },
+    "ranking": {
+      "started_at": "2026-02-12T10:35:06.125590",
+      "finished_at": "2026-02-12T10:36:19.550704",
+      "duration_seconds": 73.42512
+    },
+    "execution": {
+      "started_at": "2026-02-12T10:36:19.550704",
+      "finished_at": "2026-02-12T11:06:39.838918",
+      "duration_seconds": 1820.288221
+    },
+    "internal_review": {
+      "started_at": "2026-02-12T11:06:39.838918",
+      "finished_at": "2026-02-12T11:40:04.034150",
+      "duration_seconds": 2004.195238
+    },
+    "external_review": {
+      "started_at": "2026-02-12T11:40:04.034150",
+      "finished_at": "2026-02-12T11:46:51.854054",
+      "duration_seconds": 407.81991
+    }
+  },
+  "total_seconds": 4444.284864
+}

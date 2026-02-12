@@ -1,0 +1,38 @@
+\begin{table}[H]
+\centering
+\caption{Model Calibration}
+\label{tab:calibration}
+\begin{threeparttable}
+\begin{tabular}{llcc}
+\toprule
+Parameter & Description & Value & Source \\
+\midrule
+\multicolumn{4}{l}{\textit{Preferences}} \\
+$\beta$ & Monthly discount factor & 0.9967 & Standard \\
+$\sigma$ & CRRA coefficient & 1.0 & Standard \\
+$\eta_c$ & CES goods weight & 0.50 & Calibrated \\
+\midrule
+\multicolumn{4}{l}{\textit{Labor Market (Goods/Services)}} \\
+$\chi_s$ & Matching efficiency & 0.45 / 0.55 & JOLTS match \\
+$\xi$ & Matching elasticity & 0.50 & Hosios condition \\
+$\eta$ & Bargaining power & 0.50 & Symmetric Nash \\
+$\kappa_s$ & Vacancy cost & 0.20 / 0.15 & Calibrated \\
+$\rho_s$ & Separation rate & 0.035 / 0.028 & JOLTS \\
+$b$ & UI replacement & 0.40 & Shimer (2005) \\
+\midrule
+\multicolumn{4}{l}{\textit{Price Setting}} \\
+$\lambda_s$ & Calvo parameter & 0.75 / 0.85 & Nakamura-Steinsson (2008) \\
+$\epsilon$ & Elasticity of sub. & 6 & 20\% markup \\
+\midrule
+\multicolumn{4}{l}{\textit{Taylor Rule}} \\
+$\rho_i$ & Smoothing & 0.85 & Standard \\
+$\phi_\pi$ & Inflation response & 1.50 & Taylor (1993) \\
+$\phi_y$ & Output response & 0.125 & Taylor (1993) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: The model is calibrated at monthly frequency. Parameters reported as X/Y denote goods/services sector values. Model normalizes private-sector labor force to 1: goods employment = 16.3\%, services = 83.7\%, unemployment = 5\%. Government employment excluded from model. JOLTS moments matched: sector-level separation rates and vacancy-filling rates.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

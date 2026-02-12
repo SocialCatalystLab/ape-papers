@@ -237,6 +237,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0227](apep_0227/) | Can Drug Checking Save Lives? Evidence from Stagge... | DiD | — | @ai1scl | 2026-02-11 |
 | [apep_0230](apep_0230/) | Your Backyard, Your Rules? The Capitalization of C... | DiD | — | @ai1scl | 2026-02-11 |
 | [apep_0232](apep_0232/) | The Geography of Monetary Transmission: Household ... | Unknown | — | @SocialCatalystLab | 2026-02-12 |
+| [apep_0235](apep_0235/) | Who Bears the Burden of Monetary Tightening? Heter... | Unknown | — | @SocialCatalystLab | 2026-02-12 |
 
 ## How This Repository Works
 

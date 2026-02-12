@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-02-12T10:34:22.008230",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2134,
+    "output_tokens": 1526,
+    "total_tokens": 3660
+  },
+  "ideas_file": "output/apep_0233/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Who Bears the Burden of Monetary Tightening? Heterogeneous Labor Market Responses and Aggregate Implications",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "explicitly handling information effects",
+        "regime changes",
+        "pre-specifying heterogeneity dimensions to avoid data-mining",
+        "using JOLTS/job flows as primary evidence for mechanisms rather than only CES employment levels"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Monetary Policy and the Skills Premium",
+      "score": 60,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "switching to CPS MORG for wages or another consistent high-frequency wage source",
+        "implementing composition/selection corrections\u2014e.g.",
+        "reweighting",
+        "bounds",
+        "or modeling employment selection",
+        "clearly distinguishing wage-rate effects from workforce-composition effects"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "The Gig Economy Channel of Monetary Policy",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "Who Bears the Burden of Monetary Tightening? Heterogeneous Labor Market Responses and Aggregate Implications",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "explicitly handling information effects",
+        "regime changes",
+        "pre-specifying heterogeneity dimensions to avoid data-mining",
+        "using JOLTS/job flows as primary evidence for mechanisms rather than only CES employment levels"
+      ]
+    },
+    {
+      "idea": "Monetary Policy and the Skills Premium",
+      "rank": 2,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "switching to CPS MORG for wages or another consistent high-frequency wage source",
+        "implementing composition/selection corrections\u2014e.g.",
+        "reweighting",
+        "bounds",
+        "or modeling employment selection",
+        "clearly distinguishing wage-rate effects from workforce-composition effects"
+      ]
+    }
+  ]
+}

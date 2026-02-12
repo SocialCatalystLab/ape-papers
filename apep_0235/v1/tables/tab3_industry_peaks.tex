@@ -1,0 +1,29 @@
+\begin{table}[H]
+\centering
+\caption{Industry-Level Peak Employment Responses to Monetary Tightening}
+\label{tab:industry_peaks}
+\begin{threeparttable}
+\begin{tabular}{llcccccc}
+\toprule
+Industry & Type & Peak $h$ & $\hat{\beta}_h$ & SE & $p$-value & $N$ & $R^2$ \\
+\midrule
+Leisure/Hospitality & Services & 9 & -10.155 & 8.562 & 0.236 & 376 & 0.21 \\
+Construction & Goods & 48 & -6.585 & 9.142 & 0.471 & 337 & 0.35 \\
+Other Services & Services & 9 & -5.618 & 3.544 & 0.113 & 376 & 0.21 \\
+Mining/Logging & Goods & 18 & -5.160 & 8.020 & 0.520 & 367 & 0.34 \\
+Financial Activities & Services & 24 & -3.471 & 3.118 & 0.266 & 361 & 0.19 \\
+Education/Health Svcs. & Services & 9 & -2.692 & 2.040 & 0.187 & 376 & 0.22 \\
+Manufacturing & Goods & 18 & -1.814 & 4.579 & 0.692 & 367 & 0.49 \\
+Wholesale Trade & Services & 9 & -0.705 & 1.777 & 0.692 & 376 & 0.44 \\
+Retail Trade & Services & 9 & -0.608 & 2.026 & 0.764 & 376 & 0.39 \\
+Information & Services & 0 & -0.369 & 0.777 & 0.635 & 385 & 0.26 \\
+Transp./Utilities & Services & 9 & -0.289 & 1.942 & 0.882 & 376 & 0.37 \\
+Prof./Business Svcs. & Services & 0 & -0.197 & 0.716 & 0.783 & 385 & 0.31 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Peak (most negative) response of log industry employment (x100) to a 1 s.d. JK monetary policy shock across horizons $h \in \{0, 1, 2, 3, 6, 9, 12, 18, 24, 36, 48\}$. Newey-West HAC standard errors. Industries sorted by peak response magnitude. \sym{*} $p<0.10$, \sym{**} $p<0.05$, \sym{***} $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

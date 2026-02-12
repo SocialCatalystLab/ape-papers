@@ -1,0 +1,33 @@
+\begin{table}[H]
+\centering
+\caption{Robustness of Aggregate Employment Response}
+\label{tab:robustness}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & $h=6$ & $h=12$ & $h=24$ & $h=48$ \\
+\midrule
+Baseline & -0.669 & -0.783 & 0.234 & 1.279 \\
+ & (1.285) & (1.734) & (3.026) & (2.055) \\
+Pre-GFC (1990-2007) & 0.092 & -0.594 & -2.836 & 1.805 \\
+ & (0.538) & (1.114) & (1.927) & (2.237) \\
+Excl. ZLB (2009-15) & -1.834 & -2.595* & -3.362 & -1.359 \\
+ & (1.534) & (1.504) & (2.756) & (2.668) \\
+Excl. COVID (2020-21) & -0.908 & -1.805 & -1.149 & 1.124 \\
+ & (1.030) & (1.676) & (2.630) & (1.992) \\
+FFR change shock & 2.565*** & 3.600*** & 3.256*** & 1.062 \\
+ & (0.849) & (0.753) & (1.204) & (1.687) \\
+Oil + VIX controls & -0.891 & -0.329 & 0.242 & 2.805 \\
+ & (1.139) & (1.677) & (2.888) & (2.094) \\
+Excl. outlier shocks & -2.822 & -3.533 & -5.726 & -3.162 \\
+ & (1.750) & (3.138) & (3.763) & (6.174) \\
+6-lag specification & -0.635 & -0.801 & 0.226 & 1.331 \\
+ & (1.271) & (1.775) & (3.051) & (2.011) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Each row reports LP estimates of aggregate employment response at selected horizons under different specifications. All specifications include 12 shock lags and 4 macro control lags unless noted. Newey-West HAC standard errors. \sym{*} $p<0.10$, \sym{**} $p<0.05$, \sym{***} $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
