@@ -1,0 +1,30 @@
+\begin{table}[H]
+\centering
+\caption{Event Study Coefficients: IMLC and Healthcare Employment}
+\label{tab:eventstudy}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Event Time ($k$) & ATT & SE & $p$-value \\
+\midrule
+$k = -5$ & $0.0261**$ & ($0.0107$) & $0.014$ \\
+$k = -4$ & $0.0198***$ & ($0.0072$) & $0.006$ \\
+$k = -3$ & $0.0144***$ & ($0.0052$) & $0.005$ \\
+$k = -2$ & $0.0047*$ & ($0.0026$) & $0.076$ \\
+$k = -1$ & $0.0000$ & --- & (ref.) \\
+\midrule
+$k = +0$ & $-0.0010$ & ($0.0028$) & $0.723$ \\
+$k = +1$ & $-0.0027$ & ($0.0062$) & $0.663$ \\
+$k = +2$ & $-0.0077$ & ($0.0087$) & $0.374$ \\
+$k = +3$ & $-0.0024$ & ($0.0119$) & $0.843$ \\
+$k = +4$ & $-0.0048$ & ($0.0149$) & $0.746$ \\
+$k = +5$ & $-0.0156$ & ($0.0191$) & $0.412$ \\
+$k = +6$ & $-0.0072$ & ($0.0207$) & $0.727$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Callaway-Sant'Anna event study estimates for log healthcare employment. $k=0$ is the year of IMLC adoption. Pre-treatment coefficients ($k<0$) test parallel trends. Never-treated states as control group. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-02-12T12:08:44.905870",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3017,
+    "output_tokens": 4944,
+    "total_tokens": 7961
+  },
+  "ideas_file": "output/apep_0232/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Licensing to Log In: The Interstate Medical Licensure Compact and Healthcare Supply Creation (Idea 1)",
+      "score": 77,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Telehealth Parity Laws and the Geography of Healthcare Work (Idea 2)",
+      "score": 58,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Stacked Healthcare Compacts and Provider Supply Elasticity (Idea 4)",
+      "score": 47,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "State Broadband Infrastructure Mandates and Rural Remote Work Adoption (Idea 5)",
+      "score": 44,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 5,
+      "title": "The Psychology Interjurisdictional Compact (PSYPACT) and Mental Health Access (Idea 3)",
+      "score": 32,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

@@ -1,0 +1,34 @@
+\begin{table}[H]
+\centering
+\caption{Effect of IMLC Adoption on Healthcare Sector Outcomes}
+\label{tab:main}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+& (1) & (2) & (3) & (4) & (5) \\
+& HC Emp & Amb Emp & HC Estabs & Avg Pay & Amb Estabs \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: Callaway-Sant'Anna}} \\
+[0.5em]
+IMLC Adopted & $-0.0054$ & $-0.0088$ & $-0.0190$ & $0.0032$ & $0.0005$ \\
+& ($0.0105$) & ($0.0202$) & ($0.0362$) & ($0.0046$) & ($0.0188$) \\
+[0.5em]
+\multicolumn{6}{l}{\textit{Panel B: TWFE (potentially biased)}} \\
+[0.5em]
+IMLC Adopted & $-0.0046$ & $-0.0133$ & $-0.0110$ & $0.0036$ & $-0.0036$ \\
+& ($0.0070$) & ($0.0129$) & ($0.0237$) & ($0.0035$) & ($0.0117$) \\
+\midrule
+Observations & 510 & 510 & 510 & 510 & 510 \\
+States & 51 & 51 & 51 & 51 & 51 \\
+Treated States & 40 & 40 & 40 & 40 & 40 \\
+Control Group & \multicolumn{5}{c}{Never-treated states} \\
+Estimator & \multicolumn{5}{c}{CS (Panel A) / TWFE (Panel B)} \\
+Clustering & \multicolumn{5}{c}{State} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors in parentheses, clustered at the state level. Panel A reports Callaway and Sant'Anna (2021) ATT estimates with never-treated states as the comparison group. Panel B reports standard two-way fixed effects (TWFE) estimates with state and year fixed effects, included for comparison. Outcomes are in logs. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

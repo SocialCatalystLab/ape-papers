@@ -1,0 +1,24 @@
+\begin{table}[H]
+\centering
+\caption{Robustness Checks}
+\label{tab:robust}
+\begin{threeparttable}
+\begin{tabular}{lccl}
+\toprule
+Specification & ATT & SE & $p$-value \\
+\midrule
+Main (CS, never-treated) & $-0.0054$ & ($0.0105$) & $0.610$ \\
+Not-yet-treated control & $0.0010$ & ($0.0092$) & $0.917$ \\
+Excluding COVID (2020-21) & $-0.0077$ & ($0.0106$) & $0.466$ \\
+Pre-2020 cohorts only & $-0.0053$ & ($0.0112$) & $0.636$ \\
+Placebo: Accommodation Employment & $0.0011$ & ($0.0141$) & $0.936$ \\
+Placebo: Accommodation Establishments & $-0.0110$ & ($0.0117$) & $0.344$ \\
+Sub-industry: Hospitals & $-0.0079$ & ($0.0129$) & $0.538$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} All specifications estimate the effect of IMLC adoption on log outcomes using the Callaway-Sant'Anna estimator unless noted. ``Main'' uses never-treated states as the control group. ``Not-yet-treated'' uses states not yet in the IMLC as controls. Placebo tests use industries unrelated to healthcare licensing. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
