@@ -1,0 +1,31 @@
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Employment Response to Recession Exposure}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+& $h=3$ & $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel A: Great Recession --- Housing price instrument}} \\[3pt]
+& $-0.0069$ & $-0.0167^{*}$ & $-0.0411^{*}$ & $-0.0469$ & $-0.0617$ & $-0.0732^{*}$ & $-0.0752^{*}$ & $-0.0690^{**}$ & $-0.0046$ \\
+& (0.0054) & (0.0088) & (0.0213) & (0.0346) & (0.0381) & (0.0381) & (0.0375) & (0.0314) & (0.0378) \\
+$R^2$ & [0.050] & [0.117] & [0.115] & [0.064] & [0.084] & [0.081] & [0.069] & [0.045] & [0.000]  \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel B: COVID Recession --- Bartik instrument}} \\[3pt]
+& $0.5586^{**}$ & $0.4160^{*}$ & $0.2216$ & $-0.0821$ & $-0.1601$ & $-0.2308$ & --- & --- & --- \\
+& (0.2771) & (0.2135) & (0.1983) & (0.1559) & (0.1521) & (0.1739) & & & \\
+$R^2$ & [0.131] & [0.127] & [0.047] & [0.008] & [0.027] & [0.046] & & &  \\
+\midrule
+$N$ & \multicolumn{9}{c}{46 (GR) / 48 (COVID)} \\
+State controls & \multicolumn{9}{c}{No} \\
+Region fixed effects & \multicolumn{9}{c}{No} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of log employment change (relative to recession peak) on recession exposure at horizon $h$ months. Panel A uses the 2003--2006 housing price boom as the exposure measure for the Great Recession; Panel B uses the Bartik-predicted employment shock for COVID. COVID horizons beyond $h=48$ are not reported because the post-peak observation window extends only 52 months (through June 2024). Robust (HC1) standard errors in parentheses, $R^2$ in brackets. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}

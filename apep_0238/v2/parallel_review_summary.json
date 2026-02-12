@@ -1,0 +1,40 @@
+{
+  "mode": "referee",
+  "n_reviewers": 3,
+  "models": [
+    "gpt-5-mini",
+    "grok-4.1-fast",
+    "gemini-3-flash-preview"
+  ],
+  "routing": {
+    "gpt": "openrouter_latex",
+    "grok": "openrouter_latex",
+    "gemini": "google_direct"
+  },
+  "successful": 3,
+  "failed": 0,
+  "elapsed_seconds": 61.55656886100769,
+  "decisions": [
+    {
+      "reviewer": "gpt",
+      "model": "GPT-5-mini",
+      "decision": "MAJOR REVISION"
+    },
+    {
+      "reviewer": "grok",
+      "model": "Grok-4.1-Fast",
+      "decision": "MINOR REVISION"
+    },
+    {
+      "reviewer": "gemini",
+      "model": "Gemini-3-Flash",
+      "decision": "MINOR REVISION"
+    }
+  ],
+  "errors": [],
+  "files": [
+    "/Users/dyanag/auto-policy-evals/output/apep_0238/v2/review_gpt_1.md",
+    "/Users/dyanag/auto-policy-evals/output/apep_0238/v2/review_grok_1.md",
+    "/Users/dyanag/auto-policy-evals/output/apep_0238/v2/review_gemini_1.md"
+  ]
+}

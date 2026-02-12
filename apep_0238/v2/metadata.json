@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0238_v3",
+  "title": "Demand Recessions Scar, Supply Recessions Don't: Evidence from State Labor Markets (v3)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-12T14:39:15.641726",
+  "version": 3,
+  "paper_family_id": "apep_0238",
+  "parent_paper_id": "apep_0238_v2",
+  "is_revision": true,
+  "revision_rationale": "(1) Critical bibliography gaps: ~13 important papers missing that potential referees are likely to notice, especially Pissarides (1992, QJE) on skill depreciation\u2014the exact theoretical mechanism\u2014and B"
+}
