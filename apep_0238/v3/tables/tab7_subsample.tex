@@ -1,0 +1,27 @@
+\begin{table}[H]
+\centering
+\caption{Subsample Robustness: Great Recession Employment Effects}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Subsample & $N$ & $\hat{\beta}_{60}$ & SE & $p$-value \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Census regions}} \\[3pt]
+Northeast & 9 & $-0.1350$ & (0.0843) & 0.153 \\
+Midwest & 12 & $0.3945$ & (0.3296) & 0.259 \\
+South & 16 & $-0.0444$ & (0.0521) & 0.409 \\
+West & 13 & $-0.1795^{**}$ & (0.0805) & 0.048 \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel B: State employment size}} \\[3pt]
+Large states & 25 & $-0.0337$ & (0.0346) & 0.340 \\
+Small states & 25 & $-0.1486^{**}$ & (0.0650) & 0.032 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the local projection coefficient $\hat{\beta}_{60}$ from the Great Recession housing-price specification estimated on the indicated subsample. Panel A splits states by Census region. Panel B splits at the median of pre-recession nonfarm employment. Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:subsample}
+\end{table}

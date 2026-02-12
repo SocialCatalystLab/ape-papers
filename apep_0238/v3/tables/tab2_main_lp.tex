@@ -1,0 +1,31 @@
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Employment Response to Recession Exposure}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+& $h=3$ & $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel A: Great Recession --- Housing price instrument}} \\[3pt]
+& $-0.0086^{*}$ & $-0.0181^{**}$ & $-0.0447^{**}$ & $-0.0587^{*}$ & $-0.0715^{**}$ & $-0.0799^{**}$ & $-0.0756^{**}$ & $-0.0618^{**}$ & $0.0091$ \\
+& (0.0048) & (0.0078) & (0.0188) & (0.0313) & (0.0343) & (0.0341) & (0.0336) & (0.0296) & (0.0339) \\
+& [0.043] & [0.013] & [0.013] & [0.031] & [0.026] & [0.031] & [0.058] & [0.167] & [0.868] \\
+$R^2$ & 0.081 & 0.136 & 0.135 & 0.093 & 0.105 & 0.096 & 0.072 & 0.040 & 0.001  \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel B: COVID Recession --- Bartik instrument}} \\[3pt]
+& $0.5586^{**}$ & $0.4160^{*}$ & $0.2216$ & $-0.0821$ & $-0.1601$ & $-0.2308$ & --- & --- & --- \\
+& (0.2771) & (0.2135) & (0.1983) & (0.1559) & (0.1521) & (0.1739) & & & \\
+& [0.019] & [0.028] & [0.142] & [0.529] & [0.278] & [0.158] & & & \\
+$R^2$ & 0.131 & 0.127 & 0.047 & 0.008 & 0.027 & 0.046 & & &  \\
+\midrule
+$N$ & \multicolumn{9}{c}{50 (GR) / 48 (COVID)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of log employment change (relative to recession peak) on recession exposure at horizon $h$ months. Negative $\hat{\beta}_h$ indicates employment decline relative to the pre-recession level. Panel A uses the 2003--2006 housing price boom as the exposure measure for the Great Recession; Panel B uses the Bartik-predicted employment shock for COVID. COVID horizons beyond $h=48$ are not reported because the post-peak observation window extends only 52 months (through June 2024). Robust (HC1) standard errors in parentheses. Permutation $p$-values in brackets; 1,000 random reassignments of the state-level exposure measure. $R^2$ reported without brackets. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}

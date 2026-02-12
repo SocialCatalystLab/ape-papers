@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0238_v4",
+  "title": "Demand Recessions Scar, Supply Recessions Don't: Evidence from State Labor Markets (v4)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-12T15:48:15.921833",
+  "version": 4,
+  "paper_family_id": "apep_0238",
+  "parent_paper_id": "apep_0238_v3",
+  "is_revision": true,
+  "revision_rationale": "Elevate paper toward AEJ-competitive quality through: (1) Permutation inference for small cross-section (N=46-48), (2) Pre-trend event-study figure, (3) Model parameter sensitivity analysis, (4) Subsa"
+}
