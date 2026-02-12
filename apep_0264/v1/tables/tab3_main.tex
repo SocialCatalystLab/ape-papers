@@ -1,0 +1,33 @@
+\begin{table}[H]
+\centering
+\caption{Main Results: Effect of Business Combination Statutes}
+\label{tab:main}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+ & (1) & (2) & (3) \\
+ & Log Avg. Size & Net Entry Rate & Log Payroll/Emp \\
+\midrule
+ATT & -0.0372 & -0.0083** & 0.0085 \\
+ & (0.0231) & (0.0036) & (0.0172) \\
+95\% CI & [-0.0824, 0.0081] & [-0.0153, -0.0012] & [-0.0252, 0.0421] \\
+\midrule
+Observations & 1,586 & 1,536 & 1,586 \\
+Estimator & \multicolumn{3}{c}{Callaway \& Sant'Anna (2021)} \\
+Control group & \multicolumn{3}{c}{Never-treated states} \\
+Effective treated states & \multicolumn{3}{c}{24 (of 32 adopters)} \\
+Control states & \multicolumn{3}{c}{18} \\
+Clustering & \multicolumn{3}{c}{State} \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel B: TWFE Benchmark (for comparison)}} \\
+\midrule
+TWFE coefficient & 0.0142 & & \\
+ & (0.0191) & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: * p$<$0.10, ** p$<$0.05, *** p$<$0.01. Panel A: Standard errors clustered at the state level in parentheses. ATT is the aggregate average treatment effect on the treated using the Callaway \& Sant'Anna (2021) estimator with never-treated states as the control group and universal base period. ``Effective treated states'' are those with pre-treatment data (adopted 1988+); the earliest 17 units (adopted 1985--1987) are automatically dropped. Column (1): log of average establishment size (employees/establishments) from County Business Patterns. Column (2): net establishment entry rate. Column (3): log payroll per employee from CBP, a proxy for average wages. Panel B: TWFE regression of Column (1) outcome on post-treatment indicator with state and year fixed effects; note the sign reversal relative to Panel A.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

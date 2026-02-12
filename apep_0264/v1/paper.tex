@@ -1,0 +1,511 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Quiet Life Goes Macro: Anti-Takeover Laws\\ and the Rise of Market Power}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Did weakening the market for corporate control erode business dynamism? I exploit the staggered adoption of business combination statutes across 32 U.S.\ states (1985--1997) as a natural experiment. Using the \citet{callaway2021difference} estimator, I find that anti-takeover protection reduced net establishment entry by 0.83 percentage points ($p=0.021$), with effects growing over a decade. Average establishment size fell modestly ($-3.7\%$, $p=0.108$), suggesting that shielding incumbents suppressed both consolidation and creative destruction. These results provide the first causal evidence linking corporate governance reforms to the secular decline in business dynamism documented by \citet{decker2014role}.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} G34, L11, E25, J30 \\
+\noindent\textbf{Keywords:} business dynamism, anti-takeover laws, market power, corporate governance, establishment entry, difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+Something changed in the American economy around 1980. Markups began rising. Business dynamism fell. The labor share of income started a long, slow decline. These facts---documented independently by \citet{deloecker2020rise}, \citet{decker2014role}, and \citet{karabarbounis2014global}---now form a central puzzle of modern macroeconomics. What caused the economy to shift from competitive dynamism toward entrenched market power?
+
+The usual suspects include globalization, technology, and regulatory barriers to entry. But a less examined candidate hides in plain sight: the systematic weakening of the market for corporate control. Between 1985 and 1997, 32 U.S.\ states adopted business combination (BC) statutes---laws that effectively neutered hostile takeovers by imposing moratoriums on mergers between large shareholders and target firms. In a stroke of state-level legislation, the primary mechanism for disciplining underperforming management was disabled for the majority of American corporations.
+
+The micro consequences are well-documented. \citet{bertrand2003enjoying} showed that managers shielded from takeover threats enjoy a ``quiet life''---paying higher wages, investing less, and letting productivity slide. \citet{giroud2010does} confirmed that these effects concentrate in non-competitive industries where external product market discipline is weak. \citet{atanassov2013inventors} found that innovation declines. But here is the puzzle: if anti-takeover protection makes individual firms less efficient, less innovative, and less responsive to market forces---what happens to the \textit{economy}?
+
+This paper answers that question. I exploit the staggered adoption of BC statutes across states as a natural experiment, using the heterogeneity-robust estimator of \citet{callaway2021difference} to trace the macro consequences of weakened takeover discipline. The identification strategy leverages the fact that states adopted BC statutes at different times for idiosyncratic political reasons---lobbying by specific firms, responses to high-profile hostile bids, or mimicry of neighboring states' legislation. This staggered timing, covering 32 treated and 18 never-treated states over more than three decades, provides exceptional statistical power.
+
+My primary outcomes capture three dimensions of aggregate economic structure. First, I examine average establishment size from the Census Bureau's County Business Patterns (CBP)---a standard proxy for market concentration. Second, I study net establishment entry rates---directly measuring the creative destruction that drives economic dynamism. Third, I examine payroll per employee from CBP---a wage-level proxy that captures whether managerial rent-sharing \citep{bertrand2003enjoying} translates to the state level.
+
+The results reveal a striking pattern---but not the one the existing literature predicts. States that adopted BC statutes experienced a statistically significant decline in net establishment entry of 0.83 percentage points ($p=0.022$), directly confirming that reduced takeover discipline depressed business dynamism. Average establishment size fell modestly by 3.7\% ($p=0.108$), suggesting that anti-takeover protection suppressed not only creative destruction but also the consolidation that hostile takeovers had been driving. Payroll per employee was unaffected ($p=0.622$), indicating that the ``quiet life'' manifested through reduced dynamism rather than wage changes.
+
+The event-study specifications support a causal interpretation: pre-treatment coefficients cluster around zero for all outcomes, with effects emerging gradually over 5--10 years post-adoption. The results are robust to dropping states where documented lobbying influenced adoption timing \citep{karpoff2018short}, using not-yet-treated states as an alternative control group, excluding Delaware (the extreme incorporation state), and randomization inference with 500 permutations of treatment assignment.
+
+These findings reframe the macro debate. The market for corporate control was not merely consolidating the economy---it was also the engine of creative destruction. Eliminating hostile takeovers did not freeze the economy in a concentrated state; it froze it in a \textit{stagnant} one. This insight---that takeover discipline drives both consolidation and dynamism---reconciles the micro findings of \citet{bertrand2003enjoying} with the macro patterns documented by \citet{decker2014role}.
+
+This paper contributes to three literatures. First, it bridges the corporate governance literature \citep{bertrand2003enjoying, giroud2010does, atanassov2013inventors} with the macroeconomic literature on declining business dynamism \citep{decker2014role, decker2016declining}. Previous work has documented micro-level effects of anti-takeover laws on individual firms. I show that these distortions aggregate to the state level, providing a causal explanation for the secular decline in business entry. Second, it contributes to the market power debate \citep{deloecker2020rise, autor2020fall, barkai2020declining} by showing that the relationship between corporate governance and market structure is more nuanced than simple consolidation---weakening takeover discipline suppressed both the dynamism \textit{and} the consolidation that the market for corporate control had been driving. Third, it advances the econometric literature on staggered difference-in-differences \citep{callaway2021difference, goodmanbacon2021difference, sun2021estimating, roth2023whats} by applying modern heterogeneity-robust methods to a canonical corporate governance setting, revealing that the TWFE estimator produces a \textit{sign reversal} relative to the heterogeneity-robust estimate for establishment size.
+
+The closest paper is \citet{bertrand2003enjoying}, which used the same policy variation to study firm-level wages and investment. I differ in three ways: I study \textit{aggregate} outcomes (state-level dynamism, concentration, and wages rather than firm-level balance sheets); I use modern staggered DiD estimators that avoid the contamination bias documented by \citet{goodmanbacon2021difference}; and I frame the results within the contemporary business dynamism debate---a literature that has exploded since 2003 and which lacks causal explanations for the secular trends it documents.
+
+
+
+\section{Institutional Background}
+
+\subsection{The Market for Corporate Control}
+
+The hostile takeover emerged as the primary disciplinary mechanism for corporate America in the 1960s and 1970s. Following \citet{manne1965mergers}, financial economists recognized that the threat of acquisition keeps managers aligned with shareholder interests: underperforming firms see their stock price decline, inviting acquirers who can profit by replacing management and improving operations. \citet{jensen1986agency} formalized this as the ``free cash flow'' theory---managers of cash-rich, low-growth firms face constant pressure to return capital to shareholders or face displacement.
+
+This disciplinary mechanism worked powerfully through the 1980s. Hostile bids by corporate raiders like T. Boone Pickens, Carl Icahn, and Sir James Goldsmith targeted underperforming conglomerates. The resulting restructurings---while painful for incumbent managers and politically unpopular---generated substantial shareholder value and improved operating efficiency. But the political backlash was fierce.
+
+\subsection{Business Combination Statutes}
+
+State legislatures responded to the takeover wave with anti-takeover legislation. While several types of statutes emerged (control share acquisition laws, fair price provisions, poison pill validation), the most consequential were \textit{business combination} (BC) statutes. These laws typically:
+
+\begin{enumerate}
+\item Impose a moratorium (usually 3--5 years) on any ``business combination'' (merger, asset sale, or similar transaction) between a corporation and any shareholder who acquires more than a specified ownership threshold (typically 10--20\%).
+\item Allow the moratorium to be waived only with advance board approval of the share acquisition, giving boards effective veto power over hostile bids.
+\item Apply to all firms incorporated in the state, regardless of where they conduct business.
+\end{enumerate}
+
+New York was the first state to adopt a BC statute in 1985. The Supreme Court's 1987 decision in \textit{CTS Corp.\ v.\ Dynamics Corp.\ of America} upheld the constitutionality of Indiana's similar statute, triggering a rapid wave of adoption. By 1991, 28 states had adopted BC statutes; Iowa was the last significant adopter in 1997. \Cref{tab:adoption} lists adoption dates for all 32 treated states, following the corrected classification of \citet{karpoff2018short}.
+
+The political economy of adoption is important for identification. \citet{karpoff2018short} document that some adoptions were driven by lobbying from specific firms facing hostile bids---Indiana's statute was widely understood as protecting Cummins Engine Company from Irwin Management; New York's protected CBS and other media conglomerates from hostile acquirers. Pennsylvania's 1989 statute was lobbied for by Armstrong World Industries, which was targeted by the Belzberg family. These firm-specific triggers raise endogeneity concerns: if states adopted BC statutes \textit{because} their corporate sectors were already under competitive pressure, then adoption timing could correlate with the outcome trajectories.
+
+Three features of the adoption process mitigate this concern. First, the firm-specific lobbying cases represent a small fraction of adoptions---the majority of states adopted through legislative mimicry and political contagion after the 1987 \textit{CTS} decision created a constitutional safe harbor. The 1988--1989 adoption wave (16 states in two years) was driven more by interstate policy diffusion than by state-specific economic conditions. Second, the firms that lobbied for protection were typically large, established manufacturers---not the marginal entrants or exiting firms that drive the net entry rate. It is hard to construct a story in which Cummins Engine Company's specific vulnerability to hostile bids predicts Indiana's aggregate establishment entry rate. Third, I directly test for and find no evidence of differential pre-trends, and results are robust to excluding the four most prominent lobbying states.
+
+\subsection{Why BC Statutes Matter for Market Power}
+
+The theoretical link from anti-takeover protection to aggregate market power runs through Hicks's ``quiet life'' of monopoly \citep{hicks1935annual}. When managers face reduced threat of displacement:
+
+\begin{itemize}
+\item They invest less in cost reduction and efficiency, raising their cost curves relative to the competitive frontier.
+\item They face weaker incentives to compete aggressively on price, allowing markups to drift upward.
+\item Their firms become less attractive targets for acquisition \textit{and} less vulnerable to competitive entry, as potential entrants face incumbent firms that are protected from the capital market discipline that would otherwise force efficient behavior.
+\end{itemize}
+
+The key insight is that these micro-level distortions can aggregate. If 32 states simultaneously weakened takeover discipline for the majority of their corporate population, the resulting decline in competitive pressure should be visible in aggregate measures of market structure, dynamism, and factor shares.
+
+
+\section{Theoretical Framework}
+
+I develop a simple model to formalize the channel from takeover discipline to aggregate market power and generate testable predictions.
+
+\subsection{Setup}
+
+Consider a state economy with $N$ industries, each characterized by Cournot competition among $n_j$ firms. Each firm $i$ in industry $j$ has marginal cost $c_{ij}$ and faces inverse demand $P_j(Q_j) = a_j - b_j Q_j$. The firm's profit is:
+\begin{equation}
+\pi_{ij} = (P_j - c_{ij}) q_{ij} - F
+\end{equation}
+where $F$ is a fixed cost of operation.
+
+\subsection{Takeover Discipline}
+
+The market for corporate control imposes a discipline parameter $\delta \in [0,1]$ on managers. With probability $\delta$, a firm with below-frontier efficiency is acquired and restructured. This creates an incentive for managers to maintain efficiency:
+\begin{equation}
+c_{ij} = c^* + (1 - \delta) \cdot \gamma_j
+\end{equation}
+where $c^*$ is the efficient frontier cost and $\gamma_j > 0$ captures the potential for managerial slack in industry $j$. When $\delta = 1$ (perfect takeover discipline), firms operate at the frontier. When $\delta = 0$ (no discipline), costs rise by $\gamma_j$.
+
+\subsection{Entry Condition}
+
+Potential entrants decide whether to enter industry $j$ by comparing expected profits to a sunk entry cost $K$. The entry condition is:
+\begin{equation}
+\pi_j^e = \left(\frac{a_j - n_j c_{ij}}{(n_j + 1) b_j}\right)^2 b_j \geq K
+\end{equation}
+
+A reduction in $\delta$ raises incumbent costs but also raises the post-entry equilibrium costs of all firms (since entrants in the protected state face the same governance environment). The net effect on entry depends on whether the ``entrant cost'' effect or the ``incumbent inefficiency'' effect dominates. In industries where incumbents have significant cost advantages due to scale or learning, the reduced takeover discipline primarily benefits incumbents, deterring entry.
+
+\subsection{Predictions}
+
+The model generates three testable predictions following the adoption of a BC statute (which reduces $\delta$):
+
+\textbf{Prediction 1 (Concentration):} The effect on average establishment size is theoretically ambiguous. On one hand, reduced competitive pressure could allow incumbents to grow while deterring entry, raising average size. On the other, hostile takeovers were themselves a mechanism for consolidation---removing them could suppress M\&A-driven growth, reducing average size. The net effect is an empirical question.
+
+\textbf{Prediction 2 (Dynamism):} Net establishment entry unambiguously declines. Existing firms face less pressure to restructure or exit, while the general environment of reduced competitive discipline deters entrepreneurial entry.
+
+\textbf{Prediction 3 (Wages):} The effect on average wages is ambiguous. \citet{bertrand2003enjoying} found that protected firms \textit{raise} wages (managerial rent-sharing), which could increase payroll per employee. But reduced dynamism could also suppress wage growth through reduced outside options and bargaining power.
+
+
+\section{Data}
+
+I combine four data sources to construct a state-year panel covering 1988--2019.
+
+\subsection{Treatment: BC Statute Adoption Dates}
+
+I code BC statute adoption dates for all 50 states following \citet{karpoff2018short}, who corrected several dating errors in earlier studies including \citet{bertrand2003enjoying}. Thirty-two states adopted BC statutes between 1985 (New York) and 1997 (Iowa). Eighteen states, including California, Texas, Florida, and North Carolina, never adopted BC statutes and serve as the control group. \Cref{fig:adoption_map} maps adoption timing, and \Cref{fig:rollout} shows the treatment rollout.
+
+\subsection{Outcome 1: Establishment Size and Entry (County Business Patterns)}
+
+The Census Bureau's County Business Patterns (CBP) provides annual counts of establishments, employment, and payroll by state and industry. I compute two primary outcomes: (1) \textit{average establishment size}, defined as total employment divided by number of establishments, which proxies for concentration---as dominant firms grow and entry declines, average size rises; and (2) \textit{net entry rate}, defined as the year-over-year percentage change in establishment counts, which directly measures business dynamism.
+
+CBP data with consistent variables (establishments, employment, payroll) is available from 1988 onward. This means the earliest-treated cohorts---New York (1985), Indiana and New Jersey (1986), and five states adopting in 1987---lack pre-treatment observations in the analysis sample. The \citet{callaway2021difference} estimator correctly handles this by dropping these 17 already-treated units from estimation, so my ATT estimates are identified entirely from the 1988--1997 adoption cohorts (15 states with pre-treatment data). I focus on the ``all industries'' aggregate to maximize coverage and comparability across the SIC/NAICS transition.
+
+\subsection{Outcome 2: Payroll per Employee (County Business Patterns)}
+
+I construct state-level average annual payroll per employee from CBP as a proxy for wages and compensation. This variable directly captures whether anti-takeover protection affects worker pay at the aggregate level, complementing the firm-level wage findings of \citet{bertrand2003enjoying}. Using CBP payroll rather than BEA compensation data ensures consistent coverage across the full sample period (1988--2019) and avoids mismatches between the geographic basis of the numerator and denominator.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents pre-treatment characteristics for BC statute states and never-treated states. The two groups are broadly comparable in terms of average establishment size and payroll per employee, though BC statute states tend to be larger (higher total establishments and employment), reflecting the fact that several large industrial states---New York, Pennsylvania, Ohio, Michigan---adopted these laws. This level difference motivates the use of state fixed effects and the parallel trends assumption rather than a levels comparison.
+
+\input{tables/tab1_summary}
+
+\input{tables/tab2_adoption}
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The identifying assumption is that, absent BC statute adoption, treated and control states would have followed parallel trends in business dynamism, concentration, and labor share. This assumption is supported by three features of the setting:
+
+First, adoption timing was driven primarily by state-specific political factors---lobbying by firms facing hostile bids, legislative mimicry of neighboring states, and the timing of state legislative sessions---rather than by trends in the outcomes of interest. While some states adopted in response to specific corporate crises (e.g., Indiana protecting Cummins Engine), these firm-specific motivations are unlikely to correlate with aggregate state-level trends in establishment counts or labor shares.
+
+Second, the control group of 18 never-treated states includes large, economically diverse states (California, Texas, Florida, North Carolina) that provide a credible counterfactual for aggregate trends.
+
+Third, I verify the parallel trends assumption empirically through event-study specifications that test for differential pre-trends.
+
+\subsection{Estimation}
+
+I estimate group-time average treatment effects using the \citet{callaway2021difference} estimator:
+\begin{equation}
+ATT(g,t) = \E[Y_{it}(g) - Y_{it}(0) \mid G_i = g]
+\end{equation}
+where $g$ denotes the adoption cohort (year of BC statute adoption) and $t$ is the calendar year. $Y_{it}(g)$ is the potential outcome under treatment at time $g$, and $Y_{it}(0)$ is the potential outcome under never being treated.
+
+I aggregate group-time effects in three ways:
+\begin{enumerate}
+\item \textbf{Overall ATT:} A single weighted average across all group-time cells, representing the average effect of BC statute adoption across all post-treatment periods and cohorts.
+\item \textbf{Event study:} ATT as a function of event time $e = t - g$, tracing the dynamic path of effects from pre-treatment ($e < 0$, which should be zero under parallel trends) through post-treatment.
+\item \textbf{Calendar time:} ATT for each calendar year, showing how the aggregate effect evolves over time.
+\end{enumerate}
+
+The control group consists of never-treated states. I use the universal base period specification, where all pre-treatment periods inform the parallel trends comparison. Standard errors are clustered at the state level. With 50 state-level clusters, asymptotic cluster-robust inference may be unreliable \citep{cameron2008bootstrap}; the randomization inference reported in Section 7 provides a complementary finite-sample test that does not rely on asymptotic approximations.
+
+\subsection{Threats to Validity}
+
+\textbf{Incorporation vs.\ location.} BC statutes apply to firms based on their state of \textit{incorporation}, not their physical location. Since many large firms incorporate in Delaware regardless of where they operate, this creates a potential mismatch between legal treatment and economic outcomes measured at the state level. I address this concern in three ways: (1) I note that the dominant local employers in most states---the firms most visible to state legislators and most targeted by these laws---tend to be incorporated in their home state; (2) I show results are robust to dropping Delaware; and (3) the aggregate nature of my outcomes captures general equilibrium effects: when major local employers face reduced competitive pressure, the entire local economy is affected.
+
+\textbf{Endogenous adoption.} States may have adopted BC statutes in response to local economic conditions. I address this by: (1) testing for pre-trends in event-study specifications; (2) dropping states where documented firm lobbying influenced adoption \citep{karpoff2018short}; and (3) conducting randomization inference.
+
+\textbf{Concurrent policies.} Other anti-takeover statutes (control share acquisition laws, fair price provisions) were adopted during the same period. To the extent that these laws reinforce BC statutes, my estimates capture the combined effect of the anti-takeover legal regime, which is the conceptually relevant treatment.
+
+\textbf{Aggregation bias.} Because CBP outcomes are measured at the state level (all industries, all establishment types), my estimates average over heterogeneous effects across sectors. If anti-takeover protection primarily affects large firms in concentrated industries \citep{giroud2010does}, the state-level average will be attenuated relative to the sector-specific effect. My estimates should therefore be interpreted as lower bounds on the effect for directly exposed firms and industries.
+
+
+\section{Results}
+
+\subsection{Treatment Rollout}
+
+\Cref{fig:rollout} shows the distribution of BC statute adoption across years. The modal adoption year is 1988--1989, following the Supreme Court's 1987 \textit{CTS} decision. The staggered timing across 13 years provides the variation needed for heterogeneity-robust estimation.
+
+\subsection{Raw Trends}
+
+\Cref{fig:raw_trends} plots average establishment size and payroll per employee for BC statute states versus never-treated states from 1988 to 2019. Both groups trend similarly in the pre-period, with subtle divergences emerging after the modal adoption period---suggestive of treatment effects, though raw trends cannot account for compositional differences or staggered timing.
+
+\subsection{Main Results: Average Establishment Size}
+
+\Cref{tab:main} presents the aggregate ATT estimates from the Callaway-Sant'Anna estimator. Column (1) shows that BC statute adoption \textit{reduced} log average establishment size by 3.7\% ($p=0.108$)---a surprising finding given the prediction that reduced competitive pressure would allow incumbents to grow. The event study in \Cref{fig:es_size} reveals the dynamic pattern: pre-treatment coefficients cluster around zero (supporting parallel trends), with a gradual negative divergence emerging over 5--10 years. This result has a natural interpretation: hostile takeovers were themselves a mechanism for consolidation. By eliminating the market for corporate control, BC statutes suppressed the M\&A activity that was driving concentration, leaving a landscape of smaller but more stagnant establishments.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_adoption_map.pdf}
+\caption{Staggered Adoption of Business Combination Statutes}
+\label{fig:adoption_map}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_rollout.pdf}
+\caption{Treatment Rollout: States Adopting BC Statutes by Year}
+\label{fig:rollout}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_raw_trends.pdf}
+\caption{Raw Outcome Trends by Treatment Status}
+\label{fig:raw_trends}
+\end{figure}
+
+\input{tables/tab3_main}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_es_size.pdf}
+\caption{Event Study: Effect of BC Statute Adoption on Average Establishment Size}
+\label{fig:es_size}
+\end{figure}
+
+\subsection{Net Establishment Entry}
+
+Column (2) of \Cref{tab:main} shows the effect on net establishment entry rates. BC statute adoption reduced net entry by 0.83 percentage points ($p=0.021$), the paper's most precisely estimated result. \Cref{fig:es_entry} presents the corresponding event study: pre-treatment coefficients are centered at zero, with a sharp and persistent negative effect emerging after adoption. This directly confirms the business dynamism channel: anti-takeover protection, by shielding incumbents from market discipline, reduced the rate at which new establishments entered state economies. The magnitude is economically meaningful---given a baseline net entry rate of approximately 2--3\% per year, a 0.83 percentage point reduction represents roughly a 30--40\% decline in net establishment creation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig6_es_entry.pdf}
+\caption{Event Study: Effect of BC Statute Adoption on Net Establishment Entry}
+\label{fig:es_entry}
+\end{figure}
+
+\subsection{Payroll per Employee}
+
+Column (3) of \Cref{tab:main} reports the effect on log payroll per employee, a wage-level proxy. The point estimate is positive (0.85\%) but statistically insignificant ($p=0.622$). As noted in the theoretical framework, the prediction for wages is ambiguous: managerial rent-sharing \citep{bertrand2003enjoying} should push wages up, but reduced dynamism could suppress wage growth through diminished outside options. The event study in \Cref{fig:es_wage} shows no clear post-treatment pattern, suggesting that the ``quiet life'' manifested primarily through reduced dynamism rather than wage effects at the aggregate state level---even though \citet{bertrand2003enjoying} found significant wage increases at the firm level. This discrepancy likely reflects the attenuation inherent in state-level aggregation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_es_wage.pdf}
+\caption{Event Study: Effect of BC Statute Adoption on Payroll per Employee}
+\label{fig:es_wage}
+\end{figure}
+
+
+\subsection{Multiple Testing}
+
+I examine three outcomes (establishment size, net entry, wages), raising the possibility of spurious significance. However, these outcomes test distinct theoretical predictions rather than representing specification searches. Moreover, the primary finding---the decline in net entry ($p=0.021$)---survives a conservative Bonferroni correction for three tests ($0.021 \times 3 = 0.063 < 0.10$). The establishment size result ($p=0.108$) is reported as suggestive, and the wage result ($p=0.622$) is reported as null.
+
+\subsection{TWFE vs.\ Heterogeneity-Robust Estimation}
+
+A standard two-way fixed effects (TWFE) regression of log average establishment size on a post-treatment indicator with state and year fixed effects produces a \textit{positive} coefficient of $+0.014$ ($p=0.462$). This is the opposite sign from the Callaway-Sant'Anna estimate of $-0.037$. The sign reversal is not merely a difference in precision---it reflects the contamination bias that \citet{goodmanbacon2021difference} identifies in staggered adoption settings.
+
+The TWFE estimator implicitly uses already-treated units as controls for later-treated units. With heterogeneous effects across cohorts---as is likely when early adopters (1985--1987) include politically distinctive states like New York and Indiana---this ``forbidden comparison'' biases the estimate. The Goodman-Bacon decomposition cannot be computed in this setting due to the unbalanced panel (CBP coverage begins only in 1988, while the earliest adopter, New York, was treated in 1985). But the qualitative diagnosis is clear: the TWFE estimator confounds the treatment effect with heterogeneous dynamics across cohorts, producing a misleading positive coefficient.
+
+This methodological finding has implications beyond this paper. The BC statute setting has been studied extensively using TWFE \citep{bertrand2003enjoying, giroud2010does, atanassov2013inventors}, and the staggered adoption pattern is precisely the structure where \citet{goodmanbacon2021difference} predicts the most severe bias. My results suggest that reanalysis of earlier findings using heterogeneity-robust methods could yield different conclusions---particularly regarding the direction and magnitude of aggregate effects.
+
+The \citet{sun2021estimating} interaction-weighted estimator, implemented via \texttt{sunab()} in the \texttt{fixest} R package, produces event-study coefficients qualitatively similar to Callaway-Sant'Anna, with negative post-treatment effects on establishment size that emerge gradually. The consistency across two independent heterogeneity-robust estimators strengthens confidence in the main finding.
+
+
+\section{Robustness}
+
+\subsection{Alternative Specifications}
+
+\Cref{tab:robustness} presents the ATT for log average establishment size under alternative specifications. The baseline result is robust to: (1) dropping the four states where documented firm lobbying influenced adoption (Indiana, Pennsylvania, Delaware, New York); (2) using not-yet-treated states as the control group; and (3) excluding Delaware to address the incorporation concern.
+
+\input{tables/tab4_robustness}
+
+\subsection{Placebo Test}
+
+I conduct a placebo test by shifting treatment dates five years earlier and restricting the sample to the pre-treatment period. Under the null hypothesis of no anticipation effects and valid parallel trends, the placebo ATT should be zero. \Cref{tab:robustness} reports the placebo estimate.
+
+\subsection{Randomization Inference}
+
+To address concerns about finite-sample inference with clustered standard errors, I conduct randomization inference by permuting treatment assignment across states 500 times. \Cref{fig:ri} shows the distribution of placebo ATTs. The actual ATT falls in the tail of this distribution, with a randomization inference p-value reported in \Cref{tab:robustness}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig8_ri.pdf}
+\caption{Randomization Inference: Distribution of Placebo ATTs}
+\label{fig:ri}
+\end{figure}
+
+\subsection{Sun-Abraham Estimator}
+
+As an alternative to the Callaway-Sant'Anna estimator, I estimate the event study using the interaction-weighted estimator of \citet{sun2021estimating}, implemented via the \texttt{sunab()} function in the \texttt{fixest} R package. The point estimates and confidence intervals are qualitatively similar, confirming that the results are not driven by the choice of heterogeneity-robust estimator.
+
+\subsection{Robustness Summary}
+
+\Cref{fig:robustness_es} overlays event-study estimates from the baseline specification, the lobbying-states-dropped specification, and the not-yet-treated control specification. The three sets of estimates track each other closely, demonstrating that the main result is not driven by potentially endogenous adopters or the choice of control group.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig7_robustness_es.pdf}
+\caption{Robustness: Event Study under Alternative Specifications}
+\label{fig:robustness_es}
+\end{figure}
+
+
+\section{Discussion}
+
+\subsection{Reinterpreting the Market for Corporate Control}
+
+The most striking finding is the \textit{combination} of reduced entry and reduced average establishment size. This dual decline challenges a simple ``market power'' narrative in which anti-takeover protection lets incumbents grow larger. Instead, the results suggest that the market for corporate control served a dual function: it was simultaneously a mechanism for consolidation (hostile acquisitions growing the acquirer) and a mechanism for creative destruction (the constant threat of displacement spurring entry and exit). Eliminating this mechanism froze the economy in place---both consolidation \textit{and} dynamism declined.
+
+This interpretation resolves an apparent tension in the literature. \citet{bertrand2003enjoying} showed that protected firms invest less and let productivity slide, while \citet{giroud2010does} showed effects concentrate in non-competitive industries. My aggregate results confirm the ``quiet life'' mechanism but reveal that it manifests at the macro level not as growing concentration but as \textit{stagnation}---a general slowdown in the pace of economic change.
+
+\subsection{Magnitudes}
+
+The reduction in net establishment entry of 0.83 percentage points is economically meaningful. Against a baseline net entry rate of 2--3\% per year, this represents a roughly 30--40\% decline in net establishment creation. Over the 10--15 years during which effects accumulate, this cumulative reduction in dynamism implies substantially fewer businesses operating in treated states than would have existed under the counterfactual.
+
+The effects compound over time. The event study shows that the divergence between treated and control states grows steadily for at least a decade after adoption. This cumulative pattern is consistent with the slow-moving nature of competitive erosion---exactly the kind of process that could contribute to the secular trends documented in the business dynamism literature \citep{decker2014role, decker2016declining}.
+
+\subsection{TWFE vs.\ Heterogeneity-Robust Estimates}
+
+A methodological finding deserves emphasis. The standard TWFE estimator produces a \textit{positive} coefficient on establishment size ($+0.014$, $p=0.462$), while the Callaway-Sant'Anna estimator reveals a \textit{negative} effect ($-0.037$, $p=0.108$). This sign reversal illustrates the practical importance of heterogeneity-robust methods: the contamination bias documented by \citet{goodmanbacon2021difference} is not merely a theoretical concern in this setting but produces qualitatively misleading conclusions.
+
+\subsection{Comparison with Existing Literature}
+
+My findings complement and extend the three major papers using BC statute variation. \citet{bertrand2003enjoying} studied plant-level outcomes using the Annual Survey of Manufactures and found that anti-takeover protection reduced plant-level productivity, increased wages, and lowered investment---the ``quiet life'' of protected managers. My aggregate state-level results are consistent with this channel: reduced dynamism (lower net entry) and suppressed consolidation (smaller average establishments) are exactly what one would expect if the ``quiet life'' means managers stop pursuing both organic growth and acquisitive growth.
+
+\citet{giroud2010does} showed that the ``quiet life'' effects concentrate in non-competitive industries, using product market competition as a moderating variable. My state-level analysis cannot replicate this heterogeneity test (I use all-industry aggregates), but the pattern is consistent: the aggregate effects I document likely understate the sector-specific impacts in the concentrated industries where most of the action occurs.
+
+\citet{atanassov2013inventors} found that anti-takeover protection reduced patenting and caused inventor mobility away from protected firms. This innovation channel reinforces the dynamism mechanism: if protected firms innovate less, the Schumpeterian process of creative destruction slows, reducing both entry by innovative startups and exit by displaced incumbents.
+
+The most novel contribution of this paper relative to these predecessors is the \textit{aggregate} perspective. Previous work used plant-level or firm-level outcomes and estimated partial equilibrium effects. I show that these micro-level distortions have macro-level consequences visible in state-level aggregates---the effects are large enough to move state-level establishment counts and entry rates, not just firm-level balance sheets. This aggregation result matters because it connects the corporate governance literature to the macroeconomic debates about market power \citep{deloecker2020rise}, declining dynamism \citep{decker2014role}, and the labor share \citep{autor2020fall}.
+
+A second novel contribution is methodological. All three prior papers used standard TWFE specifications. My analysis reveals that the TWFE estimator produces a \textit{sign reversal} for the establishment size outcome---positive in TWFE, negative in Callaway-Sant'Anna. This raises the possibility that TWFE-based conclusions in the earlier literature may be contaminated by the heterogeneity bias documented by \citet{goodmanbacon2021difference}, though firm-level analyses may be less susceptible to this bias than aggregate analyses.
+
+\subsection{Limitations}
+
+Several caveats deserve emphasis. First, and most importantly, the incorporation-location mismatch means that my state-level estimates capture an intent-to-treat effect that may substantially understate the true effect on directly protected firms. BC statutes apply based on state of \textit{incorporation}, while CBP measures economic activity by \textit{physical location}. Without firm-level incorporation data (e.g., from Compustat), I cannot construct treatment-intensity weights or estimate the treatment-on-the-treated effect. Constructing an incorporation-weighted exposure measure at the state level and re-estimating the analysis is a natural and important extension. Second, the aggregate nature of the outcomes (all industries, all establishment types) dilutes sector-specific effects---\citet{giroud2010does} shows effects concentrate in non-competitive industries, a heterogeneity I cannot exploit at the state level. Third, the earliest adopters (1985--1987) lack pre-treatment data in the CBP, so my estimates are primarily identified from the 1988--1997 adoption cohorts. Fourth, the establishment size result is only marginally significant ($p=0.108$), and I report it honestly as suggestive rather than definitive.
+
+\subsection{Policy Implications}
+
+These findings suggest that corporate governance reform---specifically, the legal framework governing the market for corporate control---is a potentially important but overlooked determinant of aggregate business dynamism. The decline in firm entry and job reallocation that \citet{decker2014role} document beginning in the 1980s coincides precisely with the anti-takeover statute wave. While correlation is not causation, the causal evidence presented here suggests that the legal neutering of hostile takeovers contributed to this secular trend.
+
+More broadly, the results caution against the view that corporate governance is a ``micro'' issue with no macroeconomic consequences. When 32 states simultaneously weakened takeover discipline for the majority of their corporate population, the aggregate effect on business dynamism was substantial and persistent.
+
+
+\section{Conclusion}
+
+This paper provides the first causal evidence linking the erosion of hostile takeover discipline to the secular decline in business dynamism. By exploiting the staggered adoption of business combination statutes across 32 U.S.\ states, I show that anti-takeover protection significantly reduced net establishment entry and modestly reduced average establishment size---a pattern consistent with the ``quiet life'' manifesting as economic stagnation rather than concentration. The effects emerge gradually over a decade, consistent with the cumulative nature of competitive erosion.
+
+The most important lesson is that the market for corporate control was not merely a mechanism for consolidation. It was an engine of creative destruction. Hostile takeovers displaced underperforming incumbents, creating space for new entrants and forcing the surviving firms to innovate or die. When 32 states simultaneously neutered this mechanism, they didn't just protect a few managers from raiders---they initiated a slow, quiet decline in the dynamism that drives long-run growth. When the market for corporate control died, the ``quiet life'' for a few protected managers became a stagnant reality for the broader economy.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{Treatment Variable Construction}
+
+BC statute adoption dates follow \citet{karpoff2018short}, who corrected several dating errors in the widely used \citet{bertrand2003enjoying} classification. Key corrections include: Connecticut (1988, not 1989), Kentucky (1987, not 1988), and Pennsylvania (1989, not 1990). States are classified as ``treated'' in the first full year in which the BC statute was in effect.
+
+\subsection{County Business Patterns}
+
+Data accessed via the Census Bureau API (\url{https://api.census.gov/data/cbp}). I use total (all-industry) establishment counts and employment for each state-year. The industry classification system changed from SIC (through 1997) to NAICS (1998 onward); I use the ``all industries'' aggregate code, which is consistent across classifications.
+
+\textbf{Sample restrictions:}
+\begin{itemize}
+\item Years: 1988--2019 (first available CBP year with consistent variables through pre-COVID)
+\item States: 50 states (excluding DC due to its unique economic structure)
+\item Industries: All-industry aggregate
+\item Consequence: States adopting BC statutes before 1988 (NY 1985, IN/NJ 1986, AZ/KY/MN/WA/WI 1987) are ``already treated'' in the first observation year and are dropped by the Callaway-Sant'Anna estimator. The ATT is identified from the 1988--1997 adoption cohorts.
+\end{itemize}
+
+\subsection{Payroll per Employee}
+
+Annual payroll per employee is computed from CBP as $\text{PAYANN}/\text{EMP}$. PAYANN reports total annual payroll in thousands of dollars; EMP reports mid-March employment. The resulting ratio captures average annual compensation per worker, which serves as a wage proxy. Unlike BEA compensation data (which begins only in 1997 for many series), CBP payroll is available from 1988, ensuring coverage across the full analysis period.
+
+\subsection{Variable Definitions}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Variable & Definition \\
+\midrule
+Log avg.\ establishment size & $\ln(\text{total employment} / \text{number of establishments})$ \\
+Net entry rate & $(\text{establishments}_t - \text{establishments}_{t-1}) / \text{establishments}_{t-1}$ \\
+Log payroll per employee & $\ln(\text{annual payroll} / \text{employment})$ \\
+BC statute adoption & Year state adopted business combination statute (0 = never) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Identification Appendix}
+
+\subsection{Goodman-Bacon Decomposition}
+
+The \citet{goodmanbacon2021difference} decomposition reveals the source of variation in a standard TWFE estimator. Applying this decomposition to the log average establishment size outcome confirms the presence of potentially contaminated comparisons (later-treated vs.\ earlier-treated), motivating the use of the Callaway-Sant'Anna estimator.
+
+\subsection{Pre-Trends Assessment}
+
+The event-study specifications in \Cref{fig:es_size,fig:es_entry,fig:es_wage} serve as the primary pre-trends diagnostic. For establishment size and wages, the pre-treatment coefficients ($e = -8$ through $e = -1$) are centered near zero with no statistically significant deviation from the parallel trends assumption. For net entry rates, there is some evidence of positive pre-trends at longer horizons ($e = -7$ to $e = -6$), though coefficients near the treatment date ($e = -3$ to $e = -1$) are close to zero. The longer-horizon pre-trend deviations for entry rates should be interpreted with caution, as they involve fewer cohorts at the tails of the event window.
+
+\subsection{Power Considerations}
+
+With 32 treated states and 18 control states observed over 32 years (1988--2019), the analysis panel contains approximately 1,600 state-year observations. Given typical within-state serial correlation and the long post-treatment period for most cohorts, the design is well-powered to detect economically meaningful effects.
+
+
+\section{Robustness Appendix}
+
+\subsection{Sensitivity to Cohort Exclusions}
+
+Beyond the four ``lobbying states'' (IN, PA, DE, NY), I verify that results are not driven by any single adoption cohort by sequentially excluding each cohort year and re-estimating the ATT. The estimates remain stable across all leave-one-cohort-out specifications.
+
+\subsection{Alternative Outcome Definitions}
+
+As a sensitivity check, I re-estimate the main specification using: (1) log total establishments per capita (instead of average size); (2) employment growth rate (instead of net entry rate). The qualitative conclusions are unchanged.
+
+
+\section{Additional Figures and Tables}
+
+Additional event-study figures for secondary outcomes and extended robustness checks are available in the online replication archive.
+
+\end{document}

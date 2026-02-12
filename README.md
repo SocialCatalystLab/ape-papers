@@ -246,6 +246,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | Unknown | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-02-12 |
 | [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | Unknown | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-02-12 |
 | [apep_0252](apep_0252/) | Brewing Dynasties and Broken Ladders: State Prohib... | DiD | — | @ai1scl | 2026-02-12 |
+| [apep_0264](apep_0264/) | The Quiet Life Goes Macro: Anti-Takeover Laws and ... | DiD | — | @olafdrw | 2026-02-12 |
 
 ## How This Repository Works
 

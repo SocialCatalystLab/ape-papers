@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-02-12T17:33:43.813899",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3189,
+    "output_tokens": 6173,
+    "total_tokens": 9362
+  },
+  "ideas_file": "output/apep_0243/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "The Quiet Life Goes Macro: Anti-Takeover Laws and the Rise of Market Power",
+      "score": 70,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "The Green Transition\u2019s Hidden Cost: Renewable Portfolio Standards and Manufacturing Reallocation",
+      "score": 62,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Automatic Stabilizers in Practice: State EITCs and Local Fiscal Multipliers",
+      "score": 55,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "Does Monitoring Cure the Epidemic? Prescription Drug Monitoring Programs and Aggregate Labor Supply",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 5,
+      "title": "Data Privacy as Industrial Policy: State Breach Notification Laws and the Digital Economy",
+      "score": 32,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

@@ -1,0 +1,23 @@
+\begin{table}[H]
+\centering
+\caption{Robustness: Alternative Specifications for Average Establishment Size}
+\label{tab:robustness}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Specification & ATT & SE & 95\% CI \\
+\midrule
+Baseline (never-treated) & -0.0372 & (0.0231) & [-0.0824, 0.0081] \\
+Drop lobbying states & -0.0351 & (0.0252) & [-0.0844, 0.0142] \\
+Not-yet-treated controls & -0.0375 & (0.0234) & [-0.0834, 0.0084] \\
+Drop Delaware & -0.0372 & (0.0238) & [-0.0837, 0.0094] \\
+\midrule
+Randomization inference p-value & \multicolumn{3}{c}{0.102 (500 permutations)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: * p$<$0.10, ** p$<$0.05, *** p$<$0.01. All specifications use the Callaway \& Sant'Anna (2021) estimator. Baseline uses never-treated states as controls with universal base period. ``Drop lobbying states'' excludes Indiana, Pennsylvania, Delaware, and New York where documented firm lobbying influenced adoption. ``Drop Delaware'' addresses the incorporation-location concern (most large firms incorporate in Delaware regardless of location). Placebo test shifts treatment dates 5 years earlier and uses only pre-treatment data.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
