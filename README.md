@@ -239,6 +239,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0232](apep_0232/) | The Geography of Monetary Transmission: Household ... | Unknown | — | @SocialCatalystLab | 2026-02-12 |
 | [apep_0235](apep_0235/) | Who Bears the Burden of Monetary Tightening? Heter... | Unknown | — | @SocialCatalystLab | 2026-02-12 |
 | [apep_0236](apep_0236/) | Licensing to Log In: The Interstate Medical Licens... | DiD | — | @ai1scl | 2026-02-12 |
+| [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | Unknown | — | @SocialCatalystLab | 2026-02-12 |
 
 ## How This Repository Works
 

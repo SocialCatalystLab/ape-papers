@@ -1,0 +1,29 @@
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Employment Response to Recession Exposure}
+\begin{threeparttable}
+\footnotesize
+\begin{tabular}{l@{\hskip 6pt}c@{\hskip 6pt}c@{\hskip 6pt}c@{\hskip 6pt}c@{\hskip 6pt}c@{\hskip 6pt}c@{\hskip 6pt}c@{\hskip 6pt}c@{\hskip 6pt}c}
+\toprule
+& $h{=}3$ & $h{=}6$ & $h{=}12$ & $h{=}24$ & $h{=}36$ & $h{=}48$ & $h{=}60$ & $h{=}84$ & $h{=}120$ \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel A: Great Recession --- Housing price instrument ($N = 46$)}} \\[3pt]
+$\hat{\beta}_h$ & $-0.0100^{**}$ & $-0.0205^{***}$ & $-0.0482^{**}$ & $-0.0599^{*}$ & $-0.0736^{**}$ & $-0.0829^{**}$ & $-0.0794^{**}$ & $-0.0688^{**}$ & $0.0026$ \\
+& (0.0047) & (0.0075) & (0.0184) & (0.0320) & (0.0350) & (0.0346) & (0.0344) & (0.0301) & (0.0327) \\
+$R^2$ & [0.115] & [0.191] & [0.168] & [0.096] & [0.110] & [0.104] & [0.077] & [0.048] & [0.000]  \\
+\midrule
+& $h{=}3$ & $h{=}6$ & $h{=}12$ & $h{=}24$ & $h{=}36$ & $h{=}48$ & & & \\
+\cmidrule{1-7}
+\multicolumn{7}{l}{\textit{Panel B: COVID Recession --- Bartik instrument ($N = 48$)}} & & & \\[3pt]
+$\hat{\beta}_h$ & $0.6585^{**}$ & $0.4055$ & $0.3272$ & $0.1136$ & $0.0515$ & $0.0510$ & & & \\
+& (0.2593) & (0.2608) & (0.2065) & (0.1756) & (0.1804) & (0.2125) & & & \\
+$R^2$ & [0.188] & [0.125] & [0.106] & [0.017] & [0.003] & [0.002] & & &  \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports $\hat{\beta}_h$ from a cross-state regression of log employment change (relative to recession peak) on recession exposure at horizon $h$ months. Panel A uses the 2003--2006 housing price boom (positive values indicate larger boom); negative $\hat{\beta}_h$ means more-exposed states had lower employment. Panel B uses the Bartik-predicted employment shock (negative values indicate larger predicted decline); positive $\hat{\beta}_h$ means more-exposed states had larger initial drops. In both panels, convergence of $\hat{\beta}_h$ toward zero indicates recovery. Panel B reports horizons through $h = 48$ only; the post-peak observation window extends 52 months (through June 2024). Robust (HC1) standard errors in parentheses, $R^2$ in brackets. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}
