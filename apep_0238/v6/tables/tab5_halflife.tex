@@ -1,0 +1,25 @@
+\begin{table}[H]
+\centering
+\caption{Employment Persistence: Half-Lives and Recovery Measures}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& Great Recession & COVID Recession \\
+\midrule
+Peak response ($\hat{\beta}_{peak}$) & $-0.0527$ & $-0.8279$ \\
+Peak horizon (months) & 48 & 3 \\
+Half-life (months) & 60 & 9 \\
+$\hat{\beta}_{48}$ & $-0.0527$ & $0.0104$ \\
+Persistence ratio ($\hat{\beta}_{48} / \hat{\beta}_{peak}$) & $1.000$ & $-0.013$ \\
+\midrule
+Instrument & Housing price boom & Bartik (industry shares) \\
+States & 50 & 50 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Peak response is the most negative $\hat{\beta}_h$ among the discrete horizons reported in Table~\\ref{tab:main}. COVID coefficients are sign-reversed (multiplied by $-1$) to match the Table~\\ref{tab:main} convention where negative values indicate employment loss. Half-life is the number of months after peak until $|\\hat{\\beta}_h|$ decays to half its peak value, computed from the full LP horizon grid at 3-month intervals (not only the sparse horizons in Table~\\ref{tab:main}). For the Great Recession, the effect remains near its peak through $h = 84$ and crosses the half-peak threshold between $h = 108$ and $h = 111$. Persistence ratio measures how much of the peak effect remains at $h=48$ months.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:halflife}
+\end{table}

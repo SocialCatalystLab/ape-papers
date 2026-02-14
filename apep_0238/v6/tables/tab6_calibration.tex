@@ -1,0 +1,38 @@
+\begin{table}[H]
+\centering
+\caption{Model Calibration}
+\begin{threeparttable}
+\begin{tabular}{llcc}
+\toprule
+Parameter & Description & Value & Target/Source \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Calibrated parameters}} \\[3pt]
+$\beta$ & Monthly discount factor & 0.996 & Standard (annual 4.7\%) \\
+$\alpha$ & Matching elasticity & 0.50 & Petrongolo \& Pissarides (2001) \\
+$A$ & Matching efficiency & 0.60 & Match monthly job finding rate \\
+$\delta$ & Separation rate & 0.034 & JOLTS 2001--2019 average \\
+$\kappa$ & Vacancy posting cost & 3.40 & Free entry condition \\
+$b$ & Unemployment benefit & 0.71 & Replacement ratio $\approx$ 0.71 \\
+$b_{olf}$ & OLF home production & 0.65 & Below unemployment benefit \\
+$\gamma$ & Worker bargaining power & 0.50 & Hosios condition \\
+$\lambda$ & Skill depreciation & 0.12 & Jacobson et al.\ (1993) \\
+$\chi$ & OLF exit rate & 0.008 & Match LFP cyclicality \\
+$\psi$ & LF re-entry rate & 0.03 & Match OLF-to-U flows \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel B: Steady-state outcomes}} \\[3pt]
+Employment share $E/(E+U+O)$ & & 0.9040 & --- \\
+Unemployment rate $U/(E+U)$ & & 0.0774 & 0.055 (BLS 2001--2019) \\
+LFPR $(E+U)/(E+U+O)$ & & 0.9798 & 0.96 (prime-age, CPS) \\
+OLF share $O/(E+U+O)$ & & 0.0202 & --- \\
+Market tightness $\theta$ & & 0.4567 & 0.72 (JOLTS 2001--2019) \\
+Job finding rate $f$ & & 0.4055 & 0.40 (Shimer 2005) \\
+Wage $w$ & & 1.6314 & --- \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} The model is a Diamond-Mortensen-Pissarides search model with endogenous labor force participation and skill depreciation during unemployment. Time period is one month. Panel A reports externally calibrated parameters. Panel B reports implied steady-state values.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:calibration}
+\end{table}

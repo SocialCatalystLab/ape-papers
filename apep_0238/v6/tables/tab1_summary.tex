@@ -1,0 +1,28 @@
+\begin{table}[H]
+\centering
+\caption{Summary Statistics}
+\begin{threeparttable}
+\begin{tabular}{lrrrrr}
+\toprule
+Variable & Mean & Std. Dev. & Min & Max & N \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: State-level outcomes (monthly, 2000--2024)}} \\[3pt]
+Nonfarm payrolls (thousands) & 2,773.1 & 2,963.4 & 237.3 & 18,010.0 & 14,700 \\
+Unemployment rate (\%) & 5.3 & 2.2 & 1.7 & 30.5 & 14,700 \\
+Labor force participation rate (\%) & 65.0 & 4.3 & 52.7 & 75.8 & 14,700 \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel B: Recession exposure measures}} \\[3pt]
+Bartik shock: Great Recession & -0.0557 & 0.0097 & -0.0966 & -0.0353 & 50 \\
+Bartik shock: COVID & -0.1760 & 0.0236 & -0.2779 & -0.1018 & 50 \\
+Housing price boom (log, 2003--2006) & 0.3033 & 0.1466 & 0.0653 & 0.6146 & 50 \\
+Peak-to-trough employment (GR) & -0.0593 & 0.0272 & -0.1393 & 0.0000 & 50 \\
+Peak-to-trough employment (COVID) & -0.1547 & 0.0447 & -0.2708 & -0.0963 & 50 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Panel A reports summary statistics for the balanced state-month panel. Nonfarm payrolls are from BLS Current Employment Statistics via FRED. Panel B reports cross-state recession exposure measures. Bartik shocks are constructed using pre-recession industry employment shares weighted by national industry employment changes. Housing price boom is the log change in the FHFA state-level house price index from 2003Q1 to 2006Q4.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:summary}
+\end{table}

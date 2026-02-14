@@ -1,0 +1,29 @@
+\begin{table}[H]
+\centering
+\caption{Migration Decomposition: Employment vs.\ Employment-to-Population Ratio}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=48$ & $h=60$ & $h=120$ \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel A: Great Recession (HPI instrument)}} \\[3pt]
+$\log(\text{emp})$ & $-0.0229^{**}$ & $-0.0435^{*}$ & $-0.0444$ & $-0.0527$ & $-0.0489$ & $-0.0229$ \\
+& (0.0098) & (0.0220) & (0.0365) & (0.0466) & (0.0514) & (0.0530) \\[3pt]
+$\log(\text{emp/pop})$ & ---\textsuperscript{a} & $-0.0370^{*}$ & $-0.0362$ & $-0.0524$ & $-0.0547$ & $-0.0509^{*}$ \\
+& & (0.0201) & (0.0319) & (0.0380) & (0.0395) & (0.0276) \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel B: COVID Recession (Bartik instrument)}} \\[3pt]
+$\log(\text{emp})$ & $-0.5286^{*}$ & $-0.3653$ & $-0.1218$ & $0.0104$ & & \\
+& (0.2637) & (0.2414) & (0.1102) & (0.0977) & & \\[3pt]
+$\log(\text{emp/pop})$ & $-0.5277^{**}$ & $-0.3622$ & $-0.1030$ & ---\textsuperscript{b} & & \\
+& (0.2551) & (0.2224) & (0.0950) & & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} This table compares local projection estimates using $\log(\text{employment})$ (baseline) with $\log(\text{employment/population})$, which nets out population migration. COVID coefficients are sign-reversed (multiplied by $-1$) so that negative values indicate employment loss, consistent with Table~\ref{tab:main}. If scarring operates partly through out-migration from affected states, the employment-to-population specification will show smaller effects than the baseline. \\textsuperscript{a}Population estimates at $h=6$ not available for the Great Recession at the required frequency. \\textsuperscript{b}COVID emp/pop at $h=48$ not reported because state population estimates are unavailable at this late horizon relative to the February 2020 peak. Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:migration}
+\end{table}

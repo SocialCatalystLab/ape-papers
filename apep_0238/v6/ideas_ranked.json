@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-02-12T11:47:07.665896",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2491,
+    "output_tokens": 2109,
+    "total_tokens": 4600
+  },
+  "ideas_file": "output/apep_0234/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Demand Recessions Scar, Supply Recessions Don't: Evidence from State Labor Markets",
+      "score": 72,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Geographic Labor Mobility as a Shock Absorber: Migration Responses to Regional Recessions",
+      "score": 63,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "The Fiscal Multiplier Through the Labor Market Lens: Evidence from ARRA",
+      "score": 58,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "Skill Mismatch and the Slow Recovery: Occupational Reallocation After the Great Recession",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}
