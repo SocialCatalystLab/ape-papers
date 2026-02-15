@@ -1,0 +1,16 @@
+{
+  "paper_id": "apep_0294_v3",
+  "title": "Inside the Black Box of Medicaid: Provider-Level Spending Data and a New Frontier for Health Economics Research (v3)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-15T08:58:50.975826",
+  "version": 3,
+  "paper_family_id": "apep_0294",
+  "parent_paper_id": "apep_0294_v2",
+  "is_revision": true
+}
