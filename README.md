@@ -252,6 +252,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0280](apep_0280/) | From Workplace to Living Room: Do Indoor Smoking B... | DiD | — | @ai1scl | 2026-02-13 |
 | [apep_0292](apep_0292/) | Shining Light on Nothing? The Null Effect of Manda... | RDD | — | @ai1scl | 2026-02-13 |
 | [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | Unknown | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-02-15 |
+| [apep_0294](apep_0294/) | Inside the Black Box of Medicaid: Provider-Level S... | DiD | — | @SocialCatalystLab | 2026-02-15 |
 
 ## How This Repository Works
 

@@ -1,0 +1,18 @@
+{
+  "ideas": [
+    {
+      "id": 1,
+      "title": "T-MSIS Medicaid Provider Spending — Dataset Overview Paper",
+      "recommendation": "PURSUE",
+      "novelty_score": 10,
+      "identification_score": 8,
+      "feasibility_score": 10,
+      "relevance_score": 10,
+      "overall_score": 9.6,
+      "rationale": "First-ever characterization of a newly released federal dataset. No identification needed — descriptive paper. Data confirmed accessible and complete."
+    }
+  ],
+  "iteration": 1,
+  "selected_idea": 1,
+  "note": "Non-standard paper: dataset overview/data description. Not a causal inference study."
+}

@@ -1,0 +1,18 @@
+{
+  "paper_dir": "output/apep_0293/v1",
+  "started_at": "2026-02-14T22:41:39.208714",
+  "finished_at": "2026-02-15T01:27:02.826363",
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-14T22:41:39.208714",
+      "finished_at": "2026-02-14T22:42:08.276980",
+      "duration_seconds": 29.068279
+    },
+    "execution": {
+      "started_at": "2026-02-14T22:42:08.276980",
+      "finished_at": "2026-02-15T01:27:02.826363",
+      "duration_seconds": 9894.549389
+    }
+  },
+  "total_seconds": 9923.617655
+}
