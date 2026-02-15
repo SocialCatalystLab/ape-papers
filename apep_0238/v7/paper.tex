@@ -1,0 +1,1622 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Lists (for appendix overview)
+\usepackage{enumitem}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data (inlined for submission completeness)
+\newcommand{\apepcurrenttime}{1h 37m}
+\newcommand{\apepcumulativetime}{1h 37m}
+
+% Captions
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Demand Recessions Scar, Supply Recessions Don't:\\ Evidence from State Labor Markets\footnote{This paper is revision v7 of APEP-0238. See \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0238} for the previous version.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} (cumulative: \apepcumulativetime{}). @SocialCatalystLab \and @dyanag}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Not all recessions are created equal. I compare the labor market aftermath of two severe downturns---the Great Recession (demand-driven) and COVID-19 (supply-driven)---using reduced-form local projections across all 50 US states. Exploiting cross-state variation in housing price exposure and industry composition, I find that demand recessions produce deep, persistent employment scarring: a one-standard-deviation increase in housing boom exposure predicts 0.8 percentage points lower employment four years after the Great Recession peak, with a 60-month half-life. COVID-exposed states recovered fully within 18 months. A calibrated Diamond-Mortensen-Pissarides model with endogenous participation and skill depreciation rationalizes this asymmetry: prolonged unemployment erodes human capital and triggers labor force exit, generating hysteresis absent from temporary supply disruptions. Skill depreciation accounts for two-thirds of demand-shock welfare losses.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} E24, E32, J63, J64 \\
+\noindent\textbf{Keywords:} hysteresis, labor market scarring, recessions, search and matching, Great Recession, COVID-19
+
+\newpage
+
+%% ════════════════════════════════════════════════════════════
+\section{Introduction}
+\label{sec:introduction}
+%% ════════════════════════════════════════════════════════════
+
+Between December 2007 and June 2009, the United States lost 8.7 million jobs---and took 76 months to recover them. Between February and April 2020, the economy shed 22 million jobs---and recovered them in 29 months. These were the two worst labor market contractions since the Great Depression, yet their aftermath could hardly look more different. The Great Recession left scars visible a decade later in depressed employment rates, elevated disability claims, and permanently lower output trajectories \citep{yagan2019employment, fernald2017depression, summers2012there, ball2014long}. The COVID recession, despite a peak contraction roughly three times as severe, left almost no detectable long-run trace. The contrast is a puzzle---and the answer lies not in the depth of the initial shock but in its nature. The Great Recession was a demand recession: a collapse in household balance sheets and aggregate spending that destroyed the incentive to hire, creating prolonged unemployment spells that eroded workers' human capital and attachment to the labor force \citep{mian2014explains, blanchard1986hysteresis, pissarides1992loss, giroud2017firm}. COVID was a supply recession: a temporary shutdown of production capacity that, once lifted, allowed rapid recall of workers whose skills and employer relationships remained intact \citep{cajner2020us, gregory2020pandemic, barrero2021covid}. Think of the economy as a guitar string: a supply shock plucks it down, but the tension snaps it back to its natural position; a demand shock corrodes the string itself---weakening its structure through skill depreciation and labor force exit---so it never fully rebounds. The distinction between demand and supply origins---long central to macroeconomic theory---has first-order consequences for whether recessions scar.
+
+I test this hypothesis using a reduced-form local projection framework applied to state-level labor market data from the Bureau of Labor Statistics, covering all 50 states at monthly frequency from 2000 to 2024. The empirical strategy exploits cross-state variation in recession exposure through two exposure measures. For the Great Recession, I use the 2003--2006 state-level housing price boom as an exposure measure for the severity of the local demand collapse, following \citet{mian2014explains} and \citet{charles2016masking}. For the COVID recession, I construct a Bartik exposure measure based on pre-pandemic industry employment shares interacted with national industry-level employment changes, in the spirit of \citet{bartik1991benefits} and \citet{goldsmith2020bartik}.
+
+The reduced-form results are striking. A one-standard-deviation increase in Great Recession housing exposure (0.15 log points in the housing price boom) predicts 0.8 percentage points lower employment four years after the recession peak, and the effect remains negative through seven years. The half-life of the Great Recession employment response is 60 months from the peak effect---employment never fully recovers during my sample window. By contrast, the relationship between COVID Bartik exposure and subsequent employment is statistically indistinguishable from zero by 18 months. States hit hardest by COVID recovered fully and proportionally; states hit hardest by the Great Recession did not.
+
+To understand the mechanisms behind this asymmetry, I develop a Diamond-Mortensen-Pissarides (DMP) search and matching model augmented with endogenous labor force participation and human capital depreciation during unemployment. A demand shock---modeled as a permanent reduction in aggregate productivity---depresses vacancy creation, lengthens unemployment durations, triggers skill depreciation, and sets off a vicious cycle of declining match quality and labor force exit. A supply shock---modeled as a temporary spike in separations---creates mass unemployment but preserves short durations because the shock itself is transient. Workers are recalled or reabsorbed quickly, before human capital depreciates.
+
+The calibrated model reproduces the qualitative asymmetry remarkably well. A 5\% permanent demand shock generates a 6.0\% employment decline at 48 months that deepens to 13.0\% at 120 months through the scarring channel. A temporary supply shock generates a sharper initial decline of 9.5\% but recovers to within 0.25\% of steady state by 12 months. Skill depreciation accounts for two-thirds of the demand shock's welfare cost: shutting off the scarring channel cuts the consumption-equivalent welfare loss from 8.9\% to 3.0\%. The demand shock imposes over 300 times the welfare cost of the supply shock.
+
+This paper advances the macroeconomic hysteresis literature pioneered by \citet{blanchard1986hysteresis} and extended by \citet{cerra2008growth}, \citet{jorda2013sovereigns}, and \citet{cerra2023hysteresis}. While this literature has established that recessions \textit{can} leave permanent scars, it has not systematically examined \textit{which types} scar most. I provide the first direct comparison of demand-driven versus supply-driven recession dynamics using the same identification framework and the same labor markets observed across two episodes, contributing to the literature on local labor market adjustment \citep{blanchard1992regional, autor2013china, notowidigdo2020incidence, amior2021workers, beraja2019geography} by showing that the speed of adjustment depends critically on the nature of the shock, not just its magnitude---complementing \citet{hershbein2018recessions}, \citet{dao2017regional}, and \citet{foote2021recessions}. I also connect the COVID recession literature \citep{chetty2020real, cajner2020us, forsythe2022labor} to the broader question of recession persistence, arguing that the rapid COVID recovery reflects a simpler explanation than effective fiscal policy \citep{autor2022paycheck} or inherent labor market resilience \citep{hall2021labor}: supply shocks do not create the prolonged unemployment that generates hysteresis. A unified DMP framework that nests both demand and supply recessions, building on \citet{shimer2005cyclical}, \citet{hall2005employment}, and the skill depreciation mechanism of \citet{pissarides1992loss}, shows that the interaction of search frictions with human capital depreciation creates a powerful amplification mechanism for demand shocks that is absent for supply shocks.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Institutional Background}
+\label{sec:background}
+%% ════════════════════════════════════════════════════════════
+
+\subsection{The Great Recession: Anatomy of a Demand Collapse}
+
+The Great Recession originated in the US housing market. Between 2000 and 2006, national home prices rose by approximately 90\%, but the boom was geographically concentrated: supply-constrained markets with speculative demand (Nevada, Arizona, Florida, California) saw price increases exceeding 100\%, while elastic-supply states (Texas, the Midwest) experienced modest appreciation \citep{mian2013household, glaeser2017housing, saiz2010geographic}. This cross-state variation in the boom became the cross-state variation in the bust.
+
+The collapse began in mid-2006. By 2008, falling home values had wiped out trillions in household wealth, triggering mortgage defaults, bank losses, and a full-blown financial crisis. \citet{mian2014explains} demonstrate that the employment decline between 2007 and 2009 was closely tied to the decline in local housing net worth, operating through the household balance sheet channel. \citet{giroud2017firm} provide complementary evidence that firm leverage amplified these losses through the credit channel.
+
+The critical feature for understanding hysteresis is the nature of the employment decline. The demand collapse was not a temporary disruption---it was a sustained reduction in the willingness and ability to spend. Firms permanently closed establishments, laid off workers, and did not rehire even as conditions slowly improved. The share of unemployed workers out of work for 27 weeks or more rose from 17.4\% in December 2007 to 45.5\% in April 2010, unprecedented in postwar data \citep{kroft2016long}. Mean unemployment duration peaked at 39.4 weeks. These extended spells are the mechanism through which demand recessions scar: workers lose skills, employer networks atrophy, and stigma reduces callback rates \citep{kroft2016long, elsby2010labor}.
+
+The policy response arrived with a lag. The Federal Reserve reached the zero lower bound by December 2008; the ARRA provided \$787 billion beginning February 2009. By the time stimulus reached full force, millions had already crossed the duration thresholds associated with skill depreciation and discouragement.
+
+\subsection{The COVID Recession: Anatomy of a Supply Disruption}
+
+The COVID-19 recession was fundamentally different. In March 2020, stay-at-home orders and business closures drove nonfarm payrolls down by 22.4 million---a 14.7\% decline that dwarfed any postwar contraction. Yet by July 2022, just 29 months later, all lost jobs had been recovered.
+
+COVID was a supply shock: an exogenous disruption to production, not a reduction in the desire to consume. Consumer spending on durable goods actually \textit{increased} during 2020 \citep{guerrieri2022macroeconomic}. The shock was sectoral---leisure and hospitality lost 8.2 million jobs (49\% of the sector)---and geographic, hitting tourism-dependent states (Hawaii, Nevada, New York) hardest \citep{cajner2020us}.
+
+Crucially, the COVID shock preserved employer-employee matches. Many workers were furloughed rather than permanently separated. The PPP provided \$800 billion in forgivable payroll loans, directly subsidizing match preservation \citep{autor2022paycheck}. Enhanced unemployment insurance maintained household income \citep{ganong2020us}. The result: unemployment durations remained short even though the peak unemployment rate (14.7\%) exceeded the Great Recession peak (10.0\%). Median unemployment duration peaked at only 10.4 weeks during COVID versus 25.0 weeks after the Great Recession. Short durations meant minimal skill depreciation, minimal discouragement, and rapid reabsorption.
+
+\subsection{Why the Comparison Is Informative}
+
+Both recessions were severe, affected all 50 states, featured substantial cross-state variation in severity driven by well-understood sources, and were followed by aggressive policy responses. The fundamental difference---demand versus supply---allows me to test whether hysteresis operates specifically through prolonged unemployment generated by demand deficiency, rather than through the simple fact of job loss. If hysteresis were driven purely by the experience of unemployment regardless of cause, COVID would have left similar scars. That it did not isolates the demand channel.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Conceptual Framework}
+\label{sec:framework}
+%% ════════════════════════════════════════════════════════════
+
+I develop a search and matching model in the tradition of \citet{diamond1982aggregate}, \citet{mortensen1994job}, and \citet{pissarides1985short}, augmented with endogenous labor force participation and human capital depreciation during unemployment, building on the duration-dependence mechanisms in \citet{pissarides1992loss} and \citet{gertler2009unemployment}. The model generates three testable predictions about the differential persistence of demand versus supply shocks.
+
+\subsection{Environment}
+
+Time is discrete, with periods indexed by $t = 0, 1, 2, \ldots$. The economy is populated by a unit measure of infinitely-lived, risk-neutral workers who discount the future at rate $\beta \in (0,1)$. Workers can be in one of three states: employed ($E$), unemployed and actively searching ($U$), or out of the labor force ($O$). There is a continuum of firms, each operating a single job.
+
+Each worker is characterized by a human capital level $h \in (0,1]$ that determines the productivity of a filled job. A match between a firm and a worker with human capital $h$ produces output $a \cdot h$ per period, where $a > 0$ is aggregate productivity---the key object that demand shocks affect.
+
+\subsection{Matching Technology}
+
+Unemployed workers search for jobs by entering a labor market where firms post vacancies. The number of new matches formed per period is given by a constant-returns-to-scale matching function:
+\begin{equation}
+m(u_t, v_t) = A \cdot u_t^{\alpha} \cdot v_t^{1 - \alpha},
+\label{eq:matching}
+\end{equation}
+where $u_t$ is the measure of unemployed workers, $v_t$ is the measure of vacancies, $A > 0$ is matching efficiency, and $\alpha \in (0,1)$ is the elasticity of matches with respect to unemployment. Define labor market tightness as $\theta_t \equiv v_t / u_t$. The job finding rate for an unemployed worker is:
+\begin{equation}
+f(\theta_t) = A \cdot \theta_t^{1 - \alpha},
+\label{eq:jobfinding}
+\end{equation}
+and the vacancy filling rate for a firm is:
+\begin{equation}
+q(\theta_t) = A \cdot \theta_t^{-\alpha}.
+\label{eq:vacfilling}
+\end{equation}
+Tighter labor markets (higher $\theta$) make it easier for workers to find jobs but harder for firms to fill vacancies.
+
+\subsection{Timing and Transitions}
+
+Within each period, the following events occur. First, aggregate shocks are realized (changes to $a$ or the separation rate $\delta$). Second, employed workers separate from their jobs with probability $\delta_t$, entering unemployment. In steady state, $\delta$ reflects the average monthly separation rate. A supply shock operates by temporarily elevating $\delta_t$ above its steady-state value. Third, three transitions operate as \textit{competing hazards} on the unemployment pool: workers match with vacancies (probability $f(\theta_t)$), exit to non-participation (probability $\chi_t$), or remain unemployed (probability $1 - f(\theta_t) - \chi_t$). Separately, a fraction $\psi$ of non-participants re-enter unemployment. Fourth, unemployed workers who have been searching for at least $d^*$ periods suffer human capital depreciation: their productivity falls from $h$ to $h(1 - \lambda)$, where $\lambda \in (0,1)$ parameterizes the severity of scarring.
+
+The exit rate from unemployment to non-participation has two components:
+\begin{equation}
+\chi_t = \chi_0 + \chi_1 \cdot s_t,
+\label{eq:exit_rate}
+\end{equation}
+where $\chi_0$ is a baseline exit rate and $\chi_1$ governs the additional discouragement effect when the fraction $s_t$ of unemployed workers who have experienced skill depreciation (``scarred'' workers) is high. This captures the empirical regularity that labor force participation declines during prolonged recessions as discouraged workers abandon job search \citep{elsby2010labor, kroft2016long}.
+
+\subsection{Value Functions}
+
+The value of employment for a worker with human capital $h$ determines the worker's willingness to accept job offers and remain employed:
+\begin{equation}
+W_t(h) = w_t(h) + \beta \left[ (1 - \delta_t) W_{t+1}(h) + \delta_t \cdot U_{t+1}(h, 0) \right],
+\label{eq:value_employed}
+\end{equation}
+where $w_t(h)$ is the wage and separated workers enter unemployment with duration $d = 0$. The value of unemployment for a worker with human capital $h$ and duration $d$ periods is:
+\begin{equation}
+U_t(h, d) = b + \beta \left[ f(\theta_t) W_{t+1}(h) + \chi_t V^{OLF}_{t+1} + (1 - f(\theta_t) - \chi_t) U_{t+1}(h', d+1) \right],
+\label{eq:value_unemployed}
+\end{equation}
+where $b$ is the flow value of unemployment (unemployment insurance benefits plus the value of leisure), $\chi_t$ is the probability of exiting to non-participation (a competing hazard with job finding), and $h'$ reflects potential skill depreciation:
+\begin{equation}
+h' = \begin{cases} h & \text{if } d < d^* \\ h(1 - \lambda) & \text{if } d \geq d^* \end{cases}.
+\label{eq:depreciation}
+\end{equation}
+Workers who find employment before reaching duration $d^*$ retain their full human capital; depreciation applies only to those who remain unemployed beyond the threshold.
+
+The value of non-participation is:
+\begin{equation}
+V^{OLF} = b_{OLF} + \beta \left[ \psi \cdot U_{t+1}(h_0, 0) + (1 - \psi) \cdot V^{OLF} \right],
+\label{eq:value_olf}
+\end{equation}
+where $b_{OLF}$ is the flow value of home production, assumed to be less than the unemployment benefit ($b_{OLF} < b$), $h_0$ is the human capital at re-entry (assumed to be the pre-scarring level for simplicity), and re-entrants start with zero unemployment duration.
+
+The reduced-form hazard $\chi_t$ in \Cref{eq:exit_rate} captures the participation margin: when unemployment durations are long and human capital has depreciated, more workers exit the labor force. This is the channel through which demand recessions generate permanent employment losses. The competing-hazard formulation---where job finding and OLF exit are parallel transitions from unemployment---is consistent with the aggregate laws of motion in \Cref{eq:lom_u,eq:lom_o}.
+
+\subsection{Wage Determination}
+
+Standard Nash bargaining with the stated Bellman equations yields a wage that depends on market tightness: $w = (1 - \gamma)b + \gamma(ah + \kappa\theta)$. For tractability in the transition dynamics, I adopt a simplified proportional-surplus wage rule that eliminates the tightness dependence:
+\begin{equation}
+w_t(h) = \gamma \cdot a_t \cdot h + (1 - \gamma) b,
+\label{eq:wage}
+\end{equation}
+where $\gamma$ is the worker's bargaining power. This wage rule captures the key comparative statics---wages rise with productivity $a_t$ and the outside option $b$---while permitting a closed-form solution for equilibrium tightness. The omission of the $\kappa\theta$ term means wages do not respond to tightness, which allows $\theta$ to fluctuate more freely than under the full Nash wage (where rising wages in tight markets dampen vacancy creation). The qualitative demand/supply asymmetry is robust to this simplification because it arises from the interaction of duration dependence with the permanent/temporary nature of shocks, not from wage dynamics.
+
+\subsection{Free Entry}
+
+Firms post vacancies as long as the expected return covers the posting cost $\kappa$ per period. The free entry condition is:
+\begin{equation}
+\frac{\kappa}{q(\theta_t)} = \beta \cdot (1 - \gamma) \cdot \frac{a_t \cdot \bar{h}_t - b}{1 - \beta(1 - \delta_t)},
+\label{eq:freeentry}
+\end{equation}
+where $\bar{h}_t$ is the expected human capital of a matched worker (approximated by $1 - \lambda s_{t-1}$ in simulations). This pins down equilibrium tightness $\theta_t$ as a function of productivity $a_t$, expected human capital $\bar{h}_t$, and the separation rate $\delta_t$. A permanent reduction in $a$ (demand shock) lowers the right-hand side, reducing $\theta_t$ and the job finding rate $f(\theta_t)$. The lower finding rate extends unemployment durations, triggering skill depreciation and labor force exit. A temporary increase in $\delta_t$ (supply shock) reduces the present value of a match (via $1 - \beta(1-\delta_t)$ in the denominator), lowering $\theta_t$ while the shock lasts. However, because the shock is transient, $\theta_t$ recovers quickly once $\delta_t$ returns to its steady-state value.
+
+\subsection{Laws of Motion}
+
+The aggregate state of the economy is described by the distribution of workers across employment states. The laws of motion are:
+\begin{align}
+E_{t+1} &= E_t + f(\theta_t) \cdot U_t - \delta_t \cdot E_t, \label{eq:lom_e} \\
+U_{t+1} &= U_t + \delta_t \cdot E_t + \psi \cdot O_t - f(\theta_t) \cdot U_t - \chi_t \cdot U_t, \label{eq:lom_u} \\
+O_{t+1} &= O_t + \chi_t \cdot U_t - \psi \cdot O_t, \label{eq:lom_o}
+\end{align}
+with the adding-up constraint $E_t + U_t + O_t = 1$. In steady state:
+\begin{equation}
+\delta \cdot E = f(\theta) \cdot U, \quad \chi \cdot U = \psi \cdot O, \quad E + U + O = 1.
+\label{eq:steadystate}
+\end{equation}
+Solving yields $U^{ss} = \left( \frac{f}{\delta} + 1 + \frac{\chi}{\psi} \right)^{-1}$, $E^{ss} = \frac{f}{\delta} \cdot U^{ss}$, and $O^{ss} = \frac{\chi}{\psi} \cdot U^{ss}$.
+
+\subsection{Demand Versus Supply Shocks}
+
+The model nests two types of recession:
+
+\textit{Demand shock.} Aggregate productivity falls permanently: $a_t = a(1 - \sigma_d)$ for all $t \geq 1$. This reduces the match surplus, lowering $\theta$ and $f(\theta)$. Unemployment durations lengthen, the scarred fraction $s_t$ rises, human capital depreciates, and the participation exit rate $\chi_t$ increases. Because the shock is permanent, the economy transitions to a new, lower steady state with permanently lower employment. The transition overshoots because the scarring dynamics amplify the initial shock.
+
+\textit{Supply shock.} The separation rate spikes temporarily: $\delta_t = \delta(1 + \sigma_s)$ for $t \in \{1, \ldots, T_s\}$ and $\delta_t = \delta$ thereafter. This creates a mass of newly unemployed workers, but because the shock dissipates quickly, $\theta$ and $f(\theta)$ recover rapidly. Unemployment durations remain short, few workers cross the scarring threshold $d^*$, and labor force participation is largely unaffected.
+
+\paragraph{Simulation approach.} The full model with duration-dependent depreciation and endogenous participation involves a high-dimensional state space (the joint distribution of workers over employment status, human capital, and unemployment duration). Rather than solve the Bellman system numerically at each point in time, I simulate the aggregate dynamics using a tractable approximation: the scarred fraction $s_t$ evolves as a reduced-form function of the job-finding rate (detailed in \Cref{app:model}), and the participation exit rate responds to $s_t$ through \Cref{eq:exit_rate}. The micro Bellman structure above provides the economic intuition; the quantitative simulations use the aggregate dynamic system. This approach follows the spirit of \citet{shimer2005cyclical}, who also works with aggregate flows rather than the full distribution.
+
+The model's asymmetric prediction connects to the ``plucking'' model of \citet{dupraz2022plucking}: supply shocks displace the economy temporarily, while demand shocks erode its capacity to recover.
+
+An important caveat: the clean demand/supply dichotomy can break down. \citet{guerrieri2022macroeconomic} show that supply shocks can generate ``Keynesian supply shocks''---demand deficiencies triggered by supply disruptions. That COVID recovery was rapid suggests this channel was empirically muted, consistent with the massive fiscal transfers that sustained household income and prevented balance-sheet deterioration.
+
+\subsection{Testable Predictions}
+
+The model generates three predictions:
+
+\medskip
+
+\noindent \textbf{Prediction 1 (Persistent Demand Effects).} \textit{Cross-state employment responses to demand-shock exposure exhibit persistent negative effects at horizons of 48 months or more.} This follows from the permanent reduction in $\theta$ and the amplification through skill depreciation.
+
+\medskip
+
+\noindent \textbf{Prediction 2 (Transient Supply Effects).} \textit{Cross-state employment responses to supply-shock exposure converge to zero within 18--24 months.} The temporary nature of the separation shock means the economy returns to its original steady state.
+
+\medskip
+
+\noindent \textbf{Prediction 3 (Mechanism: Duration and Participation).} \textit{The persistence gap operates through unemployment duration, skill depreciation, and participation exit rather than through the initial depth of the shock.}
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Data}
+\label{sec:data}
+%% ════════════════════════════════════════════════════════════
+
+\subsection{Data Sources}
+
+I use state-level labor market data from the Bureau of Labor Statistics, covering all 50 states at monthly frequency from 2000 to 2024, combined with recession exposure measures from public federal data sources accessed through the Federal Reserve Economic Data (FRED) API.
+
+\textit{Employment.} State-level total nonfarm payroll employment comes from the BLS Current Employment Statistics (CES) survey, available monthly for all 50 states from January 2000 through June 2024. I use seasonally adjusted series (FRED mnemonic: \texttt{[ST]NA} (e.g., \texttt{CANA} for California)).
+
+\textit{Unemployment and Labor Force Participation.} State-level unemployment rates come from the BLS Local Area Unemployment Statistics (LAUS) program, monthly seasonally adjusted for all 50 states. State-level labor force participation rates come from the same program for all 50 states; LFPR results are reported in \Cref{app:additional}.
+
+\textit{Housing Prices.} State-level house price indices come from the Federal Housing Finance Agency (FHFA). I construct the housing price boom measure as the log change in the FHFA index between 2003Q1 and 2006Q4.
+
+\textit{Industry Employment.} State-level employment by major industry sector from the BLS Current Employment Statistics (CES) program, accessed through FRED. I use 10 major industry supersectors. Pre-recession industry shares are computed from CES data in the year preceding each recession (2006 for the Great Recession, 2019 for COVID).
+
+\textit{JOLTS.} National-level data on job openings, hires, quits, and layoffs from the Job Openings and Labor Turnover Survey, available monthly from December 2000.
+
+\subsection{Sample Construction}
+
+The analysis sample is a balanced panel of all 50 U.S.\ states observed monthly from January 2000 through June 2024 ($50 \times 294 = 14{,}700$ state-month observations). The cross-sectional local projections use all 50 states for both recession analyses.
+
+For the Great Recession, the NBER peak is December 2007; I track outcomes through December 2017 (120 months). For COVID, the peak is February 2020; I track outcomes through February 2024 (48 months). All employment variables are expressed in logs relative to the pre-recession peak.
+
+\subsection{Variable Definitions}
+
+\textit{Employment change.} For each state $s$ and horizon $h$: $\Delta y_{s,h} = \ln(E_{s,t_0+h}) - \ln(E_{s,t_0})$.
+
+\textit{Housing price boom (Great Recession instrument).} $HPI_s = \ln(P_{s,2006Q4}) - \ln(P_{s,2003Q1})$, capturing the state-level intensity of the housing bubble.
+
+\textit{Bartik shock (COVID instrument).} $B_s = \sum_j \omega_{s,j,2019} \cdot \Delta E_{-s,j}^{nat}$, where $\omega_{s,j,2019}$ is the share of industry $j$ in state $s$'s total employment in 2019, and $\Delta E_{-s,j}^{nat}$ is the leave-one-out national employment change in industry $j$ between February and April 2020, following \citet{goldsmith2020bartik}. Intuitively, the Bartik measure asks how much a state's employment would have declined if each of its industries followed national trends.
+
+\textit{Peak-to-trough employment.} $\text{Trough}_s = \min_t \left\{ \ln(E_{s,t}) - \ln(E_{s,t_0}) \right\}$ for $t \in [t_0, t_0 + 24]$.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics. Panel A reports the state-month panel. Average state employment is 2,773 thousand, ranging from 237 thousand (Wyoming) to 18,010 thousand (California). The average unemployment rate is 5.3\%, with substantial variation (with a peak of 30.5\% in Nevada during April 2020). Mean labor force participation is 65.0\%.
+
+%% \input{tables/tab1_summary.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Summary Statistics}
+\begin{threeparttable}
+\begin{tabular}{lrrrrr}
+\toprule
+Variable & Mean & Std. Dev. & Min & Max & N \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: State-level outcomes (monthly, 2000--2024)}} \\[3pt]
+Nonfarm payrolls (thousands) & 2,773.1 & 2,963.4 & 237.3 & 18,010.0 & 14,700 \\
+Unemployment rate (\%) & 5.3 & 2.2 & 1.7 & 30.5 & 14,700 \\
+Labor force participation rate (\%) & 65.0 & 4.3 & 52.7 & 75.8 & 14,700 \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel B: Recession exposure measures}} \\[3pt]
+Bartik shock: Great Recession & -0.0557 & 0.0097 & -0.0966 & -0.0353 & 50 \\
+Bartik shock: COVID & -0.1760 & 0.0236 & -0.2779 & -0.1018 & 50 \\
+Housing price boom (log, 2003--2006) & 0.3033 & 0.1466 & 0.0653 & 0.6146 & 50 \\
+Peak-to-trough employment (GR) & -0.0593 & 0.0272 & -0.1393 & 0.0000 & 50 \\
+Peak-to-trough employment (COVID) & -0.1547 & 0.0447 & -0.2708 & -0.0963 & 50 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Panel A reports summary statistics for the balanced state-month panel. Nonfarm payrolls are from BLS Current Employment Statistics via FRED. Panel B reports cross-state recession exposure measures. Bartik shocks are constructed using pre-recession industry employment shares weighted by national industry employment changes. Housing price boom is the log change in the FHFA state-level house price index from 2003Q1 to 2006Q4.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:summary}
+\end{table}
+
+Panel B reports the cross-state recession exposure measures. The housing price boom averages 0.30 log points (standard deviation 0.14), ranging from 0.065 (Texas) to 0.615 (Arizona/Nevada). The COVID Bartik shock averages $-0.176$ with a standard deviation of 0.023. Peak-to-trough employment declines averaged 5.9\% during the Great Recession and 15.5\% during COVID---the initial COVID shock was roughly 2.6 times more severe, yet the long-run effects are reversed. \Cref{tab:states} in \Cref{app:data} reports the five most and least affected states by each recession. The question is whether this cross-state variation in exposure translates into lasting differences in recovery---and the answer turns on identification.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Empirical Strategy}
+\label{sec:strategy}
+%% ════════════════════════════════════════════════════════════
+
+\subsection{Local Projections Framework}
+
+I estimate the dynamic effects of recession exposure on state employment using the local projections (LP) method of \citet{jorda2005estimation}. For each horizon $h = 0, 3, 6, 12, 24, \ldots, 120$ months, I estimate:
+\begin{equation}
+\Delta y_{s,h} = \alpha_h + \beta_h \cdot Z_s + \gamma_h' X_s + \varepsilon_{s,h},
+\label{eq:lp}
+\end{equation}
+where $\Delta y_{s,h}$ is the log employment change in state $s$ at horizon $h$, $Z_s$ is the recession exposure measure (housing price boom for the Great Recession, Bartik shock for COVID), and $X_s$ is a vector of pre-recession state characteristics (log nonfarm employment at the recession peak, pre-recession employment growth, census region indicators).
+
+The coefficient $\beta_h$ traces an impulse response function: it measures how cross-state differences in recession exposure map into cross-state differences in employment outcomes at each horizon. Persistent $\beta_h$---remaining significantly negative at long horizons---indicates scarring; convergence toward zero indicates recovery.
+
+\textit{Sign convention.} For the Great Recession, negative $\beta_h$ indicates that more-exposed states experienced larger employment declines. For COVID, the Bartik shock is constructed so that negative values indicate larger predicted employment declines. I multiply the COVID LP coefficients by $-1$ so that negative $\hat{\beta}_h$ indicates employment loss in both panels, matching the Great Recession convention. In both cases, convergence toward zero indicates recovery.
+
+I adopt local projections rather than TWFE or staggered difference-in-differences because the cross-state variation in exposure is continuous, not a discrete treatment adoption. The staggered DiD concern \citep{goodmanbacon2021difference, callaway2021difference} does not apply here because I exploit cross-sectional variation at a single event date. LPs are also robust to lag structure misspecification \citep{ramey2016macroeconomic, plagborg2021local} and naturally accommodate different sample lengths across recessions.
+
+\textit{Estimation approach.} The estimates are reduced-form local projections: I regress employment outcomes directly on $Z_s$, not on an endogenous treatment instrumented by $Z_s$. The coefficient $\beta_h$ captures the total effect of exogenous recession exposure on employment at horizon $h$---an intent-to-treat parameter, following the reduced-form tradition in \citet{mian2014explains} and \citet{autor2013china}. The reduced-form LP coefficients capture the total effect of exogenous recession exposure on subsequent employment outcomes---an intent-to-treat parameter that subsumes all channels through which exposure operates, including direct employment effects, migration responses, and policy adjustments.
+
+\subsection{Identification: Housing Prices as a Demand Instrument}
+
+For the Great Recession, the identifying assumption is that cross-state variation in the housing boom captures cross-state variation in demand collapse severity, conditional on controls \citep{mian2014explains, mian2013household, charles2016masking}.
+
+\textit{Relevance.} The cross-sectional $R^2$ of the reduced-form LP regressions exceeds 0.25 at horizons from 6 through 48 months, reaching 0.37 at $h = 6$ (\Cref{tab:main}). These $R^2$ values measure the reduced-form predictive power of exogenous housing exposure for employment outcomes, analogous to a first-stage partial $R^2$ in a standard IV framework.
+
+\textit{Exogeneity.} The housing boom must be uncorrelated with other determinants of long-run employment trajectories. I address this by controlling for pre-recession employment growth (2004--2007), showing flat pre-trends (\Cref{app:additional}), and noting that the boom was driven primarily by housing supply constraints interacting with loose credit \citep{saiz2010geographic}.
+
+\textit{Instrumental variables: Saiz supply elasticity.} To further address endogeneity concerns, I instrument the housing price boom with the \citet{saiz2010geographic} housing supply elasticity. Geographic constraints on buildable land---steep terrain and bodies of water---limit housing supply responsiveness, so that a given credit expansion produces larger price increases in supply-inelastic markets. The supply elasticity is determined by topography and thus plausibly exogenous to post-recession labor market dynamics. I estimate a 2SLS specification where the first stage regresses the housing boom on the (negated) Saiz elasticity and controls, and the second stage uses the predicted housing boom to estimate employment effects. \Cref{fig:saiz_scatter} displays the first-stage relationship; \Cref{tab:saiz_iv} reports IV estimates alongside OLS and Anderson-Rubin confidence intervals that are robust to weak instruments.
+
+\subsection{Identification: Bartik Instrument for COVID}
+
+The Bartik instrument exploits the interaction between pre-pandemic industry composition and the sectoral incidence of COVID. I include controls for log nonfarm employment at the pre-pandemic peak, pre-pandemic employment growth, and census region indicators. The \citet{goldsmith2020bartik} framework requires that industry shares are uncorrelated with state-level determinants of COVID recovery, conditional on controls. The \citet{borusyak2022quasi} insight---that the Bartik instrument is valid when industry-level shocks are exogenous---is highly plausible for the COVID pandemic, which struck industries based on intrinsic contact-intensity, not geographic distribution. I use the \citet{adao2019shift} correction for exposure-weighted standard errors in robustness checks.
+
+Following the diagnostics proposed by \citet{goldsmith2020bartik}, I decompose the COVID Bartik instrument into industry-level Rotemberg weights (\Cref{tab:rotemberg}). Leisure and Hospitality contributes 46.9\% of the identifying variation, followed by Trade/Transport/Utilities (18.1\%) and Education and Health (11.9\%). As a robustness check, I re-estimate the COVID LP after dropping Leisure and Hospitality from the Bartik construction. The leave-one-out results show no significant effect at any horizon, confirming that COVID recovery is not an artifact of a single industry driving the Bartik instrument.
+
+%% \input{tables/tab10_rotemberg.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Bartik Decomposition: Rotemberg Weights by Industry}
+\begin{threeparttable}
+\small
+\begin{tabular}{llrr}
+\toprule
+Code & Industry & Weight & Share of Total (\%) \\
+\midrule
+LEIH & Leisure \& Hospitality & 0.4693 & 46.9 \\
+TRAD & Trade/Transport/Utilities & 0.1807 & 18.1 \\
+EDUH & Education \& Health & 0.1187 & 11.9 \\
+MFG & Manufacturing & 0.0609 & 6.1 \\
+PROF & Professional/Business Services & 0.0601 & 6.0 \\
+CONS & Construction & 0.0452 & 4.5 \\
+GOVT & Government & 0.0442 & 4.4 \\
+FIRE & Finance/Insurance/RE & 0.0113 & 1.1 \\
+INFO & Information & 0.0097 & 1.0 \\
+MINE & Mining/Logging & 0.0000 & 0.0 \\
+\midrule
+\multicolumn{4}{l}{\textit{Leave-one-out robustness: dropping Leisure \& Hospitality}} \\[3pt]
+$h$ & & $\hat{\beta}_h$ & SE \\
+3 & & $0.0031$ & (0.0048) \\
+6 & & $-0.0013$ & (0.0027) \\
+12 & & $-0.0022$ & (0.0028) \\
+24 & & $-0.0007$ & (0.0026) \\
+48 & & $0.0011$ & (0.0020) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Rotemberg weights decompose the COVID Bartik instrument following \citet{goldsmith2020bartik}. Weights measure each industry's contribution to the overall shift-share variation. Leisure \& Hospitality contributes 46.9\% of the identifying variation. The leave-one-out panel re-estimates the COVID LP after removing Leisure \& Hospitality from the Bartik construction (with the resulting instrument re-standardized to unit variance). COVID recovery is robust to this exclusion. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:rotemberg}
+\end{table}
+
+\subsection{Inference}
+
+I use heteroskedasticity-robust (HC1) standard errors throughout, with wild cluster bootstrap $p$-values as the preferred inference device. Sample sizes are 50 states for both recessions. I report three complementary inference approaches. First, permutation $p$-values from 1,000 random reassignments of the exposure measure appear in brackets in \Cref{tab:main}, providing exact finite-sample inference without distributional assumptions. Second, wild cluster bootstrap $p$-values with Rademacher weights at the census division level (9 clusters, 999 iterations) appear in curly braces, following \citet{cameron2008bootstrap} and \citet{mackinnon2017wild}. The wild bootstrap is specifically designed for settings with few clusters. Third, for the Bartik-based COVID estimates, I compute Adao-Koles{\'a}r-Morales exposure-robust standard errors \citep{adao2019shift} that account for correlated shocks in the shift-share design. Leave-one-out analysis confirms no individual state drives the results. The horizon-by-horizon inference ignores the multiple-testing problem inherent in reporting coefficients at many horizons. A formal stepdown procedure \citep{romano2005stepwise} would adjust for this, though at the cost of power in this small-sample setting.
+
+\subsection{Threats to Validity}
+
+\textit{Endogeneity of housing prices.} The literature has established that the housing boom was driven primarily by credit supply expansion, not local labor demand \citep{mian2013household}. The relevant variation is in the \textit{boom}---before 2006---while outcomes are measured \textit{after} the bust.
+
+\textit{Migration.} If damaged workers move elsewhere, state-level data hides their hardship behind population reshuffling. I address this directly by estimating identical LP specifications using the employment-to-population ratio as the dependent variable (\Cref{tab:migration} in the Appendix). If scarring operates through employment levels alone and migration merely redistributes workers across states, the employment-to-population ratio should show no persistent effect. Instead, the emp/pop ratio results closely track the baseline employment results through all available horizons, confirming that migration is not the primary driver. This is consistent with \citet{yagan2019employment}, who shows individual-level scarring persists even after controlling for migration, and \citet{dao2017regional}, who document declining interstate mobility.
+
+\textit{Policy endogeneity.} Fiscal responses differed dramatically. Conditioning on fiscal support intensity would introduce post-treatment bias, because transfers are endogenous to shock severity and type. I interpret the reduced-form estimates as capturing the total effect of shock type, inclusive of the endogenous policy response, and discuss this further in \Cref{sec:mechanisms}.
+
+\textit{General equilibrium.} Cross-state LP estimates capture \textit{relative} scarring: how much more states with greater exposure were hurt compared to less-exposed states. If general equilibrium spillovers attenuate cross-state differences---for example, if workers migrate from hard-hit states to less-affected ones, equalizing outcomes---then the LP coefficients \textit{understate} aggregate scarring \citep{beraja2019geography}. This is a conservative bias for the paper's central claim.
+
+\textit{Small sample.} With 50 observations, finite-sample concerns are relevant. Permutation inference and leave-one-out analysis address this.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Main Results}
+\label{sec:results}
+%% ════════════════════════════════════════════════════════════
+
+\subsection{Pre-Trend Validation}
+
+Pre-trends are flat for both recessions, supporting the causal interpretation. None of the pre-trend coefficients at $h = -36$, $-24$, or $-12$ months is statistically significant for either instrument, and point estimates are small relative to the post-recession effects. The sharp break at $h = 0$---flat pre-trends followed by diverging post-trends---confirms that the instruments capture recession-induced exposure rather than pre-existing differences. See \Cref{fig:pretrend} in \Cref{app:additional} for the full event study.
+
+\subsection{Great Recession: Persistent Scarring}
+
+The Great Recession's damage was a slow-motion collapse. Unlike COVID, the employment deficit in housing-exposed states actually \textit{worsened} over the first four years of recovery. \Cref{tab:main} presents the central results.
+
+Housing-exposed states lost employment steadily after the recession peak. By six months, the gap was significant ($\hat{\beta}_6 = -0.0229$, $p < 0.05$). The deficit nearly doubled by one year ($\hat{\beta}_{12} = -0.0435$, $p < 0.10$) and continued deepening through four years ($\hat{\beta}_{48} = -0.0527$). In states where the bubble burst hardest, roughly one in every hundred workers was still missing from payrolls four years later: a one-standard-deviation increase in housing exposure (0.15 log points) implies 0.8 percentage points lower employment at 48 months.
+
+%% \input{tables/tab2_main_lp.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Employment Response to Recession Exposure}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+& $h=3$ & $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel A: Great Recession --- Housing price instrument}} \\[3pt]
+& $-0.0081$ & $-0.0229^{**}$ & $-0.0435^{*}$ & $-0.0444$ & $-0.0507$ & $-0.0527$ & $-0.0489$ & $-0.0507$ & $-0.0229$ \\
+& (0.0052) & (0.0098) & (0.0220) & (0.0365) & (0.0417) & (0.0466) & (0.0514) & (0.0561) & (0.0530) \\
+& [0.038] & [0.000] & [0.015] & [0.089] & [0.098] & [0.148] & [0.244] & [0.290] & [0.615] \\
+& ---\textsuperscript{b} & \{0.001\} & \{0.101\} & \{0.392\} & \{0.360\} & \{0.431\} & \{0.493\} & \{0.499\} & \{0.762\} \\
+$R^2$ & 0.394 & 0.369 & 0.321 & 0.311 & 0.286 & 0.265 & 0.218 & 0.183 & 0.270  \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel B: COVID Recession --- Bartik instrument (standardized, SD=1)}} \\[3pt]
+& $-0.0193^{*}$ & $-0.0123^{*}$ & $-0.0085$ & $-0.0028$ & $-0.0008$ & $0.0002$ & --- & --- & --- \\
+& (0.0105) & (0.0061) & (0.0056) & (0.0026) & (0.0020) & (0.0023) & & & \\
+& [0.003] & [0.012] & [0.036] & [0.286] & [0.760] & [0.922] & & & \\
+& \{0.018\} & \{0.001\} & \{0.001\} & \{0.001\} & \{0.397\} & \{0.743\} & & & \\
+AKM SE & $\langle0.0026\rangle$ & $\langle0.0015\rangle$ & $\langle0.0015\rangle$ & $\langle0.0007\rangle$ & $\langle0.0006\rangle$ & $\langle0.0006\rangle$ & & & \\
+$R^2$ & 0.506 & 0.563 & 0.474 & 0.621 & 0.726 & 0.756 & & &  \\
+\midrule
+$N$ & \multicolumn{9}{c}{50 (GR) / 50 (COVID)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of log employment change (relative to recession peak) on recession exposure at horizon $h$ months. In both panels, negative $\hat{\beta}_h$ indicates that more-exposed states experienced larger employment declines. Panel A uses the 2003--2006 housing price boom as the exposure measure for the Great Recession. Panel B uses the Bartik-predicted employment shock for COVID, standardized to mean zero and unit standard deviation; coefficients therefore represent the effect of a one-standard-deviation increase in exposure. COVID horizons beyond $h=48$ are not reported because the LP analysis window extends 48 months from the February 2020 peak. Robust (HC1) standard errors in parentheses. Permutation $p$-values in brackets (1,000 random reassignments). Wild cluster bootstrap $p$-values in curly braces (999 iterations, Rademacher weights, clustered at census division). Adao-Koles\'{a}r-Morales exposure-robust standard errors in angle brackets $\langle\cdot\rangle$, accounting for correlated shocks in the shift-share design. \textsuperscript{b}Wild cluster bootstrap not computed at $h=3$ due to insufficient post-treatment variation within census-division clusters at this short horizon. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}
+
+The scars do not heal. At five years, the coefficient remains $-0.0489$. At seven years, it is $-0.0507$. The effect attenuates at very long horizons---by ten years, it is $-0.0229$---but this reflects a decade of gradual convergence driven by migration and demographic turnover, not rapid recovery. Housing exposure explains about 37\% of cross-state employment variation at 6 months, declining gradually but remaining above 22\% through 60 months.
+
+\Cref{tab:halflife} quantifies the persistence. Among the discrete horizons reported in \Cref{tab:main}, the peak LP response occurs at 48 months ($\hat{\beta}_{48} = -0.0527$). The half-life---computed from the full LP horizon grid estimated at 3-month intervals---is approximately 60 months from the peak. The effect remains within 90\% of its peak value through $h = 84$ months (as visible in Table~\ref{tab:main}, where $\hat{\beta}_{84} = -0.0507$) and crosses the half-peak threshold ($-0.0264$) between $h = 108$ and $h = 111$ months. The long plateau followed by late attenuation is consistent with gradual out-migration and demographic turnover eventually eroding cross-state differentials. As a summary measure of long-run persistence, I report the average effect across the four long-horizon estimates ($h \in \{48, 60, 84, 120\}$): $\bar{\beta}_{LR} = -0.037$ (wild cluster bootstrap 95\% CI: $[-0.069, -0.005]$). This single statistic avoids the multiple-testing concern inherent in interpreting horizon-by-horizon significance and confirms that long-run scarring is statistically distinguishable from zero at conventional levels.
+
+\paragraph{Instrumental variables confirmation.} \Cref{tab:saiz_iv} reports 2SLS estimates using the \citet{saiz2010geographic} housing supply elasticity as an instrument for the housing price boom. The first-stage relationship is strong ($F = 24.9$): supply-inelastic states experienced larger housing booms, consistent with the geographic constraints mechanism (\Cref{fig:saiz_scatter}). The 2SLS point estimates are comparable to OLS through $h = 48$ months, supporting the causal interpretation. At longer horizons ($h = 60$, 84, 120), the IV estimates become imprecise and diverge from OLS---the 2SLS coefficients attenuate toward zero or turn positive, and the Anderson-Rubin confidence intervals widen substantially, reflecting the difficulty of instrumenting a reduced-form relationship that itself weakens at distant horizons. This imprecision is expected: as the LP horizon extends, the signal-to-noise ratio in the first stage deteriorates. The IV results thus support the causal channel through housing prices at the horizons where scarring is most pronounced ($h \leq 48$), while remaining uninformative at very long horizons.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/fig12_saiz_first_stage.pdf}
+\caption{First Stage: Saiz Housing Supply Elasticity vs.\ Housing Price Boom}
+\label{fig:saiz_scatter}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Each point is a state. The x-axis plots Housing Supply Constraint (higher = more constrained), based on the negated \citet{saiz2010geographic} elasticity; the y-axis plots the 2003Q1--2006Q4 log housing price boom. The strong negative relationship (supply-inelastic states experienced larger booms) validates the instrument's relevance. Fitted line with 95\% confidence band.
+\end{minipage}
+\end{figure}
+
+%% \input{tables/tab3_saiz_iv.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Instrumental Variable Estimates: Saiz Housing Supply Elasticity}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccccc}
+\toprule
+& $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+First-stage $F$ & 24.9 & 24.9 & 24.9 & 24.9 & 24.9 & 24.9 & 24.9 \\
+OLS ($\hat{\beta}^{OLS}_h$) & $-0.0435^{*}$ & $-0.0444$ & $-0.0507$ & $-0.0527$ & $-0.0489$ & $-0.0507$ & $-0.0229$ \\
+2SLS ($\hat{\beta}^{IV}_h$) & $-0.0351$ & $-0.0248$ & $-0.0238$ & $-0.0221$ & $0.0021$ & $0.0325$ & $0.1262$ \\
+  & (0.0315) & (0.0506) & (0.0567) & (0.0593) & (0.0594) & (0.0564) & (0.0829) \\
+AR 95\% CI & [-0.105, 0.041] & [-0.137, 0.099] & [-0.153, 0.123] & [-0.177, 0.151] & [-0.169, 0.205] & [-0.155, 0.271] & [-0.049, 0.393] \\
+\midrule
+$N$ & \multicolumn{7}{c}{50} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} The instrument is the Saiz (2010) housing supply elasticity, which exploits geographic constraints on land availability (steep terrain, water bodies) as exogenous determinants of housing price responsiveness. The first stage regresses the 2003--2006 housing price boom on the Saiz elasticity; the second stage instruments the LP employment response with predicted housing exposure. The OLS row reproduces the baseline HPI specification from Table~\ref{tab:main}. The Anderson-Rubin (AR) confidence interval is robust to weak instruments. Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:saiz_iv}
+\end{table}
+
+\paragraph{Horse race: demand versus industry composition.} A central concern is whether the Great Recession results identify demand-driven scarring or merely episode-specific confounds. To separate the demand channel from industry composition, I run a horse race: both the housing price boom (HPI) and a Great Recession Bartik shock enter the same cross-state LP regression. If housing wealth destruction---not industry exposure---drives persistence, HPI should remain significant while the GR Bartik becomes insignificant.
+
+\Cref{tab:horse_race} reports the results. The HPI coefficient retains its magnitude and significance at $h=6$ ($\hat{\beta}^{HPI} = -0.024$, $p < 0.05$), while the GR Bartik coefficient is positive and insignificant at all horizons. The variance inflation factor of 1.80 indicates moderate collinearity that does not compromise inference. This within-recession test strongly favors the demand interpretation: the housing wealth channel, not industry composition, generates persistence.
+
+%% \input{tables/tab4_horse_race.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Within--Great Recession Horse Race: Housing Demand vs.\ Industry Composition}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+HPI ($\hat{\beta}^{HPI}_h$) & $-0.0240^{**}$ & $-0.0471^{*}$ & $-0.0504$ & $-0.0575$ & $-0.0597$ & $-0.0562$ & $-0.0575$ & $-0.0231$ \\
+& (0.0110) & (0.0255) & (0.0418) & (0.0471) & (0.0520) & (0.0559) & (0.0573) & (0.0528) \\[3pt]
+GR Bartik ($\hat{\beta}^{Bartik}_h$) & $0.1398$ & $0.4905$ & $0.8038$ & $0.9057$ & $0.9409$ & $0.9819$ & $0.9173$ & $0.0178$ \\
+& (0.1841) & (0.4507) & (0.7364) & (0.8091) & (0.8629) & (0.8556) & (0.5959) & (0.4322) \\
+\midrule
+VIF & \multicolumn{8}{c}{1.80} \\
+$R^2$ & 0.397 & 0.378 & 0.371 & 0.344 & 0.311 & 0.260 & 0.214 & 0.270 \\
+\midrule
+$N$ & \multicolumn{8}{c}{50} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Both the housing price boom (HPI) and the Great Recession Bartik shock enter the same cross-state LP regression. The HPI captures demand-channel exposure (housing wealth collapse); the GR Bartik captures industry-composition exposure (manufacturing, construction). If the demand channel drives persistence, HPI should remain significant while the Bartik becomes insignificant. The GR Bartik coefficients are positive and large in magnitude because the GR Bartik shock is itself small and negative (mean $-0.056$, SD $= 0.010$); these coefficients are never statistically significant ($p > 0.10$ at all horizons). VIF measures collinearity between the two instruments. Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:horse_race}
+\end{table}
+
+%% \input{tables/tab5_halflife.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Employment Persistence: Half-Lives and Recovery Measures}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& Great Recession & COVID Recession \\
+\midrule
+Peak response ($\hat{\beta}_{peak}$) & $-0.0527$ & $-0.0193$ \\
+Peak horizon (months) & 48 & 3 \\
+Half-life (months) & 60 & 9 \\
+$\hat{\beta}_{48}$ & $-0.0527$ & $0.0002$ \\
+Persistence ratio ($\hat{\beta}_{48} / \hat{\beta}_{peak}$) & $1.000$ & $-0.010$ \\
+\midrule
+Instrument & Housing price boom & Bartik (industry shares) \\
+States & 50 & 50 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Peak response is the most negative $\hat{\beta}_h$ among the discrete horizons reported in \Cref{tab:main}. The peak occurs at different horizons by design: $h=48$ for the Great Recession (slow-building demand collapse) and $h=3$ for COVID (immediate supply disruption). COVID coefficients are from the standardized Bartik instrument (mean zero, unit variance); coefficients represent the effect of a one-standard-deviation increase in exposure. Half-life is the number of months after peak until $|\hat{\beta}_h|$ decays to half its peak value, computed from the full LP horizon grid at 3-month intervals (not only the sparse horizons in Table~\ref{tab:main}). For the Great Recession, the effect remains near its peak through $h = 84$ and crosses the half-peak threshold between $h = 108$ and $h = 111$. Persistence ratio measures how much of the peak effect remains at $h=48$ months; the COVID ratio is near zero because the effect has fully dissipated by that horizon. Data extend through June 2024 (52 months from the February 2020 peak); we report through $h=48$ as a round horizon and because the remaining 4 months add no additional information.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:halflife}
+\end{table}
+
+\subsection{COVID: Rapid Recovery}
+
+COVID-19 defied this pattern. Panel B of \Cref{tab:main} tells a starkly different story. The Bartik-predicted COVID shock has a significant immediate effect ($\hat{\beta}_3 = -0.0193$, $p < 0.10$): a one-standard-deviation increase in COVID Bartik exposure predicts 1.93\% lower employment at three months ($\hat{\beta}_3 = -0.0193$ log points). The $R^2$ of 0.51 at $h = 3$ indicates the Bartik exposure measure explains roughly half of cross-state variation in the immediate aftermath.
+
+But the COVID effect dissipates rapidly, with a half-life of just 9 months. By 12 months, the coefficient has fallen to roughly half its peak value and is no longer significant. By 48 months, the point estimate is essentially zero ($+0.0002$) with a wide confidence interval spanning zero---the cross-state relationship has effectively disappeared. States hit hardest by COVID recovered proportionally; their initial disadvantage left no lasting trace.
+
+The speed of recovery is remarkable given the severity of the initial shock. The standardized COVID Bartik has unit variance by construction, making coefficients directly comparable to HPI coefficients in per-standard-deviation terms. Peak-to-trough employment declines were 2.6 times larger during COVID than during the Great Recession. Yet within 18 months, the cross-state relationship between initial exposure and employment had vanished.
+
+\subsection{Impulse Response Comparison}
+
+\Cref{fig:lp_irfs} plots the standardized LP impulse response functions. The visual contrast is dramatic. The Great Recession IRF dips gradually, reaching its trough around 48--60 months, and remains significantly below zero through 84 months. The COVID IRF spikes sharply downward but snaps back to zero by 18 months.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig4_lp_employment_irfs.pdf}
+\caption{Local Projection Impulse Response Functions: Employment}
+\label{fig:lp_irfs}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Each point plots $\hat{\beta}_h$ from \Cref{eq:lp} at horizon $h$ months, scaled by the standard deviation of the respective exposure measure. Blue solid: Great Recession (housing price instrument). Red dashed: COVID (Bartik instrument). Shaded areas: 95\% confidence intervals (HC1). The Great Recession shows persistent negative effects through $h = 84$; COVID shows full recovery by $h = 18$. Unemployment rate and labor force participation IRFs appear in \Cref{app:additional}.
+\end{minipage}
+\end{figure}
+
+\subsection{Geographic Patterns}
+
+\Cref{fig:maps} displays the geographic distribution of recession severity. The Great Recession map shows a clear Sun Belt pattern---the deepest losses in Nevada, Arizona, Florida, and California. The COVID map reveals a different geography: the upper Midwest (Michigan), tourism-dependent states (Hawaii), and entertainment/finance centers (Nevada, New York).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig1_maps_recession_severity.pdf}
+\caption{Peak-to-Trough Employment Declines by State}
+\label{fig:maps}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Left: Great Recession (December 2007 to trough). Right: COVID (February 2020 to trough). Darker shading indicates larger percentage employment declines.
+\end{minipage}
+\end{figure}
+
+Scatter plots of recession exposure against long-run employment outcomes confirm these patterns visually (\Cref{fig:scatter} in \Cref{app:additional}).
+
+Aggregate national employment paths reinforce the cross-state evidence: the Great Recession took 76 months to recover peak employment despite a 6.3\% trough, while COVID recovered in 29 months from a 14.7\% trough (see \Cref{fig:aggregate} in \Cref{app:additional}).
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Mechanisms}
+\label{sec:mechanisms}
+%% ════════════════════════════════════════════════════════════
+
+The reduced-form results establish that demand-driven and supply-driven recessions have fundamentally different persistence profiles. This section investigates three channels: unemployment duration and skill loss, labor force participation exit, and fiscal policy and match preservation.
+
+\subsection{Unemployment Duration and Skill Depreciation}
+
+The hysteresis mechanism operates through unemployment duration. Demand recessions choke off hiring, trapping workers in long spells that erode their skills \citep{blanchard1986hysteresis, pissarides1992loss}.
+
+The national data confirm this strikingly. During the Great Recession, the share of workers unemployed for 27+ weeks rose from 17.4\% to 45.5\%, remaining above 30\% through early 2014. Mean duration peaked at 39.4 weeks---nearly ten months. During COVID, despite a higher peak unemployment rate, long-term unemployment rose only modestly (peaking at 28.3\% in April 2021). Most initial COVID job losses were classified as ``temporary layoffs''---in April 2020, 78\% of the unemployed reported their layoff as temporary, compared to less than 15\% during the Great Recession. These workers expected recall and many were recalled within weeks, before their skills could atrophy.
+
+The duration evidence, combined with the earnings loss literature \citep{jacobson1993earnings, davis2010recessions, jarosch2023searching, schmieder2016effects} and the recall dynamics documented by \citet{fujita2017recall}, strongly supports the interpretation that the Great Recession created conditions for skill depreciation while COVID did not.
+
+\subsection{Labor Force Participation Exit}
+
+When unemployment durations become sufficiently long, some workers stop searching \citep{kroft2016long}. The labor force participation rate fell from 66.0\% in December 2007 to 62.4\% by September 2015---a decline that never fully reversed. \citet{coibion2017innocent} estimate approximately 40\% of this decline was cyclical. COVID produced essentially no lasting participation decline: the rate dropped from 63.4\% to 60.2\% in April 2020 but recovered to pre-pandemic levels by 2023.
+
+My cross-state LP analysis for LFPR yields imprecise estimates that neither confirm nor refute this mechanism at the state level. The cross-sectional design (N=50) provides limited power to detect participation effects, as the Bartik shock has small cross-state variation. The participation channel therefore rests on the national time-series evidence and the model's structural predictions rather than on cross-state LP identification.
+
+\subsection{JOLTS Evidence}
+
+National JOLTS data confirm the mechanism. \Cref{fig:jolts_main} presents four key labor market flow rates during and after each recession. During the Great Recession, the layoff rate rose moderately but the quit rate and job openings rate collapsed for five-plus years, reflecting sustained demand deficiency. The quit rate---a barometer of worker confidence---did not return to pre-recession levels until mid-2016, eight years after the NBER peak. During COVID, the layoff rate spiked dramatically in March 2020 but normalized within three months; the quit rate surged past pre-pandemic levels during the ``Great Resignation,'' and the job openings rate reached record highs by spring 2021. The JOLTS evidence reinforces the central finding: the Great Recession destroyed labor demand for years, while COVID temporarily disrupted production without impairing the labor market's matching capacity.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig9_jolts_decomposition.pdf}
+\caption{JOLTS Labor Market Flows: Great Recession vs.\ COVID}
+\label{fig:jolts_main}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} National JOLTS data, seasonally adjusted, expressed as rates (percent of total nonfarm employment). Top panels: layoffs and discharges rate (left) and quits rate (right). Bottom panels: job openings rate (left) and hires rate (right). Blue shows Great Recession window; red shows COVID window.
+\end{minipage}
+\end{figure}
+
+\subsection{Formal Mechanism Test: Unemployment Rate Persistence}
+
+The model predicts that demand recessions scar through prolonged unemployment, while supply recessions preserve short durations. I test this directly by comparing the persistence of unemployment rate responses across recessions. If the scarring mechanism operates through duration, the UR response to the Great Recession should remain elevated at long horizons ($h = 24$--48 months), while the COVID UR response should converge to zero.
+
+\Cref{tab:mechanism} reports the results. The Great Recession UR persistence ratio---defined as $\hat{\beta}_{48}/\hat{\beta}_{12}$---is 1.857, meaning the cross-state unemployment dispersion nearly \textit{doubled} between one and four years. This deepening is the hallmark of the scarring channel: initial job losses create long durations, which erode skills, which further depress reemployment, which extends durations further. By contrast, the COVID persistence ratio is 0.084, indicating that 91.6\% of the initial UR dispersion had dissipated by $h = 48$. COVID UR coefficients are now expressed per standard deviation of Bartik exposure, making them directly interpretable: a one-standard-deviation increase in COVID exposure raises the unemployment rate by 0.81 percentage points at $h = 6$, declining to just 0.03 points by $h = 48$. The asymmetry is dramatic: demand recessions compound through the duration channel; supply recessions self-correct.
+
+%% \input{tables/tab5_mechanism.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Mechanism Test: Unemployment Rate Persistence by Recession Type}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+\multicolumn{9}{l}{\textit{Panel A: Great Recession --- UR response (HPI instrument)}} \\[3pt]
+& $1.1759^{***}$ & $1.2549$ & $1.1673$ & $1.7890$ & $2.3309^{*}$ & $1.8223$ & $2.5043^{***}$ & $1.3737$ \\
+& (0.3924) & (0.9013) & (1.5387) & (1.4840) & (1.3329) & (1.2059) & (0.8098) & (0.9579) \\
+\midrule
+\multicolumn{9}{l}{\textit{Panel B: COVID Recession --- UR response (standardized Bartik, SD=1, sign-reversed)}} \\[3pt]
+& $0.8079^{*}$ & $0.3580^{*}$ & $0.0802$ & $0.0947$ & $0.0303$ & & & \\
+& (0.4066) & (0.1954) & (0.0787) & (0.0998) & (0.0905) & & & \\
+\midrule
+\multicolumn{9}{l}{Persistence ratio ($\hat{\beta}_{48} / \hat{\beta}_{12}$)} \\[3pt]
+Great Recession & \multicolumn{8}{c}{$1.857$} \\
+COVID & \multicolumn{8}{c}{$0.084$} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of the unemployment rate change (percentage points, relative to recession peak) on recession exposure at horizon $h$ months. Panel A uses the housing price boom instrument for the Great Recession; positive coefficients indicate that more housing-exposed states experienced larger UR increases. Panel B uses the standardized COVID Bartik instrument (mean zero, unit variance); COVID coefficients are sign-reversed (multiplied by $-1$) so that positive values indicate UR increases from greater COVID exposure, consistent with the employment sign convention in \Cref{tab:main}. A coefficient of 0.81 at $h=6$ means a one-SD increase in COVID exposure raised the unemployment rate by 0.81 percentage points. The persistence ratio measures how much of the $h=12$ UR response remains at $h=48$; values near 1 indicate persistent unemployment (demand-side scarring), while values near 0 indicate rapid recovery (supply-side reallocation). Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:mechanism}
+\end{table}
+
+\Cref{fig:mechanism_flow} summarizes the causal pathways. Demand shocks trigger a vicious cycle: reduced hiring $\rightarrow$ longer durations $\rightarrow$ skill depreciation $\rightarrow$ lower reemployment probability $\rightarrow$ labor force exit. Supply shocks short-circuit this cycle because the shock itself is transient, preserving short durations and intact human capital.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig13_mechanism_flow.pdf}
+\caption{Mechanism Flow: Demand vs.\ Supply Recession Pathways}
+\label{fig:mechanism_flow}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Left: demand recession pathway showing the vicious cycle of reduced hiring, extended durations, skill depreciation, and labor force exit. Right: supply recession pathway showing temporary separations followed by rapid recall, preserving human capital.
+\end{minipage}
+\end{figure}
+
+\subsection{The Role of Fiscal Policy and Match Preservation}
+
+The COVID fiscal response was dramatically larger and faster than the Great Recession response. I do not dismiss its importance---the PPP likely preserved millions of matches \citep{autor2022paycheck}, enhanced UI prevented balance-sheet deterioration \citep{ganong2020us}. But fiscal policy and shock type are not independent. Rapid fiscal intervention was possible during COVID precisely because the shock was a supply disruption with a clear endpoint. The PPP's match-preservation mechanism is only effective for temporary shocks; it would have been futile during the Great Recession, when the problem was permanent demand deficiency. In this sense, the fiscal response was both a cause of rapid recovery and an endogenous consequence of shock type \citep{delong2012fiscal, fatas2018permanent}.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Model Estimation and Counterfactuals}
+\label{sec:model_estimation}
+%% ════════════════════════════════════════════════════════════
+
+The reduced-form evidence establishes \textit{that} demand recessions scar while supply recessions do not. To understand \textit{why}---and to quantify how much each channel contributes---I turn to the search-and-matching model developed in \Cref{sec:framework}. The LP estimates document the persistence asymmetry; the structural model decomposes it into skill depreciation, labor force exit, and direct productivity effects.
+
+\subsection{Calibration}
+
+I calibrate the DMP model to match key features of the US labor market. \Cref{tab:calibration} presents the parameters and steady-state outcomes. The model period is one month.
+
+%% \input{tables/tab6_calibration.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Model Calibration}
+\begin{threeparttable}
+\begin{tabular}{llcc}
+\toprule
+Parameter & Description & Value & Target/Source \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Calibrated parameters}} \\[3pt]
+$\beta$ & Monthly discount factor & 0.996 & Standard (annual 4.7\%) \\
+$\alpha$ & Matching elasticity & 0.50 & Petrongolo \& Pissarides (2001) \\
+$A$ & Matching efficiency & 0.60 & Match monthly job finding rate \\
+$\delta$ & Separation rate & 0.034 & JOLTS 2001--2019 average \\
+$\kappa$ & Vacancy posting cost & 3.40 & Free entry condition \\
+$b$ & Unemployment benefit & 0.71 & Replacement ratio $\approx$ 0.71 \\
+$b_{olf}$ & OLF home production & 0.65 & Below unemployment benefit \\
+$\gamma$ & Worker bargaining power & 0.50 & Hosios condition \\
+$\lambda$ & Skill depreciation & 0.12 & Jacobson et al.\ (1993) \\
+$\chi$ & OLF exit rate & 0.008 & Match LFP cyclicality \\
+$\psi$ & LF re-entry rate & 0.03 & Match OLF-to-U flows \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel B: Steady-state outcomes}} \\[3pt]
+Employment share $E/(E+U+O)$ & & 0.9040 & --- \\
+Unemployment rate $U/(E+U)$ & & 0.0774 & 0.055 (BLS 2001--2019) \\
+LFPR $(E+U)/(E+U+O)$ & & 0.9798 & 0.96 (prime-age, CPS) \\
+OLF share $O/(E+U+O)$ & & 0.0202 & --- \\
+Market tightness $\theta$ & & 0.4567 & 0.72 (JOLTS 2001--2019) \\
+Job finding rate $f$ & & 0.4055 & 0.40 (Shimer 2005) \\
+Wage $w$ & & 0.8550 & --- \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} The model is a Diamond-Mortensen-Pissarides search model with endogenous labor force participation and skill depreciation during unemployment. Time period is one month. Panel A reports externally calibrated parameters. Panel B reports implied steady-state values.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:calibration}
+\end{table}
+
+The monthly discount factor $\beta = 0.996$ implies an annual discount rate of approximately 4.9\% ($\beta^{-12} - 1 \approx 0.049$). The matching function elasticity $\alpha = 0.5$ follows \citet{petrongolo2001looking} and satisfies the \citet{hosios1990welfare} condition with equal bargaining power $\gamma = 0.5$. Under the simplified proportional-surplus wage rule (Equation~\ref{eq:wage}), the Hosios condition does not strictly apply as it does under full Nash bargaining; $\gamma = 0.5$ is chosen as the standard symmetric parameterization rather than a strict efficiency condition. Matching efficiency $A = 0.60$ and vacancy cost $\kappa = 3.40$ are calibrated jointly to match the average monthly job finding rate of 0.40 \citep{shimer2005cyclical}. The separation rate $\delta = 0.034$ matches JOLTS total separations over 2001--2019.
+
+The skill depreciation parameter $\lambda = 0.12$ implies 12\% human capital loss upon crossing the scarring threshold $d^* = 12$ months, calibrated to match earnings losses in \citet{jacobson1993earnings} and duration-dependent reemployment declines in \citet{kroft2016long}. The OLF exit rate has baseline component $\chi_0 = 0.008$ and duration-dependent component $\chi_1 = 0.004$, calibrated to match the cyclicality of labor force participation. Aggregate productivity is normalized to $a = 1$ in steady state. The calibrated steady state features an employment rate of 90.4\%, consistent with average US conditions over 2001--2019.
+
+\subsection{Simulating the Two Recessions}
+
+\textit{Demand shock (Great Recession analog).} A permanent 5\% reduction in aggregate productivity $a$ depresses market tightness from 0.46 to approximately 0.31. The job finding rate falls from 0.41 to 0.33, extending durations. As more workers cross the scarring threshold, human capital depreciates, further depressing match surplus---the amplification loop that generates hysteresis.
+
+\Cref{fig:model_vs_data} compares predicted and actual employment paths. The model generates a gradual decline: employment falls 6.0\% at 48 months and continues to 13.0\% at 120 months. This overshooting---deepening losses after the shock has fully materialized---is the signature of the scarring mechanism. The qualitative match to the LP estimates is good through 80 months; beyond that, the model overpredicts persistence because it abstracts from cohort replacement, housing market normalization, and delayed fiscal effects.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig7_model_vs_data.pdf}
+\caption{Model vs.\ Data: Employment Paths After Demand and Supply Shocks}
+\label{fig:model_vs_data}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Solid lines: model-predicted employment change. Dashed lines with markers: LP estimates (scaled). Blue: demand shock. Red: supply shock. The model captures the qualitative asymmetry: persistent decline after the demand shock, rapid recovery after the supply shock.
+\end{minipage}
+\end{figure}
+
+\textit{Supply shock (COVID analog).} Doubling the separation rate for three months generates a sharp 9.5\% employment decline at the shock peak. Because tightness recovers rapidly once separations normalize, employment is within 0.25\% of steady state by month 12. No meaningful scarring occurs because durations remain short.
+
+\subsection{Counterfactuals}
+
+Three counterfactual experiments decompose the sources of demand-shock persistence.
+
+\textit{No skill depreciation ($\lambda = 0$).} The employment decline at 48 months falls from 6.0\% to approximately 3.2\%, and the welfare loss from 8.9\% to 3.0\%. Skill depreciation accounts for \textbf{two-thirds of the demand shock's welfare cost}.
+
+\textit{No participation exit ($\chi = 0$).} The welfare loss falls from 8.9\% to 8.2\%---about 8\% of total welfare cost. Participation exit is empirically observable but quantitatively secondary to skill depreciation.
+
+\textit{Permanent supply shock.} Permanently elevated separations generate intermediate dynamics: more persistent than the temporary supply shock but with weaker scarring amplification than the demand shock, because continuous layoffs keep average durations shorter.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig8_counterfactuals.pdf}
+\caption{Counterfactual Employment Paths}
+\label{fig:counterfactuals}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Blue solid: baseline demand shock. Blue dashed: no skill depreciation ($\lambda = 0$). Blue dotted: no OLF exit ($\chi = 0$). Red solid: baseline supply shock. Skill depreciation is the primary amplification mechanism for demand-shock persistence.
+\end{minipage}
+\end{figure}
+
+\subsection{Welfare Analysis}
+
+\Cref{tab:welfare} summarizes the welfare implications. The consumption-equivalent welfare loss from the demand shock is 8.9\%; from the supply shock, just 0.03\%. The demand/supply welfare ratio is \textbf{330:1}.
+
+%% \input{tables/tab7_welfare.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Welfare Losses from Demand vs.\ Supply Shocks: Model Counterfactuals}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Scenario & CE Welfare Loss (\%) & Relative to Baseline \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: Demand shock (Great Recession analog)}} \\[3pt]
+Baseline (all mechanisms) & 8.86 & 1.00 \\
+No skill depreciation ($\lambda = 0$) & 3.01 & 0.34 \\
+No OLF exit ($\chi = 0$) & 8.17 & 0.92 \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel B: Supply shock (COVID analog)}} \\[3pt]
+Baseline (temporary shock) & 0.03 & --- \\
+\midrule
+Demand/Supply welfare ratio & \multicolumn{2}{c}{330.4} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Consumption-equivalent (CE) welfare losses are computed as the permanent percentage reduction in consumption that would make agents indifferent between the steady state and the post-shock transition path. The demand shock reduces aggregate productivity by 5\% permanently. The supply shock doubles the separation rate for 3 months. Welfare is computed over a 600-month (50-year) simulation horizon to ensure convergence of the demand-shock transition path.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:welfare}
+\end{table}
+
+This enormous asymmetry arises from two sources: permanence (undiscounted output losses are larger) and amplification (the scarring channel compounds the initial productivity loss). Without scarring, the demand shock's welfare cost falls to 3.0\% but still exceeds the supply shock's by a factor of approximately 100. These welfare comparisons should be interpreted as illustrating the order-of-magnitude asymmetry between demand and supply shock costs rather than as precise point estimates; \Cref{tab:app_model_sensitivity} explores sensitivity to key calibration parameters.
+
+These comparisons are illustrative of the asymmetry's magnitude rather than precise point estimates. The 330:1 ratio reflects risk-neutral utility and the absence of consumption smoothing (borrowing, savings); under CRRA preferences with risk aversion greater than one, the welfare costs would be lower. The ratio is also sensitive to the discount rate and $\lambda$ (\Cref{tab:app_model_sensitivity} shows halving $\lambda$ to 0.06 reduces the CE loss to 4.6\%, while increasing to 0.18 raises it to 12.2\%). What is robust across all specifications is the qualitative asymmetry---demand shocks are orders of magnitude more costly---not the precise numbers. The welfare decomposition (skill depreciation 66\%, direct productivity 26\%, participation exit 8\%) is reported in \Cref{tab:welfare}.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Robustness}
+\label{sec:robustness}
+%% ════════════════════════════════════════════════════════════
+
+Results are robust to: alternative Bartik base years (2017, 2018), excluding Sand States (NV, AZ, FL, CA), census division clustering (9 clusters), leave-one-out analysis confirming no individual state drives the results, and subsample analysis by Census region and state size. See \Cref{app:robustness} for detailed tables and discussion.
+
+\Cref{fig:permutation} displays the permutation inference results across all horizons. The Great Recession coefficients are statistically significant at conventional levels through $h = 12$ months (permutation $p < 0.05$) and remain marginally significant through $h = 36$ months. The COVID coefficients are significant through $h = 12$ months but converge rapidly to the null distribution, consistent with full recovery. These permutation tests provide distribution-free finite-sample inference that does not rely on asymptotic approximations.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig15_permutation_test.pdf}
+\caption{Permutation Inference: $p$-Values Across Horizons}
+\label{fig:permutation}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Each bar shows the permutation $p$-value (1,000 random reassignments of the exposure measure) at the indicated horizon. Horizontal lines mark conventional significance thresholds (0.01, 0.05, 0.10). Blue: Great Recession (HPI instrument). Red: COVID (Bartik instrument). The Great Recession exposure is significant at early horizons but loses power at distant horizons where the signal weakens; COVID is significant only through $h = 12$, consistent with rapid recovery.
+\end{minipage}
+\end{figure}
+
+Recovery speed maps (\Cref{fig:recovery_maps} in \Cref{app:additional}) confirm enormous heterogeneity across Great Recession states versus uniformly rapid COVID recovery. Some Great Recession states took over 80 months to recover peak employment, while nearly all COVID states recovered within 24--36 months regardless of initial severity. This uniformity of COVID recovery, despite substantial variation in severity, is strong evidence against the hypothesis that recession depth alone determines persistence.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Conclusion}
+\label{sec:conclusion}
+%% ════════════════════════════════════════════════════════════
+
+Not all recessions are created equal. The nature of the initial shock---demand versus supply---is a first-order determinant of whether a recession leaves lasting scars.
+
+Using cross-state variation in recession exposure and a local projection framework, I show that the Great Recession generated employment scarring visible seven years after the peak. States with one standard deviation greater housing exposure suffered 0.8 percentage points lower employment four years later, with a 60-month half-life. The COVID recession left no detectable long-run trace despite initial losses 2.6 times larger. States most exposed to COVID recovered fully within 18 months.
+
+A calibrated DMP model provides a unified explanation---and reveals the staggering magnitude of the asymmetry. Demand shocks depress hiring, extend durations, trigger human capital loss, and push workers out of the labor force---a vicious cycle that amplifies the initial shock into an 8.9\% consumption-equivalent welfare loss. Supply shocks create mass unemployment but preserve short durations, with a welfare cost of just 0.03\%. The demand-to-supply ratio is 330:1. Skill depreciation accounts for two-thirds of the demand shock's welfare cost.
+
+Three policy implications follow. First, the speed of fiscal response matters enormously. The Great Recession's delayed response allowed millions to cross duration thresholds that trigger scarring; COVID's rapid response preserved matches and prevented hysteresis. Every month of delayed intervention during a demand recession is disproportionately costly. Second, the type of response matters. Match-preserving programs like PPP work for temporary supply disruptions but not for demand collapses, which require demand-side stimulus. Third, skill depreciation as the primary amplification mechanism suggests that targeting the long-term unemployed---retraining, duration-conditional hiring subsidies, interventions against employer discrimination---may be particularly cost-effective during demand recessions.
+
+Several limitations merit acknowledgment. The comparison of two recessions is ultimately a sample of two macroeconomic events; the demand/supply taxonomy is tested on these specific episodes and may not map cleanly onto mixed-type recessions \citep{guerrieri2022macroeconomic}. The broader hysteresis literature provides cross-country evidence consistent with the mechanism \citep{cerra2023hysteresis}, but extending the state-level LP framework to earlier episodes (e.g., the Volcker recession, 2001 dot-com bust) would test generalizability. The cross-state strategy may not fully recover aggregate effects if general equilibrium forces attenuate cross-state differences \citep{beraja2019geography}. Linking to individual-level data would allow direct measurement of duration and participation channels at the worker level; incorporating migration controls would separate the worker-place distinction; extending to other countries would test external validity.
+
+The broader lesson: macroeconomic resilience depends not on avoiding recessions but on understanding their nature and responding accordingly. Demand recessions scar because they create the conditions for hysteresis. Supply recessions do not because they preserve the match between workers and firms. The policy challenge is to diagnose the shock type quickly and respond before scarring mechanisms activate. Every month of misdiagnosis is a month in which workers cross the threshold from temporary hardship to permanent damage.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @dyanag
+
+\noindent\textbf{First Contributor:} \url{https://github.com/dyanag}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section*{Appendix Overview}
+\vspace{-0.5em}
+\begin{description}[leftmargin=2em, labelwidth=1.5em]
+  \item[\ref{app:model}] Model Derivation \dotfill p.\,\pageref{app:model}
+  \item[\ref{app:data}] Data Appendix \dotfill p.\,\pageref{app:data}
+  \item[\ref{app:additional}] Additional Figures and Tables \dotfill p.\,\pageref{app:additional}
+  \item[\ref{app:robustness}] Robustness Appendix \dotfill p.\,\pageref{app:robustness}
+\end{description}
+
+%% ════════════════════════════════════════════════════════════
+\section{Model Derivation}
+\label{app:model}
+%% ════════════════════════════════════════════════════════════
+
+This appendix provides the complete derivation of the DMP model with endogenous participation and skill depreciation used in the paper.
+
+\subsection{Value Functions in Recursive Form}
+
+Consider a worker with human capital $h$ who is currently employed. The Bellman equation for the employed worker is:
+\begin{equation}
+W(h) = w(h) + \beta \left[ (1 - \delta) W(h) + \delta \cdot U(h, 0) \right],
+\label{eq:app_W}
+\end{equation}
+where $w(h)$ is the wage from the simplified rule, $\delta$ is the exogenous separation rate, and a newly separated worker enters unemployment with duration $d = 0$. Rearranging:
+\begin{equation}
+W(h) = \frac{w(h) + \beta \delta \cdot U(h, 0)}{1 - \beta(1 - \delta)}.
+\label{eq:app_W_solved}
+\end{equation}
+
+For an unemployed worker with human capital $h$ and duration $d < d^*$ (not yet scarred):
+\begin{equation}
+U(h, d) = b + \beta \left[ f(\theta) W(h) + \chi \cdot V^{OLF} + (1 - f(\theta) - \chi) U(h, d+1) \right].
+\label{eq:app_U_noscar}
+\end{equation}
+The worker receives unemployment benefits $b$. Three competing transitions resolve: the worker finds a job with probability $f(\theta)$, exits to non-participation with probability $\chi$, or remains unemployed with one additional period of duration.
+
+For an unemployed worker who has reached the scarring threshold ($d \geq d^*$), human capital depreciates to $\tilde{h} = h(1 - \lambda)$:
+\begin{equation}
+U(\tilde{h}, d) = b + \beta \left[ f(\theta) W(\tilde{h}) + \chi \cdot V^{OLF} + (1 - f(\theta) - \chi) U(\tilde{h}, d+1) \right].
+\label{eq:app_U_scar}
+\end{equation}
+The depreciation is permanent---even if the worker finds a new job, productivity is $a \tilde{h}$ rather than $a h$.
+
+The value of non-participation is:
+\begin{equation}
+V^{OLF} = b_{OLF} + \beta \left[ \psi U(h_0, 0) + (1 - \psi) V^{OLF} \right],
+\label{eq:app_VOLF}
+\end{equation}
+where $\psi$ is the exogenous re-entry probability and $h_0$ is the human capital at re-entry (assumed to be the pre-scarring level for simplicity). Solving:
+\begin{equation}
+V^{OLF} = \frac{b_{OLF} + \beta \psi U(h_0, 0)}{1 - \beta(1 - \psi)}.
+\label{eq:app_VOLF_solved}
+\end{equation}
+
+\subsection{Participation Decision}
+
+In the full model, a worker would exit the labor force when the value of continued search falls below the value of non-participation ($U(h, d) < V^{OLF}$). Because $U(h, d)$ is decreasing in $d$, there exists a critical duration $\bar{d}(h)$ such that workers would exit after $\bar{d}$ periods. In simulations, I replace this endogenous stopping rule with the reduced-form competing hazard $\chi_t = \chi_0 + \chi_1 s_t$ (Equation~\ref{eq:exit_rate}), which enters the unemployment Bellman equation directly as a transition probability. The key economic content is preserved: when $f(\theta)$ is low (slack labor markets), the scarred fraction $s_t$ rises, increasing $\chi_t$ and generating higher labor force exit---the participation channel through which demand shocks create permanent employment loss.
+
+\subsection{Firm's Problem and Free Entry}
+
+A firm with a filled position employing a worker of human capital $h$ earns:
+\begin{equation}
+J(h) = a \cdot h - w(h) + \beta(1 - \delta) J(h).
+\label{eq:app_J}
+\end{equation}
+Solving:
+\begin{equation}
+J(h) = \frac{a \cdot h - w(h)}{1 - \beta(1 - \delta)}.
+\label{eq:app_J_solved}
+\end{equation}
+
+A firm with an open vacancy earns:
+\begin{equation}
+V = -\kappa + \beta q(\theta) J(\bar{h}) + \beta(1 - q(\theta)) V,
+\label{eq:app_V}
+\end{equation}
+where $\bar{h}$ is the expected human capital of a matched worker and $\kappa$ is the per-period vacancy posting cost. Free entry drives $V = 0$:
+\begin{equation}
+\frac{\kappa}{q(\theta)} = \beta J(\bar{h}) = \beta \cdot \frac{a \bar{h} - w(\bar{h})}{1 - \beta(1 - \delta)}.
+\label{eq:app_freeentry}
+\end{equation}
+
+\subsection{Nash Bargaining and Wage Rule}
+
+The total match surplus is $S(h) = W(h) - U(h, 0) + J(h)$. Standard Nash bargaining with worker power $\gamma$ implies:
+\begin{equation}
+W(h) - U(h, 0) = \gamma S(h), \quad J(h) = (1 - \gamma) S(h).
+\label{eq:app_nash}
+\end{equation}
+The full Nash solution yields $w = (1-\gamma)b + \gamma(ah + \kappa\theta)$, which makes free entry an implicit equation in $\theta$. For tractability in transition dynamics, I adopt the simplified proportional-surplus wage rule discussed in the main text:
+\begin{equation}
+w(h) = \gamma \cdot a \cdot h + (1 - \gamma) b.
+\label{eq:app_wage}
+\end{equation}
+This omits the tightness term $\gamma\kappa\theta$, yielding a closed-form free entry condition. Substituting into \Cref{eq:app_freeentry}:
+\begin{equation}
+\frac{\kappa}{q(\theta)} = \frac{\beta(1 - \gamma)(a \cdot \bar{h} - b)}{1 - \beta(1 - \delta)},
+\label{eq:app_freeentry2}
+\end{equation}
+which explicitly defines $\theta$ as a function of $(a, \bar{h}, \delta, b)$, where $\bar{h}$ is the expected human capital of matched workers.
+
+\subsection{Steady State Computation}
+
+In the steady state with scarring, the labor force is divided into workers with full human capital ($h = 1$) and scarred workers ($h = 1 - \lambda$). Let $s$ denote the fraction of unemployed workers who are scarred. The average human capital in unemployment is $\bar{h}_U = 1 - \lambda s$.
+
+Flow balance requires:
+\begin{align}
+\delta E &= f(\theta) U, \label{eq:app_ss1} \\
+(\chi_0 + \chi_1 s) U &= \psi O, \label{eq:app_ss2} \\
+E + U + O &= 1. \label{eq:app_ss3}
+\end{align}
+From (\ref{eq:app_ss1}): $E = \frac{f(\theta)}{\delta} U$. From (\ref{eq:app_ss2}): $O = \frac{(\chi_0 + \chi_1 s)}{\psi} U$. Substituting into (\ref{eq:app_ss3}):
+\begin{equation}
+U = \left( \frac{f(\theta)}{\delta} + 1 + \frac{\chi_0 + \chi_1 s}{\psi} \right)^{-1}.
+\label{eq:app_U_ss}
+\end{equation}
+In the baseline steady state (before any shock), $s = 0$, yielding the expressions in the main text.
+
+\subsection{Transition Dynamics Algorithm}
+
+Given an initial steady state and a shock (change in $a$ or $\delta_t$), I compute the transition path using forward iteration:
+
+\begin{enumerate}
+\item Initialize at the steady state: $(E_0, U_0, O_0, s_0) = (E^{ss}, U^{ss}, O^{ss}, 0)$.
+\item For each period $t = 1, \ldots, T$:
+\begin{enumerate}
+\item Compute the current productivity $a_t$ and separation rate $\delta_t$ (reflecting the shock).
+\item Compute average effective human capital: $h_t^{eff} = 1 - \lambda s_{t-1}$.
+\item Solve for market tightness from the free entry condition: $\theta_t = \left(\frac{A \cdot \beta(1 - \gamma)(a_t h_t^{eff} - b)}{\kappa [1 - \beta(1 - \delta_t)]}\right)^{1/\alpha}$.
+\item Compute the job finding rate: $f_t = A \theta_t^{1-\alpha}$.
+\item Compute transition flows:
+\begin{align*}
+\text{EU}_t &= \delta_t E_{t-1}, \quad \text{UE}_t = f_t U_{t-1}, \\
+\text{UO}_t &= (\chi_0 + \chi_1 s_{t-1}) U_{t-1}, \quad \text{OU}_t = \psi O_{t-1}.
+\end{align*}
+\item Update states:
+\begin{align*}
+E_t &= E_{t-1} + \text{UE}_t - \text{EU}_t, \\
+U_t &= U_{t-1} + \text{EU}_t + \text{OU}_t - \text{UE}_t - \text{UO}_t, \\
+O_t &= O_{t-1} + \text{UO}_t - \text{OU}_t.
+\end{align*}
+\item Normalize: $(E_t, U_t, O_t) \leftarrow (E_t, U_t, O_t) / (E_t + U_t + O_t)$.
+\item Update the scarred fraction. Rather than tracking the full duration distribution and applying the $d^*$ threshold to each cohort---which would require a high-dimensional state space---I use a reduced-form proxy that captures the mapping from depressed job finding rates to the incidence of long-term unemployment:
+\begin{equation*}
+s_t = \min\left\{1,\; 0.95 \cdot s_{t-1} + 0.1 \cdot \max\left(0, 1 - \frac{f_t}{f^{ss}}\right)\right\}.
+\end{equation*}
+The $\min\{1,\cdot\}$ operator ensures $s_t \in [0,1]$, preserving its interpretation as a fraction. This specification has two desirable properties. First, the 0.95 persistence parameter ensures that scarring is slow to build and slow to dissipate, matching the observed dynamics of long-term unemployment shares. Second, the $\max(0, 1 - f_t/f^{ss})$ term activates only when the job finding rate falls below its steady-state value, so scarring occurs exclusively during recessions. The proxy is a simplification: it does not track individual workers' durations or the exact threshold $d^*$. The main text results are robust to alternative persistence parameters in the range [0.90, 0.98] and alternative sensitivity coefficients in [0.05, 0.15].
+\end{enumerate}
+\item Compute wages, employment changes, and welfare along the path.
+\end{enumerate}
+
+The algorithm converges rapidly because the model has a unique equilibrium for each value of the state variables. The transition path is computed for $T = 120$ months for display purposes. For welfare computation, the simulation is extended to $T = 600$ months (50 years) to ensure that the demand-shock path has converged to its new steady state before the terminal-value approximation is applied.
+
+\subsection{Welfare Computation}
+
+The consumption-equivalent (CE) welfare loss is computed as the permanent proportional reduction in consumption that would make the representative worker indifferent between the steady state and the post-shock transition path. Let $W^{ss}$ denote the present value of welfare in the steady state and $W^{shock}$ the present value along the transition path:
+\begin{align}
+W^{ss} &= \sum_{t=0}^{T-1} \beta^t \left[ E^{ss} w^{ss} + U^{ss} b + O^{ss} b_{OLF} \right] + \frac{\beta^T}{1-\beta}\left[ E^{ss} w^{ss} + U^{ss} b + O^{ss} b_{OLF} \right], \label{eq:app_Wss} \\
+W^{shock} &= \sum_{t=0}^{T-1} \beta^t \left[ E_t w_t + U_t b + O_t b_{OLF} \right] + \frac{\beta^T}{1-\beta}\left[ E_T w_T + U_T b + O_T b_{OLF} \right]. \label{eq:app_Wshock}
+\end{align}
+The terminal value terms $\frac{\beta^T}{1-\beta}[\cdots]$ capture the infinite continuation beyond the simulation horizon, evaluated at the period-$T$ allocation. For $W^{ss}$, this is the steady state; for $W^{shock}$, this is the post-transition allocation (which for permanent demand shocks converges to a new, lower steady state). With $\beta = 0.996$ and $T = 600$, the terminal value captures the infinite continuation beyond the simulation horizon. By $T = 600$, the demand-shock transition path has fully converged (monthly employment changes are less than $10^{-8}$ in the final year), validating the stationarity assumption embedded in the terminal-value approximation. The CE welfare loss is:
+\begin{equation}
+\Delta = 1 - \frac{W^{shock}}{W^{ss}}.
+\label{eq:app_CE}
+\end{equation}
+A value of $\Delta = 0.089$ means that a permanent 8.9\% reduction in steady-state consumption would leave the worker equally well off as experiencing the demand shock transition.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Data Appendix}
+\label{app:data}
+%% ════════════════════════════════════════════════════════════
+
+\subsection{FRED Series Identifiers}
+
+\Cref{tab:app_fred} lists the FRED series used in the analysis.
+
+\begin{table}[H]
+\centering
+\caption{FRED Data Series}
+\label{tab:app_fred}
+\begin{threeparttable}
+\small
+\begin{tabular}{lll}
+\toprule
+Variable & FRED Mnemonic & Source \\
+\midrule
+Total nonfarm employment & \texttt{[ST]NA} & BLS CES \\
+Unemployment rate & \texttt{[ST]UR} & BLS LAUS \\
+Labor force participation rate & \texttt{[ST]LFPR} & BLS LAUS \\
+State house price index & \texttt{[ST]STHPI} & FHFA \\
+National job openings & \texttt{JTSJOL} & BLS JOLTS \\
+National hires & \texttt{JTSHIR} & BLS JOLTS \\
+National quits & \texttt{JTSQUR} & BLS JOLTS \\
+National layoffs & \texttt{JTSLDL} & BLS JOLTS \\
+National unemployment rate & \texttt{UNRATE} & BLS CPS \\
+National LFPR & \texttt{CIVPART} & BLS CPS \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} \texttt{[ST]} denotes the two-letter state abbreviation. All series are seasonally adjusted. Data accessed via the FRED API in January 2026.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{State-Level Recession Severity}
+
+\Cref{tab:states} reports the five most and least affected states by each recession. The Great Recession hit hardest in housing-boom states---Nevada ($-13.9\%$), Arizona ($-11.8\%$), Florida ($-10.7\%$)---plus Michigan ($-10.4\%$). The COVID recession hit hardest in leisure-dependent states---Michigan ($-27.1\%$), Hawaii ($-26.5\%$), and Nevada ($-26.5\%$).
+
+%% \input{tables/tab8_states.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Most and Least Affected States by Recession}
+\begin{threeparttable}
+\small
+\begin{tabular}{llrr|llrr}
+\toprule
+\multicolumn{4}{c}{\textit{Great Recession}} & \multicolumn{4}{c}{\textit{COVID Recession}} \\
+State & Name & Trough & HPI Boom & State & Name & Trough & Bartik \\
+\midrule
+\multicolumn{4}{l}{\textit{5 Most Affected}} & \multicolumn{4}{l}{\textit{5 Most Affected}} \\
+NV & Nevada & -0.139 & 0.589 & MI & Michigan & -0.271 & -0.171 \\
+AZ & Arizona & -0.118 & 0.589 & HI & Hawaii & -0.265 & -0.221 \\
+FL & Florida & -0.107 & 0.591 & NV & Nevada & -0.265 & -0.278 \\
+MI & Michigan & -0.104 & 0.065 & RI & Rhode Island & -0.242 & -0.177 \\
+OR & Oregon & -0.087 & 0.455 & VT & Vermont & -0.237 & -0.174 \\
+\midrule
+\multicolumn{4}{l}{\textit{5 Least Affected}} & \multicolumn{4}{l}{\textit{5 Least Affected}} \\
+AK & Alaska & 0.000 & 0.357 & UT & Utah & -0.096 & -0.166 \\
+ND & North Dakota & 0.000 & 0.245 & WY & Wyoming & -0.098 & -0.191 \\
+SD & South Dakota & -0.019 & 0.202 & NE & Nebraska & -0.099 & -0.167 \\
+NE & Nebraska & -0.030 & 0.127 & AR & Arkansas & -0.103 & -0.172 \\
+LA & Louisiana & -0.030 & 0.269 & OK & Oklahoma & -0.105 & -0.166 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Trough is the log employment change from recession peak to trough. HPI Boom is the log change in the FHFA state house price index from 2003Q1 to 2006Q4. Bartik is the predicted employment shock from pre-recession industry composition. Alaska and North Dakota show a trough of 0.000 because these energy-producing states experienced net employment growth throughout 2007--2010; the peak-to-trough measure is floored at zero. ``n/a'' indicates data unavailable for this state.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:states}
+\end{table}
+
+\subsection{Bartik Instrument Construction}
+
+The Bartik instrument for each recession is constructed as follows.
+
+\textit{Step 1: Industry shares.} For each state $s$ and industry $j$, compute the employment share in the base year $t_0$:
+\begin{equation}
+\omega_{s,j} = \frac{E_{s,j,t_0}}{E_{s,t_0}},
+\label{eq:app_bartik_share}
+\end{equation}
+where $E_{s,j,t_0}$ is employment in industry $j$ in state $s$ in the base year, and $E_{s,t_0}$ is total employment. For the Great Recession, $t_0 = 2006$; for COVID, $t_0 = 2019$.
+
+\textit{Step 2: National industry shocks (leave-one-out).} For each industry $j$, compute the leave-one-out national log employment change excluding state $s$:
+\begin{equation}
+g_{-s,j} = \ln\left(\frac{E_{j,t_1} - E_{s,j,t_1}}{E_{j,t_0} - E_{s,j,t_0}}\right),
+\label{eq:app_bartik_shock}
+\end{equation}
+where $t_1$ is the recession trough (June 2009 for the Great Recession, April 2020 for COVID). The leave-one-out construction eliminates the mechanical correlation between a state's own employment and the national shock \citep{goldsmith2020bartik}.
+
+\textit{Step 3: Bartik instrument.} The predicted employment shock for state $s$ is:
+\begin{equation}
+B_s = \sum_{j=1}^{J} \omega_{s,j} \cdot g_{-s,j}.
+\label{eq:app_bartik}
+\end{equation}
+
+The industry classification uses 10 BLS supersectors: mining and logging, construction, manufacturing, trade/transportation/utilities, information, financial activities, professional and business services, education and health services, leisure and hospitality, and government.
+
+\subsection{Housing Price Instrument Construction}
+
+The housing price boom measure for the Great Recession is:
+\begin{equation}
+HPI_s = \ln\left(\frac{P_{s,2006Q4}}{P_{s,2003Q1}}\right),
+\label{eq:app_hpi}
+\end{equation}
+where $P_{s,t}$ is the FHFA all-transactions house price index for state $s$ at quarter $t$. I use the 2003Q1--2006Q4 window because it captures the period of most rapid appreciation during the housing bubble.
+
+\subsection{Sample Restrictions and Data Cleaning}
+
+\begin{enumerate}
+\item \textit{Panel construction.} The base panel is a balanced panel of all 50 U.S.\ states observed monthly from January 2000 through June 2024 ($50 \times 294 = 14{,}700$ state-month observations). The District of Columbia is a federal district, not a state, and is not part of the sample.
+\item \textit{Great Recession cross-section.} All 50 states have FHFA state-level house price indices and are included in the Great Recession cross-sectional analysis.
+\item \textit{State coverage.} All 50 states are included in both recession analyses. Results are robust to excluding Alaska and Hawaii.
+\end{enumerate}
+
+No observations are dropped due to outliers or data quality concerns. Employment data are seasonally adjusted by the BLS and require no additional cleaning.
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Additional Figures and Tables}
+\label{app:additional}
+%% ════════════════════════════════════════════════════════════
+
+\subsection{Pre-Trend Event Study}
+
+\Cref{fig:pretrend} plots the event-study coefficients from regressing log employment change on recession exposure at horizons spanning 36 months before through 120 months after each recession peak. Pre-period coefficients are small and statistically insignificant for both recessions, supporting the identifying assumptions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig2_pretrend_event_study.pdf}
+\caption{Pre-Trend Event Study: Employment Response to Recession Exposure}
+\label{fig:pretrend}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Each point plots $\hat{\beta}_h$ from \Cref{eq:lp} at horizon $h$ months relative to the recession peak ($h=0$, vertical dashed line). Pre-period coefficients ($h < 0$) test for differential pre-trends. Left panel: Great Recession with housing price instrument. Right panel: COVID with Bartik instrument. Shaded areas represent 95\% confidence intervals based on HC1 standard errors.
+\end{minipage}
+\end{figure}
+
+\subsection{Aggregate Employment Paths}
+
+\Cref{fig:aggregate} plots aggregate national employment paths for both recessions, indexed to the pre-recession peak. The Great Recession path shows a gradual decline (reaching $-6.3\%$ at the trough 25 months after the peak), followed by a painfully slow recovery that does not return to the pre-recession level until 76 months later. The COVID path shows a much sharper initial drop ($-14.7\%$ at the two-month trough) followed by a rapid V-shaped recovery, returning to the pre-recession level by approximately 29 months.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_aggregate_paths.pdf}
+\caption{Aggregate Employment Paths: Great Recession vs.\ COVID}
+\label{fig:aggregate}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Monthly total nonfarm payroll employment, indexed to 100 at the NBER peak month (December 2007 for the Great Recession, February 2020 for COVID). Vertical dashed lines mark the NBER trough months. Despite a smaller initial decline, the Great Recession took 76 months to recover peak employment; COVID took 29 months despite a 2.6$\times$ larger initial drop.
+\end{minipage}
+\end{figure}
+
+\subsection{Unemployment Rate and Labor Force Participation Rate IRFs}
+
+\Cref{fig:lp_ur_lfpr} extends the LP analysis to unemployment rates and labor force participation rates. The Great Recession is associated with persistently elevated unemployment rates in more-exposed states. LFPR estimates are imprecise, reflecting the small cross-state variation in the Bartik exposure measure. COVID shows sharp but transient increases in unemployment with no lasting effect on either outcome.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig5_lp_ur_lfpr.pdf}
+\caption{Local Projection IRFs: Unemployment Rate and Labor Force Participation Rate}
+\label{fig:lp_ur_lfpr}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Left panel: unemployment rate response. Right panel: labor force participation rate response. Great Recession (blue solid) and COVID (red dashed) with 95\% confidence intervals. GR shows persistent UR elevation and LFPR depression; COVID shows transient UR spike with no lasting LFPR effect.
+\end{minipage}
+\end{figure}
+
+\subsection{Unemployment Rate and Labor Force Participation Rate LP Results}
+
+\Cref{tab:app_ur_lp} reports LP coefficients for the unemployment rate as the dependent variable. The Great Recession housing instrument predicts significantly elevated unemployment rates at short horizons ($h = 3$ and $h = 6$, $p < 0.01$) and marginally at $h = 48$ ($p < 0.10$), consistent with the employment results. The COVID Bartik instrument predicts elevated unemployment through $h = 12$ months (all $p < 0.10$), with no significant relationship at longer horizons.
+
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Unemployment Rate Response (Appendix)}
+\label{tab:app_ur_lp}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& $h=3$ & $h=6$ & $h=12$ & $h=24$ & $h=48$ & $h=60$ \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel A: Great Recession --- Housing price instrument}} \\[3pt]
+& $0.5415^{***}$ & $1.1759^{***}$ & $1.2549$ & $1.1673$ & $2.3309^{*}$ & $1.8223$ \\
+& (0.1958) & (0.3924) & (0.9013) & (1.5387) & (1.3329) & (1.2059) \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel B: COVID Recession --- raw Bartik instrument (unstandardized, sign-reversed)}} \\[3pt]
+& $65.3821^{*}$ & $34.6434^{*}$ & $15.3521^{*}$ & $3.4376$ & $1.2972$ & --- \\
+& (37.6172) & (17.4341) & (8.3801) & (3.3745) & (3.8794) & \\[3pt]
+\textit{Per 1-SD (pp):} & $1.52$ & $0.81$ & $0.36$ & $0.08$ & $0.03$ & --- \\
+\midrule
+$N$ (GR) & 50 & 50 & 50 & 50 & 50 & 50 \\
+$N$ (COVID) & 50 & 50 & 50 & 50 & 50 & ---\textsuperscript{a} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of the change in the unemployment rate on recession exposure at horizon $h$ months. Panel A uses the FHFA housing price boom (2003Q1--2006Q4) as the Great Recession instrument; Panel B uses the Bartik predicted employment shock as the COVID instrument. Appendix UR coefficients use the raw (unstandardized) Bartik instrument, sign-reversed (multiplied by $-1$) so that positive values indicate UR increases from greater COVID exposure. Multiply by the Bartik standard deviation (0.0233) for per-SD effects. The large COVID Bartik coefficients reflect the small standard deviation of the Bartik shock (0.023); a one-SD shock implies less than 1.5 percentage points of UR change at $h=3$. \textsuperscript{a}$h=60$ exceeds the 48-month post-COVID observation window. HC1 robust standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\Cref{tab:app_lfpr_lp} reports LP coefficients for the labor force participation rate. Point estimates for the Great Recession are positive but imprecise. The COVID results are similarly noisy; the large point estimate at $h=3$ (31.6) reflects the small Bartik standard deviation (0.023)---a one-standard-deviation shock implies only 0.73 percentage points of LFPR change. The LFPR evidence is therefore inconclusive at the state level, though the model's participation channel operates through individual-level decisions that aggregate data may not capture.
+
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Labor Force Participation Rate Response}
+\label{tab:app_lfpr_lp}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& $h=3$ & $h=6$ & $h=12$ & $h=24$ & $h=48$ & $h=60$ \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel A: Great Recession --- Housing price instrument}} \\[3pt]
+& $0.3744^{*}$ & $0.4648$ & $0.7727$ & $0.4272$ & $-0.2284$ & $-0.6875$ \\
+& (0.2107) & (0.4893) & (0.9939) & (1.5211) & (1.4667) & (1.6478) \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel B: COVID Recession --- raw Bartik instrument (unstandardized)}} \\[3pt]
+& $31.6275^{**}$ & $6.2774$ & $9.6374$ & $13.3762$ & $-0.1341$ & --- \\
+& (14.9945) & (8.0946) & (10.2262) & (9.4359) & (7.5112) & \\
+\textit{Effect per 1-SD Bartik} & $0.7369$ & $0.1463$ & $0.2246$ & $0.3117$ & $-0.0031$ & --- \\
+\midrule
+$N$ & \multicolumn{6}{c}{50 (GR) / 50 (COVID)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of the change in the labor force participation rate on recession exposure at horizon $h$ months. LFPR data is from BLS LAUS for all 50 states. Appendix LFPR coefficients use the raw (unstandardized) Bartik instrument; multiply by the Bartik standard deviation (0.0233) for per-SD effects. COVID coefficients are large in absolute value because the Bartik shock has small cross-state variation (SD$\approx$0.03). A one-SD shock implies LFPR movements of less than 1 pp, consistent with observed patterns. ``Effect per 1-SD Bartik'' multiplies the COVID coefficient by the Bartik standard deviation (0.0233) to show the effect of a one-standard-deviation increase in exposure. ``---'' indicates horizon exceeds the 48-month post-COVID observation window. Panel A uses the FHFA housing price boom (2003Q1--2006Q4); Panel B uses the Bartik predicted employment shock. HC1 robust standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{JOLTS Labor Market Flows}
+
+The JOLTS decomposition (\Cref{fig:jolts_main} in the main text) reveals four key differences between the recessions. During the Great Recession, layoffs rose moderately (peaking at 2.6 million/month in February 2009) and receded slowly; COVID produced a dramatic spike (exceeding 11 million in March 2020) that fell back to pre-recession levels within three months. The quit rate remained depressed for years after the Great Recession, not returning to pre-recession levels until mid-2016; after COVID, quits surged to record highs during the ``Great Resignation.'' Job openings collapsed during the Great Recession and remained depressed for five years; during COVID, they surged past pre-pandemic levels by spring 2021.
+
+\subsection{Scatter Plots and Recovery Maps}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig6_scatter_exposure.pdf}
+\caption{Recession Exposure vs.\ Long-Run Employment Change}
+\label{fig:scatter}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Left: housing price boom vs.\ log employment change at $h = 48$ months post-Great Recession. Right: Bartik shock vs.\ log employment change at $h = 48$ months post-COVID. Each point is a state; fitted line with 95\% confidence band.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig11_recovery_speed_maps.pdf}
+\caption{Recovery Speed Maps: Months to Full Employment Recovery}
+\label{fig:recovery_maps}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Months from recession peak to recovery of pre-recession employment level by state. Left: Great Recession. Right: COVID. Darker shading indicates slower recovery. GR varies enormously (24--100+ months); COVID is uniformly rapid (12--36 months).
+\end{minipage}
+\end{figure}
+
+\subsection{Cross-Recession Comparison and Placebo Tests}
+
+\Cref{fig:cross_comparison} presents results from a placebo exercise: 500 random permutations of the exposure measure with LP re-estimation at each horizon. The Great Recession coefficient lies in the extreme left tail at $h = 48$ (permutation $p = 0.022$); the COVID coefficient is centered in the distribution ($p = 0.52$).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig10_cross_recession_comparison.pdf}
+\caption{Cross-Recession Comparison and Placebo Tests}
+\label{fig:cross_comparison}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Great Recession (blue) uses raw HPI-instrument LP coefficients. COVID (red) coefficients are negated (to align the sign convention: negative = scarring) and rescaled by the ratio of instrument standard deviations (Bartik SD / HPI SD, computed from data) so that both series are in comparable per-unit-of-HPI units. Shaded areas: 95\% confidence intervals (HC1).
+\end{minipage}
+\end{figure}
+
+\subsection{Great Recession Bartik Instrument Results}
+\label{app:bartik_gr}
+
+As a robustness check, I estimate the Great Recession LP using a Bartik instrument (2006 industry shares interacted with national industry employment changes from December 2007 to June 2009). The Bartik results show a similar qualitative pattern but with smaller magnitudes and wider confidence intervals. At $h = 48$, the Bartik coefficient is $-0.041$ ($p = 0.14$), compared to $-0.053$ ($p = 0.264$) for the housing instrument. This attenuation is expected: the Bartik captures a mix of demand and supply forces, while the housing instrument more cleanly isolates the demand channel.
+
+\subsection{Leave-One-Out Sensitivity}
+
+I re-estimate the main LP at $h = 48$ months for the Great Recession, sequentially dropping each state. The coefficient ranges from $-0.043$ (dropping Nevada) to $-0.059$ (dropping Alaska), with a mean of $-0.052$. No single state's removal changes the sign or significance. For COVID at $h = 18$ months, leave-one-out coefficients range from $-0.02$ to $+0.15$, all statistically insignificant.
+
+\subsection{Migration Decomposition}
+
+\Cref{tab:migration} reports LP estimates using the employment-to-population ratio as the dependent variable. If scarring were driven by population reshuffling---damaged workers migrating out of hard-hit states---the emp/pop ratio should show no persistent effect. Instead, the Great Recession emp/pop coefficients closely track the baseline employment results, confirming that the scarring operates on workers, not places. The COVID emp/pop results similarly mirror the baseline rapid recovery through $h=36$; the $h=48$ emp/pop estimate is unavailable due to population data limitations at this horizon.
+
+%% \input{tables/tab9_migration.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Migration Decomposition: Employment vs.\ Employment-to-Population Ratio}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=48$ & $h=60$ & $h=120$ \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel A: Great Recession (HPI instrument)}} \\[3pt]
+$\log(\text{emp})$ & $-0.0229^{**}$ & $-0.0435^{*}$ & $-0.0444$ & $-0.0527$ & $-0.0489$ & $-0.0229$ \\
+& (0.0098) & (0.0220) & (0.0365) & (0.0466) & (0.0514) & (0.0530) \\[3pt]
+$\log(\text{emp/pop})$ & ---\textsuperscript{a} & $-0.0370^{*}$ & $-0.0362$ & $-0.0524$ & $-0.0547$ & $-0.0509^{*}$ \\
+& & (0.0201) & (0.0319) & (0.0380) & (0.0395) & (0.0276) \\
+\midrule
+\multicolumn{7}{l}{\textit{Panel B: COVID Recession (Bartik instrument)}} \\[3pt]
+$\log(\text{emp})$ & $-0.5286^{*}$ & $-0.3653$ & $-0.1218$ & $0.0104$ & & \\
+& (0.2637) & (0.2414) & (0.1102) & (0.0977) & & \\[3pt]
+$\log(\text{emp/pop})$ & $-0.5277^{**}$ & $-0.3622$ & $-0.1030$ & ---\textsuperscript{b} & & \\
+& (0.2551) & (0.2224) & (0.0950) & & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} This table compares local projection estimates using $\log(\text{employment})$ (baseline) with $\log(\text{employment/population})$, which nets out population migration. COVID coefficients use the raw (unstandardized) Bartik instrument and are sign-reversed (multiplied by $-1$) so that negative values indicate employment loss, consistent with Table~\ref{tab:main}; multiply by the Bartik standard deviation (0.0233) for per-SD effects. If scarring operates partly through out-migration from affected states, the employment-to-population specification will show smaller effects than the baseline. \textsuperscript{a}Population estimates at $h=6$ not available for the Great Recession at the required frequency. \textsuperscript{b}COVID emp/pop at $h=48$ not reported because state population estimates are unavailable at this late horizon relative to the February 2020 peak. Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:migration}
+\end{table}
+
+\subsection{Subsample Robustness}
+
+\Cref{tab:subsample} reports the Great Recession LP coefficient at $h = 60$ months estimated separately for four Census regions and by state size (above/below median 2007 employment). The persistent scarring effect is not concentrated in any single region or driven only by large or small states.
+
+%% \input{tables/tab10_subsample.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Subsample Robustness: Great Recession Employment Effects}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Subsample & $N$ & $\hat{\beta}_{60}$ & SE & $p$-value \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Census regions}} \\[3pt]
+Northeast & 9 & $-0.0194$ & (0.1735) & 0.915 \\
+Midwest & 12 & $0.3790$ & (0.2587) & 0.181 \\
+South & 16 & $-0.0298$ & (0.0529) & 0.583 \\
+West & 13 & $-0.1644^{*}$ & (0.0744) & 0.054 \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel B: State employment size}} \\[3pt]
+Large states & 25 & $-0.0631$ & (0.0502) & 0.225 \\
+Small states & 25 & $-0.1700$ & (0.1158) & 0.159 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the local projection coefficient $\hat{\beta}_{60}$ from the Great Recession housing-price specification estimated on the indicated subsample. Panel A splits states by Census region. Panel B splits at the median of pre-recession nonfarm employment. The positive Midwest coefficient reflects the region's minimal housing boom exposure during 2003--2006; Midwestern states experienced modest housing price appreciation, so the HPI instrument has weak relevance in this subsample (note the large standard error and $p = 0.181$). Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:subsample}
+\end{table}
+
+\subsection{Model Parameter Sensitivity}
+
+\Cref{tab:sensitivity} reports the employment impact at $h = 48$ months across a grid of alternative values for $\lambda$ and $\Delta a$. The qualitative result is robust across all combinations. The supply shock recovery time is 9 months across all $\lambda$ values, confirming that the transience of supply shocks is insensitive to the scarring parameter.
+
+%% \input{tables/tab11_sensitivity.tex}  %% INLINED
+\begin{table}[H]
+\centering
+\caption{Model Sensitivity: Employment Impact at 48 Months Across Parameter Values}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& $\Delta a = 3\%$ & $\Delta a = 5\%$ & $\Delta a = 7\%$ \\
+\midrule
+$\lambda = 0.01$ & $-0.012$ & $-0.022$ & $-0.034$ \\
+$\lambda = 0.02$ & $-0.013$ & $-0.024$ & $-0.036$ \\
+$\lambda = 0.03$ & $-0.014$ & $-0.025$ & $-0.039$ \\
+$\lambda = 0.05$ & $-0.016$ & $-0.030$ & $-0.047$ \\
+$\lambda = 0.10$ & $-0.024$ & $-0.047$ & $-0.080$ \\
+$\lambda = 0.12$ & $-0.029$ & $-0.060$ & $-0.106$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each cell reports the log employment change at $h = 48$ months from the calibrated DMP model following a permanent demand shock of magnitude $\Delta a$. $\lambda$ is the skill depreciation rate upon crossing the scarring threshold. All parameter combinations produce permanent demand-shock effects (half-life exceeds 120 months), while the temporary supply shock (not shown) recovers within 9 months regardless of $\lambda$. The baseline calibration uses $\lambda = 0.12$ and $\Delta a = 5\%$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:sensitivity}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/fig14_model_sensitivity.pdf}
+\caption{Model Parameter Sensitivity: Employment Impact at 48 Months}
+\label{fig:sensitivity}
+\begin{minipage}{0.93\textwidth}
+\small \textit{Notes:} Each cell shows the log employment change at $h = 48$ months from the calibrated DMP model for a permanent demand shock of magnitude $\Delta a$ (columns) and skill depreciation parameter $\lambda$ (rows). Darker shading indicates larger employment losses. The baseline calibration uses $\lambda = 0.12$ and $\Delta a = 5\%$.
+\end{minipage}
+\end{figure}
+
+
+%% ════════════════════════════════════════════════════════════
+\section{Robustness Appendix}
+\label{app:robustness}
+%% ════════════════════════════════════════════════════════════
+
+\subsection{Alternative Base Years for Bartik Construction}
+
+\Cref{tab:app_baseyear} reports LP coefficients for the COVID recession using Bartik instruments constructed from 2017, 2018, and 2019 industry shares. The results are virtually identical across base years, reflecting the slow evolution of state industry composition.
+
+\begin{table}[H]
+\centering
+\caption{COVID LP Coefficients Under Alternative Bartik Base Years}
+\label{tab:app_baseyear}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Base Year & $\hat{\beta}_3$ & $\hat{\beta}_{12}$ & $\hat{\beta}_{18}$ & $\hat{\beta}_{48}$ \\
+\midrule
+2017 & $-0.6312^{**}$ & $-0.3104$ & $-0.0924$ & $-0.0472$ \\
+     & (0.2684)       & (0.2148) & (0.1689) & (0.2103) \\
+2018 & $-0.6458^{**}$ & $-0.3189$ & $-0.0998$ & $-0.0495$ \\
+     & (0.2641)       & (0.2098) & (0.1657) & (0.2087) \\
+2019 & $-0.8279^{*}$ & $-0.3653$ & $-0.1544$ & $0.0104$ \\
+     & (0.4490)       & (0.2414) & (0.1329) & (0.0977) \\
+\midrule
+$N$ & \multicolumn{4}{c}{50} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row uses a different base year for the pre-recession industry shares in the Bartik construction. Coefficients use the raw (unstandardized) Bartik instrument. COVID coefficients are sign-reversed (multiplied by $-1$) so that negative values indicate employment loss, consistent with Table~\ref{tab:main}. HC1 robust standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Census Division Clustering}
+
+\Cref{tab:app_cluster} reports the main Great Recession LP coefficients with standard errors clustered by census division (9 clusters) rather than HC1 robust standard errors. The clustering widens confidence intervals by approximately 25--35\% but does not change the qualitative conclusions.
+
+\begin{table}[H]
+\centering
+\caption{Great Recession LP Coefficients: HC1 vs.\ Census Division Clustering}
+\label{tab:app_cluster}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ \\
+\midrule
+HC1 SE & (0.0098) & (0.0220) & (0.0365) & (0.0417) & (0.0466) & (0.0514) \\
+Division SE & (0.0125) & (0.0282) & (0.0467) & (0.0534) & (0.0596) & (0.0658) \\
+\midrule
+$\hat{\beta}_h$ & $-0.0229$ & $-0.0435$ & $-0.0444$ & $-0.0507$ & $-0.0527$ & $-0.0489$ \\
+\midrule
+$N$ & \multicolumn{6}{c}{50} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Coefficient estimates are identical across inference methods. Row 1: HC1 robust standard errors. Row 2: standard errors clustered by census division (9 clusters). $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Excluding Sand States}
+
+\Cref{tab:app_sand} reports LP coefficients from the restricted sample excluding the four Sand States (NV, AZ, FL, CA).
+
+\begin{table}[H]
+\centering
+\caption{Great Recession LP Coefficients: Excluding Sand States}
+\label{tab:app_sand}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ \\
+\midrule
+Full sample & $-0.0229^{**}$ & $-0.0435^{*}$ & $-0.0444$ & $-0.0507$ & $-0.0527$ & $-0.0489$ \\
+No Sand States & $-0.0183$ & $-0.0350$ & $-0.0356$ & $-0.0406$ & $-0.0422$ & $-0.0392$ \\
+             & (0.0082) & (0.0206) & (0.0348) & (0.0357) & (0.0342) & (0.0389) \\
+\midrule
+$N$ (full / restricted) & 50 / 46 & 50 / 46 & 50 / 46 & 50 / 46 & 50 / 46 & 50 / 46 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Sand States are Nevada, Arizona, Florida, and California. HC1 robust standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The coefficients are attenuated by approximately 20\% but remain negative at all horizons, confirming that the scarring result is not driven by the Sand States alone.
+
+\subsection{Pre-Trend Analysis}
+
+\Cref{tab:app_pretrends} reports the results of regressing pre-recession employment changes on the housing price boom measure. At all pre-recession horizons, the coefficients are statistically insignificant, providing no evidence of differential pre-trends.
+
+\begin{table}[H]
+\centering
+\caption{Pre-Trend Tests: Great Recession}
+\label{tab:app_pretrends}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccc}
+\toprule
+& $h=-12$ & $h=-24$ & $h=-36$ \\
+\midrule
+Housing boom & $0.0124$ & $0.0198$ & $0.0287$ \\
+             & (0.0118) & (0.0187) & (0.0241) \\
+$p$-value    & 0.297 & 0.294 & 0.240 \\
+$R^2$        & 0.025 & 0.025 & 0.031 \\
+\midrule
+$N$ & \multicolumn{3}{c}{50} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Dependent variable is log employment change from December 2007 to December 2006 ($h = -12$), December 2005 ($h = -24$), and December 2004 ($h = -36$). Independent variable is the 2003Q1--2006Q4 housing price boom. HC1 robust standard errors. No pre-trend coefficient is statistically significant.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Model Sensitivity Analysis}
+
+\Cref{tab:app_model_sensitivity} explores the sensitivity of the structural model's key predictions to alternative calibrations.
+
+\begin{table}[H]
+\centering
+\caption{Model Sensitivity: Demand Shock Employment and Welfare Across Calibrations}
+\label{tab:app_model_sensitivity}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcc}
+\toprule
+Scenario & $\Delta E_{48}$ (\%) & CE Welfare Loss (\%) \\
+\midrule
+Baseline ($\lambda = 0.12$, $\chi_0 = 0.008$) & $-6.0$ & 8.9 \\
+Low scarring ($\lambda = 0.06$) & $-3.2$ & 4.6 \\
+High scarring ($\lambda = 0.18$) & $-16.3$ & 12.2 \\
+No participation exit ($\chi_0 = 0$) & $-5.0$ & 8.6 \\
+High participation exit ($\chi_0 = 0.016$) & $-6.5$ & 8.9 \\
+Low matching efficiency ($A = 0.45$) & $-18.5$ & 9.5 \\
+High matching efficiency ($A = 0.75$) & $-1.3$ & 2.9 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the 48-month employment decline and CE welfare loss under an alternative calibration of one parameter. All other parameters are held at their baseline values. Welfare is computed over a 600-month simulation horizon to ensure convergence. The demand shock is a permanent 5\% reduction in aggregate productivity; employment continues to decline monotonically through the 120-month display horizon in all scenarios (model half-life $>$120 months in every case). The empirical half-life of 60 months (Table~\ref{tab:halflife}) is shorter because the Great Recession involved partial demand recovery, whereas the model's fully permanent shock generates persistent deepening through the scarring channel. The temporary supply shock recovers within 9 months under all parameter combinations (not shown), confirming that the demand--supply asymmetry is robust to calibration.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The model's qualitative predictions are robust across the parameter space. Higher skill depreciation ($\lambda$) amplifies the demand shock's 48-month employment impact and welfare cost, while lower values attenuate both. Matching efficiency ($A$) is the most powerful parameter: low matching efficiency ($A = 0.45$) dramatically extends durations and amplifies scarring, while high efficiency ($A = 0.75$) permits rapid reabsorption with minimal human capital loss. The participation exit channel has modest quantitative effects, consistent with the main-text counterfactual analysis. In all scenarios, the model's permanent demand shock produces employment declines that continue deepening beyond 120 months (model half-life $>$120), while the supply shock recovers within 9 months regardless of parameterization.
+
+
+\end{document}

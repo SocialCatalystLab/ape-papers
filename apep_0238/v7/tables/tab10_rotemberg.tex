@@ -1,0 +1,36 @@
+\begin{table}[H]
+\centering
+\caption{Bartik Decomposition: Rotemberg Weights by Industry}
+\begin{threeparttable}
+\small
+\begin{tabular}{llrr}
+\toprule
+Code & Industry & Weight & Share of Total (\%) \\
+\midrule
+LEIH & Leisure \& Hospitality & 0.4693 & 46.9 \\
+TRAD & Trade/Transport/Utilities & 0.1807 & 18.1 \\
+EDUH & Education \& Health & 0.1187 & 11.9 \\
+MFG & Manufacturing & 0.0609 & 6.1 \\
+PROF & Professional/Business Services & 0.0601 & 6.0 \\
+CONS & Construction & 0.0452 & 4.5 \\
+GOVT & Government & 0.0442 & 4.4 \\
+FIRE & Finance/Insurance/RE & 0.0113 & 1.1 \\
+INFO & Information & 0.0097 & 1.0 \\
+MINE & Mining/Logging & 0.0000 & 0.0 \\
+\midrule
+\multicolumn{4}{l}{\textit{Leave-one-out robustness: dropping Leisure \& Hospitality}} \\[3pt]
+$h$ & & $\hat{\beta}_h$ & SE \\
+3 & & $0.0031$ & (0.0048) \\
+6 & & $-0.0013$ & (0.0027) \\
+12 & & $-0.0022$ & (0.0028) \\
+24 & & $-0.0007$ & (0.0026) \\
+48 & & $0.0011$ & (0.0020) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Rotemberg weights decompose the COVID Bartik instrument following \citet{goldsmith2020bartik}. Weights measure each industry's contribution to the overall shift-share variation. Leisure \& Hospitality contributes 46.9\% of the identifying variation. The leave-one-out panel re-estimates the COVID LP after removing Leisure \& Hospitality from the Bartik construction (with the resulting instrument re-standardized to unit variance). COVID recovery is robust to this exclusion. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:rotemberg}
+\end{table}

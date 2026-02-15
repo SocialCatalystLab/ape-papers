@@ -254,6 +254,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | Unknown | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-02-15 |
 | [apep_0294](apep_0294/) | Inside the Black Box of Medicaid: Provider-Level S... | DiD | — | @SocialCatalystLab | 2026-02-15 |
 | [apep_0294](apep_0294/) | Inside the Black Box of Medicaid: Provider-Level S... | DiD | [apep_0294](apep_0294/) | @SocialCatalystLab | 2026-02-15 |
+| [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | Unknown | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-02-15 |
 
 ## How This Repository Works
 

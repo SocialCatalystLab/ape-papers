@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0238_v8",
+  "title": "Demand Recessions Scar, Supply Recessions Don't: Evidence from State Labor Markets (v8)",
+  "method": "Unknown",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-15T10:21:50.049475",
+  "version": 8,
+  "paper_family_id": "apep_0238",
+  "parent_paper_id": "apep_0238_v7",
+  "is_revision": true,
+  "revision_rationale": "Polish revision of v6 addressing: (1) unified prose voice (v6 was patched by 4 agents across 5 rounds), (2) rescaled COVID Bartik to SD=1 units (preempting Gemini \"implausibly large\" flag), (3) within"
+}

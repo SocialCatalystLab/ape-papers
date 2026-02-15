@@ -1,0 +1,27 @@
+\begin{table}[H]
+\centering
+\caption{Within--Great Recession Horse Race: Housing Demand vs.\ Industry Composition}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+HPI ($\hat{\beta}^{HPI}_h$) & $-0.0240^{**}$ & $-0.0471^{*}$ & $-0.0504$ & $-0.0575$ & $-0.0597$ & $-0.0562$ & $-0.0575$ & $-0.0231$ \\
+& (0.0110) & (0.0255) & (0.0418) & (0.0471) & (0.0520) & (0.0559) & (0.0573) & (0.0528) \\[3pt]
+GR Bartik ($\hat{\beta}^{Bartik}_h$) & $0.1398$ & $0.4905$ & $0.8038$ & $0.9057$ & $0.9409$ & $0.9819$ & $0.9173$ & $0.0178$ \\
+& (0.1841) & (0.4507) & (0.7364) & (0.8091) & (0.8629) & (0.8556) & (0.5959) & (0.4322) \\
+\midrule
+VIF & \multicolumn{8}{c}{1.80} \\
+$R^2$ & 0.397 & 0.378 & 0.371 & 0.344 & 0.311 & 0.260 & 0.214 & 0.270 \\
+\midrule
+$N$ & \multicolumn{8}{c}{50} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Both the housing price boom (HPI) and the Great Recession Bartik shock enter the same cross-state LP regression. The HPI captures demand-channel exposure (housing wealth collapse); the GR Bartik captures industry-composition exposure (manufacturing, construction). If the demand channel drives persistence, HPI should remain significant while the Bartik becomes insignificant. VIF measures collinearity between the two instruments. Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:horse_race}
+\end{table}

@@ -1,0 +1,25 @@
+\begin{table}[H]
+\centering
+\caption{Instrumental Variable Estimates: Saiz Housing Supply Elasticity}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccccc}
+\toprule
+& $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+First-stage $F$ & 24.9 & 24.9 & 24.9 & 24.9 & 24.9 & 24.9 & 24.9 \\
+OLS ($\hat{\beta}^{OLS}_h$) & $-0.0435^{*}$ & $-0.0444$ & $-0.0507$ & $-0.0527$ & $-0.0489$ & $-0.0507$ & $-0.0229$ \\
+2SLS ($\hat{\beta}^{IV}_h$) & $-0.0351$ & $-0.0248$ & $-0.0238$ & $-0.0221$ & $0.0021$ & $0.0325$ & $0.1262$ \\
+  & (0.0315) & (0.0506) & (0.0567) & (0.0593) & (0.0594) & (0.0564) & (0.0829) \\
+AR 95\% CI & [-0.105, 0.041] & [-0.137, 0.099] & [-0.153, 0.123] & [-0.177, 0.151] & [-0.169, 0.205] & [-0.155, 0.271] & [-0.049, 0.393] \\
+\midrule
+$N$ & \multicolumn{7}{c}{50} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} The instrument is the Saiz (2010) housing supply elasticity, which exploits geographic constraints on land availability (steep terrain, water bodies) as exogenous determinants of housing price responsiveness. The first stage regresses the 2003--2006 housing price boom on the Saiz elasticity; the second stage instruments the LP employment response with predicted housing exposure. The OLS row reproduces the baseline HPI specification from Table~\ref{tab:main}. The Anderson-Rubin (AR) confidence interval is robust to weak instruments. Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:saiz_iv}
+\end{table}

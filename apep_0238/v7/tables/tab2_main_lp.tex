@@ -1,0 +1,34 @@
+\begin{table}[H]
+\centering
+\caption{Local Projection Estimates: Employment Response to Recession Exposure}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+& $h=3$ & $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel A: Great Recession --- Housing price instrument}} \\[3pt]
+& $-0.0081$ & $-0.0229^{**}$ & $-0.0435^{*}$ & $-0.0444$ & $-0.0507$ & $-0.0527$ & $-0.0489$ & $-0.0507$ & $-0.0229$ \\
+& (0.0052) & (0.0098) & (0.0220) & (0.0365) & (0.0417) & (0.0466) & (0.0514) & (0.0561) & (0.0530) \\
+& [0.038] & [0.000] & [0.015] & [0.089] & [0.098] & [0.148] & [0.244] & [0.290] & [0.615] \\
+& ---\textsuperscript{b} & \{0.001\} & \{0.101\} & \{0.392\} & \{0.360\} & \{0.431\} & \{0.493\} & \{0.499\} & \{0.762\} \\
+$R^2$ & 0.394 & 0.369 & 0.321 & 0.311 & 0.286 & 0.265 & 0.218 & 0.183 & 0.270  \\
+\midrule
+\multicolumn{10}{l}{\textit{Panel B: COVID Recession --- Bartik instrument}} \\[3pt]
+& $-0.0193^{*}$ & $-0.0123^{*}$ & $-0.0085$ & $-0.0028$ & $-0.0008$ & $0.0002$ & --- & --- & --- \\
+& (0.0105) & (0.0061) & (0.0056) & (0.0026) & (0.0020) & (0.0023) & & & \\
+& [0.003] & [0.012] & [0.036] & [0.286] & [0.760] & [0.922] & & & \\
+& \{0.018\} & \{0.001\} & \{0.001\} & \{0.001\} & \{0.397\} & \{0.743\} & & & \\
+AKM SE & $\langle0.0026\rangle$ & $\langle0.0015\rangle$ & $\langle0.0015\rangle$ & $\langle0.0007\rangle$ & $\langle0.0006\rangle$ & $\langle0.0006\rangle$ & & & \\
+$R^2$ & 0.506 & 0.563 & 0.474 & 0.621 & 0.726 & 0.756 & & &  \\
+\midrule
+$N$ & \multicolumn{9}{c}{50 (GR) / 50 (COVID)} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of log employment change (relative to recession peak) on recession exposure at horizon $h$ months. In both panels, negative $\hat{\beta}_h$ indicates that more-exposed states experienced larger employment declines. Panel A uses the 2003--2006 housing price boom as the exposure measure for the Great Recession. Panel B uses the Bartik-predicted employment shock for COVID, standardized to mean zero and unit standard deviation; coefficients therefore represent the effect of a one-standard-deviation increase in exposure. COVID horizons beyond $h=48$ are not reported because the LP analysis window extends 48 months from the February 2020 peak. Robust (HC1) standard errors in parentheses. Permutation $p$-values in brackets (1,000 random reassignments). Wild cluster bootstrap $p$-values in curly braces (999 iterations, Rademacher weights, clustered at census division). Adao-Koles\'{a}r-Morales exposure-robust standard errors in angle brackets $\langle\cdot\rangle$, accounting for correlated shocks in the shift-share design. \\textsuperscript{b}Wild cluster bootstrap not computed at $h=3$ due to insufficient post-treatment variation within census-division clusters at this short horizon. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}

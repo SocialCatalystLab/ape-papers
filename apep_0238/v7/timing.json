@@ -1,0 +1,21 @@
+{
+  "paper_id": "apep_0238",
+  "version": "v7",
+  "phases": {
+    "discovery": {
+      "started_at": "2026-02-14T20:00:00",
+      "finished_at": "2026-02-14T20:30:00"
+    },
+    "execution": {
+      "started_at": "2026-02-14T20:30:00",
+      "finished_at": "2026-02-15T06:00:00"
+    },
+    "internal_review": {
+      "started_at": "2026-02-15T06:00:00",
+      "finished_at": "2026-02-15T10:10:00"
+    },
+    "external_review": {
+      "started_at": "2026-02-15T10:10:00"
+    }
+  }
+}

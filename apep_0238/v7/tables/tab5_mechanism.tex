@@ -1,0 +1,29 @@
+\begin{table}[H]
+\centering
+\caption{Mechanism Test: Unemployment Rate Persistence by Recession Type}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccccc}
+\toprule
+& $h=6$ & $h=12$ & $h=24$ & $h=36$ & $h=48$ & $h=60$ & $h=84$ & $h=120$ \\
+\midrule
+\multicolumn{9}{l}{\textit{Panel A: Great Recession --- UR response (HPI instrument)}} \\[3pt]
+& $1.1759^{***}$ & $1.2549$ & $1.1673$ & $1.7890$ & $2.3309^{*}$ & $1.8223$ & $2.5043^{***}$ & $1.3737$ \\
+& (0.3924) & (0.9013) & (1.5387) & (1.4840) & (1.3329) & (1.2059) & (0.8098) & (0.9579) \\
+\midrule
+\multicolumn{9}{l}{\textit{Panel B: COVID Recession --- UR response (Bartik instrument)}} \\[3pt]
+& $-0.8079^{*}$ & $-0.3580^{*}$ & $-0.0802$ & $-0.0947$ & $-0.0303$ & & & \\
+& (0.4066) & (0.1954) & (0.0787) & (0.0998) & (0.0905) & & & \\
+\midrule
+\multicolumn{9}{l}{Persistence ratio ($\hat{\beta}_{48} / \hat{\beta}_{12}$)} \\[3pt]
+Great Recession & \multicolumn{8}{c}{$1.857$} \\
+COVID & \multicolumn{8}{c}{$0.084$} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each column reports the coefficient from a cross-state regression of the unemployment rate change (percentage points, relative to recession peak) on recession exposure at horizon $h$ months. Panel A uses the housing price boom instrument for the Great Recession. Panel B uses the standardized COVID Bartik instrument (mean zero, unit variance); coefficients represent the UR response to a one-standard-deviation increase in COVID exposure. The persistence ratio measures how much of the $h=12$ UR response remains at $h=48$; values near 1 indicate persistent unemployment (demand-side scarring), while values near 0 indicate rapid recovery (supply-side reallocation). Robust (HC1) standard errors in parentheses. $^{*}$~$p<0.10$, $^{**}$~$p<0.05$, $^{***}$~$p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:mechanism}
+\end{table}
