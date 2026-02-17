@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of HCBS Rate Increases on Provider Outcomes}
+\label{tab:main}
+\begin{tabular}{lcccc}
+\toprule
+ & Log Providers & Log Claims & Log Beneficiaries & Log Paid \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+Post Rate Increase & -0.0652 & -0.2719 & -0.1483 & 0.0780 \\
+ & (0.2236) & (0.3062) & (0.2685) & (0.3445) \\
+95\% CI & [-0.504, 0.373] & [-0.872, 0.328] & [-0.674, 0.378] & [-0.597, 0.753] \\
+WCB $p$-value & 0.805 & 0.419 & 0.618 & 0.837 \\
+\midrule
+Observations & 4,161 & 4,161 & 4,161 & 4,161 \\
+States & 52 & 52 & 52 & 52 \\
+State FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+Month FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} All regressions include state and month fixed effects with standard errors clustered at the state level (in parentheses). 95\% confidence intervals in brackets. WCB $p$-values from wild cluster bootstrap with Webb weights (9,999 replications). $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.1$.
+\end{minipage}
+\end{table}

@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\caption{Callaway-Sant'Anna Staggered DiD Estimates}
+\label{tab:cs_did}
+\begin{tabular}{lccc}
+\toprule
+ & Log Providers & Log Claims & Log Beneficiaries \\
+\midrule
+Overall ATT & -0.0813 & -0.3311 & -0.2098 \\
+ & (0.1630) & (0.2520) & (0.2458) \\
+RI $p$-value & \multicolumn{3}{c}{0.510 (500 permutations)} \\
+\midrule
+TWFE Estimate & -0.0652 & -0.2719 & -0.1483 \\
+ & (0.2236) & (0.3062) & (0.2685) \\
+\midrule
+Control Group & Never-Treated & Never-Treated & Never-Treated \\
+States & 52 & 52 & 52 \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.85\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} Top panel reports the aggregate ATT from \citet{callaway2021difference} using never-treated states as the comparison group. RI $p$-value from 500 Fisher permutations of treatment assignment. Bottom panel reports standard TWFE for comparison. Standard errors (in parentheses) are clustered at the state level. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.1$.
+\end{minipage}
+\end{table}

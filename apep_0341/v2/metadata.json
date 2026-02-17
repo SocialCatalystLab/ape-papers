@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0341_v3",
+  "title": "Paying More, Getting Less? The Perverse Effects of Medicaid HCBS Reimbursement Rate Increases on Provider Supply (v3)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "ai1scl",
+  "contributors": [
+    "ai1scl"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-18T00:07:53.127190",
+  "version": 3,
+  "paper_family_id": "apep_0341",
+  "parent_paper_id": "apep_0341_v2",
+  "is_revision": true,
+  "revision_rationale": "Three external reviewers assessed v1: GPT (MAJOR REVISION), Gemini (MINOR REVISION), Grok (MINOR REVISION)."
+}

@@ -1,0 +1,45 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\begin{tabular}{lccrl}
+\toprule
+Specification & Coefficient & SE & States & Notes \\
+\midrule
+\textit{Panel A: Baseline} & & & & \\
+\quad TWFE (personal care providers) & -0.0652 & (0.2236) & 52 & Main result \\
+\midrule
+\textit{Panel B: Placebo Tests} & & & & \\
+\quad E/M visit providers (99213/99214) & 0.1295 & (0.1272) & 52 & Placebo \\
+\quad E/M visit claims & 0.0469 & (0.1612) & 52 & Placebo \\
+\quad Pre-treatment lead (12m early) & 0.0243 & (0.1003) & 52 & Placebo \\
+\midrule
+\textit{Panel C: Heterogeneity} & & & & \\
+\quad Individual providers (Type 1) & -0.1122 & (0.0856) & 52 & \\
+\quad Organizations (Type 2) & -0.0662 & (0.2272) & 52 & \\
+\quad Sole proprietors & -0.0537 & (0.0741) & 52 & \\
+\midrule
+\textit{Panel D: Sensitivity} & & & & \\
+\quad Excluding COVID onset & -0.0603 & (0.2193) & 52 & Mar--Jun 2020 \\
+\quad Excluding Wyoming & 0.0161 & (0.2236) & 51 & Outlier dropped \\
+\quad State-specific linear trends & -0.0668 & (0.2240) & 52 & \\
+\quad Median-based rate detection & 0.0085 & (0.1234) & 52 & Alt.\ detection \\
+\quad Randomization inference & \multicolumn{2}{c}{$p = 0.580$} & 52 & 1,000 perms \\
+\midrule
+\textit{Panel E: Dose-Response} & & & & \\
+\quad Rate increase $\times$ post & 0.0510 & (0.0485) & 51 & Excl.\ WY \\
+\midrule
+\textit{Panel F: ARPA-Era Subsample} & & & & \\
+\quad ARPA cohorts only (post Apr 2021) & -0.4077 & (0.4722) & 39 & TWFE \\
+\quad Pre-ARPA cohorts only & 0.0854 & (0.2022) & 45 & TWFE \\
+\midrule
+\textit{Panel G: Mechanism Tests} & & & & \\
+\quad Org share (Type 2 / total NPIs) & -0.0018 & (0.0091) & 52 & \\
+\quad Log claims per provider & -0.2016 & (0.1381) & 52 & Intensive margin \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} All regressions include state and month fixed effects with standard errors (in parentheses) clustered at the state level. Panel B tests whether personal care rate increases affect unrelated services (E/M visits) and whether a placebo treatment dated 12 months before actual treatment shows effects. Panel C splits by provider entity type. Panel D includes sensitivity to COVID-era exclusion, outlier removal, state-specific linear trends, and alternative rate detection. Panel E uses rate change magnitude as continuous treatment. Panel F separates ARPA-era (post April 2021) from pre-ARPA treatment cohorts. Panel G tests consolidation mechanisms. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.1$.
+\end{minipage}
+\end{table}
