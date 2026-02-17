@@ -1,0 +1,34 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\begin{tabular}{lccl}
+\toprule
+Specification & Coefficient & SE & Notes \\
+\midrule
+\textit{Panel A: Baseline} & & & \\
+\quad TWFE (personal care providers) & -0.2362 & 0.2077 & Main result \\
+\midrule
+\textit{Panel B: Placebo Tests} & & & \\
+\quad E/M visit providers (99213/99214) & 0.1589 & 0.1136 & Placebo \\
+\quad E/M visit claims & 0.1358 & 0.1406 & Placebo \\
+\midrule
+\textit{Panel C: Heterogeneity} & & & \\
+\quad Individual providers (Type 1) & -0.1782 & 0.0824 & \\
+\quad Organizations (Type 2) & -0.2346 & 0.2107 & \\
+\quad Sole proprietors & -0.0971 & 0.0734 & \\
+\midrule
+\textit{Panel D: Sensitivity} & & & \\
+\quad Excluding COVID onset & -0.2282 & 0.2006 & Mar--Jun 2020 dropped \\
+\quad Excluding Wyoming & -0.1711 & 0.2105 & 1,422\% outlier dropped \\
+\quad Randomization inference & \multicolumn{2}{c}{$p = 0.024$} & 1,000 permutations \\
+\midrule
+\textit{Panel E: Dose-Response} & & & \\
+\quad Rate increase $\times$ post & -0.0424 & 0.1537 & Continuous treatment \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} All regressions include state and month fixed effects with standard errors clustered at the state level. Panel B tests whether the personal care rate increase affects outcomes for unrelated services (E/M office visits). Panel C splits provider counts by entity type from NPPES. Panel D drops the initial COVID-19 months, excludes the extreme Wyoming outlier (1,422\% rate increase), and reports a randomization inference p-value. Panel E uses rate change magnitude as a continuous treatment intensity variable.
+\end{minipage}
+\end{table}

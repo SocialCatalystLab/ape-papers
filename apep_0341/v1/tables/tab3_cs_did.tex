@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+\centering
+\caption{Callaway-Sant'Anna Staggered DiD Estimates}
+\label{tab:cs_did}
+\begin{tabular}{lccc}
+\toprule
+ & Log Providers & Log Claims & Log Beneficiaries \\
+\midrule
+Overall ATT & -0.1002 & -0.1416 & -0.0763 \\
+ & (0.1612) & (0.2804) & (0.2278) \\
+\midrule
+TWFE Estimate & -0.2362 & -0.5172 & -0.3804 \\
+ & (0.2077) & (0.3235) & (0.2806) \\
+\midrule
+Estimator & CS-DiD & CS-DiD & CS-DiD \\
+Control Group & Never-Treated & Never-Treated & Never-Treated \\
+State FE & Yes & Yes & Yes \\
+Time FE & Yes & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.85\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} Top panel reports the aggregate ATT from \citet{callaway2021difference} using never-treated states as the comparison group. Bottom panel reports standard TWFE for comparison. Standard errors (in parentheses) are clustered at the state level.
+\end{minipage}
+\end{table}

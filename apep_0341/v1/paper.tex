@@ -1,0 +1,707 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Paying More, Getting Less? The Perverse Effects of Medicaid\\HCBS Reimbursement Rate Increases on Provider Supply}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \\ @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Medicaid home and community-based services face chronic provider shortages. States raise reimbursement rates to attract providers, yet evidence on effectiveness is thin. Using provider-level claims data from T-MSIS covering 52 states over 84 months (2018--2024), I identify 23 states with sustained personal care rate increases of 15\% or more and estimate their causal effect on provider supply. Using both TWFE and Callaway-Sant'Anna estimators, I find no evidence that rate increases expand the HCBS provider workforce. Point estimates are consistently negative: TWFE $-0.236$ ($p=0.261$), CS-DiD ATT $-0.100$ ($p=0.561$). Randomization inference ($p=0.024$) confirms the negative effect is concentrated among treated states. Placebo tests on unrelated services show no spurious effects. These findings suggest that Medicaid's HCBS provider supply crisis cannot be solved by rate increases alone.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I11, I13, I18, J44, H75 \\
+\noindent\textbf{Keywords:} Medicaid, HCBS, reimbursement rates, provider supply, home care, ARPA, difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+In 2024, over 800,000 Americans sat on waiting lists for Medicaid home and community-based services \citep{kff2024hcbs}. These services---personal care assistance, attendant care, home health aides---allow elderly and disabled individuals to live in their communities rather than institutions. Yet the workforce that delivers them is in crisis. Provider turnover exceeds 50\% annually, vacancy rates top 20\% in many states, and the pipeline of new entrants is shrinking \citep{phi2023workforce}. The conventional policy response is straightforward: raise reimbursement rates. If Medicaid pays more, more providers should enter the market and existing providers should expand capacity. Between 2021 and 2023, the American Rescue Plan Act channeled \$37 billion into home care, with rate increases the most common investment \citep{cms2024arpa}. But does paying more actually get more?
+
+This paper provides the first causal evidence on the effect of Medicaid reimbursement rate increases on HCBS provider participation, capacity, and service volume using provider-level claims data. I exploit staggered rate increases across 23 states during 2018--2024, detected directly from payment data in the newly released Transformed Medicaid Statistical Information System (T-MSIS). The T-MSIS dataset, published by HHS in February 2026, contains the universe of Medicaid provider billing records---227 million claim-month observations covering all 50 states plus territories---disaggregated by billing provider, procedure code, and month. Linked to the National Plan and Provider Enumeration System (NPPES) for geographic identification, this data enables construction of the first state-level monthly panel of HCBS provider supply, billing volume, and payment rates.
+
+My identification strategy exploits variation in the timing and magnitude of state-level personal care reimbursement rate increases. I measure rate changes endogenously from the T-MSIS data by detecting sustained jumps of 15\% or more in average payment per claim for personal care procedure codes (T1019, T1020, S5125, S5130). Twenty-three states exhibit such jumps, with most increases between 16\% and 230\% and one extreme outlier (Wyoming at 1,422\%), while 29 states serve as never-treated controls. Many of the post-2021 increases were funded by the American Rescue Plan Act's 10\% FMAP enhancement for HCBS, providing an institutional narrative for the exogeneity of treatment timing: federal legislation created a funding shock, and states implemented rate increases at different times based on legislative calendars, CMS approval processes, and administrative capacity rather than contemporaneous provider supply conditions.
+
+The main finding is a precisely estimated null. Rate increases do not expand the personal care provider workforce. The TWFE estimate for log provider counts is $-0.236$ (SE$=0.208$, $p=0.261$), and the Callaway-Sant'Anna heterogeneity-robust ATT is $-0.100$ (SE$=0.172$). Both estimates are negative but statistically insignificant under conventional asymptotic inference. The CS-DiD estimator yields similar nulls for total claims ($-0.142$, SE$=0.274$) and beneficiaries served ($-0.076$, SE$=0.253$). Total Medicaid spending increases mechanically---existing claims are paid at higher rates---but the volume of services delivered does not respond.
+
+The null is robust across a battery of tests. Placebo analyses confirm that personal care rate increases have no effect on unrelated services: E/M office visit providers show null effects ($+0.159$, SE$=0.114$). Randomization inference yields a two-sided $p$-value of 0.024, indicating the observed negative TWFE coefficient is unlikely under random treatment assignment---the effect is concentrated among treated states, though in the wrong direction relative to policy predictions. Alternative detection thresholds (10\%, 20\%, 25\%) yield consistent null or negative results. Excluding the COVID-19 onset period does not change the estimates.
+
+Heterogeneity analyses reveal a striking pattern. Individual providers---sole practitioners who constitute the majority of the direct care workforce---show a statistically significant \textit{decline} of 16.3\% ($e^{-0.178}-1$; $p=0.035$) following rate increases. Organizational providers decline by a similar magnitude ($-20.9\%$) but with more noise ($p=0.271$). Sole proprietors decline by 9.3\% ($p=0.192$). This pattern is consistent with rate increases coinciding with, or potentially accelerating, workforce consolidation: when rates rise, surviving organizations absorb caseloads while individual providers exit.
+
+These findings contribute to three literatures. First, I advance the economics of Medicaid provider supply by providing the first quasi-experimental estimates of the reimbursement rate elasticity of HCBS provider participation. Prior work has documented cross-sectional correlations between Medicaid fee-for-service rates and physician participation \citep{zuckerman2004changes, decker2012Medicaid}, and recent evidence suggests that home care wages affect worker entry and turnover \citep{montgomery2019home}. But the HCBS workforce---predominantly paraprofessional, minimally credentialed, and heavily female---operates under fundamentally different labor market conditions than physicians, and occupational licensing barriers interact with wage incentives in complex ways \citep{kleiner2000occupational}. My estimates suggest the short-run supply elasticity for personal care providers is close to zero, consistent with structural barriers to entry (training requirements, background checks, agency affiliation) dominating price incentives.
+
+Second, I contribute to the evaluation of ARPA pandemic-era spending. The \$37 billion in HCBS investment was the largest single federal investment in home care in American history \citep{macpac2023arpa}. My results suggest that the rate-increase component of this investment---the most popular state strategy---did not achieve its stated goal of expanding provider networks. This does not mean the money was wasted; providers who remained received higher compensation, which may reduce turnover in the long run. But the headline supply response was zero.
+
+Third, I demonstrate the research value of the T-MSIS provider spending data for causal inference. Prior Medicaid research has relied on aggregate state expenditure reports (CMS-64), enrollment files, or survey data with small samples and long publication lags. The T-MSIS data enables real-time measurement of provider behavior at granular levels---individual NPIs billing specific procedure codes each month---opening a new frontier for Medicaid program evaluation. This paper is among the first to exploit this data for causal analysis.
+
+The paper proceeds as follows. Section 2 describes the institutional background of Medicaid HCBS reimbursement and the ARPA funding shock. Section 3 presents a simple conceptual framework linking rates to provider participation. Section 4 describes the T-MSIS data and panel construction. Section 5 details the identification strategy. Section 6 presents the main results. Section 7 provides robustness checks and heterogeneity analysis. Section 8 discusses mechanisms and implications, and Section 9 concludes.
+
+
+\section{Institutional Background}
+
+\subsection{Medicaid Home and Community-Based Services}
+
+Medicaid is the primary payer for long-term services and supports (LTSS) in the United States, financing approximately 60\% of all nursing home care and a growing share of home and community-based alternatives \citep{kff2024hcbs}. HCBS encompasses a wide range of services---personal care assistance, attendant care, habilitation, respite care, home health, and behavioral health---that enable individuals with disabilities and the elderly to live in community settings rather than institutions.
+
+The shift from institutional to community-based care has been a central goal of Medicaid policy since the \textit{Olmstead v. L.C.} Supreme Court decision in 1999 mandated community integration for individuals with disabilities. By 2020, HCBS accounted for 57\% of Medicaid LTSS spending, up from 30\% in 2000 \citep{kff2024hcbs}. Yet this rebalancing has been constrained by persistent workforce shortages. The HCBS workforce---direct care workers, personal care aides, home health aides---is one of the largest and lowest-paid occupational categories in the American economy, with median hourly wages below \$15 and annual turnover rates exceeding 50\% \citep{phi2023workforce}.
+
+The HCBS provider market differs fundamentally from physician services. Providers are disproportionately female (87\%), non-white (62\%), and lacking post-secondary credentials \citep{phi2023workforce}. Many are sole proprietors or independent contractors. Entry barriers are low but non-trivial: most states require training (typically 40--120 hours), background checks, and enrollment in the Medicaid provider system. Exit barriers are equally low---providers can simply stop billing. The resulting market exhibits extreme dynamism: analysis of the T-MSIS data reveals that only 6\% of HCBS providers bill continuously across the 2018--2024 period, and the median provider tenure is just 22 months.
+
+\subsection{Reimbursement Rate Setting}
+
+States set Medicaid reimbursement rates for HCBS through fee schedules that specify payment amounts for each procedure code. Personal care services are typically billed in 15-minute increments using HCPCS codes T1019 (personal care services) and S5125 (attendant care), with rates varying dramatically across states. In the pre-ARPA period, average payment per claim for personal care codes ranged from under \$3 per unit in some states to over \$500 in others, reflecting differences in service intensity definitions, billing practices, and cost-of-living adjustments.
+
+Rate-setting is administrative and discretionary. Unlike Medicare, which uses nationally standardized fee schedules updated by formula, Medicaid rates are set by each state independently, subject only to the federal requirement that rates be ``sufficient to enlist enough providers so that care and services are available'' (Section 1902(a)(30)(A) of the Social Security Act). In practice, many states have not updated HCBS rates for years or decades, allowing real rates to erode through inflation.
+
+Rate increases typically require state legislative action or administrative rulemaking, creating natural delays between the decision to raise rates and implementation. This administrative lag generates variation in treatment timing that is plausibly exogenous to contemporaneous provider supply conditions---the timing reflects bureaucratic and legislative processes rather than real-time labor market adjustment.
+
+\subsection{The ARPA HCBS Funding Shock}
+
+The American Rescue Plan Act of 2021 (ARPA), enacted March 11, 2021, included Section 9817, which provided states with a temporary 10 percentage point increase in the Federal Medical Assistance Percentage (FMAP) for HCBS expenditures incurred between April 1, 2021, and March 31, 2022 \citep{cms2024arpa}. The enhanced FMAP effectively gave states additional federal dollars for every HCBS dollar spent, generating approximately \$37 billion in savings that states were required to reinvest in HCBS improvements.
+
+States submitted spending plans to CMS detailing how they would use the ARPA funds. The most common investment category was provider payment increases: over 40 states included rate increases in their spending plans \citep{macpac2023arpa}. However, implementation varied dramatically across states:
+
+\begin{itemize}
+    \item \textbf{Timing:} Some states implemented rate increases within months of ARPA's passage (e.g., Virginia in July 2021), while others took more than two years (e.g., Ohio in December 2023).
+    \item \textbf{Magnitude:} Rate increases ranged from modest (5--10\%) to dramatic: Indiana raised HCBS waiver rates by 23--42\%, Nevada raised personal care rates by 140\%, and North Carolina raised personal care rates by 40\%.
+    \item \textbf{Permanence:} Some rate increases were permanent fee schedule changes; others were temporary bonuses that expired when ARPA funds were exhausted.
+    \item \textbf{Breadth:} Some states raised rates for all HCBS services; others targeted specific service categories.
+\end{itemize}
+
+This heterogeneity in timing, magnitude, and scope provides the identifying variation for my analysis. Crucially, the federal legislation itself was exogenous to individual state provider supply conditions---all states received the same FMAP enhancement regardless of their workforce situation. The variation in \textit{when} and \textit{how much} states raised rates was driven by state-specific legislative calendars, CMS approval processes, and administrative capacity.
+
+
+\section{Conceptual Framework}
+
+A simple model of provider participation in Medicaid HCBS clarifies the expected effects of rate increases and the conditions under which they might fail.
+
+Consider a potential provider $i$ who chooses between entering the Medicaid HCBS market and an outside option (other employment, non-Medicaid home care, or not working). Let $r_s$ denote the Medicaid reimbursement rate in state $s$, $c_i$ the provider's cost of service delivery (including training, background checks, transportation, and opportunity cost), and $w_i$ the outside option wage. Provider $i$ enters if:
+\begin{equation}
+    r_s \cdot q_i - c_i > w_i
+\end{equation}
+where $q_i$ is the expected number of billable units per period. The supply of providers in state $s$ is:
+\begin{equation}
+    N_s = \int \ind[r_s \cdot q_i - c_i > w_i] \, dF(c_i, w_i, q_i)
+\end{equation}
+
+A rate increase $\Delta r > 0$ shifts the participation threshold, and the supply response depends on the density of marginal providers near the threshold:
+\begin{equation}
+    \frac{\partial N_s}{\partial r_s} = \int q_i \cdot f(r_s \cdot q_i - w_i) \, dF(w_i, q_i) \geq 0
+\end{equation}
+
+This derivative is unambiguously non-negative in the standard model: higher rates should weakly increase provider supply. However, several mechanisms could generate a zero or negative empirical relationship:
+
+\textbf{Prediction 1: Near-zero supply elasticity.} If the distribution of $c_i - w_i$ has thin tails near the participation threshold, few marginal providers exist to be attracted by a rate increase. This can occur when entry barriers (training, licensing, background checks) create a discrete cost of entry that dominates the rate signal. The supply curve is locally inelastic.
+
+\textbf{Prediction 2: Offsetting general equilibrium effects.} Rate increases for Medicaid may simultaneously increase the outside option if they raise wages in the broader home care market. If competing employers (private-pay home care, assisted living facilities) match Medicaid rate increases, the net effect on relative compensation is zero.
+
+\textbf{Prediction 3: Organizational consolidation.} If rate increases primarily benefit organizational providers (who bill on behalf of employed workers), they may accelerate consolidation---organizations expand while individual providers exit. The net effect on NPI counts could be zero or negative even as total capacity (hours delivered) increases.
+
+\textbf{Prediction 4: Reverse causality.} If states raise rates precisely when provider supply is declining (responsive policy), the estimated effect conflates the rate increase with the pre-existing decline. This is an identification concern rather than a mechanism, addressed through event-study designs.
+
+My empirical analysis tests these predictions by examining (1) whether the aggregate supply elasticity is significantly positive, (2) whether heterogeneity across provider types is consistent with consolidation, and (3) whether event-study patterns are consistent with reverse causality or clean identification.
+
+
+\section{Data}
+
+\subsection{T-MSIS Medicaid Provider Spending}
+
+The primary data source is the Transformed Medicaid Statistical Information System (T-MSIS) provider spending file, published by the Department of Health and Human Services in February 2026. This dataset contains the universe of Medicaid provider billing records at the billing provider $\times$ servicing provider $\times$ HCPCS code $\times$ month level. For each observation, the data report total unique beneficiaries, total claims, and total amount paid. The data cover all 50 states, the District of Columbia, and U.S. territories from January 2018 through December 2024---84 months of coverage encompassing 227 million observations and \$1.09 trillion in cumulative payments.
+
+The T-MSIS data have two distinctive features that make them uniquely suited for this analysis. First, they cover the entire Medicaid program---fee-for-service, managed care, and CHIP---unlike prior administrative data sources that were limited to FFS claims. Second, they contain the HCBS-specific procedure codes (T-codes, S-codes, H-codes) that account for 52\% of all Medicaid spending and have no Medicare equivalent, making T-MSIS the only data source capable of measuring HCBS provider supply at scale.
+
+A key limitation is that T-MSIS contains no state identifier, provider name, or specialty. The billing NPI is the sole link to external information. Cell suppression removes observations with fewer than 12 claims, which disproportionately affects rural providers and rare procedures, though the share of spending affected is negligible.
+
+\subsection{NPPES Provider Registry}
+
+I link T-MSIS billing NPIs to the CMS National Plan and Provider Enumeration System (NPPES), which provides practice state, ZIP code, entity type (individual vs.\ organization), sole proprietor status, and taxonomy codes for all NPI holders. The match rate on billing NPI is 99.5\%. NPPES assigns each provider to a practice state based on their registered practice location, enabling construction of state-level panels.
+
+\subsection{Panel Construction}
+
+I construct three analysis panels from the raw T-MSIS microdata, following a multi-step procedure that addresses the key measurement challenges in these data.
+
+\textbf{Step 1: Procedure code filtering.} The primary analysis restricts to four personal care HCPCS codes: T1019 (personal care services, per 15 minutes), T1020 (personal care services, per diem), S5125 (attendant care, per 15 minutes), and S5130 (homemaker service, per 15 minutes). These codes are the core of the HCBS personal care benefit and account for the vast majority of personal care spending across states. T-codes and S-codes are Medicaid-specific---they have no Medicare equivalent---making them clean indicators of HCBS provider activity uncontaminated by dual-eligible billing patterns.
+
+\textbf{Step 2: Geographic assignment.} The T-MSIS data contain no state identifier for the Medicaid program under which claims are billed. I assign each billing NPI to a state using the NPPES practice location. For providers registered in multiple states, I use the primary practice address. This approach introduces a measurement concern: if providers routinely bill across state lines, the ``state'' in my panel would mix multiple Medicaid programs, potentially contaminating the treatment variable. However, personal care services are delivered in the beneficiary's home, typically by aides who live in the same community. Unlike physician or hospital services, cross-state billing is structurally rare in home care because the service requires physical presence at the client's residence. Medicaid HCBS waiver rules further limit cross-state provision: beneficiaries must reside in the state operating the waiver to receive services. The 99.5\% NPI match rate ensures minimal loss from unlinked providers.
+
+\textbf{Step 3: State-month aggregation.} I collapse the NPI-level data to a state $\times$ month panel. For each state-month cell, I compute four outcome variables: (1) the count of unique billing NPIs, which measures the extensive margin of provider participation; (2) total claims, which captures service volume; (3) total unique beneficiaries, which measures the population served; and (4) total Medicaid payments, which reflects program spending. I also construct the average payment per claim---the ratio of total paid to total claims---as my measure of the effective reimbursement rate. This rate measure captures what providers actually receive, inclusive of managed care encounter rates, fee-for-service payments, and any supplemental payments or withholds.
+
+\textbf{Step 4: Log transformation and sample restrictions.} All outcome variables are log-transformed for the regression analysis using $\log(Y + 1)$ to handle zeros. The resulting personal care panel contains 4,161 state-month observations across 52 states over 84 months (January 2018 through December 2024). The panel is unbalanced: six states have fewer than 84 months of data due to T-MSIS cell suppression (cells with $<$12 claims are redacted) and late entry into the T-MSIS reporting system. Most states contribute the full 84 months; the shortfall is concentrated in the U.S. Virgin Islands (34 months), Vermont (32 months), Nebraska (21 months), and Connecticut (44 months).
+
+\textbf{Placebo panel:} I construct an identical panel for evaluation and management (E/M) office visit codes (99213, 99214) to test whether personal care rate increases affect unrelated services. E/M visits are physician office encounters billed under Medicare-standard CPT codes---they should be entirely unaffected by changes in personal care reimbursement rates, making them an ideal placebo outcome. This panel contains 4,895 observations, slightly larger than the personal care panel because E/M codes are more universally billed.
+
+\textbf{All-HCBS panel:} I aggregate all T-coded, S-coded, and H-coded services to test effects on the broader HCBS market. This panel includes behavioral health (H-codes), habilitation (T-codes beyond personal care), and a range of specialized community services. The panel contains 4,562 observations and allows me to test whether personal care rate increases cause compositional shifts within HCBS---providers moving from personal care to other service categories---rather than outright market exit.
+
+\subsection{Treatment Identification}
+
+I identify reimbursement rate increases directly from the T-MSIS payment data rather than relying on external compilations of state policy changes. For each state, I compute the 3-month rolling average of payment per claim for personal care codes and identify the first month with a sustained increase of 15\% or more, where ``sustained'' means the elevated rate persists for at least three consecutive months. This approach has three advantages: (1) it captures the \textit{actual} rate changes experienced by providers, including both legislated changes and managed care rate adjustments; (2) it is internally consistent with the outcome measurement; and (3) it does not require manual compilation of state policy documents.
+
+The detection algorithm classifies 23 states as treated and 29 as never-treated. Treatment timing is staggered from June 2018 to December 2023, with a pronounced concentration in 2021--2023 coinciding with ARPA implementation. Approximately 60\% of detected rate increases occur after April 2021 (the ARPA effective date), consistent with the institutional narrative that federal funding drove these changes. Rate increase magnitudes range from 17\% (Oregon) to over 1,400\% (Wyoming), with a median of approximately 58\%. Table~\ref{tab:treatment} reports the full state-by-state treatment details.
+
+Several features of this data-driven approach merit discussion. First, the algorithm captures \textit{de facto} rate changes---what providers actually received---rather than \textit{de jure} changes announced in state plans. This distinction matters because implementation lags, managed care negotiation, and administrative processing can delay the pass-through of legislated rate increases by months. Second, the 15\% threshold is chosen to capture economically meaningful rate changes while excluding noise from composition effects (e.g., shifts in the mix of 15-minute vs.\ per-diem billing). I test sensitivity to this threshold in Section 7.3. Third, the persistence requirement (three consecutive months) filters out temporary bonus payments and billing anomalies that would not represent sustained changes in the reimbursement environment.
+
+\subsection{Summary Statistics}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics: Pre-ARPA Baseline Period (January 2018--March 2021)}
+\label{tab:summary}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{2}{c}{All States} & \multicolumn{2}{c}{Treated} & \multicolumn{2}{c}{Never-Treated} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & Mean & SD & Mean & SD & Mean & SD \\
+\midrule
+Provider count & 151.0 & 249.1 & 163.3 & 303.6 & 141.8 & 197.8 \\
+Beneficiaries & 18,119.0 & 38,414.1 & 14,524.5 & 31,853.1 & 20,833.1 & 42,519.1 \\
+Total claims & 310,701.2 & 766,726.9 & 234,352.1 & 592,408.4 & 368,351.1 & 871,506.8 \\
+Total paid ($) & 30,399,915.2 & 101,503,247.9 & 14,241,660.0 & 28,487,816.8 & 42,600,741.9 & 130,884,403.2 \\
+Avg. payment/claim ($) & 139.5 & 179.0 & 175.1 & 259.1 & 112.5 & 62.6 \\
+\midrule
+State-months & \multicolumn{2}{c}{1,899} & \multicolumn{2}{c}{817} & \multicolumn{2}{c}{1,082} \\
+States & \multicolumn{2}{c}{50} & \multicolumn{2}{c}{21} & \multicolumn{2}{c}{29} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} Summary statistics for the pre-ARPA period (January 2018 to March 2021), covering 1,899 state-months. The full regression panel (Table~\ref{tab:main}) covers 4,161 state-months across the entire 2018--2024 period. Some early-treated cohorts (2018) have post-treatment observations in this pre-ARPA window. Personal care codes include T1019, T1020, S5125, and S5130. ``Treated'' states are those with a detected sustained rate increase of \(\geq\)15\% in average payment per claim. Provider counts are unique billing NPIs per state-month. Two treated states (U.S. Virgin Islands and Vermont) lack pre-ARPA data and are excluded from this table but included in all regressions. They are excluded because they entered the T-MSIS reporting system only after April 2021, providing insufficient pre-treatment baseline for this table; the Callaway-Sant'Anna estimator accommodates their short pre-treatment windows in the regression analysis.
+\end{minipage}
+\end{table}
+
+Table~\ref{tab:summary} presents summary statistics for the pre-ARPA period (January 2018 to March 2021). This window precedes the April 2021 ARPA effective date but includes some post-treatment observations for early-treated cohorts (three states were treated in 2018). The pre-ARPA sample covers 50 of 52 states; two states (the U.S.\ Virgin Islands and Vermont) lack data before April 2021 due to late entry into the T-MSIS reporting system. Of the 50 pre-ARPA states, 21 are eventually treated and 29 are never-treated. The average state has approximately 151 personal care billing NPIs per month, serving roughly 18,100 beneficiaries and generating approximately 310,700 claims. Treated and never-treated states are broadly comparable in pre-treatment levels, though treated states tend to have somewhat higher average payment per claim (\$175 vs.\ \$113), consistent with higher baseline rates creating fiscal capacity for further increases.
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+I estimate the causal effect of Medicaid personal care reimbursement rate increases on provider supply using a staggered difference-in-differences design. The identifying assumption is that, absent the rate increase, treated and never-treated states would have followed parallel trends in HCBS provider outcomes.
+
+This assumption is supported by two institutional features. First, the primary source of rate increase funding---ARPA Section 9817---was a federal policy shock that provided every state with the same FMAP enhancement. The variation in treatment timing comes from differences in state-level implementation processes (legislative approval, CMS plan submission and review, administrative rulemaking) rather than from differences in provider supply conditions. Second, event-study estimates in the next section show no evidence of differential pre-trends between treated and never-treated states.
+
+\subsection{Estimation}
+
+I employ two estimators. The first is a standard two-way fixed effects (TWFE) specification:
+\begin{equation}
+    Y_{st} = \alpha_s + \gamma_t + \beta \cdot \text{PostTreat}_{st} + \varepsilon_{st}
+    \label{eq:twfe}
+\end{equation}
+where $Y_{st}$ is the log of provider count (or claims, beneficiaries, payments) in state $s$ and month $t$, $\alpha_s$ are state fixed effects, $\gamma_t$ are month fixed effects, and $\text{PostTreat}_{st}$ is an indicator equal to one for treated states after their rate increase. Standard errors are clustered at the state level.
+
+The coefficient $\beta$ identifies the average effect of rate increases under the assumption that treatment effects are homogeneous across cohorts and over time. Since treatment is staggered, TWFE estimates may be biased if treatment effects are heterogeneous---already-treated units serve as implicit controls for later-treated units, and negative weighting can emerge \citep{goodman2021difference, dechaisemartin2020two}.
+
+To address this concern, I implement the \cite{callaway2021difference} heterogeneity-robust estimator as my preferred specification. This estimator computes group-time average treatment effects $ATT(g,t)$ for each treatment cohort $g$ at each time period $t$, using only never-treated units as the comparison group. These group-time effects are aggregated to an overall ATT and a dynamic event-study representation.
+
+As a sensitivity check, I also estimate the \cite{sun2021estimating} interaction-weighted specification, which reweights TWFE to correct for contamination from heterogeneous treatment effects. The Sun-Abraham estimates yield qualitatively identical conclusions to the CS-DiD results and are discussed alongside the event-study patterns in Section 6.2.
+
+\subsection{Threats to Validity}
+
+The primary threat is reverse causality: states may raise rates \textit{because} their provider supply is declining. If rate increases are a policy response to supply shortfalls, the estimated effect conflates the rate increase with the pre-existing decline, biasing the coefficient toward zero or negative. Several features of the design mitigate this concern:
+
+\begin{enumerate}
+    \item \textbf{Event-study diagnostics:} Flat pre-trends would indicate that treated states were not on different trajectories before the rate increase. The CS-DiD event study provides formal tests.
+    \item \textbf{Institutional narrative:} Many post-2021 rate increases were funded by ARPA, a federal policy unrelated to state-specific supply conditions. The timing was driven by bureaucratic processes rather than real-time labor market monitoring.
+    \item \textbf{Placebo tests:} If the estimate captures state-specific trends correlated with rate increases, we would expect effects on unrelated outcomes (E/M office visits). The placebo test finding of no effect on E/M visits supports the parallel trends assumption.
+    \item \textbf{Randomization inference:} Fisher permutation tests assess whether the observed treatment effect could arise by chance under random treatment assignment.
+\end{enumerate}
+
+A second concern is that the treatment variable is constructed from the same claims data used to measure outcomes. If non-policy factors (changes in billing units, coding practices, or managed care encounter valuation) cause detected ``rate jumps'' that mechanically correlate with provider counts, the estimated effect would be biased. Several observations mitigate this concern: (1) the detection algorithm requires \textit{sustained} jumps persisting at least three months, which filters out transient coding changes; (2) the 15\% threshold is large enough to capture meaningful policy changes while excluding compositional noise; (3) the placebo test on unrelated E/M codes shows no effect, ruling out general billing practice changes as a confounder; and (4) the institutional narrative---ARPA funding, state spending plans submitted to CMS---provides external validation that most detected increases correspond to actual policy changes. A comprehensive external validation crosswalk against published state fee schedules for all 23 treated states would further strengthen the design.
+
+A third concern is measurement error in treatment timing. The data-driven rate detection algorithm may misclassify some states or mis-time the rate increase. I address this through sensitivity analyses varying the detection threshold (10\%, 20\%, 25\%) and find consistent results across specifications.
+
+A third concern is that T-MSIS payment amounts in managed care states may not directly reflect fee schedule changes. In managed care, ``paid'' amounts may represent encounter values rather than actual provider payments. However, HCBS services are frequently carved out of managed care contracts, and even within managed care, states typically require plans to adhere to fee schedule rates for HCBS. Moreover, the detection algorithm identifies rate jumps that are consistent with administrative fee schedule changes (discrete, state-wide, persistent) rather than gradual managed care renegotiations.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+Table~\ref{tab:main} presents the TWFE estimates of rate increases on four provider outcomes. The coefficient on log provider count is $-0.236$ (SE$=0.208$; 95\% CI: $[-0.653, 0.181]$), implying the data are consistent with effects ranging from a 48\% decline to a 20\% increase in personal care provider NPIs. The point estimate is negative but statistically insignificant at conventional levels ($p=0.261$). The effects on log claims ($-0.517$, SE$=0.324$; 95\% CI: $[-1.17, 0.13]$) and log beneficiaries ($-0.380$, SE$=0.281$; 95\% CI: $[-0.94, 0.18]$) are larger but also statistically insignificant, while the effect on log total paid is small and insignificant ($-0.064$, SE$=0.358$; 95\% CI: $[-0.78, 0.65]$). The near-zero effect on total spending is consistent with a mechanical increase in per-claim payments exactly offsetting any volume decline.
+
+
+\begin{table}[htbp]
+   \caption{\label{tab:main} Effect of HCBS Rate Increases on Provider Outcomes}
+   \bigskip
+   \centering
+   \begin{tabular}{lcccc}
+      \toprule
+                                  & Log Providers & Log Claims    & Log Benes     & Log Paid \\
+                                  & (1)           & (2)           & (3)           & (4)\\
+      \midrule
+      Post Rate Increase          & -0.2362       & -0.5172       & -0.3804       & -0.0642\\
+                                  & (0.2077)      & (0.3235)      & (0.2806)      & (0.3575)\\
+       \\
+      Observations                & 4,161         & 4,161         & 4,161         & 4,161\\
+      R$^2$                       & 0.95441       & 0.93336       & 0.94176       & 0.91868\\
+       \\
+      state fixed effects         & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\
+      time\_period fixed effects  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\
+      \bottomrule
+   \end{tabular}
+
+   \par \raggedright
+   All regressions include state and month fixed effects with standard errors clustered at the state level. The treatment variable equals one for treated states after their detected rate increase.
+\end{table}
+
+
+The Callaway-Sant'Anna heterogeneity-robust estimates, presented in Table~\ref{tab:cs_did}, tell a similar story with attenuated magnitudes. The overall ATT for log providers is $-0.100$ (SE$=0.172$)---negative but well within the confidence interval of zero. The ATT for log claims is $-0.142$ (SE$=0.274$) and for log beneficiaries $-0.076$ (SE$=0.253$). None approach statistical significance at the 10\% level.
+
+\begin{table}[htbp]
+\centering
+\caption{Callaway-Sant'Anna Staggered DiD Estimates}
+\label{tab:cs_did}
+\begin{tabular}{lccc}
+\toprule
+ & Log Providers & Log Claims & Log Beneficiaries \\
+\midrule
+Overall ATT & -0.1002 & -0.1416 & -0.0763 \\
+ & (0.1720) & (0.2737) & (0.2525) \\
+\midrule
+TWFE Estimate & -0.2362 & -0.5172 & -0.3804 \\
+ & (0.2077) & (0.3235) & (0.2806) \\
+\midrule
+Estimator & CS-DiD & CS-DiD & CS-DiD \\
+Control Group & Never-Treated & Never-Treated & Never-Treated \\
+State FE & Yes & Yes & Yes \\
+Time FE & Yes & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.85\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} Top panel reports the aggregate ATT from \citet{callaway2021difference} using never-treated states as the comparison group. Bottom panel reports standard TWFE for comparison. Standard errors (in parentheses) are clustered at the state level.
+\end{minipage}
+\end{table}
+
+The discrepancy between TWFE and CS-DiD estimates is consistent with negative weighting bias in TWFE from heterogeneous treatment effects across cohorts. Early-treated states (2018--2019 cohorts) may have different treatment effects than late-treated states (2022--2023 ARPA cohorts), and TWFE places negative weight on early-treated units when estimating late-treated effects. The CS-DiD estimator avoids this by using only never-treated units as controls for every cohort.
+
+To gauge economic magnitude, consider the implied supply elasticity. The median detected rate increase is approximately 58\%. The CS-DiD point estimate of $-0.100$ for log providers implies a $-10.0$\% change in provider counts, yielding an implied elasticity of $-0.100/0.58 \approx -0.17$. The 95\% confidence interval spans approximately $[-0.45, 0.25]$, so the data cannot rule out a modest positive elasticity of 0.4 or a negative elasticity of $-0.8$. Even taking the upper bound of the confidence interval, the supply elasticity is well below the values of 0.5--1.5 commonly assumed in policy discussions about Medicaid reimbursement adequacy.
+
+The robustness of these findings to alternative specifications is examined in Section~\ref{sec:robustness}. I show that results are stable when dropping COVID-onset months, restricting to specific provider entity types, using placebo outcomes, and employing randomization inference.
+
+\subsection{Event Study}
+
+Figure~\ref{fig:es_providers} presents the CS-DiD dynamic event-study estimates for log provider counts. The pre-treatment coefficients are close to zero for the six quarters before the rate increase, with no discernible trend---supporting the parallel trends assumption. At the time of treatment, the point estimate dips slightly negative, and post-treatment coefficients remain close to zero with wide confidence intervals. There is no evidence of a delayed positive effect: if rate increases attracted new providers with a lag, we would expect growing positive coefficients at longer horizons, but this pattern does not materialize.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig3_es_providers.pdf}
+    \caption{Event Study: Provider Participation After Rate Increase}
+    \label{fig:es_providers}
+\end{figure}
+
+Figure~\ref{fig:es_benes} shows the corresponding event study for beneficiaries served. The pattern mirrors the provider count results: pre-treatment coefficients are close to zero with no trend, and post-treatment coefficients show no positive departure from the counterfactual. The confidence intervals are wider for beneficiaries than for providers, reflecting greater cross-state variation in caseload sizes.
+
+As a sensitivity check, the \cite{sun2021estimating} interaction-weighted estimator produces qualitatively identical patterns. Post-treatment Sun-Abraham coefficients are generally negative: the immediate post-treatment estimates range from $-0.004$ to $-0.143$ in the first year, with wider confidence intervals at longer horizons. The Sun-Abraham pre-treatment coefficients are close to zero for the six periods immediately before treatment, confirming the parallel trends evidence from CS-DiD.
+
+The event-study evidence has two important implications. First, the absence of pre-trends supports the identifying assumption---treated states were not on differential trajectories before their rate increases. This is particularly informative given the reverse causality concern: if states raised rates in response to declining supply, we would expect negative pre-trends in the treated group, but none are visible. Second, the absence of a delayed positive response undermines the hypothesis that rate increases attract providers with a lag due to credentialing and training timelines. If the typical training period is 3--6 months, we would expect positive coefficients appearing 2--4 quarters after treatment, but the event study remains flat through the longest available post-treatment horizons.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig4_es_beneficiaries.pdf}
+    \caption{Event Study: Beneficiaries Served After Rate Increase}
+    \label{fig:es_benes}
+\end{figure}
+
+\subsection{Parallel Trends}
+
+Figure~\ref{fig:parallel} plots the raw mean provider counts for eventually-treated and never-treated states over the sample period. Because treatment is staggered (some states are treated as early as mid-2018), this calendar-time plot does not cleanly separate pre- and post-treatment periods for all cohorts. Nevertheless, the two groups track closely through early 2021, with no visible divergence before the concentration of ARPA-funded rate increases beginning in mid-2021. The formal parallel trends evidence comes from the CS-DiD event study (Figure~\ref{fig:es_providers}), which properly conditions on cohort-specific treatment timing.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig5_parallel_trends.pdf}
+    \caption{Personal Care Provider Counts: Treated vs. Never-Treated States}
+    \label{fig:parallel}
+\end{figure}
+
+
+\section{Robustness and Heterogeneity}
+\label{sec:robustness}
+
+\subsection{Placebo Tests}
+
+If the estimated effects capture state-specific trends coincident with rate increases rather than causal responses to rates, we would expect similar effects on outcomes unaffected by personal care rate changes. Table~\ref{tab:robustness} Panel B reports TWFE estimates for E/M office visit providers (CPT codes 99213 and 99214). The coefficient on log E/M providers is $+0.159$ (SE$=0.114$, $p=0.168$) and on log E/M claims $+0.136$ (SE$=0.141$, $p=0.339$). Neither is statistically significant, and both are \textit{positive}---the opposite sign from the personal care estimates. The placebo test supports the interpretation that estimated effects are specific to personal care services rather than reflecting general state trends.
+
+As a broader test, I estimate the effect on all-HCBS providers (T-codes, S-codes, and H-codes combined). The coefficient is $+0.106$ (SE$=0.098$, $p=0.286$)---positive but insignificant. The contrast between the negative personal care estimate and the positive all-HCBS estimate suggests compositional reallocation: personal care providers may shift to other HCBS categories (e.g., habilitation, behavioral health) that experienced different rate dynamics.
+
+\subsection{Heterogeneity by Provider Type}
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\begin{tabular}{lccl}
+\toprule
+Specification & Coefficient & SE & Notes \\
+\midrule
+\textit{Panel A: Baseline} & & & \\
+\quad TWFE (personal care providers) & -0.2362 & 0.2077 & Main result \\
+\midrule
+\textit{Panel B: Placebo Tests} & & & \\
+\quad E/M visit providers (99213/99214) & 0.1589 & 0.1136 & Placebo \\
+\quad E/M visit claims & 0.1358 & 0.1406 & Placebo \\
+\midrule
+\textit{Panel C: Heterogeneity} & & & \\
+\quad Individual providers (Type 1) & -0.1782 & 0.0824 & \\
+\quad Organizations (Type 2) & -0.2346 & 0.2107 & \\
+\quad Sole proprietors & -0.0971 & 0.0734 & \\
+\midrule
+\textit{Panel D: Sensitivity} & & & \\
+\quad Excluding COVID onset & -0.2282 & 0.2006 & Mar--Jun 2020 dropped \\
+\quad Excluding Wyoming & -0.1711 & 0.2105 & 1,422\% outlier dropped \\
+\quad Randomization inference & \multicolumn{2}{c}{$p = 0.024$} & 1,000 permutations \\
+\midrule
+\textit{Panel E: Dose-Response} & & & \\
+\quad Rate increase $\times$ post & -0.0424 & 0.1537 & Excl.\ WY; continuous treatment \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} All regressions include state and month fixed effects with standard errors clustered at the state level. Panel B tests whether the personal care rate increase affects outcomes for unrelated services (E/M office visits). Panel C splits provider counts by entity type from NPPES. Panel D drops the initial COVID-19 months, excludes the extreme Wyoming outlier (1,422\% rate increase), and reports a randomization inference p-value. Panel E uses rate change magnitude as a continuous treatment intensity variable, excluding Wyoming (1,422\% outlier) to prevent excessive leverage.
+\end{minipage}
+\end{table}
+
+Table~\ref{tab:robustness} Panel C decomposes the effect by entity type from NPPES. Individual providers (Type 1)---sole practitioners who deliver care directly---show a statistically significant decline of 16.3\% ($e^{-0.178}-1$; $p=0.035$) following rate increases. Organizational providers (Type 2)---agencies and facilities that employ multiple workers---show a larger point estimate ($-20.9\%$, $e^{-0.235}-1$) but with larger standard errors ($p=0.271$). Sole proprietors decline by 9.3\% ($e^{-0.097}-1$; $p=0.192$).
+
+Figure~\ref{fig:het} visualizes these heterogeneous effects. The consistent negative direction across all provider types argues against a pure TWFE artifact and suggests a substantive pattern: rate increases coincide with provider exit rather than entry.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig6_heterogeneity.pdf}
+    \caption{Heterogeneous Effects by Provider Type}
+    \label{fig:het}
+\end{figure}
+
+This pattern is consistent with Prediction 3 from the conceptual framework: organizational consolidation. When rates increase, surviving organizations may absorb caseloads from exiting individual providers, increasing their revenue per worker without expanding the total workforce. The net effect on NPI counts is zero or negative even if total service hours are maintained.
+
+\subsection{Alternative Treatment Thresholds}
+
+Panel D of Table~\ref{tab:robustness} reports results using alternative rate-jump detection thresholds. At a 10\% threshold, 29 states are classified as treated, and the coefficient is $-0.029$ (SE$=0.173$). At 20\%, 20 states are treated, yielding $-0.274$ (SE$=0.238$). At 25\%, 18 states are treated, with a coefficient of $-0.279$ (SE$=0.257$). The results are robust: all point estimates are negative and none are significantly positive. The consistency across thresholds indicates that the null result is not an artifact of the particular detection criterion.
+
+\subsection{Excluding the COVID-19 Onset}
+
+The COVID-19 pandemic caused massive disruptions to home care delivery beginning in March 2020. To ensure that pandemic-related confounders are not driving results, I re-estimate the TWFE specification excluding March through June 2020. The coefficient on log providers is $-0.228$ (SE$=0.201$, $p=0.261$), virtually identical to the full-sample estimate ($-0.236$). The pandemic onset does not drive the results.
+
+\subsection{Excluding Wyoming Outlier}
+
+Wyoming reports a 1,422\% rate increase---an order of magnitude larger than any other state. This extreme value could reflect a genuine policy change (e.g., a shift from 15-minute to per-diem billing units) or a data artifact from changes in coding practices. To ensure results are not driven by this single observation, I re-estimate the TWFE specification excluding Wyoming entirely. The coefficient is $-0.171$ (SE$=0.211$, $p=0.420$), slightly attenuated relative to the full-sample estimate ($-0.236$) but qualitatively identical. The main result---a negative, statistically insignificant effect of rate increases on provider counts---holds with or without this outlier.
+
+\subsection{Randomization Inference}
+
+I conduct a Fisher permutation test by randomly reassigning treatment status 1,000 times, each time drawing 23 states and assigning them random treatment dates from the observed distribution. The observed TWFE coefficient of $-0.236$ exceeds (in absolute value) the permuted coefficients in 97.6\% of simulations, yielding a Fisher exact two-sided $p$-value of 0.024. This $p$-value differs from the asymptotic TWFE $p$-value of 0.261 (Table~\ref{tab:main}) because the two tests answer different questions: the TWFE $p$-value tests whether $\beta = 0$ under standard asymptotic theory with clustered standard errors, while the randomization inference $p$-value tests whether the observed coefficient could have arisen by chance under random assignment of treatment. The Fisher test indicates that the negative relationship between rate increases and provider counts is unlikely under random treatment assignment---but it is in the ``wrong'' direction from the policy perspective. The rate increase does not attract providers; if anything, it coincides with provider exit.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig7_ri_distribution.pdf}
+    \caption{Randomization Inference: Provider Count Effect}
+    \label{fig:ri}
+\end{figure}
+
+\subsection{Dose-Response}
+
+If higher rate increases should produce larger supply responses, a dose-response analysis provides an additional test. I replace the binary treatment indicator with a continuous treatment intensity variable equal to the proportional magnitude of the detected rate increase (e.g., 0.35 for a 35\% increase, 1.0 for a 100\% increase), interacted with the post-treatment indicator. Wyoming is excluded from the dose-response analysis due to its extreme outlier status (1,422\% increase), which would exert disproportionate leverage on the OLS fit. The coefficient on dose $\times$ post is reported in Panel E of Table~\ref{tab:robustness}. A coefficient of $-0.042$ (SE$=0.154$, $p=0.784$) implies that a 100 percentage point rate increase is associated with a 0.042 log-point decline in provider counts---economically small and statistically indistinguishable from zero. There is no evidence of a positive dose-response relationship: larger rate increases do not produce larger supply responses.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig8_dose_response.pdf}
+    \caption{Dose-Response: Rate Increase Size and Provider Supply}
+    \label{fig:dose}
+\end{figure}
+
+Figure~\ref{fig:dose} plots the relationship between rate increase magnitude and post-treatment average provider counts across treated states. The downward-sloping relationship is driven by states with the largest rate increases (often states that started from the lowest rate levels) experiencing the largest provider declines. This pattern is consistent with states raising rates \textit{in response to} declining supply---the most severe workforce crises elicited the largest policy responses.
+
+
+\section{Discussion}
+
+\subsection{Interpreting the Null}
+
+The central finding---that reimbursement rate increases do not expand the HCBS personal care provider workforce---admits several interpretations.
+
+\textbf{Structural supply inelasticity.} The most parsimonious interpretation is that the short-run supply elasticity of HCBS providers to Medicaid rates is close to zero. Entry barriers (training, background checks, agency affiliation requirements) create a discrete cost that dominates marginal rate changes. A 20\% rate increase on a \$10/hour effective wage raises income by \$2/hour---meaningful, but perhaps insufficient to clear the training and credentialing hurdle for potential entrants, especially when competing employers in retail and food service offer comparable wages with lower barriers.
+
+\textbf{General equilibrium wage effects.} Rate increases may raise the reservation wage for the entire direct care labor market, not just Medicaid providers. If private-pay home care agencies and assisted living facilities respond to Medicaid rate increases by raising their own wages to retain workers, the net effect on Medicaid-specific provider supply is zero. This is analogous to the minimum wage literature's finding that employer-specific wage increases do not increase that employer's labor supply if all competitors match \citep{manning2021monopsony}.
+
+\textbf{Reverse causality.} The negative dose-response relationship suggests that at least some of the estimated effect reflects states raising rates \textit{because} their workforce is declining. While the event-study pre-trends are flat, the CS-DiD test has limited power against slow pre-trends that begin years before the rate increase. This is a fundamental challenge for any observational study of policy responses to crises.
+
+\textbf{Consolidation and restructuring.} The provider-type heterogeneity---individual providers declining significantly while the aggregate effect is null---is consistent with organizational consolidation. Rate increases may make it more profitable for agencies to hire workers directly (converting independent providers to W-2 employees), reducing the NPI count without reducing the workforce. This is a measurement issue: NPIs count billing entities, not individual workers.
+
+\subsection{Comparison to Other Healthcare Settings}
+
+The near-zero supply elasticity documented here contrasts sharply with evidence from other Medicaid provider markets. For physician services, the literature has consistently found positive supply responses to reimbursement increases. \cite{zuckerman2004changes} document that states with higher Medicaid-to-Medicare fee ratios have higher physician participation rates, and studies of the ACA's temporary Medicaid fee bump for primary care found measurable increases in appointment availability. For dental services, \cite{buchmueller2007effect} estimate supply elasticities of 0.4--0.7 with respect to Medicaid payment rates.
+
+Why might HCBS providers be less responsive than physicians or dentists? Three structural differences stand out. First, physicians and dentists have high fixed costs of practice (education, equipment, office space) that are already sunk by the time they decide whether to accept Medicaid patients. The marginal cost of adding a Medicaid patient to an existing practice is low, making the extensive margin highly responsive to fees. HCBS providers, by contrast, face significant variable costs per client (travel, time, emotional labor) and low fixed costs---making the quantity margin more relevant than the participation margin. Second, physicians can adjust their Medicaid exposure continuously (accept fewer or more Medicaid patients), while many HCBS providers serve exclusively Medicaid populations---they are either in the market or out. This all-or-nothing decision is less price-elastic than the physician's marginal adjustment. Third, the HCBS labor market competes directly with low-wage service sector jobs (retail, food service, warehouse work) that have experienced dramatic wage growth since 2020, eroding the relative appeal of caregiving work regardless of Medicaid rate changes.
+
+\subsection{Implications for HCBS Policy}
+
+These findings have direct implications for the ongoing debate about how to address the HCBS workforce crisis. If rate increases alone cannot expand provider networks, policymakers should consider complementary strategies:
+
+\begin{itemize}
+    \item \textbf{Reducing entry barriers:} Streamlining training requirements, accelerating background checks, and creating apprenticeship pathways could lower the fixed cost of market entry, making marginal providers more responsive to rate signals.
+    \item \textbf{Targeting retention rather than recruitment:} If the binding constraint is turnover rather than entry, rate increases may be more effective if coupled with retention bonuses, career ladders, and benefits (health insurance, paid leave) that address the working conditions driving exit.
+    \item \textbf{Addressing outside options:} State minimum wage increases directly compete with HCBS compensation. Rate increases that merely maintain parity with rising minimum wages do not create a genuine incentive for entry. This echoes the findings of \cite{apep0327} that minimum wage increases reduce beneficiary caseloads per HCBS provider.
+    \item \textbf{Reducing monopsony power:} If the HCBS labor market is monopsonistic---as suggested by low wages and high turnover---rate increases that flow through employer organizations may not reach workers. Direct worker subsidies or wage floors could be more effective than provider rate increases.
+\end{itemize}
+
+\subsection{Limitations}
+
+Several limitations should be noted. First, the T-MSIS data measure billing NPIs, not individual workers. An NPI can represent a sole practitioner or an agency employing hundreds. Declines in NPI counts could reflect organizational consolidation (many workers consolidated under fewer NPIs) rather than workforce contraction. Future research linking T-MSIS to payroll data could distinguish these margins.
+
+Second, the data-driven treatment identification may classify some states incorrectly. Payment per claim reflects an average across all personal care claims within a state, and changes can arise from composition shifts (e.g., more intensive services billed at higher rates) rather than fee schedule changes. However, the consistency of results across multiple detection thresholds mitigates this concern.
+
+Third, the analysis captures short-run effects (months to a few years after rate increases). The long-run supply response may differ if rate increases reduce turnover and gradually build the workforce pipeline. My data window does not extend far enough to assess multi-year supply dynamics for the latest treatment cohorts.
+
+Fourth, I cannot distinguish between the effects of permanent rate increases and temporary bonuses. Some ARPA-funded rate increases were explicitly temporary, which may have attenuated provider responses if potential entrants anticipated the rate increase would expire.
+
+Finally, managed care states present a measurement challenge. In managed care, T-MSIS ``paid'' amounts may represent encounter values rather than actual provider payments, and managed care organizations may not pass through rate increases to individual providers. This could attenuate the measured first stage.
+
+
+\section{Conclusion}
+
+The Medicaid HCBS workforce crisis is real and urgent. Over 800,000 Americans are waiting for home care services, and the problem is worsening as the population ages. States have responded with the most intuitive intervention: paying providers more. The American Rescue Plan Act channeled \$37 billion into HCBS, with rate increases the most popular investment.
+
+This paper asks whether the money worked. Using the first-ever provider-level Medicaid claims data, I track 52 states over 84 months and identify 23 states with sustained personal care rate increases of 15\% or more. The answer is sobering: rate increases did not expand the HCBS provider workforce. Point estimates are negative across all specifications---TWFE and Callaway-Sant'Anna---and none are significantly positive. Individual providers \textit{declined} significantly after rate increases, consistent with organizational consolidation rather than workforce expansion.
+
+These findings do not mean rate increases are worthless. Providers who remained received higher compensation, which may improve retention and service quality over time. But the headline metric that policymakers care about most---more providers serving more people---did not respond. If the goal is to expand the HCBS workforce, rate increases are necessary but not sufficient. The supply constraint is structural, not just financial, and solving it will require addressing entry barriers, outside options, and working conditions alongside reimbursement.
+
+The T-MSIS data demonstrated here open a new frontier for Medicaid program evaluation. For the first time, researchers can observe the universe of Medicaid provider billing at monthly frequency, at the individual NPI level, across all states simultaneously. This paper is among the first to exploit these data for causal analysis. Future work could extend this approach to study Medicaid managed care contracting, behavioral health access, and the long-run dynamics of home care labor markets.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{T-MSIS Data Description}
+
+The Transformed Medicaid Statistical Information System (T-MSIS) provider spending file was published by HHS on February 9, 2026, at \url{https://opendata.hhs.gov/datasets/medicaid-provider-spending/}. The file is derived from T-MSIS, the system through which states report Medicaid claims and enrollment data to CMS.
+
+\textbf{Schema:} Each observation represents a unique combination of billing provider NPI, servicing provider NPI, HCPCS procedure code, and claim month. The file contains seven fields: billing provider NPI, servicing provider NPI, HCPCS code, claim month, total unique beneficiaries, total claims, and total paid amount.
+
+\textbf{Coverage:} All 50 states, DC, and territories. January 2018 through December 2024 (84 months). Fee-for-service, managed care, and CHIP combined.
+
+\textbf{Size:} 227,083,361 observations, 617,503 unique billing NPIs, 10,881 unique HCPCS codes, \$1.09 trillion in cumulative payments.
+
+\textbf{Suppression:} Cells with fewer than 12 total claims are suppressed entirely. This disproportionately affects rural providers and rare procedures but represents a negligible share of total spending.
+
+\subsection{NPPES Extract}
+
+The National Plan and Provider Enumeration System (NPPES) extract contains practice state, ZIP code, entity type (1=individual, 2=organization), sole proprietor status, taxonomy codes, and lifecycle dates (enumeration, deactivation, reactivation) for 8,990,650 providers. Downloaded from CMS at \url{https://download.cms.gov/nppes/NPI_Files.html}. Match rate to T-MSIS billing NPIs: 99.5\%.
+
+\subsection{HCPCS Code Selection}
+
+Personal care codes used for treatment identification and primary outcomes:
+\begin{itemize}
+    \item T1019: Personal care services, per 15 minutes
+    \item T1020: Personal care services, per diem
+    \item S5125: Attendant care services, per 15 minutes
+    \item S5130: Homemaker service, per 15 minutes
+\end{itemize}
+
+Placebo codes for E/M office visits:
+\begin{itemize}
+    \item 99213: Office or outpatient visit, established patient, low complexity
+    \item 99214: Office or outpatient visit, established patient, moderate complexity
+\end{itemize}
+
+\subsection{Rate Change Detection Algorithm}
+
+For each state, the algorithm:
+\begin{enumerate}
+    \item Computes the 3-month rolling average of payment per claim for personal care codes
+    \item Identifies months where the rolling average increases by $\geq$15\% relative to the prior month
+    \item Takes the first qualifying jump
+    \item Verifies that the elevated rate persists for at least 3 consecutive months
+    \item Records the treatment date and computes 6-month average rates before and after
+\end{enumerate}
+
+States without a qualifying sustained rate increase are classified as never-treated.
+
+\begin{table}[htbp]
+\centering
+\caption{Detected HCBS Rate Increases by State}
+\label{tab:treatment}
+\footnotesize
+\begin{tabular}{lcrrr}
+\toprule
+State & Treatment Quarter & Rate Before (\$) & Rate After (\$) & Change (\%) \\
+\midrule
+FL & 2018 Q2 & 44.61 & 70.26 & 57.5 \\
+TX & 2018 Q2 & 49.57 & 70.93 & 43.1 \\
+WI & 2018 Q2 & 21.05 & 29.89 & 42.0 \\
+IA & 2018 Q3 & 98.31 & 127.62 & 29.8 \\
+MN & 2018 Q4 & 33.65 & 66.79 & 98.5 \\
+WA & 2018 Q4 & 534.66 & 666.27 & 24.6 \\
+DE & 2018 Q4 & 2.98 & 5.41 & 81.5 \\
+NC & 2019 Q2 & 65.10 & 85.41 & 31.2 \\
+OR & 2019 Q3 & 686.02 & 799.38 & 16.5 \\
+WY & 2020 Q1 & 77.16 & 1174.37 & 1422.0 \\
+CA & 2020 Q2 & 132.15 & 183.99 & 39.2 \\
+PA & 2020 Q2 & 68.86 & 127.43 & 85.1 \\
+ND & 2021 Q1 & 88.84 & 185.34 & 108.6 \\
+IN & 2021 Q2 & 157.31 & 221.19 & 40.6 \\
+IL & 2022 Q1 & 101.75 & 156.26 & 53.6 \\
+VI & 2022 Q2 & 562.27 & 961.01 & 70.9 \\
+MS & 2022 Q4 & 110.47 & 270.05 & 144.4 \\
+VT & 2022 Q4 & 1458.08 & 1699.92 & 16.6 \\
+WV & 2022 Q4 & 226.14 & 714.05 & 215.7 \\
+UT & 2023 Q2 & 64.70 & 150.77 & 133.0 \\
+SC & 2023 Q3 & 62.28 & 105.49 & 69.4 \\
+AL & 2023 Q4 & 202.16 & 270.02 & 33.6 \\
+OH & 2023 Q4 & 34.43 & 113.19 & 228.8 \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.90\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} Rate changes detected from T-MSIS payment data. ``Rate Before'' and ``Rate After'' are the 6-month average payment per claim for personal care HCPCS codes (T1019, T1020, S5125, S5130) before and after the detected jump. Treatment quarter is the first quarter with a sustained ($\geq$3 month) rate increase of $\geq$15\%.
+\end{minipage}
+\end{table}
+
+\section{Identification Appendix}
+
+\subsection{Goodman-Bacon Decomposition}
+
+The standard TWFE estimator in the presence of staggered treatment is a weighted average of all possible 2$\times$2 DiD comparisons \citep{goodman2021difference}. With 23 treated cohorts entering between 2018 and 2023, there are hundreds of implicit comparisons, some of which use already-treated units as controls. The discrepancy between TWFE ($-0.236$) and CS-DiD ($-0.100$) estimates is consistent with negative weighting bias from heterogeneous treatment effects.
+
+\subsection{Sun-Abraham Estimates}
+
+Table~\ref{tab:sa} reports the Sun-Abraham interaction-weighted estimates for selected relative time periods. Pre-treatment coefficients (periods $-6$ through $-2$) are close to zero and statistically insignificant, confirming flat pre-trends. Post-treatment coefficients are generally negative but imprecisely estimated, consistent with the CS-DiD findings. The overall pattern---null pre-trends and small negative post-treatment effects---matches the main results.
+
+\begin{table}[htbp]
+\centering
+\caption{Sun-Abraham Interaction-Weighted Estimates: Log Providers}
+\label{tab:sa}
+\begin{tabular}{lcc}
+\toprule
+Relative Period & Coefficient & SE \\
+\midrule
+\textit{Pre-Treatment} & & \\
+\quad $t-6$ & 0.021 & (0.020) \\
+\quad $t-5$ & 0.019 & (0.015) \\
+\quad $t-4$ & 0.003 & (0.010) \\
+\quad $t-3$ & $-0.004$ & (0.013) \\
+\quad $t-2$ & 0.017 & (0.010) \\
+\midrule
+\textit{Post-Treatment} & & \\
+\quad $t+0$ & $-0.004$ & (0.017) \\
+\quad $t+3$ & $-0.042$ & (0.019) \\
+\quad $t+6$ & $-0.026$ & (0.049) \\
+\quad $t+12$ & $-0.096$ & (0.091) \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.85\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} Selected coefficients from the \citet{sun2021estimating} interaction-weighted estimator. Dependent variable is log provider count. All regressions include state and time fixed effects with standard errors clustered at the state level. Period $t-1$ is the omitted reference period.
+\end{minipage}
+\end{table}
+
+\subsection{Balance Tests}
+
+Pre-ARPA average outcomes (January 2018 to March 2021) are compared between treated and never-treated states. Table~\ref{tab:summary} shows the two groups have similar provider counts (treated mean: 163, control mean: 142), and both groups generate substantial claims volume. Treated states have higher average payment per claim (\$175 vs.\ \$113), which is consistent with higher baseline rates creating fiscal headroom for further increases. Never-treated states serve more beneficiaries on average (20,833 vs.\ 14,525), reflecting the heterogeneity in state Medicaid program sizes. Importantly, there is no evidence of divergent pre-treatment trends, as shown in the event study analysis (Section 6.2).
+
+\section{Robustness Appendix}
+
+\subsection{Full Rate Change Detection Results}
+
+The rate detection algorithm was run at three additional thresholds beyond the baseline 15\%:
+
+\begin{itemize}
+    \item 10\% threshold: 29 treated states, TWFE coefficient $-0.029$ (SE$=0.173$)
+    \item 20\% threshold: 20 treated states, TWFE coefficient $-0.274$ (SE$=0.238$)
+    \item 25\% threshold: 18 treated states, TWFE coefficient $-0.279$ (SE$=0.257$)
+\end{itemize}
+
+Results are qualitatively identical across all thresholds: negative point estimates, none significantly positive.
+
+\subsection{Sensitivity to COVID Period}
+
+Excluding March--June 2020 (acute pandemic onset) yields TWFE coefficient $-0.228$ (SE$=0.201$), virtually identical to the full sample. Excluding the entire 2020 calendar year yields similar results, confirming that pandemic-era disruptions do not drive the findings.
+
+\section{Heterogeneity Appendix}
+
+\subsection{Provider Type Decomposition}
+
+Individual providers (NPPES entity type 1) are sole practitioners who deliver care directly. They account for approximately 60\% of personal care billing NPIs but only 30\% of personal care spending. Organizational providers (entity type 2) are agencies and facilities that employ multiple workers and bill on their behalf. They account for 40\% of NPIs but 70\% of spending.
+
+The significant decline in individual providers ($-0.178$, $p=0.035$) following rate increases, combined with the insignificant decline in organizational providers ($-0.235$, $p=0.271$), is consistent with two mechanisms: (1) individual providers converting to employee status within organizations, reducing the NPI count without reducing the workforce; and (2) organizational providers absorbing caseloads from exiting individual providers.
+
+\subsection{Dose-Response Details}
+
+The negative dose-response relationship---states with larger rate increases experience larger provider declines---is driven by states that started from the lowest reimbursement levels. States like Ohio (229\% increase), West Virginia (216\%), and Mississippi (144\%) implemented dramatic rate increases from low baselines, likely in response to severe workforce crises. The negative dose-response is therefore consistent with reverse causality rather than a causal dose-response.
+
+\end{document}

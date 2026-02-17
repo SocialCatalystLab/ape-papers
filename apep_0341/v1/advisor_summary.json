@@ -1,0 +1,52 @@
+{
+  "mode": "advisor",
+  "n_advisors": 4,
+  "models": [
+    "gpt-5.2",
+    "grok-4.1-fast",
+    "gemini-3-flash-preview",
+    "gpt-5.1-codex-mini"
+  ],
+  "routing": {
+    "gpt": "openrouter_latex",
+    "grok": "openrouter_latex",
+    "gemini": "google_direct",
+    "code": "openrouter_code"
+  },
+  "successful": 4,
+  "failed_api": 0,
+  "elapsed_seconds": 29.937712907791138,
+  "verdicts": [
+    {
+      "advisor": "gpt",
+      "model": "GPT-5.2",
+      "verdict": "PASS"
+    },
+    {
+      "advisor": "grok",
+      "model": "Grok-4.1-Fast",
+      "verdict": "PASS"
+    },
+    {
+      "advisor": "gemini",
+      "model": "Gemini-3-Flash",
+      "verdict": "FAIL"
+    },
+    {
+      "advisor": "code",
+      "model": "Codex-Mini",
+      "verdict": "PASS"
+    }
+  ],
+  "overall_pass": true,
+  "pass_count": 3,
+  "fail_count": 1,
+  "unclear_count": 0,
+  "api_errors": [],
+  "files": [
+    "/Users/ai1/auto-policy-evals/output/apep_0328/v1/advisor_gpt_1.md",
+    "/Users/ai1/auto-policy-evals/output/apep_0328/v1/advisor_grok_1.md",
+    "/Users/ai1/auto-policy-evals/output/apep_0328/v1/advisor_gemini_1.md",
+    "/Users/ai1/auto-policy-evals/output/apep_0328/v1/advisor_code_1.md"
+  ]
+}

@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics: Pre-ARPA Baseline Period (January 2018--March 2021)}
+\label{tab:summary}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{2}{c}{All States} & \multicolumn{2}{c}{Treated} & \multicolumn{2}{c}{Never-Treated} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & Mean & SD & Mean & SD & Mean & SD \\
+\midrule
+Provider count & 151.0 & 249.1 & 163.3 & 303.6 & 141.8 & 197.8 \\
+Beneficiaries & 18,119.0 & 38,414.1 & 14,524.5 & 31,853.1 & 20,833.1 & 42,519.1 \\
+Total claims & 310,701.2 & 766,726.9 & 234,352.1 & 592,408.4 & 368,351.1 & 871,506.8 \\
+Total paid ($) & 30,399,915.2 & 101,503,247.9 & 14,241,660.0 & 28,487,816.8 & 42,600,741.9 & 130,884,403.2 \\
+Avg. payment/claim ($) & 139.5 & 179.0 & 175.1 & 259.1 & 112.5 & 62.6 \\
+\midrule
+State-months & \multicolumn{2}{c}{1,899} & \multicolumn{2}{c}{817} & \multicolumn{2}{c}{1,082} \\
+States & \multicolumn{2}{c}{50} & \multicolumn{2}{c}{21} & \multicolumn{2}{c}{29} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{4pt}
+\footnotesize \textit{Notes:} Summary statistics for the pre-ARPA period (January 2018 to March 2021), covering 1,899 state-months. The full regression panel (Table~\ref{tab:main}) covers 4,161 state-months across the entire 2018--2024 period. Some early-treated cohorts (2018) have post-treatment observations in this pre-ARPA window. Personal care codes include T1019, T1020, S5125, and S5130. ``Treated'' states are those with a detected sustained rate increase of \(\geq\)15\% in average payment per claim. Provider counts are unique billing NPIs per state-month. Two treated states (U.S. Virgin Islands and Vermont) lack pre-ARPA data and are excluded from this table but included in all regressions. They are excluded because they entered the T-MSIS reporting system only after April 2021, providing insufficient pre-treatment baseline for this table; the Callaway-Sant'Anna estimator accommodates their short pre-treatment windows in the regression analysis.
+\end{minipage}
+\end{table}

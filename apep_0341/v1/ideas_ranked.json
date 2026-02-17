@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-17T15:39:58.356390",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2356,
+    "output_tokens": 3326,
+    "total_tokens": 5682
+  },
+  "ideas_file": "output/apep_0328/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "ARPA-Funded HCBS Reimbursement Rate Increases \u2192 Provider Supply and Service Volume",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Reimbursement Rate Levels and Cross-State Provider Sorting",
+      "score": 55,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "State Fee Schedule Changes \u2192 Provider Entry and Exit (Triple-Diff)",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}
