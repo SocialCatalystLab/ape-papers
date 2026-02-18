@@ -1,0 +1,20 @@
+{
+  "iteration": 1,
+  "max_iterations": 3,
+  "proceed_to_phase4": true,
+  "reason": "PURSUE idea found",
+  "best_idea": {
+    "rank": 1,
+    "title": "Medicaid Postpartum Coverage Extensions and Maternal Health Provider Supply (Idea 1)",
+    "score": 77,
+    "recommendation": "PURSUE",
+    "conditions": [
+      "explicitly addressing PHE continuous-coverage/unwinding timing",
+      "defining \u201csupply\u201d using postpartum-linked provider measures",
+      "using T\u2011MSIS quality screens + state-specific reporting-break controls",
+      "showing robust pre-trends",
+      "placebo outcomes such as antepartum codes"
+    ]
+  },
+  "timestamp": "2026-02-18T14:35:09.405075"
+}

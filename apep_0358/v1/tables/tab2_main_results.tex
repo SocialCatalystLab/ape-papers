@@ -1,0 +1,41 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of Postpartum Coverage Extensions on Maternal Health Provider Supply}
+\label{tab:main_results}
+\small
+\begin{tabular}{lcccc}
+\hline\hline
+ & Log Post- & Log Post- & Log Contra- & Log OB/GYN \\
+ & partum & partum & ceptive & Providers \\
+ & Claims & Providers & Claims & (any code) \\
+ & (1) & (2) & (3) & (4) \\
+\hline
+\multicolumn{5}{l}{\textit{Panel A: Callaway \& Sant'Anna (2021)}} \\
+ATT & 0.2834** & 0.1108 & 0.1102 & -0.0375 \\
+ & (0.1281) & (0.0682) & (0.2633) & (0.0330) \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel B: TWFE}} \\
+Treated & 0.0938 & -0.0119 & -0.0311 & -0.0070 \\
+ & (0.2134) & (0.1204) & (0.2436) & (0.0703) \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel C: TWFE post-PHE only (April 2023+)}} \\
+Treated & 0.1297 & & & \\
+ & (0.1049) & & & \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel D: Triple-difference (postpartum vs. antepartum)}} \\
+Treated $\times$ Postpartum & 0.2579 & & & \\
+ & (0.2661) & & & \\
+[6pt]
+\hline
+State FE & Yes & Yes & Yes & Yes \\
+Month FE & Yes & Yes & Yes & Yes \\
+State-months & 4284 & 4284 & 4284 & 4284 \\
+States & 51 & 51 & 51 & 51 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\linewidth}
+\vspace{6pt}
+\footnotesize
+\textit{Notes:} Panel A reports the simple aggregate ATT from Callaway and Sant'Anna (2021) with doubly robust estimation and not-yet-treated states as the control group. Panel B reports TWFE estimates with state and month fixed effects, clustering at the state level. Panel C restricts to the post-PHE period (April 2023 onward) when extensions create new coverage. Panel D reports the triple-difference coefficient: the difference between the treated effect on postpartum claims and the treated effect on antepartum claims, estimated jointly with state$\times$type and month$\times$type fixed effects. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.10$.
+\end{minipage}
+\end{table}

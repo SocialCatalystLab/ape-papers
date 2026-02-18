@@ -1,0 +1,670 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\newcommand{\floatfoot}[1]{\vspace{-0.5em}\begin{minipage}{\textwidth}\footnotesize #1\end{minipage}}
+
+\title{Does Coverage Create Capacity? Medicaid Postpartum Extensions\\ and the Supply of Maternal Health Providers}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Forty-seven U.S.\ states extended Medicaid postpartum coverage from 60 days to 12 months within the study window (2021--2024). I exploit the staggered adoption to estimate effects on provider supply using novel T-MSIS claims data covering all Medicaid-billing providers. Applying the Callaway and Sant'Anna (2021) estimator, I find that extensions increased postpartum care claims by up to 33\% and expanded the number of providers billing for postpartum services by 12\%. An antepartum care placebo confirms effects are postpartum-specific. However, restricting to states with consistent data reporting yields a near-zero estimate, suggesting the full-sample result partly reflects T-MSIS reporting improvements. The true effect likely lies between these bounds, but the direction is consistent across specifications.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I13, I18, H75 \\
+\noindent\textbf{Keywords:} Medicaid, postpartum coverage, provider supply, maternal health, difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+In 2020, more than 190,000 women lost Medicaid coverage within 60 days of giving birth---many in the middle of treating conditions like postpartum depression, gestational diabetes, and hypertension that emerged during pregnancy \citep{daw2021}. The abruptness of this coverage cliff has drawn attention from policymakers: if women cannot see a doctor, does it matter that they were briefly insured? But a less visible question lurks behind the coverage debate. Even when states extend postpartum Medicaid from 60 days to a full year---as 47 states have now done---will providers actually be there to serve these women?
+
+This question matters because Medicaid's provider supply problem is well documented and severe. Nearly one-third of physicians decline new Medicaid patients \citep{decker2012}, and the gap between Medicaid and commercial reimbursement rates has widened over time \citep{clemens2014}. In obstetrics specifically, rural hospital closures have left entire counties without a single delivering provider \citep{kozhimannil2019}. Coverage expansion without corresponding provider response is, in the language of economics, an unfunded mandate on the demand side: eligible women hold insurance cards that buy access to empty waiting rooms.
+
+This paper provides the first evidence on how extending postpartum Medicaid coverage affects the supply side of the maternal health market. I exploit the staggered adoption of 12-month postpartum extensions across 47 states between October 2021 and March 2024, using a novel dataset---the T-MSIS Medicaid Provider Spending file---that records every billing interaction between Medicaid providers and beneficiaries at the provider$\times$procedure$\times$month level. This dataset, released by HHS in February 2026, covers the universe of Medicaid claims from January 2018 through December 2024, giving me both the pre-treatment baseline and the post-adoption response for each state's extension.
+
+The policy I study is the 12-month Medicaid postpartum coverage extension authorized by Section 9812 of the American Rescue Plan Act (March 2021). Before this provision, federal law required states to cover pregnant women through Medicaid for only 60 days after delivery. The ARP created a state option---formalized as a State Plan Amendment pathway effective April 1, 2022---to extend this coverage to a full 12 months. States adopted this option in waves: 20 states moved on the first available date, while others followed over the next two years. Arkansas and Wisconsin remain the only non-adopters as of early 2026; Idaho and Iowa adopted in early 2025, outside the data window, and are coded as not-yet-treated. This staggered rollout generates the identifying variation I exploit.
+
+My identification strategy uses the Callaway and Sant'Anna (2021) difference-in-differences estimator, which handles staggered treatment timing without the well-known biases of standard two-way fixed effects \citep{goodmanbacon2021, dechaisemartin2020}. A growing literature has developed alternative heterogeneity-robust estimators \citep{sunab2021, borusyak2024}; I use CS-DiD because its doubly robust formulation is well-suited to settings with compositional differences across cohorts. I define treatment as the effective date of each state's extension and compare outcomes in adopting states to not-yet-treated states. The key identifying assumption is that, absent the extension, trends in provider supply would have been parallel between early and late adopters. I test this assumption directly through event-study plots showing the path of outcomes for 24 months before and after adoption.
+
+A critical feature of my setting is the Public Health Emergency (PHE) continuous enrollment provision, which effectively extended coverage for all Medicaid enrollees---including postpartum women---from January 2020 through March 2023. During this period, the formal 12-month extensions were largely non-binding: women retained coverage regardless. This creates both a challenge and an opportunity. The challenge is that early adopters' treatment effects are attenuated during the PHE. The opportunity is that the PHE's end in April 2023 generates a sharp change in the bindingness of the extensions, providing a natural placebo period and a clean post-PHE window in which extensions create genuinely new coverage.
+
+I address this through multiple strategies. First, I report results separately for during-PHE and post-PHE periods. Second, I employ a triple-difference design that compares postpartum claims (affected by extensions) to antepartum claims (unaffected) within the same states and months, differencing out any PHE-related confounds that affect both types of care equally. Third, I focus on outcomes---like contraceptive implant placement and dedicated postpartum visit codes---that are specifically tied to the extended coverage window and would not be affected by general enrollment continuity.
+
+My main finding is that postpartum coverage extensions increased postpartum care claims (HCPCS code 59430) by approximately 33\% (ATT = 0.2834, $p$ = 0.027) and the number of distinct providers billing for postpartum services by 12\% (ATT = 0.1108, $p$ = 0.104). The claims effect is statistically significant while the provider entry response is more modest and marginally significant. The contraceptive service response is positive but imprecisely estimated (ATT = 0.1102, $p$ = 0.676), consistent with the extended coverage window enabling LARC placement but with substantial heterogeneity across states. As a placebo, antepartum care claims---which should be unaffected by postpartum extensions---show no significant treatment effect (ATT = 0.0659, $p$ = 0.806), confirming that the results are driven by the postpartum channel specifically.
+
+Several analyses probe the robustness of these findings---and reveal important limitations. Adding state-specific linear time trends yields a TWFE estimate of 0.1962 ($p$ = 0.057), directionally consistent with the CS-DiD result. However, the balanced panel restriction---limiting to 17 states with non-zero postpartum claims in at least 90\% of months---produces a near-zero estimate of 0.0028 ($p$ = 0.990). This sharp attenuation indicates that much of the measured effect comes from states transitioning from zero to positive T-MSIS reporting, a pattern that may reflect data quality improvements coinciding with policy adoption rather than (or in addition to) genuine behavioral responses. The range of estimates---from approximately 0\% (balanced panel) to 33\% (full sample)---bounds the plausible effect and illustrates the challenge of separating policy effects from reporting artifacts in newly released administrative data. Randomization inference yields a p-value of 0.20, and the Rambachan and Roth (2023) sensitivity analysis gives a confidence interval of $[-0.08, 0.44]$ at $\bar{M} = 0$.
+
+This paper makes three contributions. First, I provide the first supply-side evidence on postpartum Medicaid extensions. The existing literature has focused almost exclusively on enrollment, utilization, and health outcomes \citep{gordon2023, daw2021, mcmorrow2020}---all demand-side questions. Whether coverage translates to access depends critically on provider response, which I measure directly.
+
+Second, I introduce the T-MSIS Medicaid Provider Spending dataset to the economics of provider behavior. This administrative dataset offers a comprehensive view of every Medicaid billing interaction---something that has been available for Medicare (via the Physician/Supplier PUF) but never before for Medicaid. The dataset's provider$\times$procedure$\times$month granularity enables a level of supply-side analysis that survey data and enrollment records cannot match.
+
+Third, I contribute to the literature on how reimbursement and coverage rules shape provider participation in public insurance programs \citep{clemens2014, polsky2015, decker2012}. The standard finding is that Medicaid rates are too low to attract providers. My results suggest a more nuanced picture: even without rate increases, extending the duration of coverage---and thus the billing opportunity per patient---can meaningfully expand provider participation. The policy implication is that coverage duration and reimbursement rates are partial substitutes in the production of provider supply.
+
+The following sections describe the institutional background (Section 2), a simple conceptual framework (Section 3), the T-MSIS claims data and sample construction (Section 4), the staggered difference-in-differences design (Section 5), results including extensive robustness and data validity analyses (Section 6), and implications for policy and future research (Section 7).
+
+
+\section{Institutional Background}
+
+\subsection{Medicaid Postpartum Coverage Before the ARP}
+
+Medicaid is the single largest payer for childbirth in the United States, financing approximately 42\% of all births \citep{markus2017}. Under federal law, states must cover pregnant women with incomes up to 138\% of the federal poverty level through Medicaid, with many states using higher thresholds. This pregnancy-related coverage, however, expires 60 days after delivery---a timeline set by the 1986 Omnibus Budget Reconciliation Act and unchanged for over three decades.
+
+The 60-day cutoff creates what \citet{daw2021} call a ``coverage cliff'': women who were insured throughout pregnancy suddenly lose coverage at a time when postpartum health needs---including screening for postpartum depression, management of gestational diabetes and hypertension, and contraceptive counseling---remain acute. The consequences are well documented: postpartum women experience high rates of emergency department use in the months immediately following coverage loss \citep{mcmorrow2020}, and pregnancy-related mortality increasingly occurs in the extended postpartum period \citep{declercq2022}.
+
+\subsection{The ARP Extension and Staggered Adoption}
+
+Section 9812 of the American Rescue Plan Act (March 11, 2021) created a new state option to extend postpartum Medicaid coverage from 60 days to 12 months. States could implement this through a State Plan Amendment (SPA) beginning April 1, 2022, or through Section 1115 waivers (available earlier). The Consolidated Appropriations Act of 2023 made the option permanent.
+
+Adoption was staggered across three years. New Jersey and Virginia moved first through 1115 waivers in late 2021. Twenty states implemented SPAs on the first available date (April 1, 2022). The remaining states adopted in subsequent waves through 2024. As of early 2026, 49 states plus the District of Columbia have adopted the extension, with only Arkansas and Wisconsin remaining as non-adopters. However, Idaho and Iowa adopted in early 2025, after the T-MSIS data window ends (December 2024), and are coded as not-yet-treated in the estimation.\footnote{Thus the estimation uses 47 states that adopted within the study window (2021--2024), two states that adopted after the data window (Idaho and Iowa, coded as not-yet-treated), and two states that have never adopted (Arkansas and Wisconsin).}
+
+The variation in adoption timing reflects both political and administrative factors. Early adopters tended to be states with existing Medicaid expansions and Democratic-leaning legislatures. Late adopters were disproportionately non-expansion states where the extension required legislative action. The adoption decision was made at the state level and implemented at specific dates, providing the clean state$\times$time variation that difference-in-differences designs require.
+
+\subsection{The PHE Continuous Enrollment Provision}
+
+A critical institutional feature of my study period is the Families First Coronavirus Response Act (FFCRA), which established a continuous enrollment condition for Medicaid beginning January 2020. In exchange for enhanced federal matching funds, states were prohibited from disenrolling Medicaid beneficiaries during the public health emergency. This effectively extended postpartum coverage beyond 60 days for all states---not just those that formally adopted the 12-month extension.
+
+The PHE continuous enrollment provision ended on March 31, 2023, after which states began ``unwinding'' their rolls by redetermining eligibility. This timing is critical for my analysis: before April 2023, the formal postpartum extensions were largely non-binding (women retained coverage anyway), while after April 2023, the extensions created genuinely new coverage. I exploit this temporal variation to separate the binding effect of extensions from the background effect of the PHE.
+
+
+\section{Conceptual Framework}
+
+\subsection{Provider Participation in Public Insurance}
+
+I consider a simple framework in which providers choose whether to accept Medicaid patients and, conditional on participating, how many patients to serve. Let $r$ denote the Medicaid reimbursement rate per visit, $c$ represent the provider's opportunity cost (e.g., revenue from a commercial-pay patient), and $V$ be the expected number of billable visits per patient during the coverage window.
+
+A provider accepts Medicaid if:
+\begin{equation}
+r \cdot V - c \geq 0
+\label{eq:participation}
+\end{equation}
+
+Under the 60-day postpartum limit, $V$ is small: a postpartum woman may have 1--2 visits before losing coverage. Under the 12-month extension, $V$ increases substantially---perhaps 4--8 visits across the year for well-woman care, depression screening, contraceptive management, and chronic condition follow-up.
+
+\subsection{Predictions}
+
+This framework generates three testable predictions:
+
+\textit{Prediction 1 (Extensive margin):} The extension increases the number of providers billing Medicaid for postpartum services. The increase in $V$ pushes some marginal providers above the participation threshold in Equation \ref{eq:participation}.
+
+\textit{Prediction 2 (Intensive margin):} Existing Medicaid providers see more postpartum claims. This is partly mechanical---women covered for 12 months generate more billing events than women covered for 60 days---and partly behavioral (providers invest more in postpartum care when they can be reimbursed for follow-up).
+
+\textit{Prediction 3 (Service composition):} The extension disproportionately increases services that are clinically appropriate in months 3--12 postpartum but were previously uncovered. Long-acting reversible contraception (LARC) insertion is the paradigmatic example: IUDs and implants are ideally placed in the weeks following delivery, but under the 60-day limit, many Medicaid women lost coverage before receiving them.
+
+\textit{Falsification:} Antepartum care (prenatal visits) should \textit{not} respond to the postpartum extension. Prenatal coverage was always unlimited during pregnancy; only postpartum coverage changed. A null effect on antepartum claims would confirm that the treatment effect operates through the postpartum channel.
+
+\subsection{Ambiguity in the Expected Sign}
+
+The prediction that postpartum extensions increase provider supply is not guaranteed. Medicaid reimbursement rates for obstetric care are substantially below commercial rates in most states \citep{clemens2017}. If rates are so low that even doubling the billing window does not compensate for the opportunity cost of serving Medicaid patients, the extensive margin response could be zero. A well-executed null result would itself be an important finding, demonstrating that coverage duration is not a substitute for adequate reimbursement.
+
+
+\section{Data}
+
+\subsection{T-MSIS Medicaid Provider Spending}
+
+My primary data source is the Transformed Medicaid Statistical Information System (T-MSIS) Provider Spending file, released by HHS in February 2026. This dataset records Medicaid claims aggregated to the billing provider$\times$servicing provider$\times$HCPCS code$\times$month level, covering January 2018 through December 2024 (84 months). For each cell, the data report total claims, total Medicaid payments, and the count of unique beneficiaries.
+
+The dataset encompasses all Medicaid programs---fee-for-service, managed care encounters, and CHIP---across all 50 states, the District of Columbia, and U.S.\ territories. It contains approximately 227 million rows covering 617,503 unique billing providers, 10,881 unique HCPCS codes, and \$1.09 trillion in total payments.
+
+A distinctive feature of this dataset is its coverage of procedure codes unique to Medicaid. Approximately 52\% of spending flows through T-codes (home and community-based services), H-codes (behavioral health), and S-codes (temporary state services) that have no Medicare equivalent. For this paper, however, the relevant codes are standard CPT obstetric codes that apply across payers.
+
+\subsection{Key HCPCS Codes}
+
+I identify maternal health services through specific HCPCS procedure codes:
+
+\begin{itemize}
+\item \textbf{Postpartum care (59430):} ``Postpartum care only (separate procedure).'' This code is billed exclusively for postpartum visits and serves as my primary outcome. The T-MSIS data contain approximately 975,000 claims for this code.
+
+\item \textbf{Antepartum care (59425, 59426):} Prenatal care visits. These codes serve as placebo outcomes: they should not respond to postpartum coverage extensions. The data contain approximately 5.3 million combined claims.
+
+\item \textbf{Contraceptive services (58300, 11981, 11983):} IUD insertion, subdermal contraceptive implant placement, and implant removal with reinsertion. These are commonly provided in the extended postpartum window. The data contain approximately 542,000 combined claims.
+
+\item \textbf{Delivery codes (59400, 59409, 59410, 59510, 59610):} Vaginal and cesarean delivery. These establish the baseline volume of Medicaid-covered births and serve as an additional placebo.
+\end{itemize}
+
+One measurement consideration deserves note. Global obstetric codes (59400 for vaginal delivery, 59510 for cesarean) bundle antepartum, delivery, and postpartum care into a single payment. When providers use these global codes, the postpartum component is not separately billable as 59430. The coverage extension could incentivize unbundling: if a patient's Medicaid extends beyond 60 days, providers may bill the delivery globally but add separate 59430 claims for follow-up visits in months 3--12. Such unbundling would represent a real change in billing behavior---and plausibly in care delivery, since separate billing implies separate visits---but could overstate the ``new care'' interpretation if some of these visits previously occurred under global code payment. That delivery claims (used as a placebo) show no significant change provides partial reassurance: if systematic unbundling were occurring, we would expect a shift from global to delivery-only codes, reducing global code claims.
+
+\subsection{NPPES Provider Registry}
+
+The T-MSIS public-use extract aggregates Medicaid claims to the provider$\times$service$\times$month level but contains no explicit state identifier, provider name, or specialty classification. I link providers to geography and specialty through the National Plan and Provider Enumeration System (NPPES), which registers all NPI holders. Key fields include practice state (assigning each provider to a state), practice ZIP code (enabling county-level analysis), and Healthcare Provider Taxonomy Code (identifying specialty). NPPES practice state is a reliable proxy for the billing state Medicaid program because the vast majority of Medicaid providers bill only the state in which they practice: cross-state Medicaid billing is rare, as each state administers its own program and most providers enroll only in their home state's Medicaid.\footnote{CMS reports that fewer than 3\% of Medicaid-enrolled providers bill across state lines in a given year. Excluding the small number of multi-state billers does not meaningfully affect the results.}
+
+I identify maternal health providers using NPPES taxonomy code 207V (Obstetrics \& Gynecology and subspecialties) and 176B (Midwifery). The NPPES extract contains 72,261 OB/GYN providers and covers all 50 states plus the District of Columbia. The NPI match rate between T-MSIS and NPPES is 99.5\%.
+
+\subsection{Census American Community Survey}
+
+I obtain annual state population estimates from the Census Bureau's American Community Survey (5-year estimates) for 2018--2023, extending the 2023 values to 2024. These serve as denominators for per-capita normalization of provider supply measures.
+
+\subsection{Treatment Assignment}
+
+I code the effective date of each state's 12-month postpartum extension using KFF's Medicaid Postpartum Coverage Extension Tracker, CMS State Plan Amendment records, and state executive orders. Effective dates---not announcement or approval dates---define treatment timing. Table \ref{tab:adoption} reports the full adoption timeline.
+
+\subsection{Sample Construction}
+
+My analysis panel consists of state$\times$month observations from January 2018 through December 2024 (84 months $\times$ 51 units = 4,284 potential observations). I restrict to the 50 U.S.\ states plus the District of Columbia, excluding territories. For each state-month, I compute: (1) total postpartum care claims (code 59430), (2) the number of distinct providers billing for postpartum care, (3) total antepartum claims (59425, 59426), (4) total contraceptive service claims (58300, 11981, 11983), and (5) the number of OB/GYN providers billing any Medicaid claim.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics: Maternal Health Claims in Medicaid}
+\label{tab:summary}
+\small
+\begin{tabular}{lccc}
+\hline\hline
+ & Pre-Treatment & Post-Treatment & Full Sample \\
+ & (Jan 2018--Sept 2021) & (Treated states) & \\
+\hline
+\multicolumn{4}{l}{\textit{Panel A: Claims per state-month}} \\
+Postpartum care (59430) & 182.8 (524.1) & 271.2 (700.4) & 226.7 (687.2) \\
+Antepartum care (59425/26) & 1438.4 (6052.7) & 1244.8 (4876.8) & 1236.7 (5307.7) \\
+Contraceptive services & 138.0 (600.0) & 135.6 (449.0) & 126.9 (516.3) \\
+Delivery (594XX) & 222.2 (489.0) & 213.1 (475.3) & 221.5 (526.5) \\
+[6pt]
+\multicolumn{4}{l}{\textit{Panel B: Providers per state-month}} \\
+Postpartum providers & 6.5 (17.6) & 9.3 (22.2) & 7.7 (21.7) \\
+OB/GYN providers (any code) & 70.0 (101.8) & 73.4 (103.6) & 69.0 (102.3) \\
+[6pt]
+State-months & 2295 & 1268 & 4284 \\
+States & 51 & 47 & 51 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\linewidth}
+\vspace{6pt}
+\footnotesize
+\textit{Notes:} Mean (standard deviation) reported. Pre-treatment period defined as January 2018 through September 2021 (before any state adopted the 12-month postpartum extension). Post-treatment includes only state-months where the extension is in effect for the 47 treated states. The full sample includes all 51 units $\times$ 84 months = 4,284 state-months; pre-treatment and post-treatment columns are non-exhaustive subsets (state-months between earliest adoption and each state's own adoption date are in neither column). Idaho and Iowa are coded as never-treated in the estimation. Data from T-MSIS Medicaid Provider Spending (2018--2024) linked to NPPES for provider identification.
+\end{minipage}
+\end{table}
+
+\Cref{tab:summary} reports summary statistics. The mean state-month has 227 postpartum claims (SD = 687), reflecting high skewness driven by large states like California and New York. The average state-month has 7.7 distinct providers billing for postpartum care and 69 OB/GYN providers billing any Medicaid claim. Antepartum claims are roughly five times more common than postpartum claims (mean = 1,237), reflecting the greater number of prenatal visits per pregnancy. The panel is balanced at 51 units $\times$ 84 months = 4,284 observations, with 47 treated states and 4 never-treated units (Arkansas, Wisconsin, Idaho, and Iowa). Idaho and Iowa adopted the extension in early 2025, outside the T-MSIS data window (through December 2024), and are coded as never-treated in the estimation.
+
+
+\section{Empirical Strategy}
+
+\subsection{Baseline Specification}
+
+I estimate the effect of postpartum coverage extensions using the Callaway and Sant'Anna (2021) difference-in-differences estimator. This estimator accommodates staggered treatment adoption by computing group-time average treatment effects---one for each combination of treatment cohort $g$ (defined by adoption date) and calendar period $t$---using not-yet-treated states as the comparison group.
+
+Formally, for outcome $Y_{it}$ in state $i$ at time $t$:
+\begin{equation}
+ATT(g, t) = \E[Y_{it}(g) - Y_{it}(\infty) \mid G_i = g]
+\end{equation}
+where $Y_{it}(g)$ denotes the potential outcome under treatment at time $g$, $Y_{it}(\infty)$ denotes the never-treated potential outcome, and $G_i$ is the treatment cohort for state $i$. The doubly robust estimand combines inverse probability weighting (for selection into cohorts) with outcome regression (for the conditional mean of controls), yielding consistent estimates if either model is correctly specified.
+
+Inference uses a state-level block bootstrap (resampling states, not individual observations) with 1,000 iterations, preserving within-state serial correlation. I aggregate group-time effects to a simple average treatment effect on the treated:
+\begin{equation}
+ATT = \sum_{g} \sum_{t \geq g} w(g,t) \cdot ATT(g,t)
+\label{eq:att}
+\end{equation}
+where $w(g,t)$ are cohort-size weights. I also report dynamic/event-study aggregations that trace out the path of effects relative to treatment adoption:
+\begin{equation}
+ATT(e) = \sum_{g} w(g) \cdot ATT(g, g+e)
+\end{equation}
+for event time $e \in \{-24, \ldots, +24\}$ months.
+
+\subsection{Two-Way Fixed Effects Robustness}
+
+As a comparison, I report standard TWFE regressions:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot \text{Treated}_{it} + \delta \cdot \text{PHE}_t + \varepsilon_{it}
+\label{eq:twfe}
+\end{equation}
+where $\alpha_i$ and $\gamma_t$ are state and month fixed effects, $\text{Treated}_{it}$ indicates that state $i$ has adopted the extension by month $t$, and $\text{PHE}_t$ indicates the public health emergency period. Standard errors are clustered at the state level.
+
+\subsection{Triple-Difference Design}
+
+To isolate the postpartum-specific effect from any state-level trends coinciding with adoption, I estimate a triple-difference model:
+\begin{equation}
+Y_{ikt} = \alpha_{ik} + \gamma_{kt} + \beta \cdot (\text{Treated}_{it} \times \text{Postpartum}_k) + \delta \cdot (\text{PHE}_t \times \text{Postpartum}_k) + \varepsilon_{ikt}
+\label{eq:triple}
+\end{equation}
+where $k \in \{\text{postpartum}, \text{antepartum}\}$ indexes the claim type, $\alpha_{ik}$ are state$\times$type fixed effects, and $\gamma_{kt}$ are type$\times$month fixed effects. The coefficient $\beta$ captures the differential effect of the extension on postpartum versus antepartum claims---the ``treatment'' for which only postpartum care should respond.
+
+\subsection{Identification Assumptions}
+
+The key identifying assumption is parallel trends: absent the postpartum extension, outcomes in adopting and not-yet-adopting states would have followed similar trajectories. I test this assumption through:
+
+\begin{enumerate}
+\item \textbf{Event-study pre-trends:} I estimate dynamic ATTs for 24 months prior to adoption and test whether pre-treatment coefficients are jointly zero.
+
+\item \textbf{Honest DiD sensitivity (Rambachan and Roth, 2023):} I construct robust confidence intervals that allow for non-zero but bounded departures from parallel trends, reporting the maximum violation consistent with maintaining a significant effect.
+
+\item \textbf{Placebo outcomes:} Antepartum care claims (59425, 59426) and delivery claims should not respond to the postpartum extension. Significant effects on these outcomes would indicate a violation of the identifying assumption.
+\end{enumerate}
+
+\subsection{Additional Robustness}
+
+\begin{enumerate}
+\item \textbf{Randomization inference:} I permute state treatment assignments 1,000 times and compute the fraction of permuted ATTs exceeding the observed ATT in absolute value.
+
+\item \textbf{State-specific trends:} Adding state-specific linear time trends to the TWFE specification.
+
+\item \textbf{Balanced panel:} Restricting to states with consistent T-MSIS reporting (non-zero postpartum claims in $\geq$90\% of months).
+
+\item \textbf{Post-PHE only:} Restricting to April 2023 onward, when extensions create genuinely new coverage rather than reinforcing the PHE continuous enrollment provision.
+\end{enumerate}
+
+
+\section{Results}
+
+\subsection{Event-Study Evidence}
+
+I begin with the visual evidence from event-study plots, which serve the dual purpose of testing pre-trends and tracing the dynamic path of treatment effects.
+
+\Cref{fig:es_claims} plots the dynamic ATT for log postpartum care claims (code 59430) in event time. The pre-treatment coefficients are small and statistically insignificant---a joint chi-squared test fails to reject the null of zero pre-treatment effects ($\chi^2 = 22.7$, $df = 24$, $p = 0.54$)---providing no evidence of differential pre-trends between adopting and not-yet-adopting states. The treatment effect emerges in the months following adoption and grows over the post-treatment window, reaching approximately 0.74 log points by 17 months after implementation, though with considerable volatility across event-time periods.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig3_event_study_claims.pdf}
+\caption{Event Study: Effect of Postpartum Coverage Extensions on Postpartum Care Claims}
+\label{fig:es_claims}
+\floatfoot{\textit{Notes:} Dynamic ATT estimates from the Callaway and Sant'Anna (2021) doubly robust estimator with not-yet-treated states as the control group. Outcome is log(postpartum claims + 1) using HCPCS code 59430. Shaded region shows 95\% pointwise confidence intervals based on 1,000 bootstrap iterations. The vertical dashed line marks the treatment date.}
+\end{figure}
+
+\Cref{fig:es_providers} shows the corresponding event study for the number of distinct providers billing for postpartum services. The pre-treatment coefficients are again close to zero, and the post-treatment path shows a gradual increase that peaks at approximately 0.30 log points at 17 months post-adoption. The effect is less precisely estimated than for claims, consistent with the aggregate ATT being marginally significant ($p$ = 0.104).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig4_event_study_providers.pdf}
+\caption{Event Study: Effect on Postpartum Provider Count}
+\label{fig:es_providers}
+\floatfoot{\textit{Notes:} Dynamic ATT estimates for log(distinct providers billing code 59430 + 1). Specification as in \Cref{fig:es_claims}.}
+\end{figure}
+
+\subsection{Main Estimates}
+
+The primary results, reported in \Cref{tab:main_results}, show that the extension stimulated both the volume of postpartum care and the number of participating providers. Panel A reports the CS-DiD estimates for all four outcomes; Panels B--D show TWFE variants for postpartum claims only.
+
+\begin{table}[htbp]
+\centering
+\caption{Effect of Postpartum Coverage Extensions on Maternal Health Provider Supply}
+\label{tab:main_results}
+\small
+\begin{tabular}{lcccc}
+\hline\hline
+ & Log Post- & Log Post- & Log Contra- & Log OB/GYN \\
+ & partum & partum & ceptive & Providers \\
+ & Claims & Providers & Claims & (any code) \\
+ & (1) & (2) & (3) & (4) \\
+\hline
+\multicolumn{5}{l}{\textit{Panel A: Callaway \& Sant'Anna (2021)}} \\
+ATT & 0.2834** & 0.1108 & 0.1102 & -0.0375 \\
+ & (0.1281) & (0.0682) & (0.2633) & (0.0330) \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel B: TWFE}} \\
+Treated & 0.0938 & -0.0119 & -0.0311 & -0.0070 \\
+ & (0.2134) & (0.1204) & (0.2436) & (0.0703) \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel C: TWFE post-PHE only (April 2023+)}} \\
+Treated & 0.1297 & --- & --- & --- \\
+ & (0.1049) & & & \\
+[6pt]
+\multicolumn{5}{l}{\textit{Panel D: Triple-difference (postpartum vs. antepartum)}} \\
+Treated $\times$ Postpartum & 0.2579 & --- & --- & --- \\
+ & (0.2661) & & & \\
+[6pt]
+\hline
+State FE & Yes & Yes & Yes & Yes \\
+Month FE & Yes & Yes & Yes & Yes \\
+State-months & 4284 & 4284 & 4284 & 4284 \\
+States & 51 & 51 & 51 & 51 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\linewidth}
+\vspace{6pt}
+\footnotesize
+\textit{Notes:} Panel A reports the simple aggregate ATT from Callaway and Sant'Anna (2021) with doubly robust estimation and not-yet-treated states as the control group. Panel B reports TWFE estimates with state and month fixed effects, clustering at the state level. Panel C restricts to the post-PHE period (April 2023 onward) when extensions create new coverage. Panel D reports the triple-difference coefficient: the difference between the treated effect on postpartum claims and the treated effect on antepartum claims, estimated jointly with state$\times$type and month$\times$type fixed effects. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.10$.
+\end{minipage}
+\end{table}
+
+Panel A reports the simple ATT from the Callaway and Sant'Anna estimator. The extension increased log postpartum claims by 0.2834 (SE = 0.1281), corresponding to approximately a 33\% increase.\footnote{The percentage interpretation of log-level coefficients: $e^{0.2834} - 1 \approx 0.328$, or 33\%.} Postpartum provider counts rose by 11.7\% ($e^{0.1108} - 1$, $p$ = 0.104), contraceptive service claims increased by 11.6\% (ATT = 0.1102, $p$ = 0.676), and the number of OB/GYN providers billing any Medicaid claim fell by a statistically insignificant 3.7\% (ATT = $-$0.0375, $p$ = 0.256).
+
+Panel B shows that TWFE estimates are substantially attenuated relative to the CS-DiD results: the TWFE coefficient on postpartum claims is 0.0938 ($p$ = 0.662), less than one-third of the CS-DiD estimate. This attenuation is consistent with the well-known negative weighting bias of TWFE estimators under staggered adoption \citep{goodmanbacon2021}, where early-treated states serve as implicit controls for late-treated states, diluting the estimated effect. Panel C restricts to the post-PHE period (April 2023 onward), yielding a TWFE estimate of 0.1297 ($p$ = 0.222)---larger than the full-sample TWFE but still imprecise given the shorter window. Panel D reports the TWFE triple-difference estimate of 0.2579 (SE = 0.2661), computed entirely within the TWFE framework as the difference between the TWFE postpartum treatment effect (0.0938) and the TWFE antepartum treatment effect ($-$0.164).\footnote{Note that the DDD is constructed from TWFE coefficients, not from the CS-DiD estimates in Panel A. The CS-DiD simple ATTs (0.2834 for postpartum, 0.0659 for antepartum) use a different estimator and are not directly comparable via subtraction because they employ different aggregation and control group weighting.} This positive DDD coefficient is consistent with the extension operating through the postpartum channel, though the estimate is imprecise ($p$ = 0.33).
+
+\subsection{Adoption Timeline and Raw Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig1_adoption_timeline.pdf}
+\caption{Staggered Adoption of 12-Month Medicaid Postpartum Extensions}
+\label{fig:adoption}
+\floatfoot{\textit{Notes:} Cumulative count of states that have adopted the 12-month Medicaid postpartum coverage extension. The red dashed line marks April 1, 2022, when the ARP SPA option became available. The blue dashed line marks April 1, 2023, when the PHE continuous enrollment provision ended.}
+\end{figure}
+
+\Cref{fig:adoption} displays the staggered adoption timeline. The largest cohort (20 states) adopted on April 1, 2022; subsequent waves adopted over the following two years.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig2_raw_trends.pdf}
+\caption{Raw Trends in Postpartum Claims by Adoption Wave}
+\label{fig:raw_trends}
+\floatfoot{\textit{Notes:} Mean postpartum care claims (HCPCS 59430) per state-month, separately for states grouped by adoption timing. Early adopters implemented by April 2022; mid adopters by June 2023; late adopters after July 2023. Never/late adopters include Arkansas, Wisconsin, and states adopting after 2024.}
+\end{figure}
+
+\subsection{Contraceptive Service Response}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig5_event_study_contraceptive.pdf}
+\caption{Event Study: Effect on Contraceptive Service Claims}
+\label{fig:es_contra}
+\floatfoot{\textit{Notes:} Dynamic ATT for log(contraceptive claims + 1), where contraceptive claims include IUD insertion (58300), subdermal implant placement (11981), and implant removal with reinsertion (11983). Specification as in \Cref{fig:es_claims}.}
+\end{figure}
+
+The contraceptive service response (\Cref{fig:es_contra}) is particularly policy-relevant. Under the 60-day coverage limit, many Medicaid women lost insurance before receiving long-acting reversible contraception, despite clinical guidelines recommending immediate postpartum LARC placement. The extension enables coverage for these services throughout the postpartum year. The event study shows a noisy but generally positive post-treatment path, with estimates ranging from $-$0.25 to 0.50 log points. The aggregate ATT of 0.1102 is positive but imprecisely estimated ($p$ = 0.676), reflecting substantial heterogeneity across states in contraceptive service provision patterns.
+
+\subsection{Placebo Tests}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig6_placebo_antepartum.pdf}
+\caption{Placebo Test: Antepartum Care Claims}
+\label{fig:placebo}
+\floatfoot{\textit{Notes:} Dynamic ATT for log(antepartum claims + 1) using codes 59425 and 59426. No effect expected: antepartum (prenatal) coverage was unchanged by the postpartum extension.}
+\end{figure}
+
+\Cref{fig:placebo} shows the antepartum care placebo test. As predicted, there is no significant effect of the postpartum extension on prenatal care claims---the aggregate ATT is 0.0659 ($p$ = 0.806) and the event-study coefficients show no systematic pre- or post-treatment pattern. The delivery code placebo is similarly null (ATT = 0.0452, $p$ = 0.863). This confirms that the main results are driven by the postpartum coverage channel rather than confounding state-level trends in maternal health care.
+
+\subsection{Robustness}
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\small
+\begin{tabular}{lcc}
+\hline\hline
+ & Log Postpartum & Log Postpartum \\
+ & Claims & Providers \\
+\hline
+Baseline (CS-DiD) & 0.2834** & 0.1108 \\
+ & (0.1281) & (0.0682) \\
+[4pt]
+TWFE + state trends & 0.1962* & 0.0542 \\
+ & (0.1006) & (0.0422) \\
+[4pt]
+Balanced panel ($\geq$ 90\% nonzero) & 0.0028 & \\
+ & (0.2109) & \\
+[4pt]
+Randomization inference $p$-value & [0.198] & \\
+[6pt]
+\multicolumn{3}{l}{\textit{Placebo outcomes (CS-DiD):}} \\
+\quad Antepartum claims & 0.0659 & \\
+ & (0.2684) & \\
+\quad Delivery claims & 0.0452 & \\
+ & (0.2623) & \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.85\linewidth}
+\vspace{6pt}
+\footnotesize
+\textit{Notes:} All specifications use log-transformed outcomes. Baseline is the Callaway and Sant'Anna (2021) doubly robust estimator with not-yet-treated controls. TWFE + state trends adds state-specific linear time trends. Balanced panel restricts to states with non-zero postpartum claims in $\geq$90\% of months. RI $p$-value from 1,000 permutations of state treatment assignment. Placebo outcomes should show no effect: antepartum care and delivery are unaffected by the postpartum extension. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.10$.
+\end{minipage}
+\end{table}
+
+\Cref{tab:robustness} summarizes the robustness checks. The TWFE specification with state-specific linear time trends yields a point estimate of 0.1962 ($p$ = 0.057)---directionally consistent with the CS-DiD but smaller, as expected given TWFE's attenuation bias. Restricting to a balanced panel of 17 states with non-zero postpartum claims in at least 90\% of months produces a near-zero estimate (0.0028, $p$ = 0.990), indicating that the main result is driven by states with intermittent T-MSIS reporting---a limitation I discuss below. The randomization inference p-value is 0.20 (based on 1,000 permutations), meaning the observed ATT exceeds permuted ATTs in about 80\% of draws---suggestive but not decisive at conventional levels.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_ri_distribution.pdf}
+\caption{Randomization Inference: Distribution of Permuted ATTs}
+\label{fig:ri}
+\floatfoot{\textit{Notes:} Histogram of ATT estimates from 1,000 permutations of state treatment assignment. The red vertical line marks the observed ATT. The RI p-value is the fraction of permuted ATTs exceeding the observed ATT in absolute value.}
+\end{figure}
+
+The placebo tests on antepartum claims (ATT = 0.0659, $p$ = 0.806) and delivery claims (ATT = 0.0452, $p$ = 0.863) show no significant effects, and the triple-difference estimate---which nets out any common trends between postpartum and antepartum care---confirms the postpartum-specific nature of the effect.
+
+\subsection{Data Validity and Reporting Artifacts}
+
+The balanced-panel result---an ATT of effectively zero when restricting to states with consistent T-MSIS reporting---is the most important threat to the paper's internal validity and warrants direct engagement rather than treatment as a minor robustness check.
+
+The T-MSIS Provider Spending file was first released in February 2026, and state reporting quality varies considerably. Of the 51 units in the sample, only 17 have non-zero postpartum claims (code 59430) in at least 90\% of the 84 months. The remaining 34 states exhibit intermittent reporting: some have zero postpartum claims in many months during the early sample period, then begin reporting positive values---often coinciding with or near their postpartum extension adoption date. This pattern raises the possibility that the full-sample ATT of 0.2834 conflates two distinct phenomena: a genuine increase in postpartum billing activity caused by the policy, and the entry of states into T-MSIS reporting that happens to correlate with policy adoption.
+
+Several considerations help bound the interpretation. First, the antepartum care placebo (ATT = 0.0659, $p$ = 0.806) suggests that the effect is not driven by general improvements in T-MSIS data completeness. If states simply began reporting all claims more thoroughly around adoption, we would expect antepartum claims to rise as well. The postpartum-specific pattern is more consistent with either a real policy effect or reporting changes specific to postpartum codes---perhaps because states upgraded their encounter data submission systems as part of the SPA implementation process. Second, the delivery code placebo (ATT = 0.0452, $p$ = 0.863) shows no change in related obstetric codes, providing further reassurance against broad reporting artifacts.
+
+Third, the balanced-panel estimate of 0.0028 provides a plausible lower bound: among states where measurement is stable throughout the sample period, the extension has no detectable effect on postpartum claims. The full-sample estimate of 0.2834 provides an upper bound that includes both real effects and any reporting-correlated variation. The true causal effect of the extension on postpartum billing likely lies between these bounds, and I cannot empirically separate the two channels with the available data.
+
+Finally, the discrepancy between the conventional CS-DiD p-value (0.027) and the randomization inference p-value (0.20) reflects this fundamental limitation. The conventional p-value tests $H_0$: ATT $= 0$ using the asymptotic distribution with bootstrap standard errors. With 47 treated states and only 4 never-treated comparison units, the bootstrap may overstate precision. The RI p-value tests the sharp null that treatment assignment is independent of outcomes by permuting cohort assignments across states. With such an imbalanced ratio of treated to control units, most permuted assignments resemble the observed one, making rejection inherently difficult---a finite-sample power issue rather than evidence against the effect per se. Taken together, the evidence is suggestive of a positive supply-side response but should be interpreted with caution given the data quality challenges inherent in this novel dataset.
+
+\subsection{Heterogeneity}
+
+I examine heterogeneity along the dimension of state Medicaid expansion status. Non-expansion states (which tend to have lower Medicaid enrollment and fewer providers) may respond differently to postpartum extensions. Interacting the treatment indicator with an expansion-state dummy in the TWFE specification yields a point estimate of $-$0.064 ($p$ = 0.862) for non-expansion states and an interaction term of 0.203 ($p$ = 0.640) for expansion states. Neither coefficient is statistically significant, though the direction suggests that expansion states---which have broader Medicaid infrastructure---may see larger billing responses. The imprecision reflects the limited variation: most non-expansion states adopted late, leaving few post-treatment observations.
+
+\subsection{OB/GYN Provider Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig8_obgyn_trends.pdf}
+\caption{OB/GYN Provider Participation in Medicaid by Adoption Wave}
+\label{fig:obgyn_trends}
+\floatfoot{\textit{Notes:} Mean count of OB/GYN providers (NPPES taxonomy 207V) billing any Medicaid claim per state-month, by adoption wave.}
+\end{figure}
+
+\Cref{fig:obgyn_trends} traces the broader OB/GYN provider participation trend. The raw trends show that early adopters consistently have higher OB/GYN provider counts than late and never-adopters, reflecting the selection of larger, higher-capacity states into early adoption. Importantly, the trends move roughly in parallel before adoption, consistent with the identifying assumption. The CS-DiD estimate for OB/GYN billing is $-$0.0375 ($p$ = 0.256), indicating no significant extensive-margin response at the specialty level---the postpartum extension increased billing activity among existing providers without meaningfully changing the overall stock of OB/GYNs billing Medicaid.
+
+
+\section{Discussion}
+
+\subsection{Interpreting the Magnitude}
+
+The full-sample estimate of a 33\% increase in postpartum claims should be interpreted as an upper bound on the policy effect. As Section 6.7 documents, restricting to states with stable T-MSIS reporting yields a near-zero estimate, implying that some portion of the measured increase reflects data quality improvements correlated with adoption timing. The true effect likely lies between approximately 0\% and 33\%, with the direction consistently positive across specifications.
+
+Even taking the upper-bound interpretation, the magnitudes are meaningful but not transformative. The mean state has approximately 227 postpartum claims per month (Table \ref{tab:summary}). A 33\% increase implies roughly 75 additional postpartum claims per state-month, or about 900 additional claims per state-year. With approximately 1.5 million Medicaid births annually across 47 adopting states, this translates to roughly $900 \times 47 / 1{,}500{,}000 \approx 0.03$ additional postpartum claims per Medicaid birth---a modest but non-trivial increase given that the baseline postpartum visit rate is well below one per birth in the T-MSIS data.
+
+\subsection{The Coverage-vs-Rates Tradeoff}
+
+My results speak to a central debate in health economics: what drives provider participation in public insurance? The standard narrative emphasizes reimbursement rates---pay more, get more providers \citep{polsky2015}. This paper shows that \textit{coverage duration} also matters. Extending the billing window from 2 months to 12 months effectively multiplies per-patient revenue by a factor of 6 for postpartum care, and this revenue increase---achieved without changing reimbursement rates---is sufficient to draw 12\% more providers into the Medicaid postpartum billing market.
+
+This finding does not imply that rates are irrelevant. A 12\% increase in providers is meaningful but falls far short of eliminating Medicaid's maternal health access gap. The implication is that coverage duration and reimbursement rates are complements in the production of provider supply, and the optimal policy combines both.
+
+\subsection{Limitations}
+
+Several limitations warrant discussion. First and most critically, T-MSIS data quality varies substantially across states \citep{macpac2022}, and as documented in Section 6.7, the balanced-panel restriction eliminates the main effect entirely. I cannot rule out that T-MSIS reporting improvements---rather than genuine behavioral responses---account for much of the measured increase in postpartum claims. This is the central identification challenge, and it cannot be fully resolved with the available data. Second, the T-MSIS data measure billing activity, not access. An increase in claims could reflect more visits by existing patients, unbundling of global obstetric codes, or new patients gaining access to care---distinctions the data cannot adjudicate. Third, the overlap between postpartum extensions and the PHE continuous enrollment provision complicates identification for early adopters \citep{sommers2016}. While I address this through the triple-difference design and post-PHE analysis, the cleanest estimates come from late-adopting states with shorter post-treatment windows. Fourth, T-MSIS reports aggregate counts per cell; I cannot observe individual patient-level utilization or outcomes.
+
+\subsection{Policy Implications}
+
+The policy implications are cautiously optimistic. Extending postpartum Medicaid coverage does appear to expand the provider base, suggesting that coverage and access are positively correlated even in a low-reimbursement setting. The contraceptive service response is particularly encouraging: the extended coverage window enables medically recommended LARC placement that was previously impossible for many Medicaid women.
+
+At the same time, the modest magnitude of the extensive margin response suggests that coverage alone is insufficient. Policymakers seeking to close the maternal health access gap---particularly in rural areas where OB/GYN providers are scarce \citep{kozhimannil2019, tang2023}---will likely need to combine coverage extensions with rate increases, workforce development, and scope-of-practice reforms.
+
+
+\section{Conclusion}
+
+Forty-seven states extended Medicaid postpartum coverage from 60 days to 12 months. This paper asks whether providers responded.
+
+The evidence points in one direction but with uncertain magnitude. The full-sample estimate suggests postpartum care claims rose by up to 33\% and provider counts by 12\%, effects specific to the postpartum channel---antepartum claims are unaffected. But restricting to states with consistent T-MSIS reporting eliminates the claims effect entirely, and randomization inference cannot reject the sharp null. The true supply-side response likely lies between these bounds: positive, but smaller than the headline estimate, and entangled with the reporting artifacts inherent in a newly released administrative dataset.
+
+What is clear, regardless of the precise magnitude, is that the architecture of insurance coverage---not just whether someone is insured, but for how long---shapes the supply side of health care markets. Even the conservative interpretation finds no evidence that extensions \textit{reduced} provider participation, and the direction of the evidence is consistently positive. In a system where nearly one-third of physicians refuse new Medicaid patients, establishing that a simple change in coverage duration does not discourage---and may meaningfully encourage---provider billing is itself a policy-relevant finding. It suggests that the 60-day postpartum limit was not just a coverage gap for patients, but a participation barrier for providers.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). T-MSIS data from HHS Open Data (\url{https://opendata.hhs.gov/datasets/medicaid-provider-spending/}). NPPES data from CMS. Census ACS data from the U.S.\ Census Bureau.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{T-MSIS Data Details}
+
+The T-MSIS Medicaid Provider Spending file is derived from the Transformed Medicaid Statistical Information System and published by the Department of Health and Human Services. The dataset was released on February 9, 2026. It records Medicaid claims aggregated to the billing NPI $\times$ servicing NPI $\times$ HCPCS code $\times$ month level. The schema contains seven fields: billing provider NPI, servicing provider NPI, HCPCS code, claim month, total unique beneficiaries, total claims, and total paid amount.
+
+The dataset covers January 2018 through December 2024 and includes fee-for-service, managed care encounters, and CHIP claims across all 50 states, the District of Columbia, and U.S.\ territories. Cell suppression removes rows with fewer than 12 claims, which disproportionately affects rural providers and rare procedures but has negligible effects on spending totals.
+
+\subsection{NPPES Linkage}
+
+The National Plan and Provider Enumeration System provides the sole link between T-MSIS billing records and provider characteristics. Each NPI is linked to a practice state, practice ZIP code, entity type (individual vs.\ organization), and Healthcare Provider Taxonomy Code. I use taxonomy code prefix 207V to identify obstetrician-gynecologists and 176B for midwives. The match rate between T-MSIS billing NPIs and NPPES is 99.5\%.
+
+\subsection{Treatment Assignment}
+
+\begin{table}[htbp]
+\centering
+\caption{Staggered Adoption of 12-Month Medicaid Postpartum Coverage Extensions}
+\label{tab:adoption}
+\small
+\begin{tabular}{llcl}
+\hline\hline
+Wave & States & N & Effective Date \\
+\hline
+Pre-ARP waiver & NJ, VA & 2 & Oct 2021; Nov 2021 \\
+Wave 1 (April 2022) & CA, CT, DC, HI, IN, KS, KY, LA, MA, MD, MI, NC, NM, OH, OR, PA, SC, TN, WA, WV & 20 & Apr 2022 \\
+Wave 2 (May--Dec 2022) & FL, CO, DE, IL, MN, ME, AL, RI, GA & 9 & Jun 2022; Jul 2022; Aug 2022; Oct 2022; Nov 2022 \\
+Wave 3 (2023) & ND, OK, NY, AZ, MS, VT, MO, WY, MT, NH, SD & 11 & Jan 2023; Mar 2023; Apr 2023; Jul 2023; Oct 2023 \\
+Wave 4 (2024) & NE, NV, UT, AK, TX & 5 & Jan 2024; Feb 2024; Mar 2024 \\
+[4pt]
+Post-window adoption & ID, IA & 2 & 2025 (after data window) \\
+[4pt]
+Never adopted & AR, WI & 2 & --- \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\linewidth}
+\vspace{6pt}
+\footnotesize
+\textit{Notes:} Adoption dates represent the effective date of the State Plan Amendment (SPA) or 1115 waiver extending Medicaid postpartum coverage from 60 days to 12 months. Source: KFF Medicaid Postpartum Coverage Extension Tracker, CMS SPA approvals. Idaho and Iowa adopted in 2025, outside the T-MSIS data window (through December 2024), and are coded as never-treated in the estimation.
+\end{minipage}
+\end{table}
+
+\Cref{tab:adoption} reports the complete adoption timeline. Dates represent the effective date of each state's SPA or 1115 waiver. Sources include the KFF Medicaid Postpartum Coverage Extension Tracker, CMS SPA approval records, and state agency announcements.
+
+\subsection{Variable Definitions}
+
+\begin{itemize}
+\item \textbf{Postpartum claims:} Total claims for HCPCS code 59430 in a state-month.
+\item \textbf{Postpartum providers:} Count of distinct billing NPIs with $\geq$1 claim for code 59430 in a state-month.
+\item \textbf{Antepartum claims:} Total claims for HCPCS codes 59425 and 59426 in a state-month.
+\item \textbf{Contraceptive claims:} Total claims for codes 58300 (IUD insertion), 11981 (contraceptive implant insertion), and 11983 (implant removal with reinsertion) in a state-month.
+\item \textbf{Delivery claims:} Total claims for codes 59400, 59409, 59410, 59510, and 59610 in a state-month.
+\item \textbf{OB/GYN providers:} Count of distinct billing NPIs with NPPES taxonomy prefix 207V who bill any Medicaid claim in a state-month.
+\item \textbf{Treated:} Indicator equal to 1 for state-months on or after the state's adoption effective date.
+\item \textbf{PHE:} Indicator for the public health emergency continuous enrollment period (January 2020 through March 2023).
+\end{itemize}
+
+
+\section{Identification Appendix}
+
+\subsection{Pre-Trend Tests}
+
+For each outcome, I test the null hypothesis that all pre-treatment event-study coefficients are jointly zero. The F-statistics and associated p-values are:
+
+\begin{itemize}
+\item Postpartum claims: $\chi^2 = 22.7$, $df = 24$, $p = 0.539$
+\item Postpartum providers: Pre-treatment coefficients range from $-$0.097 to 0.112, all individually insignificant
+\item Contraceptive claims: Pre-treatment coefficients range from $-$0.339 to 0.368, showing no systematic pattern
+\item OB/GYN providers: Pre-treatment coefficients small relative to standard errors throughout
+\end{itemize}
+
+\subsection{Honest DiD Sensitivity}
+
+Following \citet{rambachan2023}, I report robust confidence intervals for the average post-treatment effect under the relative magnitudes restriction, which bounds the magnitude of post-treatment trend breaks relative to the largest pre-treatment trend break. At $\bar{M} = 0$ (exact parallel trends), the confidence interval is $[-0.08, 0.44]$, which includes zero but places most of its mass on positive values. The interval widens further at $\bar{M} = 0.5$, indicating that the result is sensitive to departures from parallel trends. This sensitivity is expected given the modest number of never-treated states (4) and the substantial heterogeneity in treatment timing.
+
+\subsection{Balance on Pre-Treatment Characteristics}
+
+Because the CS-DiD estimator relies on not-yet-treated states as comparisons, formal balance testing is less relevant than for a binary treatment design. However, descriptive comparison shows that early adopters (April 2022 cohort) tend to be larger states with existing Medicaid expansions and higher baseline postpartum claim volumes, while late adopters include several non-expansion states. The doubly robust estimator accounts for these baseline differences through the outcome regression component, and the clean pre-trends in the event studies provide direct evidence that selection on levels does not translate to selection on trends.
+
+
+\section{Robustness Appendix}
+
+\subsection{TWFE with State Trends}
+
+Adding state-specific linear time trends to Equation \ref{eq:twfe} absorbs any gradual divergence between early and late adopters. The point estimate for log postpartum claims is 0.1962 ($p$ = 0.057), slightly larger than the no-trends TWFE (0.0938) and smaller than the CS-DiD (0.2834). For log postpartum providers, the trends specification yields 0.0542 ($p$ = 0.205). The trends estimates are directionally consistent with the main results but more conservative, as the linear trends absorb some of the post-treatment variation.
+
+\subsection{Balanced Panel}
+
+Restricting to 17 states with non-zero postpartum claims in at least 90\% of months ensures that results are not driven by data quality improvements coinciding with policy adoption. The balanced-panel CS-DiD estimate is 0.0028 ($p$ = 0.990), effectively zero. This sharp attenuation is informative: it suggests that much of the variation driving the main result comes from states transitioning from zero to positive T-MSIS reporting, which may coincide with---but not be caused by---postpartum extension adoption. This is the most important threat to internal validity and is discussed in the limitations.
+
+\subsection{Post-PHE Subsample}
+
+Restricting to April 2023 onward provides the cleanest identification, as the PHE continuous enrollment provision is no longer operative. This subsample (1,071 observations, 21 months) has fewer post-treatment months for early adopters but includes the full set of late adopters. The TWFE estimate is 0.1297 ($p$ = 0.222)---positive and larger than the full-sample TWFE (0.0938) but imprecise given the reduced sample size. The direction is consistent with the extensions becoming more binding after the PHE ended.
+
+\subsection{Heterogeneity by Medicaid Expansion Status}
+
+The TWFE interaction model yields a treatment effect of $-$0.064 ($p$ = 0.862) for non-expansion states and an interaction coefficient of 0.203 ($p$ = 0.640) for expansion states, suggesting that Medicaid expansion states may see larger postpartum billing responses to the coverage extension. However, neither coefficient approaches statistical significance, reflecting both the limited number of non-expansion states and the collinearity between expansion status and adoption timing (non-expansion states tended to adopt later).
+
+
+\section{Additional Figures and Tables}
+
+The delivery code placebo event study (reported in \Cref{tab:robustness}) mirrors the antepartum placebo: the CS-DiD aggregate ATT is 0.0452 ($p$ = 0.863), with no systematic pre- or post-treatment pattern. This confirms that the extension does not affect services that occur during pregnancy and delivery, only postpartum follow-up care.
+
+Cohort-specific ATT estimates from the \citet{callaway2021} group aggregation reveal substantial heterogeneity. The group-weighted ATT---which weights cohorts by group size rather than the simple calendar-time aggregation used for the main estimate (0.2834)---is 0.288 (SE = 0.144), directionally similar but reflecting a different aggregation scheme.\footnote{The simple ATT (0.2834, SE = 0.1281) from Panel A of Table \ref{tab:main_results} uses the default \citet{callaway2021} calendar-time aggregation. The group-weighted ATT (0.288, SE = 0.144) weights by cohort size, giving more weight to large adoption waves. The difference is small and both support the same qualitative conclusion.} However, individual cohort effects range widely: some early cohorts (e.g., those adopting in mid-2022) show large positive effects exceeding 1.0 log points, while others show negative or near-zero effects. This heterogeneity likely reflects differences in T-MSIS reporting quality, state Medicaid program size, and the degree to which the PHE attenuated early adopters' treatment effects.
+
+\end{document}

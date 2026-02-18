@@ -1,0 +1,34 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robustness}
+\small
+\begin{tabular}{lcc}
+\hline\hline
+ & Log Postpartum & Log Postpartum \\
+ & Claims & Providers \\
+\hline
+Baseline (CS-DiD) & 0.2834** & 0.1108 \\
+ & (0.1281) & (0.0682) \\
+[4pt]
+TWFE + state trends & 0.1962* & 0.0542 \\
+ & (0.1006) & (0.0422) \\
+[4pt]
+Balanced panel (\geq 90\% nonzero) & 0.0028 & \\
+ & (0.2213) & \\
+[4pt]
+Randomization inference $p$-value & [0.198] & \\
+[6pt]
+\multicolumn{3}{l}{\textit{Placebo outcomes (CS-DiD):}} \\
+\quad Antepartum claims & 0.0659 & \\
+ & (0.2847) & \\
+\quad Delivery claims & 0.0452 & \\
+ & (0.2618) & \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.85\linewidth}
+\vspace{6pt}
+\footnotesize
+\textit{Notes:} All specifications use log-transformed outcomes. Baseline is the Callaway and Sant'Anna (2021) doubly robust estimator with not-yet-treated controls. TWFE + state trends adds state-specific linear time trends. Balanced panel restricts to states with non-zero postpartum claims in $\geq$90\% of months. RI $p$-value from 1,000 permutations of state treatment assignment. Placebo outcomes should show no effect: antepartum care and delivery are unaffected by the postpartum extension. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.10$.
+\end{minipage}
+\end{table}

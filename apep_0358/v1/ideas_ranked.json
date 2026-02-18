@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-02-18T14:35:09.401802",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2560,
+    "output_tokens": 6178,
+    "total_tokens": 8738
+  },
+  "ideas_file": "output/apep_0356/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Medicaid Postpartum Coverage Extensions and Maternal Health Provider Supply (Idea 1)",
+      "score": 77,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "explicitly addressing PHE continuous-coverage/unwinding timing",
+        "defining \u201csupply\u201d using postpartum-linked provider measures",
+        "using T\u2011MSIS quality screens + state-specific reporting-break controls",
+        "showing robust pre-trends",
+        "placebo outcomes such as antepartum codes"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Medicaid Coverage of Doula Services and Birth Outcomes (Idea 2)",
+      "score": 62,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "confirming a harmonized doula identification strategy in T\u2011MSIS\u2014codes + taxonomy + enrollment rules",
+        "keeping outcomes tightly aligned to doula service use/entry rather than diluted statewide birth outcomes",
+        "pre-specifying how you handle small-cluster inference"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Medicaid Adult Dental Benefit Expansions and Dentist Participation (Idea 4)",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "State Behavioral Health Parity Enforcement and Medicaid Provider Supply (Idea 3)",
+      "score": 28,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "Medicaid Postpartum Coverage Extensions and Maternal Health Provider Supply (Idea 1)",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "explicitly addressing PHE continuous-coverage/unwinding timing",
+        "defining \u201csupply\u201d using postpartum-linked provider measures",
+        "using T\u2011MSIS quality screens + state-specific reporting-break controls",
+        "showing robust pre-trends",
+        "placebo outcomes such as antepartum codes"
+      ]
+    },
+    {
+      "idea": "Medicaid Coverage of Doula Services and Birth Outcomes (Idea 2)",
+      "rank": 2,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "confirming a harmonized doula identification strategy in T\u2011MSIS\u2014codes + taxonomy + enrollment rules",
+        "keeping outcomes tightly aligned to doula service use/entry rather than diluted statewide birth outcomes",
+        "pre-specifying how you handle small-cluster inference"
+      ]
+    }
+  ]
+}
