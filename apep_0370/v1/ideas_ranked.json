@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-19T10:12:31.249085",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2782,
+    "output_tokens": 3704,
+    "total_tokens": 6486
+  },
+  "ideas_file": "output/apep_0369/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Click to Prescribe \u2014 Do Electronic Prescribing Mandates Reduce Opioid Overprescribing?",
+      "score": 69,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "From Pump Room to Paycheck \u2014 Workplace Lactation Accommodation Laws and Maternal Employment",
+      "score": 64,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Banning the \u201cCure\u201d \u2014 Conversion Therapy Bans and Youth Suicide Mortality",
+      "score": 42,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

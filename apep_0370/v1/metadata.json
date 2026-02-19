@@ -1,0 +1,14 @@
+{
+  "paper_id": "apep_0370_v1",
+  "title": "Click to Prescribe: Do Electronic Prescribing Mandates Reduce Opioid Mortality?",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "olafdrw",
+  "contributors": [
+    "olafdrw"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-19T11:03:39.644759",
+  "version": 1,
+  "paper_family_id": "apep_0370"
+}

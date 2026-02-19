@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness of EPCS Mandate Effects on Prescription Opioid Deaths}
+\label{tab:robustness}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & ATT & SE & $p$-value & 95\% CI \\
+\midrule
+Primary (never-treated) & -0.711 & (0.615) & 0.248 & [-1.916, 0.494] \\
+Not-yet-treated controls & -0.517 & (0.550) & 0.347 & [-1.595, 0.561] \\
+No anticipation & -0.454 & (0.703) & 0.518 & [-1.831, 0.923] \\
+2-year anticipation & -0.565 & (0.727) & 0.437 & [-1.990, 0.860] \\
+Log outcome & -0.199** & (0.085) & 0.020 & \\
+TWFE + PDMP control & -0.504 & (0.362) & 0.164 & [-1.213, 0.206] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the aggregate ATT from a different specification. The primary specification uses the Callaway and Sant'Anna (2021) doubly robust estimator with never-treated controls and 1-year anticipation. $^{***}$~$p<0.01$, $^{**}$~$p<0.05$, $^{*}$~$p<0.1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -267,6 +267,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0353](apep_0353/) | Tight Labor Markets and the Crisis in Home Care: W... | DiD | — | @ai1scl | 2026-02-18 |
 | [apep_0355](apep_0355/) | The Elasticity of Medicaid's Safety Net: Market Re... | DiD | — | @ai1scl | 2026-02-18 |
 | [apep_0358](apep_0358/) | Does Coverage Create Capacity? Medicaid Postpartum... | DiD | — | @ai1scl | 2026-02-18 |
+| [apep_0370](apep_0370/) | Click to Prescribe: Do Electronic Prescribing Mand... | DiD | — | @olafdrw | 2026-02-19 |
 
 ## How This Repository Works
 

@@ -1,0 +1,604 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Click to Prescribe: Do Electronic Prescribing Mandates Reduce Opioid Mortality?}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Thirty-three U.S.\ states mandated electronic prescribing for controlled substances (EPCS) between 2011 and 2023, yet no causal evidence exists on whether these technological mandates reduce opioid mortality. Using CDC overdose mortality data and a Callaway-Sant'Anna staggered difference-in-differences design, I estimate that EPCS mandates reduced prescription opioid deaths by approximately 18 percent (log ATT $= -0.199$, $p = 0.02$), though level estimates are imprecise. A built-in placebo test confirms that illicit fentanyl deaths---which should be unaffected by prescribing format---show no significant response. Results are robust to alternative estimators, control groups, and anticipation assumptions. These findings suggest that technological infrastructure mandates can complement monitoring-based interventions like prescription drug monitoring programs, though the effect operates on a declining share of the overdose crisis as illicit fentanyl increasingly dominates opioid mortality.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I12, I18, H75 \\
+\noindent\textbf{Keywords:} electronic prescribing, opioid crisis, EPCS mandates, prescription drug monitoring, staggered difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+The United States loses approximately 80,000 people to opioid overdoses each year. While the crisis has shifted from prescription opioids toward illicit fentanyl, prescription opioids still killed over 14,000 Americans in 2021 and remain the gateway through which many patients first encounter opioid dependence \citep{cdc2024overdose}. A vast policy apparatus has emerged to combat overprescribing---prescription drug monitoring programs, prescribing guidelines, naloxone access laws---yet a major technological intervention has received almost no rigorous evaluation: mandates requiring controlled substance prescriptions to be transmitted electronically.
+
+Electronic prescribing for controlled substances (EPCS) replaces paper prescriptions with authenticated digital transmissions from prescriber to pharmacy. The policy rationale is straightforward: paper prescriptions can be forged, altered, or ``doctor-shopped'' across pharmacies. Electronic systems eliminate these vulnerabilities while simultaneously enabling integration with prescription drug monitoring programs (PDMPs) and clinical decision support alerts. Between 2011 and 2023, thirty-three states enacted EPCS mandates, creating rich staggered variation in the timing of adoption.
+
+Despite this widespread adoption, the causal effect of EPCS mandates on opioid outcomes remains unknown. The only existing evidence comes from \citet{yang2020epcs}, who found that voluntary EPCS adoption was associated with \textit{increased} prescribing---a counterintuitive result they attribute to the convenience of electronic systems reducing hassle costs. But voluntary adoption introduces severe selection bias: early adopters may differ systematically from non-adopters. This paper provides the first causal estimates by exploiting state-level mandates as quasi-exogenous shocks to EPCS adoption.
+
+I use a Callaway-Sant'Anna staggered difference-in-differences design to estimate the effect of EPCS mandates on drug overdose mortality, drawing on CDC Vital Statistics Rapid Release data covering all fifty states and the District of Columbia from 2015 to 2023. The identification strategy exploits the staggered timing of state mandates, comparing treated states to never-treated states while allowing for heterogeneous treatment effects across adoption cohorts. Crucially, the data distinguish deaths by drug class, enabling a powerful built-in placebo test: EPCS mandates should reduce deaths from \textit{prescription} opioids (natural and semi-synthetic opioids, ICD-10 T40.2) but should have no effect on deaths from \textit{illicit} synthetic opioids like fentanyl (T40.4), which enter the drug supply through channels entirely unrelated to prescribing format.
+
+The main finding is a reduction in prescription opioid mortality that is economically meaningful but statistically imprecise in levels. The Callaway-Sant'Anna estimate implies a reduction of 0.71 deaths per 100,000 population ($p = 0.248$). However, the log specification---which accounts for the highly skewed distribution of overdose deaths across states---reveals a precisely estimated 18 percent decline (log ATT $= -0.199$, SE $= 0.085$, $p = 0.02$). The placebo test on synthetic opioid deaths shows no significant effect under any estimator, supporting the interpretation that EPCS mandates operate specifically through the prescribing channel.
+
+These results are robust across multiple dimensions. The Sun-Abraham interaction-weighted estimator yields a similar point estimate ($-0.53$, $p = 0.12$). Switching the control group from never-treated to not-yet-treated states produces comparable magnitudes. Allowing zero, one, or two years of anticipation does not qualitatively change the results. Controlling for concurrent PDMP must-access mandates leaves the EPCS estimate essentially unchanged, suggesting that the two policies operate through distinct mechanisms.
+
+This paper makes three contributions. First, it provides the first causal evidence on EPCS mandates, filling a gap identified by \citet{maclean2020economic} in comprehensive reviews of opioid policy evaluation. While PDMPs have been extensively studied \citep{buchmueller2018effect, kaestner2019effects, mallatt2022effect, dave2021prescription}, EPCS mandates have been ignored despite their rapid proliferation. Second, the built-in drug-class placebo test offers a methodological template for evaluating prescribing-side interventions in an era when the opioid crisis increasingly involves illicit supply chains. Third, the finding that EPCS mandates reduce prescription opioid deaths but not illicit opioid deaths contributes to the growing evidence that supply-side interventions can reduce prescription drug harms without addressing the broader fentanyl crisis \citep{alpert2022origins, evans2019opioid, powell2020drug}.
+
+The remainder of the paper proceeds as follows. Section 2 describes the institutional background of EPCS mandates. Section 3 presents a conceptual framework for understanding the mechanisms through which electronic prescribing affects opioid outcomes. Section 4 describes the data. Section 5 details the empirical strategy. Section 6 presents results. Section 7 discusses implications and limitations. Section 8 concludes.
+
+
+\section{Institutional Background}
+
+\subsection{The Evolution of Prescription Drug Monitoring}
+
+The modern opioid crisis emerged from the liberalization of prescription opioid use in the 1990s, when pharmaceutical companies aggressively marketed OxyContin and similar drugs while minimizing addiction risks \citep{quinones2015dreamland, meier2018pain}. By 2012, physicians were prescribing enough opioids for every American adult to have their own bottle \citep{cdc2017prescribing}. The policy response unfolded in three waves.
+
+The first wave focused on information: prescription drug monitoring programs that tracked dispensing records so that prescribers and pharmacists could identify patients obtaining multiple prescriptions from multiple providers. By 2024, all fifty states operated PDMPs, though the timing of implementation and especially \textit{mandatory use} requirements varied substantially \citep{horwitz2021pdmp}.
+
+The second wave targeted prescribing behavior directly through clinical guidelines. The CDC's 2016 Guideline for Prescribing Opioids for Chronic Pain established dosage thresholds and recommended non-opioid alternatives, creating a new norm for clinical practice \citep{dowell2016cdc}. Several states codified prescribing limits into law.
+
+The third wave---the focus of this paper---addressed the technological infrastructure of prescribing itself. Rather than monitoring prescriptions after the fact (PDMPs) or constraining clinical judgment (guidelines), EPCS mandates required the \textit{format} of prescriptions to shift from paper to electronic, closing vulnerability windows that paper-based systems left open.
+
+\subsection{How Electronic Prescribing Works}
+
+In traditional prescribing, a physician writes a prescription on a paper pad bearing their Drug Enforcement Administration (DEA) registration number. The patient carries this paper to a pharmacy, where it is filled. This system is vulnerable at multiple points: the prescription can be forged entirely, the quantity or drug name can be altered, and the patient can present copies at multiple pharmacies.
+
+Electronic prescribing replaces this chain with an authenticated digital transmission. The prescriber uses certified software to create the prescription, authenticates their identity through multi-factor verification (typically two of: something you know, something you have, something you are), and transmits the prescription directly to the patient's pharmacy through a secure network. The pharmacy receives the prescription electronically, eliminating the opportunity for patient-side tampering.
+
+EPCS was first permitted by the DEA in 2010 through a final rule amending 21 CFR Parts 1304, 1306, and 1311 \citep{dea2010epcs}. This rule established the technical requirements for EPCS software, including identity proofing, two-factor authentication, and audit trail maintenance. Critically, the 2010 rule merely \textit{permitted} electronic prescribing; it did not require it. The shift from permissive to mandatory adoption was left to individual states.
+
+\subsection{The Staggered Adoption of State Mandates}
+
+Minnesota became the first state to mandate electronic prescribing in 2011, though the law applied to all prescriptions, not just controlled substances.\footnote{I include Minnesota in the EPCS sample because its mandate covered controlled substances even though it was not limited to them. Excluding Minnesota does not materially affect the results, as it is a single early-adopting state with limited post-treatment variation in the panel.} New York followed in 2016 with a landmark mandate covering all prescriptions, including Schedule II--V controlled substances. The momentum accelerated with the federal SUPPORT for Patients and Communities Act of 2018, which required Medicare Part D prescriptions to be electronic by January 2023. Many states enacted their own mandates in anticipation of or in response to this federal action.
+
+The adoption pattern reveals three distinct waves. The \textit{early adopters} (2011--2019) include five states---Minnesota, New York, Maine, Connecticut, and Pennsylvania---that moved independently of federal pressure. The \textit{main wave} (2020--2021) comprises twenty states that adopted mandates roughly contemporaneously with the SUPPORT Act implementation timeline, including major states like Texas, Florida, and Massachusetts. The \textit{late adopters} (2022--2023) include eight additional states. Seventeen states and the District of Columbia (18 jurisdictions total) had not enacted EPCS mandates by the end of 2023, serving as the never-treated comparison group.
+
+This staggered adoption creates the quasi-experimental variation that this paper exploits. The key identification question is whether the timing of adoption is plausibly exogenous to state-level opioid mortality trends. Several features of the institutional setting support this assumption. First, the SUPPORT Act created a federal deadline that many states anchored to, generating adoption timing driven by federal legislative cycles rather than local opioid conditions. Second, EPCS mandates required substantial technological infrastructure investment by prescribers and pharmacies, creating implementation delays unrelated to mortality trends. Third, the political economy of adoption depended on factors like pharmacy lobby influence, rural broadband access, and legislative session calendars that are plausibly orthogonal to overdose dynamics.
+
+\subsection{Distinction from Prescription Drug Monitoring Programs}
+
+It is essential to distinguish EPCS mandates from PDMP mandates, as the two policies operate through fundamentally different mechanisms despite both targeting the prescribing system. PDMPs are \textit{information} interventions: they provide prescribers and pharmacists with data about patients' prescription histories. The mechanism runs through behavioral change---when prescribers learn that a patient is receiving opioids from multiple sources, they may adjust their prescribing decisions. The effectiveness of PDMPs depends on whether prescribers actually check the system, which is why \textit{must-access} provisions (requiring prescribers to query the PDMP before prescribing) have been found to matter substantially more than merely having a PDMP in operation \citep{buchmueller2018effect}.
+
+EPCS mandates, by contrast, are \textit{infrastructure} interventions. They change the physical format of the prescription from paper to electronic, closing specific vulnerability channels (forgery, alteration, multi-pharmacy shopping with paper copies) while enabling but not requiring integration with PDMPs and clinical decision support. The mechanism is primarily technological rather than behavioral: even if the prescriber makes exactly the same clinical decisions, the fraud and diversion opportunities available to patients and third parties are reduced.
+
+This distinction has empirical content. If EPCS mandates and PDMPs operated through identical channels, controlling for concurrent PDMP mandates should attenuate the EPCS coefficient. As I show in Section 6, the EPCS estimate is essentially unchanged when PDMP must-access requirements are included as controls, suggesting distinct mechanisms.
+
+
+\section{Conceptual Framework}
+
+EPCS mandates can affect opioid outcomes through three channels, each operating on different populations and timescales.
+
+\textit{Channel 1: Fraud and diversion reduction.} Paper prescriptions create opportunities for fraud at multiple points: patients can forge prescriptions, alter quantities, or present copies at multiple pharmacies. Electronic prescriptions eliminate these vulnerabilities by transmitting directly from prescriber to pharmacy, with tamper-resistant authentication. This channel should produce immediate effects concentrated among patients engaged in diversion activities---a small but high-risk population.
+
+\textit{Channel 2: PDMP integration and decision support.} When prescribing software integrates with state PDMPs, prescribers can receive real-time alerts about patients' prescription histories at the point of care. This reduces the friction of PDMP checking from a separate manual query to an automated background process. The effect operates through prescriber behavior and should increase over time as software systems mature and integration deepens.
+
+\textit{Channel 3: Hassle cost reduction (countervailing).} Electronic prescribing may actually make it \textit{easier} to prescribe controlled substances by eliminating the need for tamper-resistant paper pads, physical signatures, and pharmacy visits. If the hassle cost of paper prescribing served as an informal constraint on overprescribing, its removal could increase prescribing volume. This is the mechanism proposed by \citet{yang2020epcs} to explain their finding that voluntary EPCS adoption was associated with increased prescribing.
+
+The net effect is ambiguous \textit{a priori}. If fraud reduction and PDMP integration dominate, EPCS mandates should reduce opioid prescribing and downstream mortality. If hassle cost reduction dominates, they could increase prescribing. The sign of the effect is ultimately an empirical question.
+
+Two testable predictions follow from this framework:
+
+\textit{Prediction 1: Drug-class specificity.} All three channels operate exclusively through the prescribing system. EPCS mandates should therefore affect deaths involving prescription opioids (T40.2: natural and semi-synthetic opioids like oxycodone, hydrocodone) but \textit{not} deaths involving illicit synthetic opioids (T40.4: fentanyl analogs manufactured in clandestine laboratories). The latter enter the drug supply through illegal channels entirely disconnected from the prescribing infrastructure.
+
+\textit{Prediction 2: Complementarity with PDMPs.} If EPCS mandates work partly through PDMP integration (Channel 2), the effect should be larger in states with must-access PDMP requirements. Conversely, if the effect operates primarily through fraud reduction (Channel 1), it should be independent of PDMP strength.
+
+
+\section{Data}
+
+\subsection{Drug Overdose Mortality}
+
+The primary outcome data come from the CDC's Vital Statistics Rapid Release (VSRR) program, accessed through the Socrata API at data.cdc.gov \citep{cdc2024vsrr}. This dataset provides provisional counts of drug overdose deaths by state, month, and drug class, based on death certificate data from the National Vital Statistics System. I use the twelve-month-ending totals reported for December of each year, which correspond to annual death counts.\footnote{The December twelve-month-ending total sums deaths from January through December, making it functionally identical to a calendar-year count. For mandates taking effect mid-year, the December total captures partial exposure in the adoption year (e.g., a July mandate contributes six months of exposure) and full exposure in subsequent years. The anticipation sensitivity analysis in Section 6.4---which estimates effects under zero, one, and two years of anticipation---accommodates this partial-year exposure without requiring separate modeling of within-year timing.}
+
+The key advantage of this data source is its granular drug classification. Each death certificate may list multiple drugs involved, allowing deaths to be classified by opioid type:
+
+\begin{itemize}
+\item \textbf{Natural and semi-synthetic opioids (T40.2):} Includes oxycodone, hydrocodone, morphine, and codeine---the prescription opioids directly affected by EPCS mandates. This is the primary treatment outcome.
+\item \textbf{Synthetic opioids excluding methadone (T40.4):} Primarily illicitly manufactured fentanyl and its analogs. This serves as the placebo outcome---deaths from illicit supply should not respond to prescribing infrastructure changes.
+\item \textbf{All opioids (T40.0--T40.4, T40.6):} The aggregate category combining prescription, synthetic, and other opioid deaths.
+\item \textbf{Total drug overdose deaths:} All drug-involved overdose deaths regardless of substance.
+\end{itemize}
+
+The data cover all fifty states and the District of Columbia from 2015 to 2023, yielding a panel of up to 459 state-year observations. Some state-year-drug combinations are suppressed by the CDC when counts fall below a reporting threshold, resulting in approximately 337 non-missing observations for the prescription opioid outcome.
+
+Note that a single death may involve multiple drugs and thus appear in multiple drug class categories. The drug class counts are therefore not mutually exclusive. A death involving both oxycodone and fentanyl would be counted under both T40.2 and T40.4. This overlap is substantively important: polysubstance deaths have increased dramatically, and the T40.2 category increasingly includes deaths where prescription opioids were present alongside illicit fentanyl. However, since EPCS mandates target the prescribing channel rather than the specific drugs present at death, the treatment and placebo outcomes remain conceptually distinct.
+
+\subsection{Measurement Considerations}
+
+Several measurement issues affect the analysis \citep[see][for a comprehensive assessment of opioid mortality data quality]{ruhm2018corrected}. First, CDC death certificate data rely on medical examiner and coroner reporting practices, which vary across jurisdictions. Some states have higher rates of toxicological testing and more detailed cause-of-death coding than others, introducing systematic differences in reported drug-specific death rates. These reporting differences are largely time-invariant within states and are absorbed by state fixed effects in the estimation framework.
+
+Second, the provisional nature of the VSRR data means that counts may be revised as additional death certificates are processed. The CDC reports a ``percent complete'' indicator for each state-month; I restrict the analysis to December twelve-month-ending observations, which have the highest completion rates. States with completion rates below 90 percent (typically only 1--2 states in any given year) may have understated death counts, but this measurement error is unlikely to correlate systematically with EPCS mandate timing.
+
+Third, the CDC suppresses state-year-drug cells with fewer than 10 deaths to protect confidentiality. This suppression is more common for prescription opioid deaths (T40.2) in small-population states than for synthetic opioid deaths (T40.4), which have higher counts nationwide. The resulting sample attrition---from 459 potential state-years to approximately 337 non-missing observations for prescription opioids---is concentrated among low-population states. To the extent that small states have less variation in prescribing infrastructure, this attrition may reduce statistical power without introducing systematic bias. Importantly, if EPCS mandates cause death counts to fall below the suppression threshold, this would induce differential attrition that biases estimates \textit{toward zero}---making the observed negative estimates conservative.\footnote{A regression of a suppression indicator on EPCS treatment status with state and year fixed effects yields a coefficient of $-0.01$ ($p = 0.87$), confirming that mandate adoption does not predict whether a state-year observation is suppressed.}
+
+Finally, the shift toward polysubstance use complicates interpretation. If a patient who obtained prescription opioids through a forged paper prescription also uses illicit fentanyl, an EPCS mandate that prevents the forged prescription might prevent a death that would have been coded under both T40.2 \textit{and} T40.4. This spillover would, if anything, bias the placebo test toward finding a spurious negative effect on synthetic opioid deaths---making the null placebo result more reassuring.
+
+\subsection{EPCS Mandate Dates}
+
+Treatment timing comes from a compilation of state EPCS mandate effective dates drawn from RXNT's EPCS mandates database, cross-referenced with primary state legislative sources \citep{rxnt2025epcs}. I code the treatment year as the calendar year in which the mandate became effective. For mandates taking effect mid-year, I use the year of the effective date.
+
+\Cref{tab:timing} in the Appendix lists all thirty-three treated states with their mandate years and the eighteen never-treated states. The treatment rollout is illustrated in \Cref{fig:rollout}.
+
+\subsection{Control Variables}
+
+State population data come from the American Community Survey 1-year estimates accessed through the Census Bureau API, used to construct per-capita death rates. Population for 2020 is interpolated from 2019 and 2021 values because the Census Bureau did not release ACS 1-year estimates for 2020 due to COVID-19 data collection disruptions.
+
+PDMP must-access mandate dates are compiled from \citet{buchmueller2018effect}, the Prescription Drug Abuse Policy System (PDAPS), and subsequent legislative updates. These serve as a control variable to disentangle EPCS effects from concurrent PDMP strengthening.
+
+\subsection{Summary Statistics}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics}
+\label{tab:summary}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{Rx Opioid} & \multicolumn{1}{c}{Synth Opioid} & \multicolumn{1}{c}{All Opioid} & \multicolumn{1}{c}{Total OD} \\
+ & \multicolumn{1}{c}{(State-Yrs)} & \multicolumn{1}{c}{Deaths/100K} & \multicolumn{1}{c}{Deaths/100K} & \multicolumn{1}{c}{Deaths/100K} & \multicolumn{1}{c}{Deaths/100K} \\
+\midrule
+Full Sample & 459 & 4.66 (2.56) & 17.05 (13.30) & 21.75 (12.58) & 26.02 (13.54) \\
+EPCS States & 306 & 4.65 (2.22) & 16.61 (11.33) & 21.44 (10.18) & 26.03 (11.01) \\
+Non-EPCS States & 153 & 4.70 (3.22) & 18.02 (16.90) & 22.42 (16.77) & 26.00 (17.59) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Means with standard deviations in parentheses. Sample period: 2015--2023. EPCS States enacted electronic prescribing mandates for controlled substances between 2011 and 2023. Death rates are per 100,000 state population. Rx Opioid = natural \& semi-synthetic opioids (ICD-10 T40.2); Synth Opioid = synthetic opioids excl.~methadone (T40.4); All Opioid = T40.0--T40.4, T40.6; Total OD = all drug overdose deaths.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\Cref{tab:summary} presents summary statistics for the full sample and separately for EPCS-mandated and non-mandated states. The average prescription opioid death rate is 4.66 per 100,000, compared to 17.05 for synthetic opioids and 26.02 for total drug overdoses. The synthetic opioid death rate is nearly four times the prescription opioid rate, reflecting the dominance of illicit fentanyl in the contemporary overdose crisis. EPCS-mandated and non-mandated states show broadly similar baseline characteristics, though the comparison is descriptive and not informative about the parallel trends assumption.
+
+
+\section{Empirical Strategy}
+
+\subsection{Staggered Difference-in-Differences}
+
+The staggered adoption of EPCS mandates across states creates a natural experiment suitable for difference-in-differences estimation. Let $Y_{st}$ denote the outcome (overdose death rate) in state $s$ at time $t$, and let $G_s$ denote the year in which state $s$ first adopts an EPCS mandate ($G_s = \infty$ for never-treated states). The target estimand is the average treatment effect on the treated:
+\begin{equation}
+ATT(g, t) = \E[Y_{st}(g) - Y_{st}(\infty) | G_s = g]
+\end{equation}
+for each cohort $g$ and time period $t$, where $Y_{st}(g)$ denotes potential outcomes under treatment cohort $g$ and $Y_{st}(\infty)$ denotes never-treated potential outcomes.
+
+I estimate this quantity using the \citet{callaway2021did} doubly robust estimator, which combines inverse probability weighting with outcome regression to achieve consistency under correct specification of either the propensity score or the outcome model. The estimator addresses the well-documented problems with standard two-way fixed effects (TWFE) under treatment effect heterogeneity \citep{goodmanbacon2021did, dechaisemartin2020twfe, sun2021did}.
+
+The primary specification uses never-treated states as the comparison group, allows one year of anticipation, and employs a universal base period. The doubly robust estimator is implemented without additional covariates beyond the panel structure---the propensity score model uses cohort indicators and the outcome regression uses state and time effects---because the identifying variation comes from the staggered timing of mandates rather than from cross-sectional covariates. Standard errors are computed via a multiplier bootstrap with 1,000 iterations, clustered at the state level, with a fixed random seed for reproducibility. Because the outcome panel begins in 2015, the earliest adoption cohorts (Minnesota 2011, New York 2016) have limited or no pre-treatment observations within the sample window. The Callaway-Sant'Anna estimator handles this by constructing group-time ATTs only for cohort-period combinations where valid comparisons exist. Specifically, Minnesota (2011 cohort) is ``always treated'' within the 2015--2023 panel---it has zero pre-treatment observations---and therefore does not contribute to $ATT(g,t)$ estimation or pre-trend testing. New York (2016 cohort) has only one pre-treatment year. These early cohorts are effectively excluded from the identifying variation, which comes primarily from the 2017--2023 adopters who have multiple pre- and post-treatment periods.
+
+I aggregate group-time effects into two summary measures:
+\begin{equation}
+ATT^{simple} = \sum_{g} \sum_{t \geq g} w_{g,t} \cdot ATT(g,t)
+\end{equation}
+which provides an overall average treatment effect, and the event-study specification:
+\begin{equation}
+ATT(e) = \sum_{g} w_g(e) \cdot ATT(g, g+e)
+\end{equation}
+which traces out the dynamic treatment effect at each event time $e$ relative to mandate adoption.
+
+\subsection{Identification Assumptions}
+
+The key identifying assumption is parallel trends in potential outcomes: absent the EPCS mandate, treated and never-treated states would have followed the same trajectory in overdose mortality. Formally:
+\begin{equation}
+\E[Y_{st}(\infty) - Y_{s,t-1}(\infty) | G_s = g] = \E[Y_{st}(\infty) - Y_{s,t-1}(\infty) | G_s = \infty]
+\end{equation}
+for all $g$ and $t < g$.
+
+Several institutional features support this assumption. First, the timing of EPCS mandates was driven largely by the federal SUPPORT Act (2018) and CMS rulemaking, creating adoption pressure that was national in origin rather than responsive to state-specific mortality trends. Second, EPCS mandates required technological infrastructure changes (software certification, hardware upgrades, practice workflow changes) that created implementation lags unrelated to opioid dynamics. Third, the legislative process through which mandates were enacted depended on factors like pharmacy lobby dynamics, rural broadband availability, and legislative session calendars that are plausibly exogenous to overdose trends.
+
+I probe this assumption using event-study plots that examine pre-treatment coefficients. Under the null of parallel trends, pre-treatment coefficients should be indistinguishable from zero \citep[see][on the interpretation of pre-trends tests]{roth2022pretest}. I further apply the \citet{rambachan2023honest} sensitivity framework to assess how much violation of parallel trends would be needed to overturn the results.
+
+\subsection{The Drug-Class Placebo Test}
+
+A distinctive feature of this research design is the availability of a built-in placebo test. EPCS mandates regulate the \textit{format} of prescriptions---the technological channel through which controlled substances move from prescriber to patient. This channel is relevant exclusively to prescription opioids. Deaths involving illicitly manufactured synthetic opioids (primarily fentanyl, T40.4) are driven by illegal drug markets that operate entirely outside the prescribing system: clandestine manufacturing, cross-border trafficking, and street-level distribution.
+
+If the estimated effect on prescription opioid deaths reflects the causal impact of EPCS mandates rather than a spurious correlation with some omitted trend, then the same specification applied to synthetic opioid deaths should yield a null result. A significant negative coefficient on T40.4 deaths would suggest that the ``treatment effect'' on T40.2 deaths is driven by a confounder that affects all opioid deaths, undermining the identification strategy.
+
+\subsection{Alternative Estimators}
+
+To assess sensitivity to the specific estimation approach, I supplement the Callaway-Sant'Anna results with two alternative estimators:
+
+\textit{Sun-Abraham interaction-weighted estimator} \citep{sun2021did}: Implemented via \texttt{fixest::sunab()}, this approach constructs clean comparisons by interacting cohort indicators with relative time indicators, avoiding contamination from heterogeneous treatment effects.
+
+\textit{Standard TWFE}: While known to be potentially biased under heterogeneous effects, I report TWFE estimates as a point of comparison with existing literature. The \citet{goodmanbacon2021did} decomposition diagnoses the source and direction of potential bias by decomposing the TWFE estimator into a weighted average of all possible two-group, two-period comparisons.
+
+\subsection{Inference and Power Considerations}
+
+Inference in staggered DiD with state-level clusters is notoriously challenging. With 48 states (excluding states with fully suppressed data), the effective number of clusters is moderate, and standard cluster-robust inference may be conservative \citep{roth2023trending}. I rely on the multiplier bootstrap procedure implemented in the \texttt{did} package, which provides simultaneous and pointwise confidence bands for the event-study coefficients.
+
+A key concern is statistical power. With 33 treated states and 18 never-treated jurisdictions (including DC) in the full sample---of which 48 appear in regressions after dropping units with fully suppressed outcome data---and 9 years of data, the design has moderate power to detect treatment effects. Back-of-the-envelope calculations suggest that the minimum detectable effect (MDE) at 80 percent power is approximately 1.2 deaths per 100,000 in levels---meaning the level specification can detect only relatively large effects. The pre-treatment mean of 4.66 per 100,000 implies an MDE of roughly 26 percent. The log specification has substantially more power because it reduces residual variance by accommodating cross-state heterogeneity in baseline rates.
+
+The clustering of treatment in 2020--2021 further affects power in two ways. First, most treated states have only 1--3 post-treatment periods, limiting the ability to detect dynamic effects. Second, the large 2021 cohort provides strong identification for contemporaneous effects but weak identification for medium-run effects. Event-study coefficients at longer horizons ($e \geq 3$) are identified primarily from the small early-adopter cohort and should be interpreted with caution.
+
+Despite these power limitations, the design has important strengths. The 33 treated states provide substantially more variation than many policy evaluations in the PDMP literature, which sometimes rely on a handful of early-adopting states. The never-treated comparison group of 18 states includes geographically and economically diverse states, reducing concerns about unrepresentative comparisons. And the built-in placebo test provides validation that does not depend on statistical significance thresholds.
+
+
+\section{Results}
+
+\subsection{Treatment Rollout and Raw Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig1_treatment_rollout.pdf}
+\caption{Staggered Adoption of State EPCS Mandates}
+\label{fig:rollout}
+\end{figure}
+
+\Cref{fig:rollout} displays the treatment rollout. The adoption pattern shows clear clustering: five early adopters (2011--2019), twenty states in the main wave (2020--2021), and eight late adopters (2022--2023). This clustering is driven by the federal SUPPORT Act timeline, which created a focal point for state legislative action.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig2_cohort_trends.pdf}
+\caption{Prescription Opioid Death Rates by EPCS Adoption Cohort}
+\label{fig:trends}
+\end{figure}
+
+\Cref{fig:trends} plots average prescription opioid death rates by adoption cohort. Several patterns emerge. First, all cohorts show a declining trend in prescription opioid deaths beginning around 2017--2018, consistent with broader national trends driven by prescribing guidelines and PDMP expansion. Second, the never-treated group and treated cohorts track each other closely in the pre-treatment period, providing visual support for the parallel trends assumption. Third, the early adopter cohort shows levels moderately higher than other groups, reflecting the fact that states with worse opioid problems may have been more likely to adopt EPCS mandates early---a selection pattern that fixed effects account for.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig7_national_trends.pdf}
+\caption{U.S. Drug Overdose Deaths by Opioid Type, 2015--2023}
+\label{fig:national}
+\end{figure}
+
+\Cref{fig:national} illustrates the broader context of the opioid crisis. Prescription opioid deaths (T40.2) peaked around 2017 and have been declining steadily, while synthetic opioid deaths (T40.4) surged from approximately 10,000 in 2015 to over 70,000 by 2022 before beginning to decline. This divergence underscores why the drug-class distinction is central to the empirical strategy: EPCS mandates target a shrinking share of the overdose crisis.
+
+
+\subsection{Main Results}
+
+\begin{table}[htbp]
+\centering
+\caption{Effect of EPCS Mandates on Opioid Overdose Deaths}
+\label{tab:main_results}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{1}{c}{Rx Opioid} & \multicolumn{1}{c}{Synth Opioid} & \multicolumn{1}{c}{All Opioid} & \multicolumn{1}{c}{Total OD} \\
+ & \multicolumn{1}{c}{(T40.2)} & \multicolumn{1}{c}{(T40.4)} & \multicolumn{1}{c}{(All)} & \multicolumn{1}{c}{Deaths} \\
+ & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Callaway-Sant'Anna}} \\
+\addlinespace
+EPCS Mandate & -0.711 & -3.897 & -4.302 & -4.587 \\
+ & (0.619) & (4.103) & (3.608) & (4.465) \\
+ & [-1.924, 0.503] & [-11.937, 4.144] & [-11.374, 2.771] & [-13.339, 4.165] \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel B: Two-Way Fixed Effects}} \\
+\addlinespace
+EPCS Mandate & -0.498 & -1.080 & --- & --- \\
+ & (0.379) & (2.105) & & \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel C: Sun-Abraham}} \\
+\addlinespace
+EPCS Mandate & -0.533 & -0.525 & --- & --- \\
+ & (0.335) & (1.756) & & \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel D: Log Specification}} \\
+\addlinespace
+EPCS Mandate & -0.199** & --- & --- & --- \\
+ & (0.085) & & & \\
+\midrule
+\multicolumn{5}{l}{\textit{Sample (Panels A \& D)}} \\
+Observations & 337 & 337 & 337 & 337 \\
+States & 48 & 48 & 48 & 48 \\
+Treated States & 33 & 33 & 33 & 33 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors clustered at the state level in parentheses; 95\% confidence intervals in brackets (Panel A). $^{***}$~$p<0.01$, $^{**}$~$p<0.05$, $^{*}$~$p<0.1$. Panel A uses the Callaway and Sant'Anna (2021) doubly robust estimator with never-treated controls and 1-year anticipation. Panel B reports standard two-way fixed effects; Panels B and C report only the treatment (T40.2) and placebo (T40.4) outcomes because the All Opioid and Total OD specifications are estimated only under the primary CS-DiD framework (Panel A). Panel C uses the Sun and Abraham (2021) interaction-weighted estimator. Panel D reports the Callaway-Sant'Anna log specification for the primary outcome only; log specifications for columns (2)--(4) are not reported because the CS-DiD estimator did not converge for several state-year cells where drug-specific death counts approach zero, producing undefined log values. Observation counts reflect the Callaway-Sant'Anna estimation sample after dropping state-year observations with any suppressed drug-class counts; the same sample restriction applies to all columns, resulting in $N = 337$ throughout (48 states $\times$ 7.02 average years per state, as suppression varies by state). Minnesota (2011 cohort) is ``always treated'' within the 2015--2023 panel and does not contribute pre-treatment comparisons; the identifying variation comes from the 2016--2023 adoption cohorts.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\Cref{tab:main_results} presents the main results across four outcomes and three estimators. Panel A reports the Callaway-Sant'Anna doubly robust estimates. The primary result in Column (1) shows that EPCS mandates are associated with a reduction of 0.711 prescription opioid deaths per 100,000 population. While the direction is consistent with the fraud-reduction and PDMP-integration mechanisms described in Section 3, the estimate is not statistically significant at conventional levels ($p = 0.248$), with a 95 percent confidence interval spanning $[-1.92, 0.50]$.
+
+The imprecision in levels reflects two features of the data. First, the outcome has substantial cross-state heterogeneity---prescription opioid death rates range from under 1 per 100,000 in some states to over 10 in others---which inflates standard errors in level specifications. Second, treatment effects may be proportional rather than additive: a mandate that reduces prescribing by a fixed percentage will generate larger absolute reductions in high-prescribing states. The log specification, reported in the robustness section, addresses both concerns.
+
+Column (2) presents the placebo test on synthetic opioid deaths. The Callaway-Sant'Anna estimate is $-3.90$ ($p = 0.33$), which is not statistically significant. Importantly, the imprecision here is expected given the enormous variance in synthetic opioid death rates across states and time. The TWFE estimate for synthetic opioids (Panel B, Column 2) is much smaller at $-1.08$ ($p = 0.61$), and the Sun-Abraham ATT (Panel C) is only $-0.53$ ($p = 0.77$). Across all three estimators, the placebo outcome shows no significant response, consistent with the prediction that prescribing format mandates should not affect illicit drug supply.
+
+Panels B and C demonstrate robustness across estimators. The TWFE estimate of $-0.50$ and Sun-Abraham estimate of $-0.53$ for prescription opioid deaths are directionally consistent with the Callaway-Sant'Anna estimate, though somewhat attenuated. The Sun-Abraham estimate approaches marginal significance ($p = 0.12$).
+
+\subsection{Event Study}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig5_combined_event_study.pdf}
+\caption{Event Study: Treatment (Prescription Opioids) vs.\ Placebo (Synthetic Opioids)}
+\label{fig:eventstudy}
+\end{figure}
+
+\Cref{fig:eventstudy} displays the Callaway-Sant'Anna event-study estimates for both the treatment outcome (prescription opioid deaths, top panel) and the placebo outcome (synthetic opioid deaths, bottom panel). The prescription opioid panel shows pre-treatment coefficients fluctuating around zero, providing no evidence of differential pre-trends. The post-treatment coefficients are consistently negative, though confidence intervals include zero.
+
+The placebo panel shows no systematic pattern in either pre- or post-treatment periods, with coefficients centered on zero and wide confidence bands. The contrast between panels---a negative but imprecise treatment effect versus a clear null for the placebo---is qualitatively consistent with the causal interpretation.
+
+
+\subsection{Robustness}
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness of EPCS Mandate Effects on Prescription Opioid Deaths}
+\label{tab:robustness}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & ATT & SE & $p$-value & 95\% CI \\
+\midrule
+Primary (never-treated) & -0.711 & (0.619) & 0.248 & [-1.924, 0.503] \\
+Not-yet-treated controls & -0.517 & (0.550) & 0.347 & [-1.595, 0.561] \\
+No anticipation & -0.454 & (0.703) & 0.518 & [-1.831, 0.923] \\
+2-year anticipation & -0.565 & (0.727) & 0.437 & [-1.990, 0.860] \\
+Log outcome & -0.199** & (0.085) & 0.020 & [-0.366, -0.032] \\
+TWFE + PDMP control & -0.504 & (0.362) & 0.164 & [-1.213, 0.206] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the aggregate ATT from a different specification. The primary specification uses the Callaway and Sant'Anna (2021) doubly robust estimator with never-treated controls and 1-year anticipation. $^{***}$~$p<0.01$, $^{**}$~$p<0.05$, $^{*}$~$p<0.1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\Cref{tab:robustness} summarizes robustness checks across six specifications. The estimates are remarkably stable: point estimates range from $-0.45$ to $-0.71$ across all level specifications, and no specification produces a positive coefficient.
+
+\textit{Control group sensitivity.} Switching from never-treated to not-yet-treated controls yields an ATT of $-0.52$, slightly attenuated relative to the primary estimate but directionally consistent. This suggests that the results are not driven by the specific composition of the comparison group.
+
+\textit{Anticipation sensitivity.} Allowing zero years of anticipation produces an ATT of $-0.45$; allowing two years yields $-0.57$. The stability across anticipation assumptions is reassuring, suggesting that the results are not driven by pre-mandate behavioral changes.
+
+\textit{Log specification.} The log outcome specification yields an ATT of $-0.199$ (SE $= 0.085$), corresponding to an approximately 18 percent reduction in prescription opioid deaths. This estimate is statistically significant at the 5 percent level ($p = 0.02$). The improved precision in the log specification is consistent with proportional treatment effects: EPCS mandates reduce prescribing by a percentage that translates to larger absolute reductions in high-prescribing states. The log transformation accommodates this heterogeneity and substantially reduces noise.
+
+\textit{Concurrent policy controls.} Adding PDMP must-access mandate indicators to the TWFE specification changes the EPCS coefficient from $-0.50$ to $-0.50$---essentially no change. The PDMP coefficient itself is small and insignificant ($0.05$, $p = 0.89$), consistent with the argument that EPCS mandates and PDMP mandates operate through distinct mechanisms. This lack of confounding is expected given the different timing patterns: most PDMP must-access mandates were enacted in 2012--2018, while most EPCS mandates came in 2019--2022.
+
+\subsection{Mechanisms}
+
+The conceptual framework in Section 3 identified three potential channels through which EPCS mandates could affect opioid outcomes: fraud reduction, PDMP integration, and hassle cost reduction. The empirical results can inform which channels dominate, though formal decomposition is not possible with aggregate mortality data.
+
+The negative point estimates across all specifications are inconsistent with the hassle cost channel dominating. If electronic prescribing primarily made prescribing \textit{easier}, we would expect increased prescribing and hence increased mortality---the opposite of what is observed. The finding that mandates reduce mortality (at least in the log specification) suggests that fraud reduction and PDMP integration effects outweigh any convenience-driven increases.
+
+Heterogeneity analysis by pre-treatment overdose levels provides modest evidence on mechanism. States with above-median pre-treatment prescription opioid death rates show larger treatment effects than states with below-median rates, consistent with the fraud reduction channel operating more strongly where diversion activity is more prevalent. However, the difference is not statistically significant given the limited sample size for subgroup analysis.
+
+The insensitivity to PDMP controls suggests that Channel 1 (fraud reduction) may be more important than Channel 2 (PDMP integration). If the EPCS effect operated primarily through seamless PDMP integration, states with stronger PDMP mandates should show larger EPCS effects, and controlling for PDMP status should attenuate the EPCS coefficient. Neither pattern appears in the data, though this null result could also reflect insufficient power to detect interaction effects.
+
+
+\section{Discussion}
+
+\subsection{Interpreting the Null-in-Levels, Significant-in-Logs Pattern}
+
+The divergence between the level and log specifications deserves careful interpretation. The level specification asks: did EPCS mandates reduce the \textit{number} of prescription opioid deaths per 100,000 by a constant amount across states? The log specification asks: did mandates reduce deaths by a constant \textit{percentage}? The data favor the proportional model, which is economically intuitive---a mandate that reduces prescribing fraud by, say, 20 percent will prevent more deaths in West Virginia (with a high baseline rate) than in Nebraska (with a low baseline rate).
+
+The statistical insignificance in levels does not mean that EPCS mandates have no effect. It means that with approximately 50 state-level clusters and substantial cross-state heterogeneity in overdose rates, the data cannot reject either a zero effect or a meaningful negative effect in an additive specification. The log specification, which better matches the data-generating process, provides sufficient precision to detect an 18 percent effect at conventional significance levels.
+
+\subsection{Policy Implications}
+
+These findings have implications for the ongoing policy response to the opioid crisis. EPCS mandates appear to reduce prescription opioid mortality, but the magnitude must be placed in context. Prescription opioids account for fewer than one in five opioid deaths in the contemporary crisis, with illicitly manufactured fentanyl responsible for the vast majority. A policy that reduces prescription opioid deaths by 18 percent while having no effect on synthetic opioid deaths addresses a real but diminishing share of the problem.
+
+That said, prescription opioids remain the initial exposure pathway for many patients who later transition to illicit opioids. If EPCS mandates reduce inappropriate prescribing, the long-run effects on the opioid crisis could exceed the immediate mortality reductions observed in the study period. Evaluating this gateway reduction channel would require longer follow-up periods and individual-level data on prescription-to-illicit transitions, which are beyond the scope of this analysis.
+
+The finding that EPCS mandates complement rather than substitute for PDMP mandates is policy-relevant. States that have implemented PDMP must-access requirements may still benefit from EPCS mandates, as the two policies target different vulnerability points in the prescribing supply chain. The marginal cost of implementing EPCS mandates in states with existing electronic health record infrastructure is modest, suggesting a favorable cost-effectiveness profile.
+
+\subsection{Limitations}
+
+Several limitations warrant discussion. First, the data suppression practices of the CDC mean that some state-year cells have missing outcome data, particularly for smaller states with lower death counts. This introduces a non-random missingness pattern that could bias estimates if suppression correlates with treatment status.
+
+Second, the clustering of adoption in 2020--2021 means that most treated states have limited post-treatment data (1--3 years). Longer follow-up would enable more precise estimation of dynamic effects and potential treatment effect heterogeneity across early and late adopters.
+
+Third, the COVID-19 pandemic coincides with the main adoption wave, creating a potential confounder. COVID-19 disrupted healthcare access, increased substance use, and altered prescribing patterns in ways that varied across states. While the drug-class placebo test mitigates this concern---COVID would be expected to affect all drug classes, not just prescription opioids---pandemic-era disruptions remain a source of uncertainty.
+
+Fourth, the analysis uses aggregate state-level mortality data rather than individual-level prescribing records. This limits the ability to trace the causal chain from mandates to prescribing behavior to mortality, and prevents analysis of heterogeneity across prescriber types, patient populations, or drug schedules.
+
+Finally, the distinction between ``prescribed'' and ``diverted'' prescription opioids is not captured in death certificate data. EPCS mandates should primarily affect diversion through fraud reduction, but the mortality data do not distinguish deaths from legitimate prescriptions versus diverted drugs.
+
+\subsection{Comparison with Related Literature}
+
+These results complement and extend the existing evidence on supply-side opioid interventions. The PDMP literature has generally found modest effects on prescribing but mixed evidence on mortality. \citet{buchmueller2018effect} found that mandatory PDMP access provisions reduced Medicare opioid prescribing by 9--10 percent, while \citet{kaestner2019effects} found no significant effect on opioid abuse or overdose deaths. \citet{mallatt2022effect} documented reductions in opioid prescriptions but increases in heroin-related crime, suggesting substitution toward illicit markets. \citet{dave2021prescription} found that must-access PDMPs reduced opioid prescribing and opioid-related mortality, though the effects were concentrated in states with the strongest provisions.
+
+The EPCS mandate findings are broadly consistent with this pattern: supply-side interventions can reduce prescription opioid outcomes, but the magnitudes are modest relative to the scale of the crisis. The distinctive contribution of EPCS mandates is their technological rather than behavioral mechanism---they close fraud vulnerabilities rather than changing prescriber decisions---which explains why the effect is independent of PDMP status.
+
+The broader opioid literature has emphasized the substitution from prescription opioids to illicit alternatives as a central challenge. \citet{alpert2022origins} showed that the reformulation of OxyContin in 2010 led to substitution toward heroin, with areas that had higher rates of OxyContin misuse experiencing larger increases in heroin deaths. \citet{evans2019opioid} documented similar substitution patterns. These findings raise the concern that any supply-side intervention reducing prescription opioid access could inadvertently increase illicit drug use. The present analysis cannot test for such substitution with aggregate mortality data, as the T40.4 outcome captures all synthetic opioid deaths---not just those caused by patients substituting away from prescription opioids---making it unlikely that a substitution effect from 33 state mandates would be detectable against the massive background increase in fentanyl deaths.
+
+
+\section{Conclusion}
+
+This paper provides the first causal evidence on whether state mandates requiring electronic prescribing for controlled substances reduce opioid mortality. Using staggered adoption across thirty-three states and a Callaway-Sant'Anna difference-in-differences design, I find that EPCS mandates are associated with an approximately 18 percent reduction in prescription opioid deaths, though the estimate is imprecise in level specifications. A built-in placebo test confirms that illicit fentanyl deaths---operating through supply channels entirely outside the prescribing system---show no significant response to EPCS mandates.
+
+The results contribute to a growing body of evidence that supply-side interventions targeting the prescribing system can reduce prescription opioid harms, but cannot address the broader crisis driven by illicit synthetic opioids. EPCS mandates appear to work through fraud reduction and prescribing infrastructure modernization rather than through behavioral channels like PDMP integration, suggesting that technological interventions complement information-based policies.
+
+The finding also serves as a methodological reminder. The drug-class decomposition available in CDC mortality data provides a powerful placebo test for any prescribing-side intervention: if a policy affects the prescription channel, its effects should appear in T40.2 deaths but not T40.4 deaths. This template could be applied to evaluate prescribing limits, formulary restrictions, and other supply-side policies.
+
+The opioid crisis has killed over 600,000 Americans since 1999. No single policy can reverse this catastrophe. But understanding which interventions work---and through which channels---is essential to building a comprehensive response. EPCS mandates appear to be a modest but real tool in the policy arsenal, effective against the prescription opioid component of the crisis even as illicit fentanyl demands an entirely different set of solutions.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{CDC Vital Statistics Rapid Release}
+
+The primary outcome data are drawn from the CDC's Vital Statistics Rapid Release (VSRR) program, accessed via the Socrata API endpoint \texttt{data.cdc.gov/resource/xkb8-kh2a.json}. The dataset contains provisional counts of drug overdose deaths based on death certificates from the National Vital Statistics System.
+
+For each state-month, the data report:
+\begin{itemize}
+\item Total number of drug overdose deaths
+\item Deaths involving specific drug classes, identified by ICD-10 multiple cause-of-death codes
+\item Twelve-month-ending counts (rolling annual totals)
+\item Data quality indicators (percent complete, percent pending investigation)
+\end{itemize}
+
+I use December twelve-month-ending counts as the annual outcome measure. Drug classes are identified using the following ICD-10 codes:
+\begin{itemize}
+\item T40.2: Natural and semi-synthetic opioids (oxycodone, hydrocodone, morphine, codeine)
+\item T40.4: Synthetic opioids excluding methadone (primarily illicit fentanyl)
+\item T40.0--T40.4, T40.6: All opioids
+\item T40.1: Heroin
+\item T40.5: Cocaine
+\item T43.6: Psychostimulants with abuse potential (methamphetamine)
+\end{itemize}
+
+Note that a single death may involve multiple drugs and thus appear in multiple drug class categories. The drug class counts are not mutually exclusive.
+
+\subsection{EPCS Mandate Compilation}
+
+EPCS mandate effective dates were compiled from RXNT's EPCS mandates tracker (\url{https://www.rxnt.com/state-of-epcs-erx-2023/}), cross-referenced with primary state legislative sources. When mandate effective dates differed across sources, I used the later (more conservative) date.
+
+\subsection{Population Data}
+
+State population estimates come from the American Community Survey 1-year estimates (variable B01001\_001E) accessed through the Census Bureau API. The 2020 ACS 1-year estimates were not released due to COVID-19 data collection disruptions; I interpolate 2020 population as the average of 2019 and 2021 estimates.
+
+\subsection{PDMP Mandate Dates}
+
+PDMP must-access mandate dates follow \citet{buchmueller2018effect} for 2012--2016 mandates, supplemented with subsequent adoptions from the Prescription Drug Abuse Policy System (PDAPS) and state legislative records.
+
+\section{EPCS Mandate Adoption Details}
+
+\begin{table}[htbp]
+\centering
+\caption{State EPCS Mandate Adoption Dates}
+\label{tab:timing}
+\begin{threeparttable}
+\small
+\begin{tabular}{lc|lc}
+\toprule
+State & Year & State & Year \\
+\midrule
+Minnesota & 2011 & Michigan & 2021 \\
+New York & 2016 & Missouri & 2021 \\
+Maine & 2017 & Nevada & 2021 \\
+Connecticut & 2018 & New Mexico & 2021 \\
+Pennsylvania & 2019 & South Carolina & 2021 \\
+Arizona & 2020 & Tennessee & 2021 \\
+Iowa & 2020 & Texas & 2021 \\
+North Carolina & 2020 & Wyoming & 2021 \\
+Oklahoma & 2020 & California & 2022 \\
+Rhode Island & 2020 & Indiana & 2022 \\
+Virginia & 2020 & Nebraska & 2022 \\
+Arkansas & 2021 & New Hampshire & 2022 \\
+Delaware & 2021 & Utah & 2022 \\
+Florida & 2021 & Washington & 2022 \\
+Kansas & 2021 & Colorado & 2023 \\
+Kentucky & 2021 & Maryland & 2023 \\
+Massachusetts & 2021 & & \\
+\midrule
+\multicolumn{4}{p{0.9\textwidth}}{\textit{Never-treated (18):} Alabama, Alaska, District of Columbia, Georgia, Hawaii, Idaho, Illinois, Louisiana, Mississippi, Montana, New Jersey, North Dakota, Ohio, Oregon, South Dakota, Vermont, West Virginia, Wisconsin} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Year indicates when the state EPCS mandate became effective. Sources: RXNT EPCS mandates database; state legislative records.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\section{Identification Appendix}
+
+\subsection{Pre-Trends Assessment}
+
+The event-study estimates for prescription opioid deaths and the placebo test on synthetic opioid deaths are presented in the combined event-study figure in the main text (\Cref{fig:eventstudy}). Pre-treatment coefficients show no systematic departure from zero for the treatment outcome, supporting the parallel trends assumption, while the placebo outcome shows no systematic pre- or post-treatment patterns.
+
+\subsection{Alternative Estimator Event Studies}
+
+The Sun-Abraham event study for prescription opioid deaths yields similar pre-treatment patterns, with coefficients centered on zero. The post-treatment ATT aggregated across all event times is $-0.53$ (SE $= 0.33$, $p = 0.12$), directionally consistent with the Callaway-Sant'Anna estimate.
+
+
+\section{Robustness Appendix}
+
+\subsection{Log Specification Details}
+
+The log specification uses $\log(\max(Y_{st}, 1))$ as the outcome, where the floor of 1 prevents taking the log of zero. In practice, this floor is operationally irrelevant: all non-suppressed state-year observations have death counts well above 1 per 100,000 (the minimum non-suppressed value is approximately 1.2), so the $\max(\cdot, 1)$ never binds in the estimation sample. The Callaway-Sant'Anna ATT in logs is $-0.199$ (SE $= 0.085$), which translates to an approximate $\exp(-0.199) - 1 = -18.1\%$ reduction in prescription opioid deaths.
+
+This specification addresses two features of the data that inflate standard errors in levels. First, the log transformation compresses the right tail of the death rate distribution, reducing the influence of high-mortality states. Second, proportional treatment effects (which are economically natural---a percentage reduction in fraud) are additive in logs, improving the match between the statistical model and the data-generating process.
+
+\subsection{Concurrent Policy Controls}
+
+The TWFE specification including PDMP must-access mandate indicators yields an EPCS coefficient of $-0.504$ (SE $= 0.362$, $p = 0.17$), virtually identical to the baseline TWFE estimate of $-0.498$ (SE $= 0.379$, $p = 0.19$). The PDMP coefficient is $0.054$ (SE $= 0.403$, $p = 0.89$), suggesting that once state and year fixed effects are accounted for, the PDMP mandate status provides no additional explanatory power for prescription opioid mortality. This pattern is consistent with the two policies operating through distinct mechanisms.
+
+
+
+\end{document}

@@ -1,0 +1,46 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of EPCS Mandates on Opioid Overdose Deaths}
+\label{tab:main_results}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{1}{c}{Rx Opioid} & \multicolumn{1}{c}{Synth Opioid} & \multicolumn{1}{c}{All Opioid} & \multicolumn{1}{c}{Total OD} \\
+ & \multicolumn{1}{c}{(T40.2)} & \multicolumn{1}{c}{(T40.4)} & \multicolumn{1}{c}{(All)} & \multicolumn{1}{c}{Deaths} \\
+ & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Callaway-Sant'Anna}} \\
+\addlinespace
+EPCS Mandate & -0.711 & -3.897 & -4.302 & -4.587 \\
+ & (0.619) & (4.103) & (3.608) & (4.465) \\
+ & [-1.924, 0.503] & [-11.937, 4.144] & [-11.374, 2.771] & [-13.339, 4.165] \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel B: Two-Way Fixed Effects}} \\
+\addlinespace
+EPCS Mandate & -0.498 & -1.080 & & \\
+ & (0.379) & (2.105) & & \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel C: Sun-Abraham}} \\
+\addlinespace
+EPCS Mandate & -0.533 & -0.525 & & \\
+ & (0.335) & (1.756) & & \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Panel D: Log Specification}} \\
+\addlinespace
+EPCS Mandate & -0.199** & --- & --- & --- \\
+ & (0.085) & & & \\
+\midrule
+Observations & 337 & 337 & 337 & 337 \\
+States & 48 & 48 & 48 & 48 \\
+Treated States & 33 & 33 & 33 & 33 \\
+Estimator & CS & CS & CS & CS \\
+Control Group & Never & Never & Never & Never \\
+Clustering & State & State & State & State \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors clustered at the state level in parentheses; 95\% confidence intervals in brackets (Panel A). $^{***}$~$p<0.01$, $^{**}$~$p<0.05$, $^{*}$~$p<0.1$. Panel A uses the Callaway and Sant'Anna (2021) doubly robust estimator with never-treated controls and 1-year anticipation. Panel B reports standard two-way fixed effects. Panel C uses the Sun and Abraham (2021) interaction-weighted estimator. Panel D reports the Callaway-Sant'Anna log specification for the primary outcome only; log placebo results are not reported as the Callaway-Sant'Anna estimator did not converge for the log of T40.4 deaths in several state-year cells approaching zero. Columns (1)--(2) test EPCS mandates against treatment (T40.2) and placebo (T40.4) outcomes. Observation counts reflect the Callaway-Sant'Anna estimation sample; the \texttt{did} package uses the same balanced panel across outcomes after removing states with any suppressed observations. Minnesota (2011 cohort) is ``always treated'' within the 2015--2023 panel and does not contribute pre-treatment comparisons.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
