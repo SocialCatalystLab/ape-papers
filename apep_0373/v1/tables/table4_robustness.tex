@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks: Bachelor's Degree P25 Earnings}
+\label{tab:robustness}
+\begin{tabular}{lccccc}
+\hline\hline
+ & Baseline & Region$\times$Cohort & Lead Test & Binary & Placebo \\
+ & (1) & (2) & (3) & (4) & (5) \\
+\hline
+$\ln(MW)$ & 0.0519 & -0.0156 & 0.0344 & & 0.0800** \\
+ & (0.0594) & (0.0526) & (0.0519) & & (0.0371) \\
+$\ln(MW_{t+1})$ & & & 0.0434 & & \\
+ & & & (0.0549) & & \\
+High MW $\times$ Post & & & & 0.0197 & \\
+ & & & & (0.0237) & \\
+\hline
+Degree level & Bachelor's & Bachelor's & Bachelor's & Bachelor's & Graduate \\
+State controls & Yes & Yes & Yes & Yes & Yes \\
+Institution FE & Yes & Yes & Yes & Yes & Yes \\
+Cohort FE & Yes & Region$\times$Cohort & Yes & Yes & Yes \\
+Observations & 2,953 & 2,953 & 2,442 & 2,953 & 1,363 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize
+\textit{Notes:} Dependent variable is log 25th percentile first-year earnings. Columns (1)--(4) use bachelor's degree graduates. Column (1) is the baseline specification. Column (2) replaces cohort FE with region $\times$ cohort FE. Column (3) adds lead (next-cohort) MW as a falsification test. Column (4) uses a binary treatment: states with above-median total MW increases $\times$ post-2010 indicator. Column (5) is a placebo test using graduate degree (master's) holders, whose P25 earnings should be far above the wage floor. Standard errors clustered at the state level. $^{***}$, $^{**}$, $^{*}$ denote significance at the 1\%, 5\%, and 10\% levels.
+\end{minipage}
+\end{table}

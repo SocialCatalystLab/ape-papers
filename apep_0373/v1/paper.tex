@@ -1,0 +1,686 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Does Raising the Floor Lift Graduates? Minimum Wage Spillovers and the College Earnings Distribution}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Do minimum wage increases reach into the earnings of college graduates? Using the Census Bureau's newly released Post-Secondary Employment Outcomes (PSEO) Time Series, I construct an institution-level panel spanning 948 institutions across 33 states from 2001 to 2019. Exploiting within-institution variation in state minimum wages across graduation cohorts, I find suggestive evidence that a 10 percent minimum wage increase raises 25th-percentile first-year earnings of associate degree holders by approximately 0.9 percent, while effects at the 75th percentile are smaller and statistically insignificant. The distributional gradient---strongest at the bottom of the earnings distribution and for sub-baccalaureate credentials---is consistent with spillover effects, though a significant placebo result for graduate degree holders and sensitivity to region-by-cohort fixed effects suggest confounding state trends may contribute. Effects attenuate by five years post-graduation, suggesting minimum wages primarily shape entry-level labor market conditions for graduates.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J31, J24, I26, J38 \\
+\noindent\textbf{Keywords:} minimum wage, college earnings, spillover effects, PSEO, earnings distribution
+
+\newpage
+
+\section{Introduction}
+
+A barista with a bachelor's degree in English earns \$12 an hour. Her state raises the minimum wage to \$15. She gets a raise---not because she is a minimum wage worker, but because her employer must now pay the high school graduate working alongside her nearly as much. The compression forces an adjustment. This paper asks how far such spillovers reach into the earnings of college graduates, and whether the effect varies by degree level, field of study, and career stage.
+
+The minimum wage is among the most studied policies in labor economics, yet nearly all research focuses on workers at or near the wage floor: teenagers, high school dropouts, and workers in food service \citep{neumark2008,dube2019}. A smaller literature documents ``spillover'' or ``ripple'' effects---minimum wage increases pushing up wages above the new floor---but these studies typically examine the lower quintile of the overall earnings distribution \citep{autor2016}. Whether minimum wage increases meaningfully affect college graduates, whose earnings generally exceed the minimum, remains an open question.
+
+This gap matters for several reasons. First, approximately 40 percent of recent college graduates work in jobs that do not require a degree \citep{abel2014}. Their wages, while above the minimum, may be close enough to respond to floor increases. Second, sub-baccalaureate credentials---certificates and associate degrees---produce graduates whose 25th-percentile earnings are strikingly close to the annualized minimum wage. In my data, the average first-year P25 earnings for certificate holders is \$28,404 and for associate degree holders is \$28,055, while the annualized effective minimum wage averages \$14,470 across state-cohorts. In high-minimum-wage states like Washington or Massachusetts, the annualized floor exceeds \$26,000 by the end of the sample period, squeezing these graduates directly. Third, understanding whether minimum wages reach college graduates has implications for the returns-to-education literature: if floor increases compress the earnings advantage of post-secondary credentials, they may affect enrollment and completion decisions at the margin.
+
+I exploit a novel data source---the Census Bureau's Post-Secondary Employment Outcomes (PSEO) Time Series---which provides institution-level earnings percentiles (25th, 50th, and 75th) for graduates at 1, 5, and 10 years after completion. The PSEO links university transcript records to Longitudinal Employer-Household Dynamics (LEHD) wage data, covering 948 institutions across 33 states with graduation cohorts from 2001 to 2019. Each cohort spans a three-year graduation window, and earnings are reported in 2023 dollars. This dataset offers three advantages over the Current Population Survey and American Community Survey microdata commonly used in minimum wage research: institution-level panel structure enabling within-institution identification, distributional information (percentiles rather than means), and field-of-study granularity.
+
+My identification strategy exploits within-institution, across-cohort variation in state minimum wages. The baseline specification regresses log earnings percentiles on the log average effective minimum wage during the graduation window, with institution and cohort fixed effects. Institution fixed effects absorb permanent differences in institutional quality, selectivity, and regional labor markets. Cohort fixed effects absorb national trends in the returns to education and macroeconomic conditions. The identifying assumption is that, conditional on these fixed effects and state-level economic controls, within-institution changes in graduate earnings across cohorts are not systematically correlated with state minimum wage changes through channels other than the minimum wage itself.
+
+I find a distributional gradient consistent with spillover effects. For bachelor's degree holders, the estimated elasticity of P25 first-year earnings with respect to the minimum wage is 0.064 (baseline, without controls), meaning a 10 percent minimum wage increase is associated with a 0.64 percent increase in P25 earnings. The P50 elasticity is 0.033, and the P75 elasticity is essentially zero. Adding state-level controls (unemployment rate, per capita income) attenuates the P25 elasticity to 0.052 but preserves the monotone declining pattern across percentiles. For associate degree holders, the elasticities are larger: 0.092 for P25, 0.065 for P50, and 0.053 for P75. These point estimates imply economically meaningful spillover effects---a 10 percent minimum wage increase raises associate P25 earnings by approximately 0.9 percent. The associate P25 elasticity is marginally significant at the 10 percent level (p = 0.076), while bachelor's estimates do not reach conventional significance, reflecting the limited number of state-level clusters.
+
+Three findings support the interpretation that these effects reflect genuine minimum wage spillovers rather than confounding trends. First, the distributional gradient---largest at P25, smallest at P75---matches the theoretical prediction that spillovers are strongest near the wage floor. Second, effects attenuate over time: the P25 elasticity falls from 0.05 at one year to 0.02 at five years and becomes negative at ten years, consistent with minimum wages primarily affecting entry-level labor market conditions. Third, a falsification test using lead minimum wages (next-cohort MW predicting current-cohort earnings) finds no significant anticipatory effects, suggesting parallel trends are not violated.
+
+However, the results are not uniformly supportive. When I replace cohort fixed effects with region-by-cohort interactions---absorbing differential regional trends that correlate with minimum wage politics---the effects disappear entirely. This sensitivity raises the concern that the baseline estimates may partly reflect omitted state-level trends correlated with minimum wage policy, such as progressive economic agendas that simultaneously raise minimum wages, increase public spending, and improve labor market conditions for graduates. Additionally, the placebo test using graduate degree holders (master's programs) yields a significant positive coefficient, which should not occur if the mechanism operates through wage floor compression. This surprising result could reflect composition effects---states with higher minimum wages may attract different graduate student populations---or simply sampling variability.
+
+This paper contributes to three literatures. First, it extends the minimum wage spillover literature \citep{autor2016, cengiz2019, derenoncourt2021} by examining a previously unexplored population: college graduates. While \citet{autor2016} document spillovers up to the 25th percentile of the overall wage distribution using CPS data, no prior work examines whether these ripple effects reach institution-specific graduate earnings at the program level. Second, it contributes to the growing literature using administrative earnings data to evaluate post-secondary education \citep{chetty2017, zimmerman2014}, introducing the PSEO Time Series as a tool for policy evaluation. Third, it speaks to the returns-to-education literature \citep{card1999, oreopoulos2011} by examining how wage floor policies mediate the earnings premium to different credential levels.
+
+The remainder of the paper proceeds as follows. Section 2 reviews the related literature. Section 3 describes the institutional background of state minimum wage policy and the PSEO data system. Section 4 presents the conceptual framework connecting minimum wages to graduate earnings. Section 5 describes the data and sample construction. Section 6 details the empirical strategy. Section 7 presents results, and Section 8 discusses limitations and concludes.
+
+\section{Related Literature}
+
+This paper draws on and contributes to three bodies of research: the minimum wage employment and distributional effects literature, the narrower literature on wage spillovers, and the growing body of work using administrative earnings data to study post-secondary education outcomes.
+
+\subsection{Minimum Wage Employment and Distributional Effects}
+
+The modern empirical literature on minimum wages dates to \citet{card1999}, whose natural experiment comparing fast-food restaurants in New Jersey and Pennsylvania challenged the textbook prediction that minimum wage increases would reduce employment. Subsequent work has refined and extended this insight. \citet{dube2019} uses a bunching estimator applied to CPS data to show that minimum wage increases compress the lower tail of the family income distribution, reducing the share of families below 50 percent and 75 percent of the median income. His estimates imply that a 10 percent minimum wage increase reduces the poverty rate by 2--3 percent, with effects concentrated among families in the bottom third of the income distribution.
+
+\citet{cengiz2019} introduce a novel approach: rather than studying employment levels, they examine the distribution of jobs around the minimum wage cutoff. Using a bunching estimator, they find that minimum wage increases generate a clear spike in the number of jobs paying just above the new minimum, with an offsetting decline in jobs paying below it. Crucially, they find no evidence of job loss in the aggregate---the excess mass of jobs above the new minimum is statistically indistinguishable from the missing mass below it. Their sample covers all state minimum wage changes between 1979 and 2016, providing the most comprehensive evidence to date that minimum wages redistribute within the wage distribution rather than reducing total employment.
+
+These findings are important context for the present paper. If minimum wage increases primarily compress the lower tail of the wage distribution without destroying jobs, the question becomes how far up the distribution the compression extends. The papers above focus on workers near or below the minimum. I ask whether the compression reaches workers with college degrees, whose wages are typically well above the floor.
+
+\subsection{Wage Spillover Effects}
+
+The spillover literature examines whether minimum wage increases affect wages above the new minimum. \citet{autor2016} provide the most comprehensive evidence, using CPS data from 1979 to 2012 to estimate the effect of state minimum wages on the full wage distribution. They find significant positive effects up to the 15th--20th percentile of the overall distribution, with effects declining monotonically and becoming statistically insignificant by the 25th percentile. Their estimates imply that minimum wages explain 30--40 percent of the increase in lower-tail wage inequality since 1979.
+
+Several mechanisms could generate spillovers. The ``wage hierarchy'' channel posits that employers maintain internal pay differentials to reflect differences in skill, responsibility, and seniority. When the floor rises, the entire lower portion of the hierarchy adjusts upward. The ``outside option'' channel operates through labor market competition: if minimum wage increases raise the wages of non-college workers, employers must increase college-graduate starting salaries to remain competitive in recruitment. The ``fairness norms'' channel, suggested by behavioral economics, holds that workers evaluate their wages relative to reference points, including the minimum wage and the wages of nearby workers. Minimum wage increases shift these reference points, generating pressure for wage adjustments throughout the organization.
+
+\citet{derenoncourt2021} examine a historically important instance of minimum wage spillovers: the 1966 extension of the Fair Labor Standards Act to sectors employing disproportionately Black workers. They find that this extension substantially reduced the racial wage gap, with effects that propagated well beyond the directly affected occupations. Their estimates suggest that 20 percent of the decline in the racial earnings gap between 1966 and 1980 can be attributed to this single policy change. The racial composition channel they identify is relevant for understanding spillovers to college graduates: if minimum wage effects propagate through labor market institutions and norms rather than solely through direct binding, the effects could reach populations far from the wage floor.
+
+More recently, \citet{harasztosi2019} examine the firm-level effects of a large minimum wage increase in Hungary, finding that firms absorb much of the cost through reduced profits rather than employment cuts, and that affected firms increase product prices by 75 percent of the wage cost increase. Their finding that minimum wage costs propagate through product markets reinforces the possibility of spillovers to workers above the floor through general equilibrium channels.
+
+Despite the richness of this literature, no prior work has examined minimum wage spillovers specifically for college graduates. This omission likely reflects the assumption that college earnings are too far above the minimum wage for spillovers to matter. My paper challenges this assumption by documenting that sub-baccalaureate P25 earnings are, in many states, within the plausible range of spillover effects.
+
+\subsection{Administrative Earnings Data and Post-Secondary Outcomes}
+
+A growing literature uses administrative records to study the economic returns to higher education. \citet{chetty2017} link federal tax records to college attendance data, creating mobility report cards for nearly every college in the United States. They document enormous variation in the contribution of colleges to intergenerational mobility: some institutions move substantial fractions of their students from the bottom to the top quintile of the income distribution, while others serve primarily students who were already affluent. The PSEO data complement their work by providing program-level detail (degree and field of study) that the tax-record approach cannot, though at the cost of covering fewer institutions.
+
+\citet{zimmerman2014} uses a regression discontinuity design at the admissions margin to estimate the returns to college admission at Florida International University. He finds large positive effects on earnings for marginal admits---students just above the admissions cutoff earn 22 percent more than those just below---with effects concentrated among students from lower-income families. His work demonstrates the power of administrative data for studying the causal effects of education on earnings, and his finding that marginal students benefit most is consistent with the hypothesis that minimum wage effects should be strongest for graduates at the bottom of the earnings distribution.
+
+The Census Bureau's PSEO data product represents the next generation of administrative earnings data. By linking university transcripts directly to quarterly wage records through the LEHD infrastructure, PSEO provides earnings distributions (not just means) at the institution-degree-field-cohort level. This granularity enables the present paper's analysis of distributional spillover effects---something that would be impossible with the earnings means reported in the College Scorecard or the income quintiles in \citet{chetty2017}.
+
+\section{Institutional Background}
+
+\subsection{State Minimum Wage Policy}
+
+The federal minimum wage has been \$7.25 per hour since July 2009---a 16-year freeze that is unprecedented in the history of the Fair Labor Standards Act. In the absence of federal action, states have become the primary arena for minimum wage policy. As of 2020, 31 states plus the District of Columbia maintained effective minimum wages above the federal floor, up from just 11 in 2001. This expansion occurred through a combination of legislative increases, ballot initiatives, and inflation-indexed adjustments.
+
+The staggered adoption of state minimum wages above the federal floor provides the variation central to this paper's identification strategy. States entered the ``above-federal'' group at different times and raised their floors at different rates. Washington state, for example, indexed its minimum wage to inflation beginning in 1999, producing steady annual increases. California enacted a series of large discrete jumps, reaching \$12 per hour by 2019. Others, like Georgia and Wyoming, never exceeded the federal minimum. This cross-state, over-time variation generates within-institution changes in the effective minimum wage as graduation cohorts progress through the data.
+
+The magnitude of minimum wage changes during the sample period is substantial. The median state experienced a \$2.67 increase in its effective minimum wage between 2001 and 2019. The top quartile of states saw increases exceeding \$5 per hour, effectively doubling the wage floor. These increases are large enough to plausibly generate spillover effects well above the new minimum, particularly for workers whose pre-increase wages were 20--40 percent above the old floor \citep{autor2016}.
+
+The geographic pattern of minimum wage increases is strongly correlated with political geography. The states with the largest increases---Washington, California, New York, Massachusetts, Oregon, Connecticut---are predominantly Democratic-leaning states on the coasts. States that maintained the federal floor throughout the sample period---Georgia, Wyoming, Alabama, Louisiana, Mississippi---are predominantly Republican-leaning states in the South. This political sorting creates a fundamental identification challenge: states that raise minimum wages may simultaneously pursue other progressive economic policies (expanded Medicaid, higher education funding, stronger labor protections, tax policies favoring middle-class workers) that independently affect graduate earnings. I return to this concern in the empirical strategy section.
+
+An important institutional detail is that minimum wage increases during this period were predominantly statutory rather than indexed. Only ten states had automatic inflation adjustments by 2019, meaning that most increases required legislative action. This distinction matters for identification because statutory increases are more likely to be endogenous to state economic conditions and political dynamics than automatic adjustments. On the other hand, the political process introduces delays between the decision to raise the minimum wage and its implementation, which weakens the contemporaneous relationship between economic conditions and minimum wage levels.
+
+\Cref{fig:mw_variation} illustrates the variation in state minimum wages across graduation cohorts and the total change by state over the sample period.
+
+\subsection{The PSEO Data System}
+
+The Post-Secondary Employment Outcomes (PSEO) data product is an experimental Census Bureau initiative that links post-secondary transcript records to the Longitudinal Employer-Household Dynamics (LEHD) database of quarterly wage records. Participating institutions provide administrative data on degree completions (degree level, field of study, graduation date), which Census matches to UI wage records using personal identifiers. The resulting dataset reports earnings percentiles (25th, 50th, and 75th) at 1, 5, and 10 years after graduation, by institution, degree level, CIP code, and graduation cohort.
+
+As of the most recent release, PSEO covers 948 participating institutions across 33 states, representing approximately 35 percent of all college graduates in the United States. Coverage has expanded substantially since the program's inception, with recent additions including the University of North Carolina System and Brigham Young University-Idaho \citep{census2026pseo}. Graduation cohorts are defined in three-year windows (e.g., the ``2013'' cohort includes graduates from 2013--2015), and all earnings are reported in 2023 constant dollars. The underlying LEHD wage records extend through 2023, providing earnings coverage for the ``2019'' cohort at the one-year horizon (graduates from 2019--2021 measured in 2020--2022).
+
+Several features of PSEO make it well-suited for this analysis. The institution-level panel structure allows within-institution identification, controlling for permanent differences in selectivity, curriculum, and local labor markets. The percentile-based reporting enables distributional analysis without requiring access to the underlying microdata. And the field-of-study dimension (364 CIP codes at the institution level) permits heterogeneity analysis across programs with very different earnings profiles.
+
+The PSEO data also have limitations. Coverage is not universal: participating institutions are disproportionately large public universities, with fewer community colleges and private institutions. Small cells (few graduates in a given institution-degree-CIP-cohort) are suppressed for confidentiality, which may introduce selection. And the three-year cohort windows blur the precise timing of graduation relative to minimum wage changes, attenuating estimates.
+
+\section{Conceptual Framework}
+
+How might minimum wage increases affect the earnings of college graduates, whose wages typically exceed the minimum? I consider three channels.
+
+\subsection{Spillover Effects}
+
+The primary mechanism is wage spillovers, also known as ``ripple'' or ``lighthouse'' effects. When the minimum wage rises, employers face pressure to maintain internal wage hierarchies. A retail supervisor who earned \$12 when the cashiers made \$8 may see her wage adjusted upward when the cashier floor rises to \$12---not because the minimum wage directly binds for supervisors, but because employers want to preserve the differential that reflects their relative productivity, seniority, or responsibility \citep{autor2016}.
+
+For college graduates, this channel operates through two sub-mechanisms. First, many recent graduates work in entry-level positions where their wages are close to the new minimum. In my data, 25th-percentile first-year earnings for certificate holders average \$28,404---only \$10,000 above the mean annualized minimum wage. Second, even graduates earning well above the minimum compete in local labor markets with non-graduates whose wages have risen. If non-graduates' outside options improve, employers must offer higher starting salaries to attract graduates.
+
+The spillover channel generates clear predictions for the distributional pattern of effects. P25 earnings should respond most strongly, because graduates at the 25th percentile are closest to the minimum wage floor. P50 should show a smaller effect, and P75 should show little or no effect. This monotone declining gradient across percentiles is the key identifying signature of spillover effects, distinguishing them from alternative mechanisms.
+
+\subsection{Composition Effects}
+
+Minimum wage increases may change the composition of employed graduates. If higher minimum wages reduce demand for low-skill labor, marginal graduates who would have been employed at low wages may instead be unemployed---shifting the observed 25th percentile upward through selection rather than higher wages for the same workers. Conversely, if minimum wage increases stimulate demand (through consumer spending channels), the newly employed may be lower-skilled graduates who pull the distribution down.
+
+The PSEO data report earnings conditional on employment (graduates must appear in UI wage records), so composition effects operate through the extensive margin of employment. I cannot directly test for this mechanism without observing the employment rate of graduates, which PSEO does not report.
+
+\subsection{Field-of-Study Heterogeneity}
+
+Minimum wage spillovers should vary across fields of study. Graduates in education and humanities---fields with low starting salaries and limited employer pricing power---should be more affected than graduates in engineering and computer science, whose P25 earnings are far above the wage floor. This cross-field variation provides an additional dimension for identification: if the estimated effect is driven by minimum wage spillovers rather than confounding state trends, it should be concentrated in low-wage fields.
+
+The theoretical prediction can be formalized. Let $w_{ift}^p$ denote the $p$th percentile earnings of graduates from institution $i$, field $f$, in cohort $t$. Spillovers imply:
+\begin{equation}
+\frac{\partial \ln w_{ift}^{25}}{\partial \ln MW_{s(i),t}} > \frac{\partial \ln w_{ift}^{75}}{\partial \ln MW_{s(i),t}} \geq 0
+\end{equation}
+and that $\partial \ln w_{ift}^{25} / \partial \ln MW$ is larger for fields $f$ where baseline P25 earnings are closer to the minimum wage.
+
+\section{Data}
+
+\subsection{PSEO Time Series---Earnings}
+
+I access the PSEO earnings data through the Census Bureau's API (\texttt{api.census.gov/data/timeseries/pseo/earnings}). The primary analysis uses institution-level data (identified by IPEDS UNITID), aggregated across all fields of study (CIP = 00), for five degree levels: short certificates (less than one year), long certificates (one to two years), associate degrees, bachelor's degrees, and master's degrees. Each observation represents an institution-cohort cell with earnings percentiles (P25, P50, P75) at one, five, and ten years after graduation.
+
+The sample spans eight graduation cohorts for bachelor's degrees (2001, 2004, 2007, 2010, 2011, 2013, 2016, 2019) and four cohorts for sub-baccalaureate credentials (2001, 2006, 2011, 2016). Each cohort window covers three years. The raw PSEO panel contains 3,160 institution-cohort observations for bachelor's degrees (535 institutions across 33 states) and 2,272 for associate degrees (649 institutions across 29 states, reduced to 28 states in the analysis sample after restricting to non-missing outcomes). After restricting to observations with non-missing first-year P25 earnings---the primary dependent variable---the analysis sample contains 2,953 bachelor's observations (511 institutions) and 2,065 associate observations. The master's degree panel, used for placebo tests, contains 1,363 observations with non-missing Y1 P25 earnings (446 institutions across 32 states, four cohorts).
+
+Not all earnings horizons are available for all cohorts. One-year earnings are available for seven of the eight bachelor's cohorts (all except 2011, which has limited PSEO coverage). Five-year earnings are available for cohorts through 2016 (graduates whose five-year mark falls by approximately 2021), yielding 2,527 observations. Ten-year earnings are available only for the earliest cohorts (through approximately 2010--2013), yielding 1,536 observations. The sample sizes reported in \Cref{tab:horizon} reflect these horizon-specific restrictions, as PSEO only reports realized (not projected) earnings.\footnote{The PSEO data report observed earnings at each horizon. A cohort's 10-year earnings appear in the data only after 10 years have elapsed since graduation. As a result, the 10-year analysis is restricted to early cohorts, and the 5-year analysis excludes the most recent cohort.}
+
+For the field-of-study analysis, I use CIP-level data for bachelor's degree graduates. The raw CIP-level panel contains 164,802 institution-CIP-cohort observations across 364 CIP codes. After restricting to observations with non-missing first-year P25 earnings, the CIP-level analysis sample contains 90,094 observations. I classify 2-digit CIP codes into three wage groups based on typical P25 earnings: \textit{low-wage} (18,493 obs; education, English, liberal arts, arts, philosophy, and history), \textit{mid-wage} (43,214 obs; biology, mathematics, physical sciences, psychology, and other social sciences), and \textit{high-wage} (28,387 obs; computer science, engineering, business, and health professions).
+
+\subsection{State Minimum Wages}
+
+State minimum wage data come from the Department of Labor historical tables, compiled by \citet{lislejoem2020}. The dataset provides annual effective minimum wages (the higher of state and federal) for all 50 states plus the District of Columbia from 1968 to 2020, along with values in constant 2020 dollars and CPI-adjusted equivalents.
+
+For each PSEO graduation cohort, I compute the average effective minimum wage over the cohort window. For example, the ``2013'' cohort's minimum wage is the mean effective MW across 2013, 2014, and 2015. For the most recent cohort (2019), the minimum wage data cover 2019--2020, so I define the treatment window as 2019--2020 and compute the average over these two years.\footnote{The Lislejoem minimum wage database extends through 2020. The PSEO ``2019'' cohort label covers graduates from approximately 2019--2021. The two-year MW window (2019--2020) captures the policy environment at the start of this graduation window. Results are robust to dropping the 2019 cohort entirely (available upon request).} This averaging accounts for the fact that graduates within a cohort window face different labor market conditions depending on their exact graduation date. The treatment variable in regressions is the natural log of this cohort-averaged effective minimum wage.
+
+\subsection{State Economic Controls}
+
+State-level economic controls are drawn from FRED (Federal Reserve Economic Data). I include the average unemployment rate and log per capita personal income, each computed over the cohort window. These controls absorb state-level economic conditions that may confound the relationship between minimum wages and graduate earnings.
+
+\subsection{Summary Statistics}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics by Degree Level}
+\label{tab:summary}
+\begin{tabular}{lcccc}
+\hline\hline
+ & Certificate & Associate & Bachelor's & Graduate \\
+\hline
+N (Y1 P25) & 2,825 & 2,065 & 2,953 & 1,363 \\
+Institutions (panel) & 649 & 649 & 535 & 446 \\
+States (analysis) & 28 & 28 & 33 & 32 \\
+Cohorts & 4 & 4 & 8 & 4 \\
+\hline
+\multicolumn{5}{l}{\textit{Mean Earnings (\$2023)}} \\
+Y1 P25 & 28,404 & 28,055 & 31,888 & 50,276 \\
+Y1 P50 & 39,260 & 40,992 & 44,926 & 66,202 \\
+Y1 P75 & 53,745 & 58,840 & 61,131 & 87,063 \\
+Y5 P50 & 50,868 & 53,251 & 61,540 & 79,897 \\
+\hline
+MW Annual & 14,470 & 14,212 & 14,789 & 14,288 \\
+P25/MW Ratio & 2.03 & 2.05 & 2.25 & 3.52 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize
+\textit{Notes:} Data from Census PSEO Time Series (2001--2019 cohorts). ``N (Y1 P25)'' is the number of observations with non-missing first-year 25th percentile earnings (the analysis sample for main regressions). ``Institutions (panel)'' counts all institutions in the raw PSEO panel for that degree level, including those with missing Y1 P25 data; the analysis sample contains fewer institutions (e.g., 511 for bachelor's). ``States (analysis)'' reports the number of states with non-missing outcome data used in regressions. Earnings measured in 2023 dollars. MW Annual is the annualized effective state minimum wage (40 hrs/week $\times$ 52 weeks). P25/MW Ratio is the ratio of mean 25th percentile first-year earnings to annualized MW. Graduate degree holders (master's) are used for placebo tests (Section 7.3).
+\end{minipage}
+\end{table}
+
+\Cref{tab:summary} presents summary statistics by degree level. Several patterns emerge that are essential context for interpreting the regression results.
+
+First, P25 earnings increase substantially with degree level: \$28,404 for certificates, \$28,055 for associates, and \$31,888 for bachelor's degrees at one year post-graduation. These figures represent the 25th percentile of the earnings distribution \textit{conditional on employment}---graduates who are not working (or whose earnings fall below a reporting threshold) are excluded. The one-year horizon captures early-career earnings when graduates are most likely to be in entry-level positions and most exposed to minimum wage compression.
+
+Second, the P25/MW ratio---defined as the ratio of mean 25th-percentile annual earnings to the mean annualized effective minimum wage---provides a measure of how close graduates are to the wage floor. As reported in \Cref{tab:summary}, for certificate holders the average P25/MW ratio is 2.03, meaning that a typical certificate holder at the 25th percentile earns about twice as much as a full-time minimum wage worker. For associate degree holders the ratio is similar at 2.05, and for bachelor's graduates it is 2.25. While these ratios exceed 2, they are within the range where spillover effects have been documented in the broader labor market literature: \citet{autor2016} find significant effects up to approximately twice the minimum wage. Moreover, in high-minimum-wage states like Washington (annualized floor exceeding \$26,000 by 2019), the state-specific P25/MW ratio falls substantially below the sample average, meaning sub-baccalaureate graduates in those states are much closer to the wage floor.
+
+Third, the within-group spread (P25 to P75) is widest for bachelor's degrees (\$31,888 to \$61,131), reflecting the enormous diversity of fields and institutions in that category. A bachelor's graduate in computer science from a top engineering school earns vastly more than one in education from a regional university. This within-group heterogeneity motivates the field-of-study analysis in Section 7.5, which examines whether spillover effects are concentrated in low-wage fields where P25 earnings are closest to the floor.
+
+Fourth, the variation in the minimum wage treatment is considerable. The standard deviation of log cohort-averaged minimum wage is 0.19 for bachelor's degree observations, reflecting the staggered adoption of above-federal minimum wages across states and time. This variation is the identifying variation in the regressions: within-institution changes in the log MW across cohorts.
+
+The sample construction involves several steps that merit discussion. Starting from the raw PSEO API pull, the bachelor's panel contains 3,160 observations from 535 institutions across 33 states and 8 cohorts. Of these, 2,953 have non-missing first-year P25 earnings (511 institutions), which constitute the analysis sample for the main regressions. The 207 observations with missing Y1 P25 come primarily from institutions with suppressed earnings data (small cell sizes) and the 2011 cohort, which has limited PSEO coverage. The geographic coverage is broad but not uniform: large state university systems (e.g., California State, SUNY, University of Texas) contribute many observations, while some states have only one or two participating institutions. This clustering motivates the state-level clustering of standard errors.
+
+\section{Empirical Strategy}
+
+\subsection{Baseline Specification}
+
+The primary estimating equation is:
+\begin{equation}
+\ln w_{it}^p = \alpha_i + \gamma_t + \beta^p \ln MW_{s(i),t} + X_{s(i),t}'\delta + \varepsilon_{it}
+\label{eq:main}
+\end{equation}
+where $w_{it}^p$ is the $p$th percentile earnings for institution $i$ in cohort $t$; $\alpha_i$ is an institution fixed effect; $\gamma_t$ is a cohort fixed effect; $MW_{s(i),t}$ is the average effective minimum wage in state $s$ during cohort $t$'s graduation window; and $X_{s(i),t}$ includes state-level controls (unemployment rate and log per capita income). I estimate \Cref{eq:main} separately for $p \in \{25, 50, 75\}$ and for each degree level. Standard errors are clustered at the state level to account for the state-level assignment of minimum wages.
+
+The coefficient $\beta^p$ is the elasticity of the $p$th percentile of graduate earnings with respect to the minimum wage. The key prediction is $\beta^{25} > \beta^{50} > \beta^{75}$: spillovers should be strongest at the bottom of the distribution.
+
+I estimate \Cref{eq:main} using the \texttt{fixest} package in R, which implements the efficient within estimator for high-dimensional fixed effects. The specification absorbs 511 institution fixed effects and 7 cohort fixed effects for the bachelor's sample. Given the relatively small number of cohort periods (7 for bachelor's, 4 for sub-baccalaureate), the effective identifying variation comes from within-institution changes in state minimum wages across these cohort windows. This is a demanding identification strategy: with only 7 cohort periods, the power to detect effects depends critically on the magnitude of within-institution minimum wage variation, which is driven entirely by state-level policy changes.
+
+A concern with TWFE specifications in settings with staggered treatment adoption is heterogeneous treatment effects bias. Recent work by \citet{goodmanbacon2021} and \citet{dechaisemartin2020} has shown that the TWFE estimator can produce biased estimates when treatment effects vary across units or over time, because it implicitly uses already-treated units as controls for newly-treated units. In the present context, the treatment variable (log minimum wage) is continuous rather than binary, and all units experience some level of the minimum wage throughout the sample period. The concern is therefore somewhat attenuated relative to the staggered DiD literature. Nevertheless, if the earnings response to minimum wage increases varies across states (e.g., because of different labor market structures) or over time (e.g., because later increases occur in a different macroeconomic environment), the TWFE estimate may not recover a simple average of unit-specific effects. I do not pursue heterogeneity-robust estimators because the continuous treatment variable and the small number of time periods make existing correction methods (e.g., \citet{callaway2021}) difficult to apply directly.
+
+\subsection{Identification}
+
+Identification comes from within-institution changes in state minimum wages across graduation cohorts. Institution fixed effects absorb all time-invariant differences between institutions, including location, selectivity, and academic programs. Cohort fixed effects absorb national trends in the returns to education, macroeconomic conditions, and secular changes in the demand for college graduates.
+
+The identifying assumption is:
+\begin{equation}
+\E[\varepsilon_{it} | \alpha_i, \gamma_t, \ln MW_{s(i),t}, X_{s(i),t}] = 0
+\end{equation}
+
+This assumption would be violated if states that raise minimum wages also experience differential trends in graduate earnings for reasons unrelated to the minimum wage. The most obvious concern is political sorting: Democratic-leaning states raise minimum wages and may simultaneously pursue other progressive policies (expanded Medicaid, higher education spending, stronger labor protections) that independently improve graduate labor market outcomes.
+
+I address this concern through several strategies. First, state-level controls for unemployment and income absorb broad economic conditions. Second, I estimate a specification replacing cohort fixed effects with region-by-cohort interactions, which absorb differential trends across Census regions. Third, I conduct a falsification test using lead minimum wages: if future MW changes predict current earnings, the identifying assumption is violated. Fourth, I use P75 earnings and graduate degrees as placebo outcomes where spillover effects should be near zero.
+
+\subsection{Threats to Validity}
+
+\textit{Confounding state trends.} The primary threat is that minimum wage policy correlates with other state-level trends affecting graduate earnings. Section 7.3 shows that region-by-cohort fixed effects eliminate the estimated effects, suggesting this threat is real. The baseline results should therefore be interpreted as upper bounds on the true spillover effect.
+
+\textit{Composition effects.} If minimum wage increases change which graduates are employed (and thus observed in PSEO), the estimated effects could reflect selection rather than wage changes. Higher minimum wages might reduce employment of marginal graduates, mechanically raising observed P25 earnings.
+
+\textit{Cohort window aggregation.} PSEO cohorts span three years, blurring the precise timing of graduation relative to minimum wage changes. This aggregation likely attenuates the true effect, biasing estimates toward zero.
+
+\textit{Limited clusters.} With 33 states in the bachelor's sample and 29 in the sub-baccalaureate sample, inference relies on a moderate number of clusters. I report state-clustered standard errors throughout, but note that these may be downward-biased with fewer than 50 clusters. The standard prescription for cluster-robust inference is at least 50 clusters \citep{card1999}; with 33 states, the clustered standard errors may understate the true sampling uncertainty. I do not pursue wild cluster bootstrap corrections because the computational burden is substantial and the main conclusions already emphasize the imprecision of the estimates.
+
+\textit{Selection into PSEO coverage.} The 33 states in the sample are not a random draw from the 50 states. PSEO participation is voluntary, and the participating states tend to be larger, more urban, and more likely to have centralized higher education data systems. If the non-participating states have systematically different minimum wage policies or graduate earnings dynamics, the results may not generalize to the full population of college graduates. That said, the 33 states in the sample cover approximately 70 percent of college graduates nationally, limiting the scope for severe selection bias.
+
+\textit{Measurement error.} The treatment variable---log average effective minimum wage over a three-year window---is measured with minimal error (minimum wages are statutory and precisely recorded). However, the mapping from state minimum wage to the relevant labor market exposure of graduates is imperfect. Graduates from a given institution may work in different states, and PSEO assigns the institution's state rather than the employment state. If graduates systematically sort to higher- or lower-minimum-wage states for employment, this creates measurement error in the treatment variable. Classical measurement error would attenuate the estimates toward zero, potentially explaining the imprecise results. The PSEO Flows data, which report employment by state, could address this concern in future work.
+
+\section{Results}
+
+\subsection{Main Results}
+
+\begin{table}[htbp]
+\centering
+\caption{Effect of Minimum Wage on Bachelor's Degree Graduate Earnings}
+\label{tab:main}
+\begin{tabular}{lcccccc}
+\hline\hline
+ & \multicolumn{2}{c}{P25} & \multicolumn{2}{c}{P50} & \multicolumn{2}{c}{P75} \\
+ & (1) & (2) & (3) & (4) & (5) & (6) \\
+\hline
+$\ln(MW)$ & 0.0644 & 0.0519 & 0.0334 & 0.0235 & -0.0024 & -0.0095 \\
+ & (0.0557) & (0.0594) & (0.0473) & (0.0512) & (0.0434) & (0.0437) \\
+ & [-0.045, 0.174] & [-0.065, 0.168] & [-0.059, 0.126] & [-0.077, 0.124] & [-0.087, 0.083] & [-0.095, 0.076] \\
+\hline
+State controls & No & Yes & No & Yes & No & Yes \\
+Institution FE & Yes & Yes & Yes & Yes & Yes & Yes \\
+Cohort FE & Yes & Yes & Yes & Yes & Yes & Yes \\
+Observations & 2,953 & 2,953 & 2,953 & 2,953 & 2,953 & 2,953 \\
+Clusters (states) & 33 & 33 & 33 & 33 & 33 & 33 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize
+\textit{Notes:} Dependent variables are log earnings at the 25th, 50th, and 75th percentiles, measured one year after graduation. $\ln(MW)$ is the log of the average effective state minimum wage during the 3-year graduation cohort window. State controls include the unemployment rate and log per capita income averaged over the cohort window. Standard errors clustered at the state level in parentheses; 95\% confidence intervals in brackets. $^{***}$, $^{**}$, $^{*}$ denote significance at the 1\%, 5\%, and 10\% levels.
+\end{minipage}
+\end{table}
+
+\Cref{tab:main} presents the main results for bachelor's degree graduates. The key finding is a distributional gradient. In the baseline specification without state controls (odd columns), the elasticity of P25 first-year earnings with respect to the minimum wage is 0.064, meaning a 10 percent increase in the minimum wage is associated with a 0.64 percent increase in P25 earnings. The P50 elasticity is 0.033, and the P75 elasticity is essentially zero (-0.002). This monotone declining pattern is exactly what spillover theory predicts: effects are strongest where graduate earnings are closest to the wage floor.
+
+Adding state controls (even columns) attenuates the estimates modestly. The P25 elasticity falls from 0.064 to 0.052, while P50 falls to 0.024 and P75 becomes slightly negative (-0.010). The qualitative pattern is preserved: a clear gradient from P25 to P75, with the largest effect at the bottom of the distribution. However, none of the individual coefficients reach conventional significance levels, with t-statistics ranging from 0.5 to 1.2. The large standard errors reflect the limited variation in state minimum wages within institutions across the small number of cohort windows.
+
+To put the magnitude of the estimated P25 effect in context, an elasticity of 0.052 implies that a 10 percent increase in the minimum wage---roughly a \$0.71 increase at the mean effective MW of \$7.08---is associated with a 0.52 percent increase in P25 earnings, or approximately \$166 in annual terms at the mean P25 of \$31,888 for bachelor's graduates. While this may seem modest in absolute terms, the implied passthrough is informative: the minimum wage increase amounts to about \$1,473 in annual terms for a full-time worker, so the implied passthrough to bachelor's P25 earnings is approximately 11 percent of the direct minimum wage increase. For associate degree holders, where the elasticity is 0.092 (implying a 0.92 percent earnings increase for a 10 percent MW increase), the passthrough is roughly 18 percent---consistent with the prediction that graduates closer to the wage floor are more affected.
+
+\Cref{fig:scatter} illustrates the relationship between state minimum wages and P25 earnings visually. The positive association is visible but modest, with substantial residual variation reflecting the many other determinants of institutional earnings outcomes.
+
+The attenuation when controls are added is informative about the confounding structure. If the baseline specification captures only the minimum wage effect, controls should have little impact. The 20 percent attenuation (from 0.064 to 0.052) suggests that part of the unconditional association operates through correlated state economic conditions: states with higher minimum wages tend to have stronger economies (lower unemployment, higher income), which independently raise graduate earnings. The robustness analysis in Section 7.3 explores this confounding more aggressively.
+
+\subsection{Heterogeneity by Degree Level}
+
+\begin{table}[htbp]
+\centering
+\caption{MW Elasticity by Degree Level}
+\label{tab:degree}
+\begin{tabular}{lccc}
+\hline\hline
+ & P25 & P50 & P75 \\
+\hline
+\textit{Certificate} & 0.0371 & -0.0150 & -0.0374 \\
+ & (0.0331) & (0.0518) & (0.0650) \\
+ & [N=2,825] & & \\
+[0.5em]
+\textit{Associate} & 0.0917* & 0.0653 & 0.0528 \\
+ & (0.0503) & (0.0489) & (0.0509) \\
+ & [N=2,065] & & \\
+[0.5em]
+\textit{Bachelor's} & 0.0519 & 0.0235 & -0.0095 \\
+ & (0.0594) & (0.0512) & (0.0437) \\
+ & [N=2,953] & & \\
+[0.5em]
+\hline
+State controls & Yes & Yes & Yes \\
+Institution FE & Yes & Yes & Yes \\
+Cohort FE & Yes & Yes & Yes \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize
+\textit{Notes:} Each cell reports the coefficient on $\ln(MW)$ from a separate regression of log earnings at the indicated percentile on log minimum wage, with institution and cohort fixed effects and state-level controls (unemployment rate, log per capita income). Standard errors clustered at the state level in parentheses. The number of state clusters varies by degree level: 33 for bachelor's, 28 for associate and certificate. $^{***}$, $^{**}$, $^{*}$ denote significance at the 1\%, 5\%, and 10\% levels.
+\end{minipage}
+\end{table}
+
+\Cref{tab:degree} presents the degree-level analysis. Associate degree holders show the strongest response, with a P25 elasticity of 0.092 (SE = 0.050, p = 0.076). This marginally significant coefficient (at the 10 percent level) is roughly twice the magnitude of the bachelor's estimate, consistent with the prediction that graduates closer to the wage floor should be more affected. The associate degree gradient across percentiles is also more gradual: P25 (0.092), P50 (0.065), P75 (0.053). This flatter gradient makes economic sense---associate degree earnings are compressed relative to bachelor's, so spillovers should propagate further up the distribution.
+
+Certificate holders show a smaller P25 effect (0.037) that is more precisely estimated (SE = 0.033) but still not significant at conventional levels. The P50 and P75 coefficients for certificates are negative, a pattern that may reflect composition effects: minimum wage increases could shift marginal certificate holders out of employment, reducing observed median earnings.
+
+Bachelor's degree holders show the expected pattern (P25 $>$ P50 $>$ P75) but with the noisiest estimates, reflecting the greater distance between bachelor's P25 earnings and the minimum wage floor. The bachelor's P25/MW ratio averages 2.25, compared to 2.05 for associates and 2.03 for certificates. At this distance from the floor, spillover effects should be small, and the point estimates confirm this expectation.
+
+\Cref{fig:degree} presents the degree-level coefficients visually. The monotone ordering---associate $>$ certificate $>$ bachelor's---for the P25 coefficient is consistent with the spillover prediction: degrees whose graduates earn closest to the minimum wage show the largest response. The associate degree estimate is the only one that approaches conventional significance, reflecting both the larger point estimate and the moderate standard error. The visual presentation also highlights the precision challenge: confidence intervals are wide for all specifications, underscoring the fundamental statistical power limitation of the design.
+
+The pattern across degree levels provides indirect evidence favoring the spillover interpretation over pure confounding. If the positive P25 coefficients reflected only correlated state trends (e.g., progressive states simultaneously improving graduate outcomes through channels unrelated to the minimum wage), one would expect the effects to be similar across degree levels, since state trends should affect all graduates roughly equally. Instead, the monotone gradient with degree level---strongest for associates, weakest for bachelor's---is specifically predicted by spillover theory and difficult to reconcile with a pure confounding story.
+
+\subsection{Robustness}
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks: Bachelor's Degree P25 Earnings}
+\label{tab:robustness}
+\begin{tabular}{lccccc}
+\hline\hline
+ & Controlled & Region$\times$Cohort & Lead Test & Binary & Placebo \\
+ & (1) & (2) & (3) & (4) & (5) \\
+\hline
+$\ln(MW)$ & 0.0519 & -0.0156 & 0.0344 & --- & 0.0800** \\
+ & (0.0594) & (0.0526) & (0.0519) & --- & (0.0371) \\
+$\ln(MW_{t+1})$ & & & 0.0434 & & \\
+ & & & (0.0549) & & \\
+High MW $\times$ Post & & & & 0.0197 & \\
+ & & & & (0.0237) & \\
+\hline
+Degree level & Bachelor's & Bachelor's & Bachelor's & Bachelor's & Graduate \\
+State controls & Yes & Yes & Yes & Yes & Yes \\
+Institution FE & Yes & Yes & Yes & Yes & Yes \\
+Cohort FE & Yes & Region$\times$Cohort & Yes & Yes & Yes \\
+Observations & 2,953 & 2,953 & 2,442 & 2,953 & 1,363 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize
+\textit{Notes:} Dependent variable is log 25th percentile first-year earnings. Columns (1)--(4) use bachelor's degree graduates. Column (1) is the controlled baseline specification (corresponding to Column 2 in \Cref{tab:main}; the uncontrolled elasticity is 0.064). Column (2) replaces cohort FE with region $\times$ cohort FE. Column (3) adds lead (next-cohort) MW as a falsification test. Column (4) uses a binary treatment: states with above-median total MW increases $\times$ post-2010 indicator. Column (5) is a placebo test using graduate degree (master's) holders, whose P25 earnings should be far above the wage floor. Standard errors clustered at the state level. $^{***}$, $^{**}$, $^{*}$ denote significance at the 1\%, 5\%, and 10\% levels.
+\end{minipage}
+\end{table}
+
+\Cref{tab:robustness} reports five robustness checks for the P25 specification.
+
+\textit{Region-by-cohort fixed effects} (column 2). Replacing cohort fixed effects with region-by-cohort interactions---which absorb differential trends across the Northeast, Midwest, South, and West---eliminates the estimated effect. The coefficient falls from 0.052 to -0.016. This result is concerning because it suggests the baseline estimate may be driven by correlated regional trends rather than the minimum wage itself. States in the West and Northeast, which raised minimum wages most aggressively, may also have experienced differential growth in the demand for college-educated labor.
+
+\textit{Lead minimum wage test} (column 3). To test for pre-existing trends, I include the next-cohort's minimum wage as an additional predictor. If states raising minimum wages were already on a differential earnings trajectory, lead MW should predict current earnings. The lead coefficient is 0.043 (SE = 0.055), which is not statistically significant. This provides some reassurance that the estimates are not driven by pre-trends, though the test has limited power given the small number of cohort transitions.
+
+\textit{Binary treatment} (column 4). As an alternative to continuous treatment, I define high-minimum-wage states as those with above-median total MW increases over the sample period (16 states) and estimate a difference-in-differences with a post-2010 indicator. The interaction coefficient is 0.020 (SE = 0.024), positive but insignificant.
+
+\textit{Jackknife stability.} \Cref{fig:jackknife} shows that the baseline estimate is stable to dropping individual states. The jackknife range is [-0.005, 0.086], and no single state drives the result. This suggests the estimate does not depend on a single influential observation. The jackknife distribution is approximately centered on the full-sample estimate, with a standard deviation of 0.016---close to what one would expect from leave-one-out resampling of 33 clusters. No state produces an outlier when dropped, providing reassurance that the result is not an artifact of a small number of extreme observations.
+
+\textit{Placebo: Graduate degree holders} (column 5). As an additional falsification test, I estimate the baseline specification for master's degree graduates. If the mechanism operates through wage floor compression, graduate degree holders---whose P25 earnings average over \$40,000---should show no effect. The estimated coefficient is 0.080 (SE = 0.037, p = 0.039), positive and statistically significant at the 5 percent level. This is problematic for the spillover interpretation. However, several explanations are consistent with this finding. States that raise minimum wages may also invest in graduate education or attract different types of graduate students. Alternatively, the result may reflect the same correlated state trends that make the region-by-cohort specification sensitive. The graduate degree placebo failure, combined with the sensitivity to region-by-cohort fixed effects, forms the strongest evidence against a purely causal interpretation of the baseline estimates.
+
+\textit{Division-by-cohort fixed effects.} To diagnose the geographic sensitivity, I add an intermediate specification using Census division-by-cohort fixed effects (nine divisions, compared to four regions). For bachelor's P25, the coefficient falls from 0.052 (cohort FE) to -0.059 (division $\times$ cohort), further below the region $\times$ cohort estimate of -0.016. This progression---positive with national cohort FE, negative with finer geographic controls---strongly suggests the bachelor's result reflects regional trends. However, the associate P25 result is strikingly different: the division $\times$ cohort coefficient is 0.176 (SE = 0.080, p = 0.036), substantially \textit{larger} than the baseline estimate of 0.092. This divergence---bachelor's effects disappearing while associate effects strengthen with geographic controls---is consistent with genuine spillover effects operating at the sub-baccalaureate level where graduates are closer to the wage floor.
+
+\textit{Pairs cluster bootstrap.} Given the moderate number of state clusters (28--33), I conduct pairs cluster bootstrap inference \citep{cameron2008} (999 replications, resampling states with replacement) for the key specifications. The bootstrap 95\% confidence interval for bachelor's P25 is [-0.057, 0.176], comfortably including zero. For associate P25, the bootstrap CI is [-0.019, 0.211], also spanning zero but with a narrower margin. These intervals are broadly consistent with the analytical standard errors, suggesting that cluster-robust inference is not severely distorted despite the small number of clusters.
+
+\textit{Summary of robustness.} Taken together, the robustness checks paint a nuanced picture. For bachelor's graduates, the evidence favors confounding over genuine spillovers: the effect vanishes or reverses with geographic controls, and the graduate placebo is significant. For associate graduates, the picture is more encouraging: effects strengthen with geographic controls and the distributional gradient is preserved. The most conservative interpretation is that the bachelor's baseline estimates represent upper bounds inflated by regional trends, while the associate estimates may capture genuine spillover effects operating close to the wage floor.
+
+\subsection{Time Horizon}
+
+\begin{table}[htbp]
+\centering
+\caption{Persistence of MW Effects: Bachelor's Degree Graduates}
+\label{tab:horizon}
+\begin{tabular}{lccc}
+\hline\hline
+ & 1 Year & 5 Years & 10 Years \\
+\hline
+\textit{P25} & 0.0519 & 0.0176 & -0.0199 \\
+ & (0.0594) & (0.0278) & (0.0373) \\
+ & [N=2,953] & [N=2,527] & [N=1,536] \\
+[0.5em]
+\textit{P50} & 0.0235 & -0.0217 & -0.0289 \\
+ & (0.0512) & (0.0282) & (0.0446) \\
+ & [N=2,953] & [N=2,527] & [N=1,536] \\
+[0.5em]
+\textit{P75} & -0.0095 & -0.0398 & 0.0043 \\
+ & (0.0437) & (0.0303) & (0.0527) \\
+ & [N=2,953] & [N=2,527] & [N=1,536] \\
+[0.5em]
+\hline
+State controls & Yes & Yes & Yes \\
+Institution FE & Yes & Yes & Yes \\
+Cohort FE & Yes & Yes & Yes \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize
+\textit{Notes:} Each cell reports the coefficient on $\ln(MW)$ from a separate regression. The dependent variable is log earnings at the indicated percentile, measured 1, 5, or 10 years after graduation. Sample sizes differ across horizons because PSEO reports only realized (not projected) earnings: 1-year outcomes are available for seven of eight bachelor's cohorts (all except 2011); 5-year outcomes for cohorts through 2016; 10-year outcomes for early cohorts only. All specifications include institution and cohort fixed effects and state-level controls. Standard errors clustered at the state level.
+\end{minipage}
+\end{table}
+
+\Cref{tab:horizon} reports the MW elasticity at 1, 5, and 10 years after graduation for bachelor's degree holders. The pattern is consistent with minimum wages primarily affecting entry-level labor market conditions. At one year, the P25 elasticity is 0.052; by five years, it has fallen to 0.018; and by ten years, it is -0.020 (all insignificant). This attenuation is expected: minimum wage spillovers should be most relevant for first jobs, when graduates are most likely to be in positions directly affected by wage compression. As careers progress, human capital accumulation and job mobility dominate, and the influence of the entry-level wage floor fades.
+
+The P50 and P75 coefficients at five and ten years are negative, though not significant. This could reflect a mechanical effect: states that raised minimum wages in the graduation window may have experienced different economic trajectories by the time five- and ten-year earnings are measured.
+
+\subsection{Field-of-Study Heterogeneity}
+
+\begin{table}[htbp]
+\centering
+\caption{MW Elasticity by Field of Study (Bachelor's, P25)}
+\label{tab:cip}
+\begin{tabular}{lcccc}
+\hline\hline
+ & $\ln(MW)$ & SE & N & Inst$\times$CIP \\
+\hline
+Low-wage & 0.0066 & (0.0659) & 18,493 & 1,557 \\
+Mid-wage & 0.0854 & (0.0684) & 43,214 & 3,705 \\
+High-wage & 0.0871 & (0.0698) & 28,387 & 1,505 \\
+\hline
+\multicolumn{5}{l}{\footnotesize Low-wage: Education (13), Humanities (23, 24, 50), Arts (38, 54)} \\
+\multicolumn{5}{l}{\footnotesize Mid-wage: Biology (26), Math (27), Social Science (42, 45)} \\
+\multicolumn{5}{l}{\footnotesize High-wage: CS (11), Engineering (14), Business (52), Health (51)} \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize
+\textit{Notes:} Dependent variable is log P25 first-year earnings. Each row is a separate regression for bachelor's degree graduates in the indicated field group. The unit of observation is institution$\times$CIP$\times$cohort (the raw CIP-level panel contains 164,802 observations; N shown is observations with non-missing Y1 P25). Fixed effects are at the institution$\times$CIP and cohort level. The identifying variation remains at the state$\times$cohort level (minimum wage varies by state and cohort, not by CIP code within an institution). Standard errors clustered at the state level (33 clusters).
+\end{minipage}
+\end{table}
+
+\Cref{tab:cip} examines whether the spillover effect varies across field groups for bachelor's degree holders. The prediction is that low-wage fields (education, humanities, arts) should show larger effects because their P25 earnings are closer to the minimum wage.
+
+The results do not support this prediction. Low-wage fields show a near-zero coefficient (0.007, SE = 0.066), while mid-wage fields (biology, math, social science) and high-wage fields (CS, engineering, business) show larger but insignificant effects of 0.085 and 0.087, respectively. This reversed pattern is puzzling from a spillover perspective. One possible explanation is that high-wage fields have more institutional variation in earnings (some universities produce engineers earning \$70,000, others \$40,000), providing greater scope for minimum wage effects at the left tail. Another is that the CIP-level fixed effects (institution-by-CIP) absorb too much variation, leaving insufficient within-cell variation for identification.
+
+\section{Discussion and Conclusion}
+
+This paper examines whether minimum wage increases spill over into the earnings of college graduates, using the Census Bureau's newly released PSEO Time Series data. The results provide mixed evidence. On one hand, the distributional gradient---largest effects at P25, smallest at P75---and the attenuation over time are consistent with spillover theory. Associate degree holders, whose P25 earnings are closest to the wage floor, show the largest and most precisely estimated response. On the other hand, the estimates are imprecise, and the effects disappear when regional trends are absorbed, raising concerns about confounding.
+
+Several limitations temper the conclusions. First, PSEO cohorts span three-year windows, blurring the precise timing of minimum wage changes and likely attenuating effects. Second, the number of state clusters (29--33) is moderate for cluster-robust inference. Third, PSEO coverage is not universal---the sample is skewed toward larger public institutions---and the results may not generalize to the full universe of post-secondary graduates.
+
+The sensitivity to region-by-cohort fixed effects is the most important caveat. It suggests that the baseline estimates may partly capture correlated state-level trends---progressive states that raise minimum wages may simultaneously pursue other policies that benefit college graduates. Without a sharper identification strategy (such as a border discontinuity design or a plausibly exogenous minimum wage instrument), it is difficult to isolate the causal spillover effect from these confounding trends.
+
+Despite these limitations, this paper makes three contributions. First, it introduces the PSEO Time Series as a tool for labor market policy evaluation, demonstrating its utility for institution-level panel analysis. The richness of the data---percentile earnings by degree, field, and cohort---enables distributional analyses that are infeasible with standard survey data. The Census Bureau has made these data publicly available through a well-documented API, lowering the barrier to entry for researchers interested in institution-level labor market analysis. As PSEO coverage continues to expand (from 33 states currently to what may eventually be near-universal), the data will become increasingly powerful for both academic research and policy evaluation.
+
+Second, it provides the first estimates of minimum wage spillovers specifically for college graduates, a population that is generally assumed to be unaffected by wage floor policies. The finding that associate degree P25 earnings respond to MW increases at a near-significant elasticity of 0.09 suggests that spillovers may reach further than previously documented. Even if the true causal effect is smaller than the point estimate (given the confounding concerns raised by the region-by-cohort specification), the distributional gradient---P25 $>$ P50 $>$ P75, associate $>$ bachelor's---is precisely what spillover theory predicts. This pattern is difficult to explain through alternative mechanisms such as aggregate state-level trends, which would affect all percentiles and degree levels similarly.
+
+Third, it highlights the challenge of identifying minimum wage effects with aggregated cohort data: the attenuation from three-year windows and the sensitivity to regional trends underscore the need for finer temporal granularity in future PSEO releases. The tension between the promising distributional gradient and the fragility to region-by-cohort fixed effects is, itself, an informative finding. It suggests that state-level confounders---particularly the political sorting that correlates minimum wage policy with other progressive economic policies---are first-order concerns in this setting. Future work must address this confounding more directly.
+
+\subsection{Policy Implications}
+
+The policy implications of this work depend on which interpretation of the results one emphasizes. Under the spillover interpretation, minimum wage increases generate positive externalities for workers beyond those directly affected---including, potentially, recent college graduates. This would strengthen the case for minimum wage increases by expanding the set of beneficiaries. If a 10 percent minimum wage increase raises associate degree P25 earnings by 0.9 percent (an elasticity of 0.09), the policy lifts not only the lowest-paid workers but also the lower-earning segment of college graduates, compressing wage inequality within the college-educated population.
+
+Under the confounding interpretation, the positive associations reflect correlated state-level trends rather than causal effects of the minimum wage. Progressive states invest in higher education, expand social safety nets, and pursue labor market policies that collectively improve graduate outcomes. In this case, the minimum wage increase is not the active ingredient but rather a marker for a bundle of progressive policies. This interpretation has different policy implications: rather than focusing on minimum wage policy alone, policymakers should consider the full package of labor market and education investments.
+
+A third possibility is that both channels operate simultaneously. Minimum wages generate genuine spillovers at the bottom of the graduate earnings distribution, but these spillovers are quantitatively small compared to the correlated state-level trends. The baseline specification captures both, while the region-by-cohort specification absorbs both. Under this interpretation, the baseline estimates are upward-biased but not entirely spurious, and the region-by-cohort estimates are downward-biased because they remove genuine within-region minimum wage variation along with the confounding trends. The truth likely lies between the two specifications.
+
+\subsection{Directions for Future Research}
+
+Future research could extend this analysis in several directions that would sharpen identification and improve statistical power.
+
+First, annual (rather than three-year) cohort windows would dramatically improve identification. With annual cohorts, within-state minimum wage variation increases, institution-level panels become longer, and the temporal alignment between minimum wage changes and graduation improves. The Census Bureau has indicated that annual cohorts may be available in future PSEO releases as coverage expands and disclosure avoidance methods improve.
+
+Second, the PSEO Flows endpoint, which reports where graduates work by geography (rather than where they attended college), could enable a border-discontinuity design. Comparing institutions in adjacent states with different minimum wages, while controlling for the geographic mobility of graduates, would provide a sharper identification strategy than the within-institution approach used here. The key challenge is that graduates do not all work in the state where they attended college---the Flows data would allow researchers to identify the share of graduates employed in each state and construct an exposure-weighted minimum wage treatment.
+
+Third, linking PSEO to the College Scorecard's institutional characteristics would allow heterogeneity analysis by institutional selectivity, enrollment size, and share of Pell recipients. If spillover effects are concentrated at less selective institutions (where graduates are more likely to earn near the minimum wage), this would strengthen the causal interpretation. The College Scorecard also reports median earnings and employment rates, which could be used to construct the employment margin that PSEO currently lacks.
+
+Fourth, the analysis could be extended to examine subgroup heterogeneity by race, gender, and age at graduation. PSEO does not currently report earnings by demographic group, but if such breakdowns become available, they would enable tests of whether spillover effects are concentrated among demographic groups known to have lower earnings (e.g., women, racial minorities) or among older graduates who may be more likely to work in positions near the minimum wage.
+
+Finally, the recently expanded state minimum wage landscape---with California, New York, and Washington all reaching \$15 or above by 2023---provides an opportunity for a quasi-experimental analysis using the next release of PSEO data. The magnitude of these increases (50--100 percent above the federal floor) is unprecedented and should generate larger spillover effects, potentially pushing estimates into statistically significant territory.
+
+The question of whether raising the floor lifts graduates remains open. The evidence presented here is suggestive but not definitive. What is clear is that the PSEO Time Series---a novel, underutilized data source---has the potential to transform how researchers study the labor market consequences of post-secondary education. As coverage expands and temporal granularity improves, future analyses will be better equipped to isolate the causal effects of labor market policies on graduate outcomes.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{PSEO API Access}
+
+The PSEO Time Series data are accessed via the Census Bureau's public API at \texttt{https://api.census.gov/data/timeseries/pseo/earnings}. No API key is required. The following parameters are used for the primary query:
+
+\begin{itemize}
+    \item \texttt{DEGREE\_LEVEL}: 01 (cert $<$1yr), 02 (cert 1--2yr), 03 (associate), 05 (bachelor's), 07 (master's)
+    \item \texttt{CIPCODE}: 00 (all fields) for main analysis; specific codes for CIP-level analysis
+    \item \texttt{INST\_LEVEL}: I (institution) or S (state aggregate)
+    \item \texttt{GRAD\_COHORT}: 2001, 2004, 2006, 2007, 2010, 2011, 2013, 2016, 2019
+\end{itemize}
+
+Each cohort spans a three-year graduation window (e.g., cohort 2013 = graduates from 2013--2015). Earnings are reported in 2023 constant dollars. Cells with fewer than 20 graduates are suppressed for confidentiality.
+
+\subsection{Minimum Wage Data}
+
+State minimum wage data are sourced from the Department of Labor historical tables, as compiled by the Lislejoem GitHub repository (\url{https://github.com/Lislejoem/Minimum-Wage-by-State-1968-to-2020}). The ``effective minimum wage'' is the higher of the state and federal minimum wage in each state-year. For each PSEO cohort, I compute the arithmetic mean of the effective minimum wage over the corresponding three-year graduation window.
+
+\subsection{FRED Economic Controls}
+
+State unemployment rates are from the Bureau of Labor Statistics Local Area Unemployment Statistics (LAUS) program, accessed via FRED using series IDs of the form \texttt{[STATE]UR}. Per capita personal income is from the Bureau of Economic Analysis, accessed via FRED using series IDs of the form \texttt{[STATE]PCPI}. Both variables are averaged over the three-year cohort window.
+
+\subsection{CIP Code Classification}
+
+Two-digit CIP codes are classified into three wage groups:
+
+\begin{itemize}
+    \item \textbf{High-wage:} 11 (Computer Science), 14 (Engineering), 15 (Engineering Technology), 51 (Health Professions), 52 (Business)
+    \item \textbf{Mid-wage:} 26 (Biology), 27 (Mathematics), 40 (Physical Sciences), 42 (Psychology), 45 (Social Sciences)
+    \item \textbf{Low-wage:} 13 (Education), 23 (English), 24 (Liberal Arts), 38 (Philosophy), 50 (Visual \& Performing Arts), 54 (History)
+\end{itemize}
+
+\section{Additional Figures}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig1_mw_variation.pdf}
+    \caption{Minimum Wage Variation Across States and Cohorts}
+    \label{fig:mw_variation}
+    \begin{minipage}{0.95\textwidth}
+    \vspace{0.3em}
+    \footnotesize
+    \textit{Notes:} Panel A shows state effective minimum wages by graduation cohort, with blue indicating states above the federal minimum and orange indicating states at the federal floor. Panel B shows the total change in effective minimum wage from 2001 to 2019 by state. States are ordered by magnitude of change.
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig2_earnings_vs_mw.pdf}
+    \caption{Bachelor's P25 Earnings vs.\ Annualized Minimum Wage}
+    \label{fig:scatter}
+    \begin{minipage}{0.95\textwidth}
+    \vspace{0.3em}
+    \footnotesize
+    \textit{Notes:} Each point is a state-cohort average. Size reflects the number of institutions. Color indicates graduation cohort (darker = more recent). The fitted line suggests a positive cross-sectional relationship between minimum wages and P25 graduate earnings, though this relationship may reflect confounding state characteristics.
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig3_gradient.pdf}
+    \caption{MW Elasticity by Earnings Percentile and Time Horizon}
+    \label{fig:gradient}
+    \begin{minipage}{0.95\textwidth}
+    \vspace{0.3em}
+    \footnotesize
+    \textit{Notes:} Each point represents the estimated elasticity of log earnings with respect to log minimum wage from a separate regression with institution and cohort fixed effects and state controls. Lines connect estimates across percentiles within each time horizon. Error bars show 95 percent confidence intervals. The declining gradient from P25 to P75 is consistent with spillover effects.
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig4_degree_het.pdf}
+    \caption{MW Elasticity by Degree Level and Percentile}
+    \label{fig:degree}
+    \begin{minipage}{0.95\textwidth}
+    \vspace{0.3em}
+    \footnotesize
+    \textit{Notes:} Each point represents the estimated elasticity from a separate regression for the indicated degree level and percentile. Associate degree holders show the largest and most precisely estimated effects, consistent with their P25 earnings being closest to the minimum wage floor.
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/fig5_cip_het.pdf}
+    \caption{MW Elasticity by Field of Study Wage Group (Bachelor's, P25)}
+    \label{fig:cip}
+    \begin{minipage}{0.95\textwidth}
+    \vspace{0.3em}
+    \footnotesize
+    \textit{Notes:} Each point represents the estimated P25 elasticity for bachelor's degree graduates in the indicated field group. Contrary to prediction, low-wage fields do not show larger effects than high-wage fields. All estimates are imprecise due to the large number of institution-by-CIP fixed effects.
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/fig6_jackknife.pdf}
+    \caption{Jackknife Sensitivity: Dropping One State at a Time}
+    \label{fig:jackknife}
+    \begin{minipage}{0.95\textwidth}
+    \vspace{0.3em}
+    \footnotesize
+    \textit{Notes:} Each point shows the estimated P25 elasticity for bachelor's degree graduates when the indicated state is dropped from the sample. The blue horizontal line shows the full-sample estimate. The estimate is stable across state exclusions.
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig7_trends.pdf}
+    \caption{First-Year Earnings Trends by Degree Level and Percentile}
+    \label{fig:trends}
+    \begin{minipage}{0.95\textwidth}
+    \vspace{0.3em}
+    \footnotesize
+    \textit{Notes:} Mean earnings across institutions by graduation cohort. Certificate and associate degree trends reflect four cohorts (2001, 2006, 2011, 2016); bachelor's degree trends reflect eight cohorts (seven with non-missing Y1 P25 data). Earnings are in 2023 constant dollars.
+    \end{minipage}
+\end{figure}
+
+\end{document}

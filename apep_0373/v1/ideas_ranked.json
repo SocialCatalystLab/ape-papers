@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-02-19T13:43:05.786763",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2876,
+    "output_tokens": 6646,
+    "total_tokens": 9522
+  },
+  "ideas_file": "output/apep_0372/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "The Gainful Employment Threat: Did Accountability Pressure Improve For-Profit Outcomes?",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Does Raising the Floor Lift Graduates? Minimum Wage Effects on the College Earnings Distribution",
+      "score": 65,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "restricting primary analysis to cells where MW plausibly binds\u2014certificate/associate",
+        "low-wage CIPs",
+        "bottom-tail outcomes",
+        "doing aggressive state labor-market controls/sensitivity"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Graduating into the Storm: Recession Scarring by Field of Study",
+      "score": 60,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "State Higher Education Appropriations and Graduate Earnings",
+      "score": 52,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 5,
+      "title": "State EITC Supplements and Returns to Sub-Baccalaureate Education",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "Does Raising the Floor Lift Graduates? Minimum Wage Effects on the College Earnings Distribution",
+      "rank": 2,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "restricting primary analysis to cells where MW plausibly binds\u2014certificate/associate",
+        "low-wage CIPs",
+        "bottom-tail outcomes",
+        "doing aggressive state labor-market controls/sensitivity"
+      ]
+    }
+  ]
+}
