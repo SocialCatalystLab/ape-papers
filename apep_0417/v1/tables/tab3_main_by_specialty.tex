@@ -1,0 +1,26 @@
+\begin{table}
+\centering
+\caption{\label{tab:tab:main_by_spec}Effect of Medicaid Unwinding on Provider Supply by Specialty}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{lrrcr}
+\toprule
+Specialty & Estimate & SE & Stars & N\\
+\midrule
+\textit{Pooled (all specialties)} & 0.0128 & (0.2376) &  & 501,228\\
+Behavioral Health & 0.1104 & (0.3923) &  & 71,604\\
+Dental & 0.5032 & (0.8312) &  & 71,604\\
+NP/PA & -0.4353 & (0.2715) &  & 71,604\\
+OB-GYN & 0.1101 & (0.0948) &  & 71,604\\
+\addlinespace
+Primary Care & -0.1424 & (0.2620) &  & 71,604\\
+Psychiatry & 0.0329 & (0.0809) &  & 71,604\\
+Surgery & -0.0897 & (0.0705) &  & 71,604\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item Dependent variable: $\log$(active providers + 1). Treatment: post-unwinding $\times$ net disenrollment rate. All models include county$\times$specialty and quarter fixed effects. Standard errors clustered at the state level (51 clusters). * p$<$0.10, ** p$<$0.05, *** p$<$0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

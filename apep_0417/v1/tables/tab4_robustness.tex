@@ -1,0 +1,22 @@
+\begin{table}
+\centering
+\caption{\label{tab:tab:robustness}Robustness Checks}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{llll}
+\toprule
+Specification & Estimate & SE & N\\
+\midrule
+Main (≥4 claims/qtr) & 0.0128 & (0.2376) & 501,228\\
+Tight threshold (≥12 claims/qtr) & 0.0128 & (0.2376) & 501,228\\
+Binary treatment (early vs. late) & 0.0424 & (0.0457) & 501,228\\
+With Medicaid share × time & 0.0160 & (0.2382) & 501,228\\
+Placebo (fake 2021Q2 treatment) & -0.0612 & (0.5701) & 394,758\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item All models include county$\times$specialty and quarter fixed effects with state-clustered standard errors (51 clusters). Randomization inference (500 permutations of treatment timing across states) yields p = 0.962 for the main specification.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

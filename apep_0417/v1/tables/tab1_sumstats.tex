@@ -1,0 +1,26 @@
+\begin{table}
+\centering
+\caption{\label{tab:tab:sumstats}Summary Statistics by Specialty}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{lrrrrrrr}
+\toprule
+Specialty & County-Quarters & Counties & Mean Providers & SD & \% Zero & Per 10K Pop & \% Desert\\
+\midrule
+Behavioral Health & 71,604 & 2,652 & 3.2 & 10.7 & 51.7 & 0.30 & 92.6\\
+Dental & 71,604 & 2,652 & 4.4 & 20.0 & 40.9 & 0.39 & 89.0\\
+NP/PA & 71,604 & 2,652 & 2.2 & 18.0 & 70.2 & 0.17 & 95.2\\
+OB-GYN & 71,604 & 2,652 & 0.7 & 5.9 & 85.9 & 0.03 & 99.8\\
+Primary Care & 71,604 & 2,652 & 6.4 & 53.2 & 53.0 & 0.32 & 90.7\\
+\addlinespace
+Psychiatry & 71,604 & 2,652 & 1.0 & 7.9 & 82.2 & 0.03 & 99.7\\
+Surgery & 71,604 & 2,652 & 0.6 & 6.1 & 87.2 & 0.03 & 99.7\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item Sample: US county $\times$ specialty $\times$ quarter observations, 2018Q1--2024Q3. Active providers defined as billing $\geq$4 Medicaid claims per quarter. Desert: $<$1 active provider per 10,000 county population.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}

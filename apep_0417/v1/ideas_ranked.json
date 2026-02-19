@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-19T13:55:45.866178",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2586,
+    "output_tokens": 3679,
+    "total_tokens": 6265
+  },
+  "ideas_file": "output/apep_0371/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Where Medicaid Goes Dark \u2014 A Claims-Based Atlas of Provider Deserts and the Demand Shock of Enrollment Unwinding",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Rate Shock Therapy \u2014 Do HCBS Rate Increases Attract Providers to Medicaid Deserts?",
+      "score": 46,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "The Substitution Gap \u2014 Do Nurse Practitioners Fill Physician Deserts in Medicaid?",
+      "score": 34,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}
