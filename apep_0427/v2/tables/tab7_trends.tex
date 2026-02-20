@@ -1,0 +1,33 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:trends} Robustness: Controlling for Sector-Specific Linear Trends}
+   \bigskip
+   \centering
+   \begin{adjustbox}{width = \textwidth, center}
+      \begin{tabular}{lcccccc}
+         \toprule
+          & \multicolumn{2}{c}{Youth Share (\%)} & \multicolumn{2}{c}{Youth Emp. (000s)} & \multicolumn{2}{c}{Total Emp. (000s)}\\
+          & \multicolumn{2}{c}{Youth Share} & \multicolumn{2}{c}{Youth Level} & \multicolumn{2}{c}{Total Emp.} \\ 
+                                           & (1)           & (2)           & (3)           & (4)           & (5)           & (6)\\  
+         \midrule 
+         Exposure $\times$ Post-Reduction  & 0.0741$^{*}$  & 0.0605$^{**}$ & 3.393$^{**}$  & 1.062         & 8.959$^{**}$  & 1.054\\   
+                                           & (0.0385)      & (0.0281)      & (1.586)       & (0.7904)      & (4.121)       & (3.700)\\   
+          \\
+         R$^2$                             & 0.93135       & 0.94738       & 0.96985       & 0.98414       & 0.99522       & 0.99786\\  
+         Observations                      & 701           & 701           & 701           & 701           & 701           & 701\\  
+          \\
+         Sector fixed effects              & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+         Year-Quarter fixed effects        & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+         time\_trend $\times $ Sector      &               & $\checkmark$  &               & $\checkmark$  &               & $\checkmark$\\   
+         \bottomrule
+      \end{tabular}
+      
+      \par \raggedright 
+      Standard errors clustered at sector level in parentheses.\\
+      * p$<$0.10, ** p$<$0.05, *** p$<$0.01.\\
+      Odd columns: baseline specification with sector and year-quarter FE.\\
+      Even columns: add sector-specific linear time trends to absorb differential sector growth.
+   \end{adjustbox}
+\end{table}
+
+

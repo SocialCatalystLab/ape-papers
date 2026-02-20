@@ -1,0 +1,37 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:main_bartik} Effect of Apprenticeship Subsidy Reduction on Employment}
+   \bigskip
+   \centering
+   \begin{adjustbox}{width = \textwidth, center}
+      \begin{tabular}{lccccc}
+         \toprule
+                                                & Youth Share (\%)  & Youth Emp. (000s) & Youth Share (\%)  & Total Emp. (000s) & Prime-Age Share (\%)\\   
+                                                & Youth Share (\%)  & Youth (000s)      & Binary            & Total (000s)      & Prime-Age (\%) \\    
+                                                & (1)               & (2)               & (3)               & (4)               & (5)\\  
+         \midrule 
+         Exposure $\times$ Post-Reduction       & 0.0741$^{*}$      & 3.393$^{**}$      &                   & 8.959$^{**}$      & -0.0741$^{*}$\\   
+                                                & (0.0385)          & (1.586)           &                   & (4.121)           & (0.0385)\\   
+         High Exposure $\times$ Post-Reduction  &                   &                   & 0.9801$^{**}$     &                   &   \\   
+                                                &                   &                   & (0.3582)          &                   &   \\   
+          \\
+         R$^2$                                  & 0.93135           & 0.96985           & 0.93281           & 0.99522           & 0.93135\\  
+         Observations                           & 701               & 701               & 701               & 701               & 701\\  
+          \\
+         Sector fixed effects                   & $\checkmark$      & $\checkmark$      & $\checkmark$      & $\checkmark$      & $\checkmark$\\   
+         Year-Quarter fixed effects             & $\checkmark$      & $\checkmark$      & $\checkmark$      & $\checkmark$      & $\checkmark$\\   
+         \bottomrule
+      \end{tabular}
+      
+      \par \raggedright 
+      Standard errors clustered at sector level in parentheses.\\
+      * p$<$0.10, ** p$<$0.05, *** p$<$0.01.\\
+      All specifications include sector and year-quarter fixed effects.\\
+      Exposure measures 2019 sector apprenticeship intensity (DARES), in percentage points.\\
+      Coefficients are per percentage point of exposure.\\
+      Post-Reduction = 1 after January 2023 subsidy cut.\\
+      Col 5: Prime-age (25+) employment share as placebo outcome.
+   \end{adjustbox}
+\end{table}
+
+

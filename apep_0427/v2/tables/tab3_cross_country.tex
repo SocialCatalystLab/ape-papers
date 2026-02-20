@@ -1,0 +1,40 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:cross_country} Cross-Country Difference-in-Differences: Subsidy Effects on Youth Outcomes}
+   \bigskip
+   \centering
+   \begin{adjustbox}{width = \textwidth, center}
+      \begin{tabular}{lccccc}
+         \toprule
+          & \multicolumn{3}{c}{Emp. Rate (\%)} & NEET Rate (\%) & Temp. Share (\%)\\
+                                                         & Youth Emp (Redn) & Youth Emp (Intro) & DDD           & NEET          & Temp Emp \\   
+                                                         & (1)              & (2)               & (3)           & (4)           & (5)\\  
+         \midrule 
+         France $\times$ Post-Reduction                  & 1.488$^{**}$     &                   & -1.093        & 1.743         & 3.026\\   
+                                                         & (0.5802)         &                   & (0.6583)      & (1.157)       & (4.057)\\   
+         France $\times$ Post-Introduction               &                  & 2.491$^{***}$     &               &               &   \\   
+                                                         &                  & (0.6183)          &               &               &   \\   
+         France $\times$ Youth $\times$ Post-Reduction   &                  &                   & 2.581$^{**}$  &               &   \\   
+                                                         &                  &                   & (0.7946)      &               &   \\   
+          \\
+         R$^2$                                           & 0.99575          & 0.99614           & 0.99828       & 0.85116       & 0.75127\\  
+         Observations                                    & 344              & 344               & 688           & 688           & 340\\  
+          \\
+         Country fixed effects                           & $\checkmark$     & $\checkmark$      &               & $\checkmark$  & $\checkmark$\\   
+         Year-Quarter fixed effects                      & $\checkmark$     & $\checkmark$      &               & $\checkmark$  & $\checkmark$\\   
+         Country-Age Group fixed effects                 &                  &                   & $\checkmark$  &               & \\  
+         Year-Quarter-Age Group fixed effects            &                  &                   & $\checkmark$  &               & \\  
+         \bottomrule
+      \end{tabular}
+      
+      \par \raggedright 
+      Standard errors clustered at country level in parentheses.\\
+      * p$<$0.10, ** p$<$0.05, *** p$<$0.01.\\
+      Controls: Belgium, Netherlands, Spain, Italy, Portugal, Germany, Austria.\\
+      Col 1--2: Youth (15--24) employment rate.\\
+      Col 3: Triple-diff (France $\times$ Youth $\times$ Post).\\
+      Col 4: NEET rate (15--24). Col 5: Temporary employment share.
+   \end{adjustbox}
+\end{table}
+
+

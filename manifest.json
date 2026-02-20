@@ -2170,6 +2170,17 @@
       "date": "2026-02-20",
       "pdf": "papers/apep_0427/v1/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0427_v2",
+      "paper_family_id": "apep_0427",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-20",
+      "pdf": "papers/apep_0427/v2/paper.pdf",
+      "promising": false,
+      "is_revision": true,
+      "parent_paper_id": "apep_0427_v2",
+      "version": 3
     }
   ]
 }

@@ -1,0 +1,24 @@
+\begin{table}[H]
+\centering
+\caption{Inference Comparison: Clustered SEs, Randomization Inference, and Wild Cluster Bootstrap}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+ & Youth Share & Youth Level & Total Emp. & Cross-Country \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+Coefficient & 0.074 & 3.39 & 8.96 & 1.49 \\
+Clustered SE $p$-value & 0.070 & 0.046 & 0.043 & 0.037 \\
+RI $p$-value & 0.126 & --- & --- & --- \\
+WCB $p$-value & 0.029 & 0.007 & 0.026 & 0.391 \\
+\midrule
+Clusters & 19 sectors & 19 sectors & 19 sectors & 8 countries \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Cols 1--3: Exposure DiD (sector-level design). Col 4: Cross-country DiD (France vs.\ 7 EU comparators, youth 15--24). Clustered SEs at sector level (cols 1--3) or country level (col 4). RI permutes exposure assignments across 19 sectors (1,000 permutations). WCB uses Rademacher weights with 999 bootstrap iterations, imposing the null hypothesis \citep{cameron2008bootstrap}.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:inference}
+\end{table}

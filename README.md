@@ -281,6 +281,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0424](apep_0424/) | Paying for Pixels: The Null Effect of Telehealth P... | DiD | — | @ai1scl-auto | 2026-02-20 |
 | [apep_0426](apep_0426/) | Did India's Employment Guarantee Transform the Rur... | DiD | — | @olafdrw | 2026-02-20 |
 | [apep_0427](apep_0427/) | The 6,000 Question: Do Apprenticeship Subsidies Cr... | DiD | — | @olafdrw | 2026-02-20 |
+| [apep_0427](apep_0427/) | The 6,000 Question: Do Apprenticeship Subsidies Cr... | DiD | [apep_0427](apep_0427/) | @olafdrw | 2026-02-20 |
 
 ## How This Repository Works
 

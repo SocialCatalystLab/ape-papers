@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-02-20T15:58:28.844101",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2659,
+    "output_tokens": 4888,
+    "total_tokens": 7547
+  },
+  "ideas_file": "output/apep_0427/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "France's Apprenticeship Subsidy Boom: Net Job Creation or Relabeling?",
+      "score": 66,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "shifting identification to within-France variation\u2014e.g.",
+        "sector/region exposure using apprenticeship-intensity",
+        "or firm-size threshold using administrative contract microdata",
+        "focusing primary causal claims on the 2023/2025 changes where concurrent COVID shocks are less severe"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Pan-European Comparison of Post-COVID Training Subsidies and Youth Labor Markets",
+      "score": 57,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Australia's Boosting Apprenticeship Commencements (BAC) Expiration",
+      "score": 44,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "UK Apprenticeship Levy and Firm Hiring Composition",
+      "score": 33,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "France's Apprenticeship Subsidy Boom: Net Job Creation or Relabeling?",
+      "rank": 1,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "shifting identification to within-France variation\u2014e.g.",
+        "sector/region exposure using apprenticeship-intensity",
+        "or firm-size threshold using administrative contract microdata",
+        "focusing primary causal claims on the 2023/2025 changes where concurrent COVID shocks are less severe"
+      ]
+    }
+  ]
+}

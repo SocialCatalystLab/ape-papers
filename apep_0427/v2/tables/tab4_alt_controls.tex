@@ -1,0 +1,32 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:alt_controls} Robustness: Alternative Control Groups}
+   \bigskip
+   \centering
+   \begin{adjustbox}{width = \textwidth, center}
+      \begin{tabular}{lcccc}
+         \toprule
+          & \multicolumn{4}{c}{Emp. Rate (\%)}\\
+                                         & Baseline      & Excl. Germany & Southern EU   & Neighbors \\   
+                                         & (1)           & (2)           & (3)           & (4)\\  
+         \midrule 
+         France $\times$ Post-Reduction  & 1.488$^{**}$  & 1.623$^{*}$   & 1.538$^{*}$   & 0.6748\\   
+                                         & (0.5802)      & (0.6698)      & (0.6512)      & (0.8032)\\   
+          \\
+         R$^2$                           & 0.99575       & 0.99591       & 0.96544       & 0.99774\\  
+         Observations                    & 344           & 301           & 172           & 172\\  
+          \\
+         Country fixed effects           & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+         Year-Quarter fixed effects      & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+         \bottomrule
+      \end{tabular}
+      
+      \par \raggedright 
+      Standard errors clustered at country level in parentheses.\\
+      * p$<$0.10, ** p$<$0.05, *** p$<$0.01.\\
+      Baseline: BE, NL, ES, IT, PT, DE, AT.\\
+      Southern EU: ES, IT, PT. Neighbors: BE, DE, NL.
+   \end{adjustbox}
+\end{table}
+
+

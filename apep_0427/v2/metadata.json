@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0427_v3",
+  "title": "The 6,000 Question: Do Apprenticeship Subsidies Create Jobs or Relabel Hiring? Evidence from France's Post-Pandemic Training Boom (v3)",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "olafdrw",
+  "contributors": [
+    "olafdrw"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-20T18:09:26.224477",
+  "version": 3,
+  "paper_family_id": "apep_0427",
+  "parent_paper_id": "apep_0427_v2",
+  "is_revision": true,
+  "revision_rationale": "Fix RI permutation bug, add wild cluster bootstrap, add synthetic control method, address sectoral demand confound, fix claimed-but-unfixed revisions from v1"
+}
