@@ -1,0 +1,30 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness: VIIRS 2020 RDD Estimates}
+\label{tab:robustness}
+\begin{tabular}{llcccc}
+\hline\hline
+Specification & & Estimate & SE & $p$-value & $N_{\text{eff}}$ \\
+\hline
+\multicolumn{6}{l}{\textit{Panel A: Bandwidth Sensitivity}} \\
+& $h = 53.9 $ & -0.0211 & (0.0389) & 0.707 & 37,952 \\
+& $h = 80.9 $ & -0.0291 & (0.0318) & 0.596 & 57,221 \\
+& $h = 107.8 $ & -0.0253 & (0.0276) & 0.264 & 76,214 \\
+& $h = 134.8 $ & -0.0205 & (0.0248) & 0.197 & 95,018 \\
+& $h = 161.7 $ & -0.0185 & (0.0226) & 0.203 & 113,866 \\
+& $h = 215.6 $ & -0.0158 & (0.0196) & 0.248 & 150,927 \\
+\multicolumn{6}{l}{\textit{Panel B: Polynomial Order}} \\
+& $p = 1 $ & -0.0253 & (0.0225) & 0.190 & 76,214 \\
+& $p = 2 $ & -0.0272 & (0.0244) & 0.201 & 126,275 \\
+& $p = 3 $ & -0.0322 & (0.0295) & 0.248 & 142,011 \\
+\multicolumn{6}{l}{\textit{Panel C: Donut RDD ($\pm 25$ excluded)}} \\
+& VIIRS 2015 & -0.0850 & (0.0621) & 0.099 & 37,025 \\
+& VIIRS 2018 & -0.0601 & (0.0601) & 0.254 & 40,531 \\
+& VIIRS 2021 & -0.0645 & (0.0617) & 0.202 & 39,153 \\
+& VIIRS 2023 & -0.0500 & (0.0602) & 0.311 & 41,235 \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}\small
+\item \textit{Notes:} All specifications use $\text{asinh}(\text{VIIRS nightlights})$ as the dependent variable and Census 2001 population as the running variable. Panel A varies the bandwidth around the MSE-optimal choice ($h^* = 107.8$); bandwidths are forced via \texttt{rdrobust(h=...)}, which may yield different bias bandwidths and thus different SE/p-values than Table~\ref{tab:main_rdd} (which uses automatic bandwidth selection). Panel B varies the polynomial order with MSE-optimal bandwidth. Panel C excludes villages within $\pm 25$ persons of the 500 threshold to address heaping.
+\end{tablenotes}
+\end{table}

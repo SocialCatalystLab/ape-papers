@@ -283,6 +283,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0427](apep_0427/) | The 6,000 Question: Do Apprenticeship Subsidies Cr... | DiD | — | @olafdrw | 2026-02-20 |
 | [apep_0427](apep_0427/) | The 6,000 Question: Do Apprenticeship Subsidies Cr... | DiD | [apep_0427](apep_0427/) | @olafdrw | 2026-02-20 |
 | [apep_0428](apep_0428/) | Connecting the Most Remote: Road Eligibility and D... | RDD | — | @olafdrw | 2026-02-20 |
+| [apep_0429](apep_0429/) | The Long Arc of Rural Roads: A Dynamic Regression ... | RDD | — | @olafdrw | 2026-02-20 |
 
 ## How This Repository Works
 

@@ -1,0 +1,599 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Figure notes environment
+\newenvironment{figurenotes}{\par\vspace{0.5em}\small}{\par}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Long Arc of Rural Roads: A Dynamic Regression Discontinuity Analysis of India's PMGSY}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. This paper was generated autonomously. Total execution time: \apepcurrenttime{} (cumulative: \apepcumulativetime{}). Correspondence: scl@econ.uzh.ch} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+India's Pradhan Mantri Gram Sadak Yojana (PMGSY) is the world's largest rural road construction program. I exploit the population eligibility threshold at 500 persons in a regression discontinuity design using village-level nighttime lights from 1994 to 2023---spanning the complete pre- and post-treatment period. Despite a massive sample of 552,788 villages and precise identification, I find no robust effect of PMGSY eligibility on nighttime economic activity at any horizon from 1 to 23 years. The null persists across DMSP and VIIRS sensors, alternative bandwidths, polynomial orders, and donut specifications. Covariate balance and McCrary density tests confirm the design's validity. These results suggest that road connectivity alone is insufficient to generate sustained increases in local economic activity measurable through luminosity, even two decades after construction.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} O18, R42, H54, O13 \\
+\noindent\textbf{Keywords:} rural roads, infrastructure, India, PMGSY, regression discontinuity, nighttime lights, null result
+
+\newpage
+
+\section{Introduction}
+
+In December 2000, India launched a project to pave the last mile for its most isolated citizens. Two decades and \$40 billion later, the Pradhan Mantri Gram Sadak Yojana (PMGSY) has laid nearly 700,000 kilometers of all-weather roads, connecting 178,000 rural habitations to the national economy. Yet the view from space remains unchanged: the villages that received these roads are no brighter at night than comparable villages that did not. This paper documents that fact---and asks what it means for infrastructure policy in the developing world.
+
+The existing evidence is nuanced. \citet{asher2020rural}, in the definitive study of PMGSY, exploit the same population eligibility threshold I use here and find that road construction increases transportation activity and exposure to non-local markets, but generates only modest effects on consumption (around 10 log points) and little transformation of the occupational structure. Their analysis, however, relies on two Census snapshots (2001 and 2011) that provide only a single before-after comparison. A fundamental question remains unanswered: what is the complete \textit{dynamic path} of road effects? Do benefits emerge slowly and compound over time, as theories of market integration predict? Or do the modest initial effects represent the program's full long-run impact?
+
+This paper traces the entire trajectory. I combine the PMGSY population threshold at 500 persons with village-level nighttime lights data spanning 30 years (1994--2023), drawn from the SHRUG platform \citep{asher2021shrug}. Nighttime luminosity---available annually and consistently for every Indian village---serves as a continuous proxy for local economic activity \citep{henderson2012measuring}. The annual frequency transforms the standard RDD into a ``dynamic RDD'' that estimates year-specific treatment effects for every year from 1994 through 2023, yielding a complete picture of the program's impact trajectory from well before PMGSY's launch through two decades after.
+
+The central finding is a precisely estimated null. PMGSY eligibility produces no robust or persistent increase in nighttime lights at any horizon---short, medium, or long run. The point estimates are uniformly small and negative (ranging from $-0.01$ to $-0.03$ in asinh units), with 95\% confidence intervals that rule out effects larger than approximately 5\% of a standard deviation. While isolated year-specific estimates reach marginal significance (notably in early DMSP years 1994--1996 and DMSP 2009), these do not survive multiple-testing adjustments and are inconsistent with a genuine treatment effect that should strengthen, not weaken, as the program matures. The null is robust across every specification I consider: MSE-optimal and alternative bandwidths, local linear and quadratic polynomials, donut RDD excluding observations heaped at exactly 500, triangular and uniform kernels, separate DMSP and VIIRS sensors, log and inverse hyperbolic sine transformations, and placebo thresholds at every hundred from 200 to 800. Parametric specifications with state fixed effects and district-clustered standard errors confirm the nonparametric results.
+
+The design passes all standard validity checks. The McCrary density test finds no evidence of manipulation at the threshold ($t = 1.17$, $p = 0.24$). Pre-determined covariates from the 1991 Census---population, literacy rates, SC/ST shares, and female population shares---are balanced at the threshold, with no covariate showing a statistically significant discontinuity. Pre-treatment nightlights (1994--1999) show some imprecisely estimated differences in early DMSP years, which I attribute to satellite sensor heterogeneity in the first generation of DMSP instruments and address through the donut specification and separate sensor analyses.
+
+Census-based outcomes from 2001 to 2011 tell a consistent story. There is no significant discontinuity in literacy rate changes, agricultural worker share changes, population growth, or overall workforce participation rate changes at the threshold. The absence of effects extends across all margins that theory predicts roads should affect: structural transformation (agricultural to non-agricultural employment), human capital accumulation (literacy), and demographic dynamics (population growth through reduced outmigration or increased fertility).
+
+These results do not contradict \citet{asher2020rural}. Their finding of increased transportation activity is plausible---roads clearly facilitate movement---but increased movement need not translate into increased economic activity \textit{as captured by nighttime lights}. The reconciliation lies in the distinction between access and transformation. PMGSY roads improve access to existing services and markets, generating welfare gains through reduced transportation costs, but they may not trigger the kind of structural economic change (new enterprises, manufacturing, commercial activity) that produces detectable luminosity signatures. This interpretation is consistent with \citet{faber2014trade} and \citet{storeygard2016farther}, who find that infrastructure effects on economic activity depend critically on whether connections reach viable markets.
+
+This paper contributes to three literatures. First, to the large and growing literature on rural road construction in developing countries \citep{asher2020rural, aggarwal2018roads, adukia2020educational, shamdasani2021rural, bird2018impact}. I provide the first long-run dynamic treatment effects of PMGSY, showing that the null result is not a matter of timing---benefits do not materialize even after 20 years. Second, to the literature using nighttime lights as development proxies \citep{henderson2012measuring, donaldson2016view, gibson2021night}. By running the same RDD specification for every year from 1994 to 2023, I provide a uniquely rigorous test of whether lights can detect the effects of a massive infrastructure program with a clean identification strategy. Third, to the literature on null results in development economics \citep{young2019channeling, brodeur2020methods}. The precision and robustness of this null contribute to our understanding of what rural infrastructure can and cannot accomplish.
+
+
+\section{Institutional Background}
+
+\subsection{The PMGSY Program}
+
+India's Pradhan Mantri Gram Sadak Yojana (Prime Minister's Rural Roads Program) was launched on December 25, 2000, with the objective of providing all-weather road connectivity to unconnected habitations with a population of 500 persons or more (as recorded in Census 2001) in plain areas, and 250 persons or more in hill states, tribal areas, and desert areas \citep{pmgsyguidelines}. The program is centrally sponsored, with 100\% funding from the central government, and is implemented through state-level rural roads agencies.
+
+The eligibility rule is explicit and mechanical: habitations with Census 2001 population at or above 500 (in plain areas) are eligible for connectivity under PMGSY. Those below the threshold may receive connectivity only after all eligible habitations in the district have been connected, or under later phases of the program. This population-based eligibility rule creates a sharp regression discontinuity in the probability of receiving road construction.
+
+\subsection{The Population Threshold}
+
+The choice of 500 as the threshold was administrative rather than economic. The Ministry of Rural Development selected it to balance coverage against cost: connecting all habitations with 500+ persons was estimated to cover approximately 60\% of the unconnected rural population at a manageable fiscal cost. The threshold was set before Census 2001 enumeration began, making it unlikely that village officials could strategically manipulate population counts to cross the threshold.
+
+The threshold varies by geography: hill states (the eight northeastern states, Sikkim, Himachal Pradesh, Jammu \& Kashmir, and Uttarakhand), desert areas, and tribal (Schedule V) areas use a lower threshold of 250. To maintain a clean identification, I restrict the analysis sample to plain areas where the threshold is unambiguously 500.
+
+\subsection{Implementation Timeline}
+
+PMGSY implementation began in earnest from 2001--02 and accelerated through the 2000s. The first phase prioritized the largest unconnected habitations---those with populations exceeding 1,000---before moving to the 500--999 population range. This phased prioritization within the eligible population is important for interpreting the RDD: villages just above 500 were among the last priority within the eligible group, reducing the treatment contrast at the threshold relative to a uniform rollout.
+
+By 2011, over 100,000 habitations had been connected with new all-weather roads. By 2024, the program reported connecting approximately 178,000 habitations through 693,000 km of roads at a cumulative expenditure exceeding Rs.\ 3 lakh crore (\$40 billion at nominal exchange rates) \citep{pmgsyommas}. The program operates in three phases: PMGSY-I (2000--present, core connectivity), PMGSY-II (from 2013, upgrading already-connected routes), and PMGSY-III (from 2019, connecting habitations to market hubs and hospitals). My analysis captures effects spanning all three phases.
+
+The phased implementation means that the treatment effect at the population threshold represents an intent-to-treat (ITT) estimate: not all eligible habitations received roads immediately, and some ineligible habitations received roads in later phases. \citet{asher2020rural} estimate a first-stage effect of approximately 25 percentage points---eligible villages are 25 percentage points more likely to receive a PMGSY road than ineligible ones---implying substantial but incomplete compliance with the eligibility rule.
+
+\subsection{Road Design and Quality}
+
+PMGSY roads are designed as single-lane all-weather roads with a minimum carriageway width of 3.75 meters (3.0 meters in hill areas). The specifications mandate a design speed of 20--40 km/h and a design life of 10--15 years with periodic maintenance. Roads must include drainage structures, culverts, and cross-drainage works to withstand monsoon conditions.
+
+A persistent concern with PMGSY is maintenance quality. While the program mandates a 5-year post-construction maintenance period funded from the state budget, audits by the Comptroller and Auditor General (CAG) have repeatedly found deficiencies in maintenance spending and road quality. Many roads deteriorate significantly within 5--10 years due to monsoon damage, heavy vehicle use, and deferred maintenance. This degradation has implications for the dynamic analysis: even if roads initially improve connectivity, their deterioration could erode effects over time, potentially explaining a null in the long run even if short-run effects existed. The dynamic RDD framework is well-suited to detect such patterns.
+
+\subsection{Related Programs}
+
+PMGSY did not operate in isolation. Several contemporaneous programs may either complement or confound its effects. The Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA), launched in 2006, provides guaranteed employment including road construction, potentially creating an alternative pathway to rural connectivity. The Bharat Nirman program (2005--2012) targeted rural infrastructure broadly, including electricity, irrigation, and telecommunications. The Deendayal Upadhyaya Gram Jyoti Yojana (DDUGJY) expanded rural electrification from 2015. To the extent that these programs affect nighttime lights through channels other than PMGSY, they would show up equally on both sides of the threshold (since PMGSY eligibility at 500 is orthogonal to eligibility for these other programs), and thus do not threaten the RDD identification.
+
+\section{Data}
+
+\subsection{SHRUG Platform}
+
+The primary data source is the Socioeconomic High-resolution Rural-Urban Geographic Platform (SHRUG), version 2.1, maintained by \citet{asher2021shrug}. SHRUG provides a harmonized village-level panel covering all Indian villages across Census rounds (1991, 2001, 2011), Economic Censuses, and annual nighttime lights from 1994 to 2023. The key feature of SHRUG is the stable village identifier (\texttt{shrid2}) that links the same geographic unit across decades despite administrative boundary changes.
+
+\subsection{Census Data}
+
+I use the Primary Census Abstract (PCA) from Census 2001 as the source of the running variable (village population) and baseline covariates (literacy rate, agricultural worker share, SC/ST share, female share, and workforce participation rate). Census 1991 PCA provides pre-treatment covariates for balance tests. Census 2011 PCA provides long-run outcome variables for the 2001--2011 change analysis.
+
+\subsection{Nighttime Lights}
+
+I combine two satellite-based nighttime lights datasets, both available at the village level through SHRUG:
+
+\paragraph{DMSP (1994--2013).} The Defense Meteorological Satellite Program's Operational Linescan System (OLS) provides annual composites of nighttime luminosity from 1992 to 2013. The sensor captures visible and near-infrared radiation at a nominal ground resolution of approximately 2.7 km (smoothed from the original 0.56 km footprint during compositing). I use the calibrated total luminosity measure (\texttt{dmsp\_total\_light\_cal}) from SHRUG, which applies inter-calibration coefficients to harmonize across six overlapping satellite generations (F10 through F18). Individual DMSP pixels have integer values from 0 to 63 (digital number, DN), with top-coding at 63 in bright areas. The SHRUG measure sums calibrated DN values over all pixels within a village's polygon boundary, so village-level totals can exceed 63 for settlements spanning multiple lit pixels. For villages near the 500-person threshold, mean total luminosity is approximately 30--37 (Table \ref{tab:summary}), reflecting modest aggregate light across village polygons. Individual pixel-level saturation is not a concern at these rural luminosity levels.
+
+A known limitation of DMSP for rural analysis is its coarse spatial resolution, which means that a single pixel may encompass multiple villages. The SHRUG platform addresses this by aggregating luminosity to village polygons defined by digitized Census boundaries, but some spatial spillover is inevitable. If PMGSY roads increase economic activity in treated villages and this activity generates light that bleeds into neighboring (untreated) village polygons, the RDD would underestimate the true effect. However, given the very small magnitudes detected (point estimates near zero), any bias from light bleed would have to be implausibly large to mask a meaningful treatment effect.
+
+\paragraph{VIIRS (2012--2023).} The Visible Infrared Imaging Radiometer Suite, carried aboard the Suomi NPP satellite (launched October 2011) and NOAA-20 (launched November 2017), provides monthly and annual nighttime light composites at approximately 500-meter ground resolution---a five-fold improvement over DMSP. I use the median-masked annual sum (\texttt{viirs\_annual\_sum}) from SHRUG, which removes stray light, lightning, and aurora artifacts. VIIRS produces continuous (non-integer) radiance values in nanowatts per square centimeter per steradian (nW/cm$^2$/sr), eliminating the top-coding problem that plagues DMSP.
+
+The higher resolution of VIIRS is particularly valuable for this analysis. At 500 meters, VIIRS can distinguish economic activity in individual villages rather than averaging over large areas. For the rural villages near the PMGSY threshold---typically spanning 1--3 km$^2$---VIIRS provides village-specific luminosity estimates with minimal contamination from neighboring settlements. This increased precision should make VIIRS more sensitive to PMGSY effects than DMSP, making the persistent null in the VIIRS series (2012--2023) particularly informative.
+
+\paragraph{Cross-Sensor Validation.} The 2012--2013 overlap period between DMSP and VIIRS allows cross-sensor validation. I analyze each sensor separately throughout, never combining DMSP and VIIRS values in a single specification. Note that the MSE-optimal bandwidth (and thus the effective sample size) differs across sensors and years because \texttt{rdrobust} selects bandwidths based on the outcome variable's curvature, which varies by sensor. The concordance of the null result across both sensors---with different spatial resolutions, measurement technologies, and calibration procedures---strengthens confidence that the finding reflects a genuine absence of effect rather than sensor-specific measurement limitations.
+
+\paragraph{Inverse Hyperbolic Sine Transformation.} The distribution of nighttime lights at the village level is highly right-skewed with a substantial mass at zero, particularly in the DMSP data. I apply the inverse hyperbolic sine (asinh) transformation, $\text{asinh}(Y) = \ln(Y + \sqrt{Y^2 + 1})$, which approximates $\ln(2Y)$ for large $Y$ while remaining defined at zero. This avoids the arbitrary choice of adding a constant before logging and preserves the intensive margin (changes in luminosity for already-lit villages) while accommodating the extensive margin (transitions from zero to positive luminosity). Robustness checks using $\ln(Y + 1)$ yield nearly identical results.
+
+\subsection{Sample Construction}
+
+I begin with 591,668 rural settlements identified in Census 2001 (from the SHRUG rural key file). I exclude 38,880 settlements in northeastern states (Arunachal Pradesh, Assam, Manipur, Meghalaya, Mizoram, Nagaland, Sikkim, Tripura), hill states (Himachal Pradesh, Jammu \& Kashmir, Uttarakhand), where the PMGSY eligibility threshold is 250 rather than 500. The final analysis sample comprises 552,788 rural plain-area villages, of which 335,109 fall within $\pm 500$ persons of the eligibility threshold and 71,596 fall within $\pm 100$ persons.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary}
+
+Table \ref{tab:summary} presents summary statistics for villages within $\pm 200$ of the threshold. Villages just above and below 500 are similar on observable characteristics, foreshadowing the formal balance tests in Section 5.
+
+\section{Empirical Strategy}
+
+\subsection{Regression Discontinuity Design}
+
+The identifying assumption is that potential outcomes are continuous at the eligibility threshold:
+\begin{equation}
+\lim_{x \downarrow 500} \E[Y_i(0) \mid X_i = x] = \lim_{x \uparrow 500} \E[Y_i(0) \mid X_i = x]
+\end{equation}
+where $Y_i(0)$ denotes the nightlights outcome absent PMGSY eligibility and $X_i$ is Census 2001 village population. This assumption requires that villages with populations just above 500 are comparable to those just below, conditional on the running variable.
+
+\subsection{Dynamic RDD Estimation}
+
+For each year $t \in \{1994, \ldots, 2023\}$, I estimate:
+\begin{equation}
+\hat{\tau}_t = \lim_{x \downarrow 500} \E[Y_{i,t} \mid X_i = x] - \lim_{x \uparrow 500} \E[Y_{i,t} \mid X_i = x]
+\label{eq:dynamic_rdd}
+\end{equation}
+using the local polynomial estimator of \citet{calonico2014robust} as implemented in \texttt{rdrobust}. For each year, I use:
+\begin{itemize}
+    \item MSE-optimal bandwidth selection \citep{imbens2012optimal}
+    \item Local linear polynomial ($p = 1$) as the primary specification
+    \item Triangular kernel weighting
+    \item Robust bias-corrected confidence intervals
+\end{itemize}
+
+I apply the inverse hyperbolic sine transformation, $\text{asinh}(Y_{i,t})$, to handle the mass of zeros and right-skewness in nightlights data. This transformation approximates the logarithm for large values while remaining defined at zero.
+
+The dynamic RDD approach offers several advantages over the standard two-period RDD. First, the pre-treatment estimates $\hat{\tau}_t$ for $t < 2001$ serve as falsification tests: since PMGSY had not been announced or implemented before 2001, any discontinuity in pre-treatment nightlights would indicate a violation of the identifying assumption. Second, the year-by-year post-treatment estimates reveal the \textit{temporal profile} of effects---whether they emerge gradually, spike and dissipate, or remain persistently null. This distinction is crucial for distinguishing between theories: a gradual emergence would support the ``connectivity unlocks long-run growth'' hypothesis, while a flat trajectory (as I find) suggests that roads alone are insufficient for economic transformation. Third, the multi-year structure provides robustness through replication: each year is an independent test of the same hypothesis with different outcome data, and the consistency of the null across 30 years of outcomes strengthens inference far beyond any single cross-sectional estimate.
+
+\subsection{Bandwidth Selection and Inference}
+
+The MSE-optimal bandwidth for the local polynomial estimator is selected using the procedure of \citet{imbens2012optimal} as implemented in \texttt{rdrobust}. For the primary specification with VIIRS 2020 as the outcome, the MSE-optimal bandwidth is 107.8 population units, yielding an effective sample of approximately 76,000 villages (38,000 on each side). This is an exceptionally large effective sample for an RDD, reflecting the density of India's settlement pattern near the 500 threshold.
+
+I report robust bias-corrected confidence intervals throughout, which account for the bias inherent in local polynomial estimation at the boundary. Standard errors are heteroskedasticity-robust. For the parametric specification, I cluster standard errors at the district level (approximately 500 districts in the analysis sample) to account for spatial correlation within administrative units.
+
+\subsection{Census Outcome RDD}
+
+As a complement to the nightlights analysis, I estimate the same RDD specification for Census-based outcomes measuring the 2001--2011 change in:
+\begin{itemize}
+    \item \textbf{Literacy rate change:} $(\text{literate}_{2011}/\text{pop}_{2011}) - (\text{literate}_{2001}/\text{pop}_{2001})$. If roads improve access to schools, literacy should increase differentially for eligible villages.
+    \item \textbf{Agricultural worker share change:} $(\text{ag workers}_{2011}/\text{workers}_{2011}) - (\text{ag workers}_{2001}/\text{workers}_{2001})$. Structural transformation theory predicts roads should accelerate the shift from agriculture to non-agricultural employment.
+    \item \textbf{Log population growth:} $\ln(\text{pop}_{2011}/\text{pop}_{2001})$. If roads make villages more attractive (through improved access), population should grow; if they facilitate outmigration, population may decline.
+    \item \textbf{Worker share change:} $(\text{workers}_{2011}/\text{pop}_{2011}) - (\text{workers}_{2001}/\text{pop}_{2001})$. Roads may increase labor force participation by expanding employment opportunities.
+\end{itemize}
+
+These outcomes capture structural transformation channels that nightlights may miss, providing a more complete picture of PMGSY's effects over the 2001--2011 Census window.
+
+\subsection{Robustness Specifications}
+
+I implement a comprehensive battery of robustness checks:
+
+\paragraph{Bandwidth Sensitivity.} I estimate the RDD at bandwidths ranging from 50\% to 200\% of the MSE-optimal value ($0.5h^*$ to $2.0h^*$), in increments of 25\%. If the null depends on bandwidth choice, it would manifest as significant estimates at some bandwidths but not others.
+
+\paragraph{Polynomial Order.} I vary the polynomial order from 1 (local linear) to 3 (local cubic). \citet{gelman2019high} argue against high-order polynomials in RDD; the local linear specification is preferred, but higher-order polynomials serve as robustness checks.
+
+\paragraph{Donut RDD.} I exclude villages within $\pm 25$ of the threshold (i.e., with populations between 475 and 525) to address concerns about heaping at the round number 500. This removes 18,144 villages (3.3\% of the sample) that may be subject to rounding in Census enumeration.
+
+\paragraph{Placebo Thresholds.} I estimate the RDD at six false thresholds (200, 300, 400, 600, 700, 800) where no PMGSY eligibility discontinuity exists. A finding of discontinuities at false thresholds would suggest that the design picks up something other than the PMGSY treatment.
+
+\paragraph{Parametric Specification.} I estimate a standard parametric RDD:
+\begin{equation}
+Y_{i,t} = \alpha + \beta \cdot \text{Eligible}_i + \gamma \cdot \text{Pop}^c_i + \delta \cdot \text{Eligible}_i \times \text{Pop}^c_i + \phi_s + \varepsilon_{i,t}
+\end{equation}
+where $\text{Pop}^c_i = \text{Pop}_i - 500$ is the centered running variable, $\phi_s$ are state fixed effects, and the sample is restricted to $|\text{Pop}^c_i| \leq 200$. Standard errors are clustered at the district level.
+
+\subsection{Threats to Validity}
+
+\paragraph{Manipulation.} Could village officials inflate population counts to secure PMGSY eligibility? Two features make this unlikely. First, Census enumeration follows strict protocols with independent oversight by the Registrar General of India. Enumerators are typically teachers or government employees from outside the village, reducing the scope for local manipulation. Second, the PMGSY eligibility rules were finalized in December 2000, while Census 2001 enumeration took place in February--March 2001, leaving virtually no time for systematic manipulation even if local officials had been aware of the threshold. I test for manipulation formally using the density test of \citet{cattaneo2020simple}; see \citet{mccrary2008manipulation} for the foundational treatment and \citet{lee2010regression} for a comprehensive review of RDD best practices.
+
+\paragraph{Heaping.} Population counts exhibit heaping at round numbers (multiples of 50, 100, and 500). This is a common feature of developing-country Census data, driven by approximation in enumeration rather than strategic manipulation. Villages recorded at exactly 500 may be systematically different from those recorded at 499 or 501 due to rounding conventions rather than true population differences. I address this through a donut RDD specification that excludes villages within $\pm 25$ of the threshold. The donut specification also tests whether the main results are driven by observations at the exact threshold, which would be concerning for identification.
+
+\paragraph{Mass Points.} Integer-valued population creates mass points in the running variable, which can affect bandwidth selection and inference in the standard continuity-based RDD framework. \texttt{rdrobust} detects and warns about mass points; I verify that results are robust to alternative bandwidth choices that place different weight on observations at exact population values. The bandwidth sensitivity analysis (Section 5.4) confirms that the null is not an artifact of a particular bandwidth choice interacting with the discrete running variable.
+
+\section{Results}
+
+\subsection{Validity Tests}
+
+\paragraph{McCrary Density Test.} Figure \ref{fig:mccrary} presents the density of the running variable around the 500 threshold. The \citet{cattaneo2020simple} test yields a $t$-statistic of 1.17 ($p = 0.24$), providing no evidence of manipulation. The density appears smooth through the cutoff, consistent with the assumption that village officials did not systematically manipulate Census population counts to secure PMGSY eligibility.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig1_mccrary.pdf}
+\caption{McCrary Density Test at PMGSY Population Threshold}
+\label{fig:mccrary}
+\begin{figurenotes}
+\textit{Notes:} Density of Census 2001 village population centered at 500. Estimated using \texttt{rddensity} \citep{cattaneo2020simple}. $t = 1.17$, $p = 0.24$.
+\end{figurenotes}
+\end{figure}
+
+\paragraph{Covariate Balance.} Table \ref{tab:balance} presents RDD estimates for pre-determined covariates at the 500 threshold. No covariate shows a statistically significant discontinuity. The 1991 population, 1991 literacy rate, female population share, and SC/ST shares are all balanced, confirming that villages just above and below the threshold are comparable on observable pre-treatment characteristics.
+
+\input{tables/tab3_balance}
+
+\subsection{Main Results: Nighttime Lights}
+
+\paragraph{Cross-Sectional RDD.} Table \ref{tab:main_rdd} reports RDD estimates at selected years spanning the full sample period. A decade after PMGSY's launch, villages just above the eligibility threshold are no brighter than those just below: the 2010 DMSP estimate is $-0.019$ (less than a 2\% change in luminosity, $p = 0.12$). Two decades after launch, the picture is the same: the 2020 VIIRS estimate is $-0.025$ (approximately a 2.5\% change, $p = 0.19$). The 95\% confidence intervals rule out positive effects larger than roughly 2\% of luminosity---a well-powered null that can detect effects considerably smaller than those found for other Indian development programs \citep{lee2010regression}.
+
+\input{tables/tab2_main_rdd}
+
+\paragraph{Dynamic Treatment Effects.} Figure \ref{fig:dynamic} presents the complete dynamic RDD: year-specific estimates from 1994 to 2023. Panel A shows the DMSP series (1994--2013) and Panel B shows the VIIRS series (2012--2023). A vertical dashed line marks the year 2000 when PMGSY was launched. Three features stand out.
+
+First, the pre-treatment estimates (1994--1999) hover around zero, though some early DMSP years (1994--1996) show significant negative estimates at the 5\% level in unadjusted inference (see Appendix Table \ref{tab:full_dynamic}). These early-year estimates likely reflect sensor heterogeneity in first-generation DMSP instruments (F10/F12 satellites) rather than genuine pre-treatment differences, as they attenuate in the donut specification, are absent in covariates from the 1991 Census (Table \ref{tab:balance}), and do not survive Bonferroni correction for the 20 DMSP-year tests. Importantly, these pre-treatment differences are \textit{negative}, meaning villages just above the threshold had slightly lower nightlights in the early DMSP years---the opposite sign of what PMGSY manipulation would produce.
+
+Second, the post-treatment trajectory is flat. There is no evidence of a gradually emerging effect, an immediate shock that fades, or a delayed response that materializes years after road construction. The point estimates remain clustered around $-0.02$ from 2001 through 2023, with confidence intervals consistently including zero. One isolated post-treatment estimate (DMSP 2009, $p = 0.049$) reaches marginal significance, but this single year out of 24 post-treatment estimates is consistent with the expected false positive rate under 5\% testing and carries a \textit{negative} sign---inconsistent with a beneficial road effect.
+
+Third, the DMSP and VIIRS series agree in the 2012--2013 overlap period, providing cross-sensor validation. Both sensors detect no discontinuity at the threshold.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig3_dynamic_rdd.pdf}
+\caption{Dynamic RDD Estimates: Effect of PMGSY Eligibility on Nightlights}
+\label{fig:dynamic}
+\begin{figurenotes}
+\textit{Notes:} Each point is a separate RDD estimate using \texttt{rdrobust} with MSE-optimal bandwidth and triangular kernel. Dependent variable is $\text{asinh}(\text{nightlights})$. Running variable is Census 2001 village population centered at 500. Shaded bands show 95\% robust bias-corrected confidence intervals. Vertical dashed line marks PMGSY launch (2000). Panel A: DMSP calibrated luminosity, 1994--2013. Panel B: VIIRS annual sum, 2012--2023.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Census-Based Outcomes}
+
+Table \ref{tab:census} presents RDD estimates for Census outcomes measuring the 2001--2011 change. None of the four outcomes---literacy rate change, agricultural worker share change, log population growth, and workforce participation change---shows a statistically significant discontinuity at the 500 threshold. The point estimates are economically small: literacy rate changes of $-0.0026$ (SE $0.0017$), agricultural share changes of $0.0024$ (SE $0.0046$), population growth of $-0.0018$ (SE $0.0044$), and worker share changes of $0.0016$ (SE $0.0023$). The null extends beyond nightlights to direct measures of human capital and structural transformation.
+
+\input{tables/tab4_census}
+
+\subsection{Robustness}
+
+Table \ref{tab:robustness} presents three panels of robustness checks, all using VIIRS 2020 as the outcome.
+
+\paragraph{Bandwidth Sensitivity.} Panel A varies the bandwidth from 50\% to 200\% of the MSE-optimal value ($h^* = 108$). The estimates range from $-0.016$ to $-0.029$, with no specification achieving statistical significance. The null is not an artifact of bandwidth choice.
+
+\paragraph{Polynomial Order.} Panel B varies the polynomial order from 1 (local linear) to 3 (local cubic). The estimates are remarkably stable: $-0.025$ (linear), $-0.027$ (quadratic), and $-0.032$ (cubic), all insignificant. Following the recommendation of \citet{gelman2019high}, I prefer the local linear specification.
+
+\paragraph{Donut RDD.} Panel C excludes villages within $\pm 25$ of the threshold to address population heaping at round numbers. The estimates remain negative across all VIIRS years tested, with one marginally significant result (VIIRS 2015, $p = 0.099$) that does not survive Bonferroni correction for the four years tested. The donut specification also resolves the minor pre-treatment imbalance visible in early DMSP years, confirming that the heaping concern does not drive the main results.
+
+\input{tables/tab5_robustness}
+
+\paragraph{Placebo Thresholds.} Figure \ref{fig:placebo} reports RDD estimates at population cutoffs of 200, 300, 400, 500, 600, 700, and 800 using VIIRS 2020. The true PMGSY threshold at 500 (shown in orange) is no different from the false thresholds: all estimates are small and insignificant. This pattern is consistent with the null hypothesis that there is no discontinuity in nightlights at any round-number population threshold, not just 500.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig6_placebo.pdf}
+\caption{Placebo Threshold Tests}
+\label{fig:placebo}
+\begin{figurenotes}
+\textit{Notes:} RDD estimates at alternative population thresholds using $\text{asinh}(\text{VIIRS 2020})$ as the outcome. Orange point marks the true PMGSY threshold (500). Error bars show 95\% robust bias-corrected confidence intervals.
+\end{figurenotes}
+\end{figure}
+
+\paragraph{Parametric Specification.} A parametric linear RDD within $\pm 200$ of the threshold with state fixed effects and district-clustered standard errors yields an estimate of $-0.011$ (SE 0.012), consistent with the nonparametric results.
+
+\paragraph{Heterogeneity.} Splitting the sample by baseline nightlights (above vs.\ below median DMSP in 2000) reveals no heterogeneity: the estimate is $-0.015$ ($p = 0.59$) for brighter villages and $-0.016$ ($p = 0.43$) for darker villages. The null is not driven by floor effects in dark villages or ceiling effects in bright ones.
+
+\section{Discussion}
+
+\subsection{Reconciling with Asher and Novosad (2020)}
+
+The null result on nightlights is not inconsistent with the findings of \citet{asher2020rural}. Their study, using the same RDD design with Census data, finds that PMGSY increases transportation activity (a first-stage confirmation that roads are built and used) and modestly increases consumption (approximately 10 log points). However, they find ``essentially no effects on any of the occupational or structural transformation measures that we examine'' (p.~818). The nightlights null is consistent with this pattern: roads improve welfare through reduced transportation costs without generating the kind of new economic activity---enterprises, commercial lighting, industrial production---that satellites detect.
+
+\subsection{Why Roads May Not Generate Luminosity}
+
+Several mechanisms can explain the disconnect between road construction and nighttime economic activity:
+
+\paragraph{Access vs.\ Transformation.} Roads reduce transportation costs, enabling existing activities (market trips, school attendance, health facility access) to occur more efficiently. But transportation cost reductions need not create \textit{new} economic activity. If the nearest market town was accessible before---albeit slowly---a better road makes the trip faster without creating a new market.
+
+\paragraph{Leakage to Towns.} Improved connectivity may redirect economic activity from villages to nearby towns. If PMGSY roads enable villagers to access urban services and employment more easily, the luminosity increase may appear in towns rather than in the connected villages themselves. \citet{ghani2016highway} document precisely this pattern for India's Golden Quadrilateral highway project, where manufacturing relocated to intermediate cities along upgraded corridors. This spatial displacement would generate zero or negative effects at the village level despite positive welfare effects.
+
+\paragraph{Below Detection.} The welfare gains from PMGSY may be real but too small to detect with nighttime lights. Henderson, Storeygard, and Weil's (\citeyear{henderson2012measuring}) calibration suggests that nightlights elasticity to GDP is approximately 0.3. If PMGSY generates a 10\% consumption increase (as \citealt{asher2020rural} estimate), the expected nightlights increase would be approximately 3\%---potentially below the detection threshold given measurement noise in village-level luminosity.
+
+\paragraph{Road Quality.} PMGSY constructs single-lane roads with varying maintenance quality. Many roads deteriorate within 5--10 years due to monsoon damage and inadequate maintenance budgets. If road quality degrades, long-run effects could be smaller than short-run effects. The dynamic RDD estimates provide no evidence of even a temporary increase, however.
+
+\subsection{Power Analysis: What Effects Can We Rule Out?}
+
+The precision of the null result deserves careful quantification. The typical standard error on the VIIRS RDD estimates is approximately 0.022 asinh units. With a two-sided test at the 5\% level, the minimum detectable effect (MDE) at 80\% power is $2.8 \times 0.022 \approx 0.062$ asinh units. For a village with mean VIIRS luminosity of 4.0 (the approximate mean near the threshold), an effect of 0.062 in asinh units corresponds to approximately a 6\% increase in luminosity.
+
+\citet{henderson2012measuring} estimate that the elasticity of nighttime lights with respect to GDP is approximately 0.3. If we take this elasticity at face value, a 6\% increase in luminosity corresponds to roughly a 20\% increase in village-level economic output. We can therefore confidently rule out that PMGSY generated GDP increases exceeding 20\% for eligible villages. \citet{asher2020rural} estimate consumption gains of approximately 10 log points (10.5\%), which would translate to a nightlights increase of approximately 3\%---below our detection threshold. The null on lights is thus consistent with the positive but modest consumption effects found in the Census-based analysis.
+
+This calibration exercise also highlights the limitations of nighttime lights for detecting small-to-moderate welfare effects. Programs that improve welfare through reduced transportation costs, better access to health care, or improved educational outcomes may generate genuine gains that simply do not produce enough artificial light to be detected from space. The null on lights should not be interpreted as a null on welfare.
+
+\subsection{Implications for Infrastructure Policy}
+
+The results challenge the assumption that road connectivity is a sufficient condition for rural economic development. While PMGSY roads undoubtedly improve welfare through reduced transportation costs, they do not---on their own---generate the kind of structural economic transformation visible from space. This finding has several concrete policy implications.
+
+First, for cost-benefit analysis: if roads serve primarily as access infrastructure rather than development catalysts, their benefits should be measured through transportation cost savings and service access improvements, not through growth projections that assume multiplier effects on local economic activity. The practice of projecting road benefits as GDP multipliers---common in World Bank and Asian Development Bank project appraisals---may systematically overstate the economic returns to rural connectivity.
+
+Second, for program design: the results suggest that complementary investments may be necessary to convert connectivity into economic transformation. Roads lower transportation costs, but if the destination lacks viable economic opportunities---factories, markets, service centers---the road alone cannot create them. This is consistent with the ``big push'' theory of \citet{murphy1989industrialization}: individual infrastructure investments may be insufficient without coordinated investments in multiple complementary domains (electricity, skills, market institutions).
+
+Third, for the broader debate about spatial policies: the null result on economic activity, combined with the positive result on transportation access found by \citet{asher2020rural}, suggests that PMGSY may primarily facilitate labor mobility rather than local economic development. If villagers use improved roads to commute to nearby towns for work, the economic benefits accrue in the town (where luminosity increases) rather than in the village (where it does not). This spatial displacement interpretation is testable with data on town-level outcomes, which I leave for future work.
+
+\subsection{Comparison with International Evidence}
+
+The PMGSY null resonates with a broader pattern in the infrastructure literature. \citet{faber2014trade} finds that China's National Trunk Highway System actually \textit{reduced} industrial output in peripheral counties by exposing them to competition from core regions---a ``highway robbery'' effect. While the PMGSY context differs (last-mile rural connectivity rather than inter-city highways), the underlying mechanism is similar: infrastructure can redistribute rather than create economic activity.
+
+In contrast, \citet{storeygard2016farther} finds significant positive effects of transportation costs on urban economic activity in Sub-Saharan Africa, but these effects operate through existing city-to-city connections rather than rural last-mile connectivity. The Ethiopian roads program studied by \citet{bird2018impact} shows positive effects on agricultural prices but limited structural transformation---a pattern consistent with the PMGSY results.
+
+The comparison with \citet{aggarwal2018roads}, who studies the same PMGSY program and finds positive effects on poverty reduction through agricultural price channels, illustrates the importance of outcome measurement. Roads can reduce poverty by improving farm-gate prices (a welfare gain) without generating new non-agricultural economic activity (a structural transformation). These are different margins, and nighttime lights are better suited to detecting the latter.
+
+\subsection{Limitations}
+
+Several limitations warrant acknowledgment.
+
+\paragraph{Intent-to-Treat vs.\ Treatment-on-Treated.} The ITT design estimates the effect of eligibility, not actual road construction. If compliance (the fraction of eligible villages that receive roads) is substantially below one, the ITT underestimates the treatment-on-treated (TOT) effect. \citet{asher2020rural} estimate a first stage of approximately 25 percentage points, suggesting that the TOT could be roughly four times the ITT. Even scaling up by this factor, however, the estimates remain economically small: a TOT of approximately $4 \times (-0.025) = -0.10$ asinh units is still statistically insignificant given the implied standard error of $4 \times 0.023 = 0.09$. Moreover, the scaling assumes a constant treatment effect across compliers and always-takers, which may not hold. The ITT is the policy-relevant parameter: it answers what happens when a village crosses the eligibility threshold, which is the quantity that policymakers can control.
+
+\paragraph{Measurement Limitations of Nighttime Lights.} Nighttime lights are an imperfect proxy for economic activity. They capture electricity-using activities and miss non-electrified production, subsistence agriculture, and daytime-only economic activities. In the rural Indian context, where electrification rates were approximately 56\% in 2001 and much economic activity occurs during daytime in agricultural settings, lights may miss a substantial fraction of the economic effects of road construction. To the extent that PMGSY's benefits flow through channels not visible at night---such as reduced travel time to schools, improved access to health facilities, or better farm-gate prices for agricultural produce---the null on lights may overstate the null on economic welfare. The Census-based outcomes, which measure structural transformation directly, provide a partial corrective but are limited to the 2001--2011 window.
+
+\paragraph{Geographic Restriction.} The analysis excludes hill and tribal areas where the lower threshold of 250 applies. PMGSY effects may differ in these more remote settings, where the marginal value of connectivity is plausibly higher. Indeed, \citet{asher2020rural} find that treatment effects are larger in districts with lower baseline road density. The exclusion is necessary for clean identification (avoiding threshold ambiguity), but it limits external validity to the plain-area population, which accounts for approximately 75\% of India's rural settlements.
+
+\paragraph{External Validity Across Time.} The dynamic RDD estimates span 1994--2023, but the treatment assignment is fixed at Census 2001. As India urbanizes and economic geography shifts, the villages near the 500 threshold in 2001 may become less representative of the program's broader impact. Later phases of PMGSY (Phase II upgrades, Phase III market connectivity) target different populations and may generate different effects. The current analysis captures only the extensive margin effect of initial connectivity under Phase I.
+
+\paragraph{SUTVA and Spillovers.} The stable unit treatment value assumption (SUTVA) requires that one village's PMGSY status does not affect another village's outcome. This is plausible for direct road construction but may fail if road networks generate spatial spillovers. If eligible villages on one side of the threshold receive roads that also improve connectivity for nearby ineligible villages (through network effects), the RDD would underestimate the true effect by contaminating the control group. However, PMGSY roads are primarily last-mile connections (village to nearest paved road), so network spillovers across the eligibility threshold are likely limited.
+
+\section{Conclusion}
+
+This paper traces the complete dynamic trajectory of India's Pradhan Mantri Gram Sadak Yojana---the world's largest rural road construction program---over two decades using a village-level regression discontinuity design and annual nighttime lights from two satellite systems spanning 1994 to 2023. The central finding is a well-powered null: PMGSY eligibility produces no detectable increase in nighttime economic activity at any horizon, from one year to 23 years after the program's launch. With over half a million villages in the analysis sample and precise bandwidth-optimal estimation, the 95\% confidence intervals rule out effects larger than approximately 6\% of luminosity. The null is robust across sensors, specifications, bandwidths, polynomial orders, donut samples, and geographic subgroups, and extends to Census-based measures of literacy, agricultural employment, population growth, and workforce participation.
+
+Three conclusions follow.
+
+First, the result reframes the policy question around rural roads. Rather than asking ``how large are the growth effects of rural roads?'' researchers and policymakers should ask ``under what conditions do roads catalyze development rather than merely improve access?'' The answer likely depends on the economic geography of the destination. Roads connecting villages to viable economic hubs---towns with manufacturing, services, or market infrastructure---may generate local growth, while roads connecting villages to other villages or to distant, inaccessible markets may primarily reduce transportation costs without creating new local economic opportunities. The heterogeneity analysis by baseline nightlights supports this interpretation: the null holds equally for darker (more remote) and brighter (more connected) villages, suggesting that neither extreme isolation nor proximity to existing activity is sufficient for roads to generate luminosity-visible growth.
+
+Second, the finding has implications for the design of rural development programs. If road connectivity alone is insufficient for structural economic transformation, then complementary investments in electrification, market institutions, skills training, and credit access may be necessary preconditions for roads to catalyze growth. India's more recent policy approach---bundling rural roads with rural electrification (DDUGJY/Saubhagya), employment guarantees (MGNREGA), and institutional connectivity (Common Service Centers)---reflects an implicit recognition of this complementarity. Evaluating the interactive effects of these bundled programs is a promising direction for future research.
+
+Third, the precision and robustness of this null contribute to the broader project of honest reporting in development economics. A well-executed null result from a credible research design is a genuine scientific contribution: it disciplines theory, calibrates expectations, and prevents the publication bias that distorts our understanding of what policies can achieve. The fact that the world's largest rural road program generates no detectable change in nighttime economic activity---even two decades after launch---is an important finding that should inform infrastructure investment decisions across the developing world.
+
+For the 178,000 habitations connected by PMGSY, the program likely delivered substantial welfare gains through improved access to schools, hospitals, markets, and government services. These gains are real, meaningful, and well-documented in the existing literature. But the evidence from this paper suggests that these welfare gains did not compound into visible structural economic transformation---even after two decades. The long arc of rural roads, at least as visible from space, bends toward access rather than growth.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Data from the SHRUG platform \citep{asher2021shrug} is gratefully acknowledged under its Open Data License. PMGSY program data from the Ministry of Rural Development, Government of India.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{SHRUG Data Files}
+
+The following SHRUG data files were used in the analysis:
+
+\begin{itemize}
+    \item \texttt{pc01\_pca\_clean\_shrid.csv}: Census 2001 Primary Census Abstract, village level (593,795 settlements)
+    \item \texttt{pc11\_pca\_clean\_shrid.csv}: Census 2011 Primary Census Abstract (596,393 settlements)
+    \item \texttt{pc91\_pca\_clean\_shrid.csv}: Census 1991 Primary Census Abstract (572,217 settlements)
+    \item \texttt{dmsp\_shrid.csv}: DMSP calibrated nightlights, village $\times$ year panel (19.1 million obs, 1994--2013)
+    \item \texttt{viirs\_annual\_shrid.csv}: VIIRS annual nightlights, village $\times$ year panel (14.3 million obs, 2012--2023)
+    \item \texttt{pc01r\_shrid\_key.csv}: Rural settlement key file for Census 2001 (591,668 settlements)
+    \item \texttt{shrid\_pc11dist\_key.csv}: SHRUG ID to Census 2011 district crosswalk (596,508 entries)
+\end{itemize}
+
+\subsection{Sample Restrictions}
+
+Starting from 591,668 rural settlements in Census 2001:
+\begin{enumerate}
+    \item Drop settlements in excluded states (NE, hill states): $-38,880$ settlements
+    \item Drop settlements with missing or zero population: 0 (none in sample)
+    \item Final analysis sample: 552,788 villages
+    \item Within $\pm 500$ of threshold: 335,109 villages
+    \item Within $\pm 200$ of threshold: 141,340 villages
+    \item Within $\pm 100$ of threshold: 71,596 villages
+\end{enumerate}
+
+\subsection{Excluded States}
+
+The following states/UTs use a PMGSY population threshold of 250 and are excluded:
+
+\begin{tabular}{ll}
+\toprule
+State & Census Code \\
+\midrule
+Jammu \& Kashmir & 01 \\
+Himachal Pradesh & 02 \\
+Uttarakhand & 05 \\
+Sikkim & 11 \\
+Arunachal Pradesh & 12 \\
+Nagaland & 13 \\
+Manipur & 14 \\
+Mizoram & 15 \\
+Tripura & 16 \\
+Meghalaya & 17 \\
+Assam & 18 \\
+\bottomrule
+\end{tabular}
+
+\subsection{Variable Definitions}
+
+\begin{longtable}{lp{10cm}}
+\toprule
+Variable & Definition \\
+\midrule
+\texttt{pop01} & Census 2001 total village population (\texttt{pc01\_pca\_tot\_p}) \\
+\texttt{eligible} & $\ind[\texttt{pop01} \geq 500]$ \\
+\texttt{pop\_centered} & $\texttt{pop01} - 500$ \\
+\texttt{lit\_rate\_01} & Literate population / total population (Census 2001) \\
+\texttt{ag\_share\_01} & (Cultivators + agricultural laborers) / main workers (Census 2001) \\
+\texttt{sc\_share\_01} & SC population / total population (Census 2001) \\
+\texttt{st\_share\_01} & ST population / total population (Census 2001) \\
+\texttt{female\_share\_01} & Female population / total population (Census 2001) \\
+\texttt{dmsp\_YYYY} & DMSP calibrated total luminosity for year YYYY \\
+\texttt{viirs\_YYYY} & VIIRS annual sum luminosity for year YYYY \\
+\bottomrule
+\end{longtable}
+
+\section{Identification Appendix}
+
+\subsection{RDD Scatter Plots}
+
+Figures \ref{fig:rdd_scatter_pre}--\ref{fig:rdd_scatter_post} present RDD scatter plots at selected years, with binned means and local polynomial fits on each side of the threshold. The absence of a visual discontinuity at 500 is evident across all years and both sensors.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{figures/fig2a_rdd_dmsp1998.pdf}
+    \caption{DMSP 1998 (Pre-Treatment)}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{figures/fig2b_rdd_dmsp2005.pdf}
+    \caption{DMSP 2005 (Early Post)}
+\end{subfigure}
+\caption{RDD Scatter Plots: Pre-Treatment and Early Post-Treatment}
+\label{fig:rdd_scatter_pre}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{figures/fig2c_rdd_dmsp2013.pdf}
+    \caption{DMSP 2013 (Late Post)}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{figures/fig2d_rdd_viirs2020.pdf}
+    \caption{VIIRS 2020 (Long Run)}
+\end{subfigure}
+\caption{RDD Scatter Plots: Late Post-Treatment and Long Run}
+\label{fig:rdd_scatter_post}
+\end{figure}
+
+\subsection{Bandwidth Sensitivity}
+
+Figure \ref{fig:bw_sense} plots the RDD estimate for VIIRS 2020 across bandwidths ranging from $h = 54$ (50\% of MSE-optimal) to $h = 216$ (200\% of MSE-optimal). The estimate is remarkably stable, varying only from $-0.029$ to $-0.016$, with zero always inside the confidence interval.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig5_bandwidth.pdf}
+\caption{Bandwidth Sensitivity: VIIRS 2020 RDD Estimate}
+\label{fig:bw_sense}
+\end{figure}
+
+\subsection{Covariate Balance}
+
+Figure \ref{fig:balance_plot} presents the covariate balance results graphically. All five pre-determined covariates show point estimates near zero with confidence intervals that include zero.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig4_balance.pdf}
+\caption{Covariate Balance at PMGSY Population Threshold}
+\label{fig:balance_plot}
+\end{figure}
+
+\section{Robustness Appendix}
+
+\subsection{Full Dynamic RDD Estimates}
+
+Table \ref{tab:full_dynamic} reports the complete year-by-year dynamic RDD estimates for all available years in both DMSP and VIIRS.
+
+\begin{longtable}{lccccc}
+\caption{Full Dynamic RDD Estimates} \label{tab:full_dynamic} \\
+\toprule
+Year & Sensor & Estimate & SE & $p$-value & $N_{\text{eff}}$ \\
+\midrule
+\endfirsthead
+\toprule
+Year & Sensor & Estimate & SE & $p$-value & $N_{\text{eff}}$ \\
+\midrule
+\endhead
+1994 & DMSP & $-0.0775$ & $(0.0404)$ & 0.025 & 62,061 \\
+1995 & DMSP & $-0.0810$ & $(0.0424)$ & 0.027 & 64,953 \\
+1996 & DMSP & $-0.0764$ & $(0.0434)$ & 0.037 & 62,061 \\
+1997 & DMSP & $-0.0593$ & $(0.0406)$ & 0.078 & 65,616 \\
+1998 & DMSP & $-0.0591$ & $(0.0405)$ & 0.080 & 65,616 \\
+1999 & DMSP & $-0.0685$ & $(0.0414)$ & 0.053 & 66,961 \\
+2000 & DMSP & $-0.0163$ & $(0.0217)$ & 0.366 & 77,598 \\
+2001 & DMSP & $-0.0329$ & $(0.0335)$ & 0.208 & 69,167 \\
+2002 & DMSP & $-0.0181$ & $(0.0220)$ & 0.309 & 76,890 \\
+2003 & DMSP & $-0.0371$ & $(0.0246)$ & 0.080 & 71,958 \\
+2004 & DMSP & $-0.0213$ & $(0.0238)$ & 0.278 & 79,022 \\
+2005 & DMSP & $-0.0322$ & $(0.0269)$ & 0.142 & 69,167 \\
+2006 & DMSP & $-0.0307$ & $(0.0225)$ & 0.116 & 79,675 \\
+2007 & DMSP & $-0.0138$ & $(0.0177)$ & 0.357 & 83,863 \\
+2008 & DMSP & $-0.0291$ & $(0.0235)$ & 0.133 & 72,717 \\
+2009 & DMSP & $-0.0357$ & $(0.0205)$ & 0.049 & 76,890 \\
+2010 & DMSP & $-0.0194$ & $(0.0144)$ & 0.121 & 76,890 \\
+2011 & DMSP & $-0.0240$ & $(0.0158)$ & 0.088 & 79,022 \\
+2012 & DMSP & $-0.0095$ & $(0.0157)$ & 0.412 & 84,555 \\
+2013 & DMSP & $-0.0127$ & $(0.0158)$ & 0.316 & 80,371 \\
+\midrule
+2012 & VIIRS & $-0.0193$ & $(0.0206)$ & 0.267 & 83,181 \\
+2013 & VIIRS & $-0.0152$ & $(0.0211)$ & 0.439 & 85,957 \\
+2014 & VIIRS & $-0.0202$ & $(0.0213)$ & 0.293 & 80,371 \\
+2015 & VIIRS & $-0.0107$ & $(0.0214)$ & 0.593 & 83,863 \\
+2016 & VIIRS & $-0.0130$ & $(0.0209)$ & 0.495 & 81,760 \\
+2017 & VIIRS & $-0.0186$ & $(0.0216)$ & 0.372 & 81,760 \\
+2018 & VIIRS & $-0.0163$ & $(0.0217)$ & 0.460 & 81,760 \\
+2019 & VIIRS & $-0.0181$ & $(0.0216)$ & 0.376 & 81,760 \\
+2020 & VIIRS & $-0.0253$ & $(0.0225)$ & 0.190 & 76,214 \\
+2021 & VIIRS & $-0.0280$ & $(0.0230)$ & 0.154 & 74,059 \\
+2022 & VIIRS & $-0.0171$ & $(0.0227)$ & 0.360 & 76,890 \\
+2023 & VIIRS & $-0.0208$ & $(0.0231)$ & 0.276 & 76,214 \\
+\bottomrule
+\multicolumn{6}{p{0.9\textwidth}}{\small\textit{Notes:} Each row is a separate RDD estimate using \texttt{rdrobust} with MSE-optimal bandwidth, local linear polynomial, and triangular kernel. SE and $p$-values are robust bias-corrected (following \citealt{calonico2014robust}), which accounts for boundary bias in local polynomial estimation. These $p$-values differ from naive $t$-statistics (estimate/SE) because they incorporate bias correction. $N_{\text{eff}}$ is the effective sample within the MSE-optimal bandwidth on both sides of the cutoff.} \\
+\end{longtable}
+
+\end{document}

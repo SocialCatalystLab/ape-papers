@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\caption{Covariate Balance at PMGSY Population Threshold}
+\label{tab:balance}
+\begin{tabular}{lcccc}
+\hline\hline
+Covariate & Estimate & SE & $p$-value & $N_{\text{eff}}$ \\
+\hline
+Population (1991) & 1.9582 & (2.3704) & 0.370 & 95,241 \\
+lit rate 91 & -0.0003 & (0.0030) & 0.987 & 84,385 \\
+Female Share (2001) & 0.0003 & (0.0006) & 0.484 & 65,250 \\
+SC Share (2001) & -0.0045 & (0.0031) & 0.136 & 135,836 \\
+ST Share (2001) & -0.0013 & (0.0060) & 0.652 & 82,141 \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}\small
+\item \textit{Notes:} Each row reports an RDD estimate of the discontinuity in the pre-determined covariate at the 500 population threshold. MSE-optimal bandwidth, local linear polynomial, triangular kernel. Robust bias-corrected standard errors. No covariate shows a statistically significant discontinuity at conventional levels.
+\end{tablenotes}
+\end{table}

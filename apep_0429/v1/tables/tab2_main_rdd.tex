@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\caption{Main RDD Estimates: Effect of PMGSY Eligibility on Nightlights}
+\label{tab:main_rdd}
+\begin{tabular}{lccccc}
+\hline\hline
+Year & Sensor & Estimate & SE & $p$-value & $N_{\text{eff}}$ \\
+\hline
+2000 & DMSP & -0.0163 & (0.0217) & 0.366 & 77,598 \\
+2005 & DMSP & -0.0322 & (0.0269) & 0.142 & 69,167 \\
+2010 & DMSP & -0.0194 & (0.0144) & 0.121 & 76,890 \\
+2013 & DMSP & -0.0127 & (0.0158) & 0.316 & 80,371 \\
+2013 & VIIRS & -0.0152 & (0.0211) & 0.439 & 85,957 \\
+2015 & VIIRS & -0.0107 & (0.0214) & 0.593 & 83,863 \\
+2020 & VIIRS & -0.0253 & (0.0225) & 0.190 & 76,214 \\
+2023 & VIIRS & -0.0208 & (0.0231) & 0.276 & 76,214 \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}\small
+\item \textit{Notes:} Each row reports a separate local polynomial RDD estimate using \texttt{rdrobust} with MSE-optimal bandwidth and triangular kernel. Dependent variable is $\text{asinh}(\text{nightlights})$. Running variable is Census 2001 village population centered at 500. Robust bias-corrected confidence intervals. * $p<0.1$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{table}
