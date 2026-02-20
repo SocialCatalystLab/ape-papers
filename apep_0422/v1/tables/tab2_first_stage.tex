@@ -1,0 +1,39 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:first_stage} First Stage: Ujjwala Exposure and Clean Fuel Adoption}
+   \centering
+   \begin{tabular}{lccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variable: & \multicolumn{3}{c}{delta\_clean\_fuel}\\
+       & \multicolumn{3}{c}{$\Delta$ Clean Fuel} \\ 
+      Model:                & (1)            & (2)            & (3)\\  
+      \midrule
+      \emph{Variables}\\
+      Constant              & -6.792$^{***}$ & 62.05$^{***}$  &   \\   
+                            & (1.767)        & (3.659)        &   \\   
+      Ujjwala exposure      & 44.20$^{***}$  & -3.667         & 14.05$^{***}$\\   
+                            & (3.222)        & (2.277)        & (3.001)\\   
+      Baseline electricity  &                & -23.76$^{***}$ & -7.711$^{*}$\\   
+                            &                & (3.073)        & (4.104)\\   
+      Baseline sanitation   &                & 1.154          & -4.232\\   
+                            &                & (2.325)        & (3.494)\\   
+      Baseline water access &                & -25.21$^{***}$ & -17.94$^{***}$\\   
+                            &                & (2.802)        & (3.674)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      state\_code           &                &                & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations          & 708            & 708            & 708\\  
+      R$^2$                 & 0.23155        & 0.54671        & 0.83587\\  
+      Within R$^2$          &                &                & 0.46792\\  
+      \midrule \midrule
+      \multicolumn{4}{l}{\emph{Heteroskedasticity-robust standard-errors in parentheses}}\\
+      \multicolumn{4}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   HC1 robust standard errors in parentheses. Ujjwala exposure = (100 - NFHS-4 clean fuel \%) / 100.
+\end{table}
+
+

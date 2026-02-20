@@ -1,0 +1,37 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:reduced_form} Reduced Form: Ujjwala Exposure and Child Health Outcomes}
+   \centering
+   \begin{tabular}{lccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variables:  & delta\_diarrhea    & delta\_stunting    & delta\_underweight\\   
+                            & $\Delta$ Diarrhea  & $\Delta$ Stunting  & $\Delta$ Underweight \\    
+      Model:                & (1)                & (2)                & (3)\\  
+      \midrule
+      \emph{Variables}\\
+      Ujjwala exposure      & -2.822             & -8.290$^{***}$     & -6.129$^{***}$\\   
+                            & (2.280)            & (2.406)            & (2.372)\\   
+      Baseline electricity  & -1.283             & -13.71$^{***}$     & -22.21$^{***}$\\   
+                            & (2.164)            & (3.354)            & (3.093)\\   
+      Baseline sanitation   & -3.498             & 1.641              & 9.306$^{***}$\\   
+                            & (2.284)            & (2.790)            & (2.751)\\   
+      Baseline water access & -6.472$^{***}$     & -29.66$^{***}$     & -19.14$^{***}$\\   
+                            & (1.907)            & (2.931)            & (2.481)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      state\_code           & Yes                & Yes                & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations          & 708                & 708                & 708\\  
+      R$^2$                 & 0.49159            & 0.82889            & 0.80422\\  
+      Within R$^2$          & 0.16858            & 0.67734            & 0.60971\\  
+      \midrule \midrule
+      \multicolumn{4}{l}{\emph{Heteroskedasticity-robust standard-errors in parentheses}}\\
+      \multicolumn{4}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   HC1 robust standard errors in parentheses. State fixed effects included. Dependent variables: change in health indicator (pp) from NFHS-4 to NFHS-5.
+\end{table}
+
+

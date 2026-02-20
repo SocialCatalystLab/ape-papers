@@ -1,0 +1,32 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:panel_did} Na\"ive Panel DiD (Without State$\times$Period FE)}
+   \centering
+   \begin{tabular}{lccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variable: & \multicolumn{3}{c}{outcome}\\
+                              & Clean Fuel    & Diarrhea      & Stunting \\   
+      Model:                  & (1)           & (2)           & (3)\\  
+      \midrule
+      \emph{Variables}\\
+      Exposure $\times$ Post  & 44.14$^{***}$ & 8.892$^{***}$ & 30.12$^{***}$\\   
+                              & (13.61)       & (2.025)       & (7.432)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      district\_id            & Yes           & Yes           & Yes\\  
+      period                  & Yes           & Yes           & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations            & 1,416         & 1,416         & 1,416\\  
+      R$^2$                   & 0.86347       & 0.57270       & 0.70554\\  
+      Within R$^2$            & 0.22647       & 0.10336       & 0.20673\\  
+      \midrule \midrule
+      \multicolumn{4}{l}{\emph{Clustered (state\_code) standard-errors in parentheses}}\\
+      \multicolumn{4}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   District and period FE included but not state$\times$period interactions. Positive health coefficients reflect concentration of high-exposure districts in states with worst aggregate trends. See Section 5 for discussion.
+\end{table}
+
+

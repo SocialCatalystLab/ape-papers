@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-02-20T10:52:44.343054",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3420,
+    "output_tokens": 4524,
+    "total_tokens": 7944
+  },
+  "ideas_file": "output/apep_0422/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Can Clean Cooking Save Lives? India\u2019s Ujjwala Yojana and Child Health (Idea 2)",
+      "score": 66,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Does Rural Road Access Build Markets? PMGSY and Agricultural Commercialization (Idea 3)",
+      "score": 58,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "India\u2019s Mid-Day Meal Scheme and Long-Run Educational Attainment (Idea 4)",
+      "score": 52,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "Revisiting MGNREGA with Modern Econometrics: Heterogeneous Treatment Effects (Idea 1)",
+      "score": 35,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

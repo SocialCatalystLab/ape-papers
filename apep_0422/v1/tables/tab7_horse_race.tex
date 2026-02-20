@@ -1,0 +1,35 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:horse_race} Controlling for Concurrent Infrastructure Changes}
+   \centering
+   \begin{tabular}{lccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variables:   & delta\_diarrhea    & delta\_stunting    & delta\_underweight\\   
+                             & $\Delta$ Diarrhea  & $\Delta$ Stunting  & $\Delta$ Underweight \\    
+      Model:                 & (1)                & (2)                & (3)\\  
+      \midrule
+      \emph{Variables}\\
+      Ujjwala exposure       & 0.8919             & -0.9025            & -1.679\\   
+                             & (2.020)            & (2.064)            & (2.058)\\   
+      $\Delta$ Sanitation    & -0.0298            & -0.0640$^{*}$      & -0.0648$^{**}$\\   
+                             & (0.0253)           & (0.0348)           & (0.0323)\\   
+      $\Delta$ Water access  & 0.1002$^{***}$     & 0.4352$^{***}$     & 0.3754$^{***}$\\   
+                             & (0.0121)           & (0.0205)           & (0.0207)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      state\_code            & Yes                & Yes                & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations           & 708                & 708                & 708\\  
+      R$^2$                  & 0.49178            & 0.83839            & 0.80197\\  
+      Within R$^2$           & 0.16889            & 0.69525            & 0.60523\\  
+      \midrule \midrule
+      \multicolumn{4}{l}{\emph{Heteroskedasticity-robust standard-errors in parentheses}}\\
+      \multicolumn{4}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   HC1 robust SE. State FE included. Controls for changes in sanitation and water coverage between NFHS rounds to address confounding from Swachh Bharat Mission and Jal Jeevan Mission.
+\end{table}
+
+

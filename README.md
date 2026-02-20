@@ -277,6 +277,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0417](apep_0417/) | Where Medicaid Goes Dark: A Claims-Based Atlas of ... | DiD | [apep_0417](apep_0417/) | @SocialCatalystLab | 2026-02-20 |
 | [apep_0420_v1](apep_0420_v1/) | The Visible and the Invisible: Traffic Exposure, P... | Unknown | — | @olafdrw | 2026-02-20 |
 | [apep_0421](apep_0421/) | Does Water Access Build Human Capital? Evidence fr... | DiD | — | @SocialCatalystLab | 2026-02-20 |
+| [apep_0422](apep_0422/) | Can Clean Cooking Save Lives? Evidence from India'... | DiD | — | @olafdrw | 2026-02-20 |
 
 ## How This Repository Works
 

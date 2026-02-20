@@ -1,0 +1,37 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:iv} IV Estimates: Clean Fuel Adoption and Child Health}
+   \centering
+   \begin{tabular}{lcc}
+      \tabularnewline \midrule \midrule
+      Dependent Variables:                     & delta\_diarrhea  & delta\_stunting\\   
+                                               & Diarrhea         & Stunting \\   
+      Model:                                   & (1)              & (2)\\  
+      \midrule
+      \emph{Variables}\\
+      $\Delta$ Clean fuel                      & -0.2009          & -0.5901$^{***}$\\   
+                                               & (0.1642)         & (0.2057)\\   
+      Baseline electricity                     & -2.832           & -18.26$^{***}$\\   
+                                               & (2.705)          & (4.622)\\   
+      Baseline sanitation                      & -4.348           & -0.8565\\   
+                                               & (2.843)          & (4.050)\\   
+      Baseline water access                    & -10.08$^{***}$   & -40.25$^{***}$\\   
+                                               & (3.755)          & (5.129)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      state\_code                              & Yes              & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations                             & 708              & 708\\  
+      R$^2$                                    & 0.43802          & 0.73104\\  
+      F-test (1st stage), $\Delta$ Clean fuel  & 18.938           & 18.938\\  
+      \midrule \midrule
+      \multicolumn{3}{l}{\emph{Heteroskedasticity-robust standard-errors in parentheses}}\\
+      \multicolumn{3}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   Instrument: baseline Ujjwala exposure. State FE and baseline controls included. HC1 robust SE.
+\end{table}
+
+
