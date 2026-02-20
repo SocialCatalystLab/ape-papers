@@ -1,0 +1,99 @@
+{
+  "timestamp": "2026-02-20T13:32:10.513924",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3212,
+    "output_tokens": 4934,
+    "total_tokens": 8146
+  },
+  "ideas_file": "output/apep_0426/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Jal Jeevan Mission and School Enrollment",
+      "score": 76,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "obtaining reliable district completion/coverage time series by month",
+        "aligning treatment to UDISE reference date/school year",
+        "restricting outcomes to rural schools",
+        "running strong event-study pre-trend tests"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "The 20-Year Legacy of MGNREGA: Village-Level Evidence of Structural Transformation from Satellite Data",
+      "score": 68,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "MGNREGA as Climate Insurance: Do Guaranteed Jobs Buffer Drought Shocks?",
+      "score": 66,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "a pre-analysis plan for drought timing",
+        "explicit controls for drought relief/other safety nets",
+        "placebo tests showing no \u201cbuffering\u201d pre-MGNREGA"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Ayushman Bharat PM-JAY and the Age-70 Expansion",
+      "score": 52,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "obtaining suitable post-Sep-2024 microdata\u2014claims/admin data",
+        "a new wave of a large health expenditure survey",
+        "or NFHS-6 with appropriate modules",
+        "timing",
+        "confirming whether the design is sharp vs fuzzy in practice"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "One Nation One Ration Card and Interstate Labor Mobility",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "Jal Jeevan Mission and School Enrollment",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "obtaining reliable district completion/coverage time series by month",
+        "aligning treatment to UDISE reference date/school year",
+        "restricting outcomes to rural schools",
+        "running strong event-study pre-trend tests"
+      ]
+    },
+    {
+      "idea": "MGNREGA as Climate Insurance: Do Guaranteed Jobs Buffer Drought Shocks?",
+      "rank": 3,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "a pre-analysis plan for drought timing",
+        "explicit controls for drought relief/other safety nets",
+        "placebo tests showing no \u201cbuffering\u201d pre-MGNREGA"
+      ]
+    },
+    {
+      "idea": "Ayushman Bharat PM-JAY and the Age-70 Expansion",
+      "rank": 4,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "obtaining suitable post-Sep-2024 microdata\u2014claims/admin data",
+        "a new wave of a large health expenditure survey",
+        "or NFHS-6 with appropriate modules",
+        "timing",
+        "confirming whether the design is sharp vs fuzzy in practice"
+      ]
+    }
+  ]
+}

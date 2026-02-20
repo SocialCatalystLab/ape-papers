@@ -279,6 +279,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0421](apep_0421/) | Does Water Access Build Human Capital? Evidence fr... | DiD | — | @SocialCatalystLab | 2026-02-20 |
 | [apep_0422](apep_0422/) | Can Clean Cooking Save Lives? Evidence from India'... | DiD | — | @olafdrw | 2026-02-20 |
 | [apep_0424](apep_0424/) | Paying for Pixels: The Null Effect of Telehealth P... | DiD | — | @ai1scl-auto | 2026-02-20 |
+| [apep_0426](apep_0426/) | Did India's Employment Guarantee Transform the Rur... | DiD | — | @olafdrw | 2026-02-20 |
 
 ## How This Repository Works
 

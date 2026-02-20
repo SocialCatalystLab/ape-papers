@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of MGNREGA on District Nightlights}
+\label{tab:main}
+\begin{tabular}{lcccc}
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & TWFE & State$\times$Year FE & TWFE + Controls & Sun-Abraham \\
+\midrule
+Treated & 0.0556 & 0.1137$^{*}$ & 0.0936 & -0.1666$^{***}$ \\
+ & (0.0887) & (0.0658) & (0.0816) & (0.0582) \\
+\midrule
+Callaway-Sant'Anna ATT & \multicolumn{4}{c}{0.0332 (0.1440)} \\
+\midrule
+District FE & Yes & Yes & Yes & Yes \\
+Year FE & Yes & -- & Yes & Yes \\
+State$\times$Year FE & -- & Yes & -- & -- \\
+Baseline Controls$\times$Year & -- & -- & Yes & -- \\
+Observations & 19,200 & 19,200 & 19,200 & 19,200 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Dependent variable is log(nightlights + 1). Standard errors clustered at the state level in parentheses. The Callaway-Sant'Anna estimate uses regression-based estimation with not-yet-treated districts as controls. The 2006 treatment cohort returns missing group-time ATTs due to limited not-yet-treated controls after conditioning; the overall CS-DiD ATT is primarily identified from the 2007 and 2008 cohorts. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.1$.
+\end{tablenotes}
+\end{table}
