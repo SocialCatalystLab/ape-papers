@@ -1,0 +1,36 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:main} Language and Religion Effects on Gender Referendum Voting}
+   \centering
+   \begin{tabular}{lccccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variable: & \multicolumn{5}{c}{yes\_share}\\
+                                & (1)            & (2)             & (3)             & (4)             & (5) \\   
+      Model:                    & (1)            & (2)             & (3)             & (4)             & (5)\\  
+      \midrule
+      \emph{Variables}\\
+      French-speaking           & 0.1293$^{***}$ &                 & 0.1371$^{***}$  & 0.1659$^{***}$  & 0.0612$^{***}$\\   
+                                & (0.0045)       &                 & (0.0038)        & (0.0038)        & (0.0152)\\   
+      Catholic (historical)     &                & -0.0668$^{***}$ & -0.0802$^{***}$ & -0.0507$^{***}$ &   \\   
+                                &                & (0.0051)        & (0.0041)        & (0.0049)        &   \\   
+      French $\times$ Catholic  &                &                 &                 & -0.0733$^{***}$ &   \\   
+                                &                &                 &                 & (0.0082)        &   \\   
+      \midrule
+      \emph{Fixed-effects}\\
+      vote\_date                & Yes            & Yes             & Yes             & Yes             & Yes\\  
+      canton\_id                &                &                 &                 &                 & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations              & 10,289         & 10,289          & 10,289          & 10,289          & 10,289\\  
+      R$^2$                     & 0.69013        & 0.63227         & 0.71986         & 0.72583         & 0.76505\\  
+      Adjusted R$^2$            & 0.68995        & 0.63205         & 0.71967         & 0.72561         & 0.76441\\  
+      \midrule \midrule
+      \multicolumn{6}{l}{\emph{Clustered (mun\_id) standard-errors in parentheses}}\\
+      \multicolumn{6}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   Dependent variable: yes-share on gender referenda. All specifications include referendum fixed effects. Column (5) adds canton fixed effects, identifying the language effect only from bilingual cantons (FR, BE, VS). Standard errors clustered at municipality level in parentheses. * p<0.10, ** p<0.05, *** p<0.01.
+\end{table}
+
+
