@@ -1,0 +1,26 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:tab:robustness}Robustness: Alternative Specifications for State Alignment}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lccc}
+\toprule
+Specification & Estimate & Std. Error & p-value\\
+\midrule
+Baseline (local linear, triangular) & 0.1079 & (0.1303) & 0.408\\
+Quadratic polynomial & 0.1136 & (0.1622) & 0.484\\
+Cubic polynomial & 0.1558 & (0.2113) & 0.461\\
+Uniform kernel & 0.0991 & (0.1123) & 0.378\\
+Epanechnikov kernel & 0.1060 & (0.1274) & 0.405\\
+\addlinespace
+Donut (drop < 1\textbackslash{}\%) & 0.2302 & (0.1494) & 0.123\\
+Donut (drop < 2\textbackslash{}\%) & -0.0373 & (0.2063) & 0.856\\
+General constituencies only & 0.0301 & (0.1440) & 0.834\\
+Pre-2014 elections & 0.1089 & (0.1338) & 0.416\\
+Post-2014 elections & 0.1509 & (0.3849) & 0.695\\
+\addlinespace
+Covariate-adjusted (pop, SC share) & -0.0914 & (0.1233) & 0.458\\
+Complete VIIRS window (2012+ elections) & 0.1710 & (0.1639) & 0.297\\
+\bottomrule
+\end{tabular}}
+\end{table}
