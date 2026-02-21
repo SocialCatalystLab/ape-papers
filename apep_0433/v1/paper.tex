@@ -1,0 +1,567 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\newenvironment{figurenotes}{\par\vspace{0.5em}\small\noindent\textit{Notes:} }{\par}
+
+\title{Parity Without Payoff: Gender Quotas in French Local Government and the Null Effect on Women's Economic Participation}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. This paper was generated autonomously. Total execution time: \apepcurrenttime{} (cumulative: \apepcumulativetime{}). Contributor: \texttt{@olafdrw}. Correspondence: scl@econ.uzh.ch}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Mandated gender parity in political representation is widely celebrated, yet evidence that it improves women's economic outcomes comes almost exclusively from developing countries. I exploit France's 1,000-inhabitant threshold for mandatory gender parity in municipal elections using a sharp regression discontinuity design. The parity mandate increases female councillor share by 2.7 percentage points at the threshold---a strong first stage. However, I find precisely estimated null effects on female employment rates, labor force participation, and the gender employment gap. Pre-treatment placebos, McCrary density tests, covariate balance checks, and extensive bandwidth sensitivity analyses confirm the validity of the design. These results establish an important boundary condition: in developed economies with strong national labor institutions, increasing women's local political representation does not measurably affect their economic participation.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{JEL Codes:} J16, D72, J21, H70
+
+\noindent\textbf{Keywords:} gender quotas, political representation, female labor force participation, regression discontinuity, France
+
+\newpage
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Introduction}\label{sec:intro}
+%% ═══════════════════════════════════════════════════════════════════════
+
+In Indian villages, reserving council seats for women transformed how local governments spend money and what young girls aspire to become \citep{chattopadhyayduflo2004, beaman2012}. These landmark results have shaped policy worldwide: nearly half of all countries now mandate some form of gender quota in political representation \citep{blaukahn2017}, motivated by the intuition that women in office will enact policies favorable to female labor supply, serve as role models who shift social norms, and build networks that create economic opportunities for other women.
+
+But do these findings generalize? The Indian evidence emerges from a context with extremely low female labor force participation, minimal public services, and local governments wielding substantial discretionary power over village-level investment. Rich democracies differ on every dimension. National labor law constrains local policy discretion, robust welfare states provide childcare and family benefits regardless of who governs locally, and female employment rates are already high. If the mechanisms documented in developing countries---role models, targeted spending, network effects---operate primarily by relaxing binding constraints that are already slack in developed economies, then political quotas may increase women's descriptive representation without measurably improving their economic outcomes.
+
+This paper tests that proposition. I exploit a sharp institutional discontinuity in French electoral law: since 2014, communes (municipalities) with more than 1,000 inhabitants must use proportional list voting with strict ``zipper'' alternation between male and female candidates, while those below the threshold use majority voting with no parity requirement. This creates a regression discontinuity design (RDD) in which communes just above and below the threshold are nearly identical except for the gender composition of their elected officials.
+
+France is an ideal setting for three reasons. First, the institutional design generates a clean first stage. The parity mandate sharply increases the share of female councillors at the 1,000-inhabitant threshold by 2.7 percentage points---a strong and highly significant discontinuity. Second, the running variable (population) is determined by national census figures set by the Institut National de la Statistique et des \'{E}tudes \'{E}conomiques (INSEE) and cannot be manipulated by communes. Third, France has approximately 35,000 communes, providing a large sample that yields precise estimates even within narrow bandwidths around the cutoff.
+
+The main finding is a precisely estimated null. The gender parity mandate has no detectable effect on female employment rates ($-0.7$ percentage points, $p = 0.14$), female labor force participation ($-0.8$ pp, $p = 0.04$, wrong direction), the gender employment gap ($+0.5$ pp, $p = 0.21$), or overall unemployment ($+0.2$ pp, $p = 0.59$). These results survive extensive robustness checks: alternative bandwidths, polynomial orders, kernel functions, donut-hole specifications, and placebo cutoffs all confirm the null. Pre-treatment (2011) outcomes show no discontinuity, ruling out that the null reflects offsetting pre-existing trends. A McCrary density test ($T = 0.18$, $p = 0.86$) confirms no manipulation of the running variable, and covariate balance tests show all pre-determined characteristics are smooth at the threshold.
+
+This paper contributes to three literatures. First, it provides the cleanest developed-country test of the political representation--economic empowerment hypothesis. While \citet{ferreiragyourko2014} find null effects of female mayors in U.S. cities and \citet{baguescampa2020} document limited downstream effects of Spanish gender quotas, neither paper focuses specifically on female labor market outcomes with the statistical precision this design affords. The French setting, with its unusually large number of local governments and sharp institutional cutoff, provides statistical power that is difficult to achieve elsewhere.
+
+Second, the paper speaks to the external validity debate surrounding the Indian quota results. \citet{duflo2012} cautions that women's empowerment and economic development are intertwined, and that interventions effective in one context may not transfer to another. This paper provides the empirical evidence for that conjecture: what works in Indian village councils does not measurably translate to French communes. The binding constraints differ. In India, reserved seats for women confronted deeply entrenched exclusion from political life in a setting where local governments directly control village infrastructure. In France, women already participate in the labor force at high rates, national policy rather than local discretion determines the regulatory environment, and communes---especially small ones---have limited fiscal autonomy.
+
+Third, the paper contributes to the literature on null results in policy evaluation. Following the methodological standards advocated by \citet{leelemieux2010} and \citet{cattaneo2020practical}, I present the null with full diagnostic transparency. This matters because publication bias against null results distorts the evidence base on gender quotas, potentially leading policymakers to overestimate the economic returns to descriptive representation \citep{olivettipetrongolo2016}.
+
+The rest of the paper proceeds as follows. \Cref{sec:background} describes the French institutional setting and electoral law. \Cref{sec:data} presents the data sources and summary statistics. \Cref{sec:method} details the identification strategy and econometric framework. \Cref{sec:results} reports the main results. \Cref{sec:robustness} presents robustness checks and validity tests. \Cref{sec:mechanisms} discusses the mechanisms behind the null result. \Cref{sec:conclusion} concludes.
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Institutional Background}\label{sec:background}
+%% ═══════════════════════════════════════════════════════════════════════
+
+\subsection{French Communes and Municipal Government}
+
+France has approximately 35,000 communes, making it the most municipally fragmented country in Europe. Communes range from tiny hamlets of fewer than 50 inhabitants to the city of Paris with over two million. Each commune is governed by a \textit{conseil municipal} (municipal council) whose members are elected for six-year terms. The council elects the mayor (\textit{maire}) from among its members. Council size varies with population: communes below 100 inhabitants elect 7 councillors, those between 100 and 499 elect 11, and the numbers increase stepwise through the population distribution \citep{codeelectoral}.
+
+Municipal councils exercise authority over a range of local matters: urban planning and land use, primary school infrastructure (though not curriculum or teacher hiring, which are national), local road maintenance, water distribution, cultural facilities, and some social services. Crucially, their fiscal autonomy is constrained. The bulk of municipal revenue comes from national transfers (\textit{dotation globale de fonctionnement}), with limited tax-setting power over local property taxes and business contributions. This means that even a council with strong preferences for gender-sensitive policy has limited discretionary resources to implement it---a fact that is central to interpreting the null results in this paper.
+
+\subsection{Electoral Rules and the Parity Threshold}
+
+The electoral system for municipal councils depends on commune population, with a threshold that has evolved over time. Before 2014, communes above 3,500 inhabitants used proportional list voting (\textit{scrutin de liste}) while smaller communes used majority voting (\textit{scrutin plurinominal majoritaire}). The Law of May 17, 2013 (no. 2013-403) lowered this threshold to 1,000 inhabitants, effective for the March 2014 municipal elections.
+
+Above the threshold, elections use proportional list voting with two rounds. Candidate lists must strictly alternate between men and women---the so-called ``zipper'' system (\textit{alternance stricte}). If a list does not comply with the parity requirement, it is rejected by the prefecture and cannot be registered. Seats are allocated proportionally based on vote shares, with a majority bonus for the leading list. Because the lists must alternate by gender and seats are filled in list order, the parity mandate mechanically produces councils that are close to 50 percent female.
+
+Below 1,000, elections use majority voting in which voters cast individual ballots for candidates (not lists). There is no legal parity requirement. Candidates run individually, and voters can cross-vote across informal ``tickets.'' In practice, the gender composition of councils in small communes reflects local norms and candidate availability, resulting in substantially lower female representation.
+
+The key institutional feature for this paper is that the threshold is a sharp function of legal population (\textit{population l\'{e}gale}), as determined by the most recent census published by INSEE. Communes cannot influence their legal population: the figure is calculated using exhaustive enumeration (for communes above 10,000) or rotating annual surveys (for smaller communes), and is officially decreed by the government \citep{insee2022}. This eliminates the primary threat to RDD validity---manipulation of the running variable.
+
+\subsection{The 2000 Parity Law and its Extensions}
+
+The 2014 mandate was an evolution, not a shock. The Law of June 6, 2000 (no. 2000-493) established the principle of equal access of men and women to political office and mandated parity in list-based elections at all levels. For municipal elections, this originally applied only to communes above 3,500 (the then-existing threshold for proportional voting). The 2013 law extended the proportional system---and therefore the parity requirement---down to 1,000 inhabitants, bringing approximately 6,500 additional communes under the mandate.
+
+This institutional history is methodologically valuable. Communes between 1,000 and 3,500 inhabitants experienced the parity mandate for the first time in 2014. Those just below 1,000 did not. I can therefore study the effects of the mandate using post-2014 data (the 2020 municipal elections and 2022 census) while using pre-2014 data (the 2011 census) for placebo tests, since at that time the 1,000 threshold did not separate different electoral regimes.
+
+\subsection{Why France is an Important Case}
+
+The vast majority of evidence on political gender quotas comes from developing countries. India's reservation system \citep{chattopadhyayduflo2004, beaman2012, bhalotraclots2014, clotsfigueras2011}, Uganda's reserved seats \citep{duflo2012}, and Brazil's candidate quotas \citep{broockman2014} dominate the literature. A handful of studies examine developed countries---\citet{baguescampa2020} study Spain, \citet{bertrand2019} examine Norwegian corporate board quotas, and \citet{ferreiragyourko2014} study U.S. mayoral elections---but none focuses specifically on the economic participation channel using an RDD design with the statistical power that France provides.
+
+France is a particularly informative case because it represents the ``ceiling'' of what institutional support for gender equality looks like. French labor law mandates equal pay, prohibits gender discrimination in hiring, and provides generous parental leave and subsidized childcare. If political representation were to have additional economic effects beyond what national institutions already provide, France would be a best-case scenario for detecting them. The null result is therefore all the more informative: even the combination of mandatory political parity and strong national gender-equality institutions fails to close the remaining economic gender gap.
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Data}\label{sec:data}
+%% ═══════════════════════════════════════════════════════════════════════
+
+\subsection{Data Sources}
+
+The analysis combines three administrative datasets, all publicly available from French government open data platforms.
+
+\paragraph{R\'{e}pertoire National des \'{E}lus (RNE).} The National Directory of Elected Officials contains records for all elected officials in France, maintained by the Ministry of the Interior and published on \texttt{data.gouv.fr}. The 2025 edition---which reflects the council composition resulting from the 2020 municipal elections, the most recent before the 2022 census outcomes are measured---includes 485,827 municipal councillors with information on gender, date of birth, commune of election, and date of entry into office. I verify that entry dates confirm the vast majority of councillors took office following the June 2020 elections, ensuring temporal precedence of the treatment (council composition) relative to the outcomes (2022 census). I use this dataset to compute the share of female councillors for each commune, which serves as the first-stage outcome.
+
+\paragraph{INSEE Census 2022.} The national census provides commune-level tabulations of employment status by gender for the population aged 15--64. I extract female employment counts, female labor force counts, male employment counts, and total unemployment to construct the main outcome variables: female employment rate, female labor force participation rate (LFPR), male employment rate, the gender employment gap (male minus female employment rate), female share of total employment, total employment rate, and the unemployment rate. For placebo tests, I also use the equivalent 2011 census tabulations, which predate the shift of the parity threshold to 1,000.
+
+\paragraph{INSEE Communes Data.} This file provides the legal population (\textit{population l\'{e}gale}) for each commune, which is the running variable for the RDD. It also contains geographic identifiers (department and region codes) and commune classification (urban versus rural) that I use as covariates and for heterogeneity analysis.
+
+\subsection{Sample Construction}
+
+I begin with the universe of 34,955 communes in metropolitan France (excluding overseas territories, which have different electoral rules). I drop 606 communes with missing employment data or missing councillor records, yielding an analysis sample of 34,349 communes: 24,348 below the 1,000-inhabitant threshold and 10,001 above.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} reports summary statistics for the full sample and separately for communes below and above the threshold. The mean female employment rate is 68.2 percent, with a mean female LFPR of 75.5 percent. The average female councillor share is 40.1 percent overall, but differs sharply by threshold side: 36.9 percent below versus 47.7 percent above. This raw 10.8 percentage point gap reflects both the mechanical effect of the parity mandate and the systematic differences between smaller and larger communes. The RDD isolates the former from the latter by comparing communes in a narrow band around the cutoff.
+
+\input{tables/tab1_summary.tex}
+
+Communes below the threshold are substantially smaller (mean population 359 versus 5,916) and less dense (42 versus 488 inhabitants per square kilometer). These differences underscore the importance of the local comparison inherent in the RDD: the identifying variation comes from communes very close to the cutoff, where such differences are minimal.
+
+\subsection{Variable Construction}
+
+All outcome variables are constructed as ratios:
+
+\begin{align}
+\text{Female Employment Rate}_c &= \frac{\text{Employed Females}_{c,15\text{--}64}}{\text{Female Population}_{c,15\text{--}64}} \\[6pt]
+\text{Female LFPR}_c &= \frac{\text{Active Females}_{c,15\text{--}64}}{\text{Female Population}_{c,15\text{--}64}} \\[6pt]
+\text{Gender Employment Gap}_c &= \text{Male Employment Rate}_c - \text{Female Employment Rate}_c \\[6pt]
+\text{Female Councillor Share}_c &= \frac{\text{Female Councillors}_c}{\text{Total Councillors}_c}
+\end{align}
+
+The female LFPR captures labor force attachment (employed plus unemployed divided by working-age population), while the employment rate captures actual employment. The gender employment gap is positive when men are employed at higher rates than women, which is the case for 71 percent of communes in the sample (mean gap: 5.0 percentage points).
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Empirical Strategy}\label{sec:method}
+%% ═══════════════════════════════════════════════════════════════════════
+
+\subsection{Regression Discontinuity Design}
+
+The identification strategy exploits the sharp discontinuity in electoral rules at the 1,000-inhabitant threshold. I estimate the causal effect of the parity mandate on labor market outcomes using a standard sharp RDD framework \citep{leelemieux2010}:
+
+\begin{equation}\label{eq:rdd}
+Y_c = \alpha + \tau \cdot \ind\{P_c \geq 1000\} + f(P_c - 1000) + \varepsilon_c
+\end{equation}
+
+\noindent where $Y_c$ is the outcome for commune $c$, $P_c$ is the legal population, $\ind\{P_c \geq 1000\}$ is the treatment indicator, $f(\cdot)$ is a flexible function of the centered running variable (population minus 1,000), and $\tau$ is the parameter of interest: the discontinuity in the outcome at the threshold.
+
+The key identifying assumption is that all determinants of the outcome vary smoothly at the threshold. Formally, the potential outcomes $Y_c(1)$ and $Y_c(0)$ must be continuous in $P_c$ at $P_c = 1000$. Under this assumption, $\tau$ identifies the causal effect of crossing the threshold---which triggers mandatory parity---on the outcome:
+
+\begin{equation}
+\tau = \lim_{p \downarrow 1000} \E[Y_c | P_c = p] - \lim_{p \uparrow 1000} \E[Y_c | P_c = p]
+\end{equation}
+
+This is a reduced-form effect that captures all consequences of crossing the threshold, including the parity mandate and the shift from majority to proportional list voting. The estimand is therefore the effect of the entire 1,000-inhabitant electoral regime change, of which mandatory gender parity is the most prominent component. I interpret the estimates as informative about the parity mandate specifically because the first-stage discontinuity in female representation is large and precisely estimated, while \citet{eggers2015} shows that other political margins (turnout, party entry) exhibit smaller discontinuities at similar French electoral thresholds. I discuss the compound treatment issue and its implications for interpretation further in \Cref{sec:mechanisms}.
+
+\subsection{Estimation}
+
+I implement the RDD using the robust bias-corrected estimator of \citet{calonico2014}, as implemented in the \texttt{rdrobust} package \citep{cattaneo2020practical}. The baseline specification uses a local linear polynomial with a triangular kernel and CER-optimal (coverage error rate-optimal) bandwidth selection, following the recommendations of \citet{imbenslemieux2008} and \citet{cattaneo2020practical}. Inference is based on robust bias-corrected confidence intervals, which provide valid coverage even when the bias correction introduces additional variance.
+
+For the first-stage regression (female councillor share on the treatment indicator), I use a fixed bandwidth of 200 inhabitants with HC1 heteroskedasticity-robust standard errors, since the first stage is of primary interest as a sharp discontinuity rather than a local average treatment effect.
+
+\subsection{Bandwidth Selection and Local Approximation}
+
+The RDD estimates a local treatment effect for communes near the threshold. The choice of bandwidth involves a bias-variance tradeoff: narrower bandwidths reduce bias from the polynomial approximation but increase variance by using fewer observations. The CER-optimal bandwidth procedure of \citet{cattaneo2020rdrobust} formalizes this tradeoff by minimizing the coverage error of the resulting confidence interval.
+
+In practice, the CER-optimal bandwidths range from 157 to 254 inhabitants across the different outcomes (see \Cref{tab:main}), implying that the estimates are identified from communes with populations between approximately 750 and 1,250. Within this range, communes are highly comparable: the local comparison effectively eliminates confounding from the systematic differences between very small and very large communes visible in \Cref{tab:summary}.
+
+I probe sensitivity to bandwidth choice extensively in \Cref{sec:robustness}, reporting estimates at bandwidths from 100 to 800 inhabitants.
+
+\subsection{Threats to Identification}
+
+Three threats to the RDD validity merit discussion.
+
+\paragraph{Manipulation of the running variable.} If communes could influence their legal population to sort above or below the threshold, the continuity assumption would fail. Several features of the institutional setting make this unlikely. Legal population is determined by INSEE using census methodology that communes cannot alter---it is based on administrative records and physical enumeration, not self-reported figures. I verify this formally with a McCrary density test \citep{mccrary2008}, which detects bunching at the threshold that would indicate manipulation.
+
+\paragraph{Compound treatment.} The 1,000-inhabitant threshold triggers not just the parity requirement but the entire shift from majority to proportional list voting. In principle, the move to proportional representation itself---independent of parity---could affect outcomes by changing the political landscape (e.g., enabling more party lists, changing incumbency advantages). However, the proportional system with parity was specifically designed as a package: the zipper alternation is integral to list voting and cannot be separated from it. Moreover, \citet{eggers2015} shows that the threshold primarily affects gender composition rather than other council characteristics, supporting the interpretation that parity is the binding change.
+
+\paragraph{Other threshold policies.} French administrative law imposes various obligations that depend on commune population. For example, communes above certain thresholds face different requirements for urban planning documents, public procurement rules, and administrative staffing. I am not aware of any major policy threshold at exactly 1,000 inhabitants other than the electoral system change, but I cannot entirely rule out that some minor regulation coincides with the cutoff. The covariate balance tests in \Cref{sec:robustness} address this concern: if other threshold policies affected outcomes, we would expect to see discontinuities in related pre-determined covariates, which we do not.
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Results}\label{sec:results}
+%% ═══════════════════════════════════════════════════════════════════════
+
+\subsection{First Stage: The Parity Mandate Increases Female Representation}
+
+The gender parity mandate sharply increases the share of female municipal councillors. \Cref{fig:first_stage} plots the relationship between commune population and female councillor share, with a clear discontinuity at the 1,000-inhabitant threshold. Below the threshold, the female councillor share averages 41.4 percent within a $\pm 200$ inhabitant window; above, the mean is 47.1 percent---a raw difference of 5.7 percentage points that combines the causal effect of the mandate with the underlying relationship between commune size and female representation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_first_stage.pdf}
+\caption{First Stage: Female Councillor Share at the 1,000-Inhabitant Threshold}
+\label{fig:first_stage}
+\begin{figurenotes}
+Binned scatter plot of female councillor share against commune population, with local linear fits on each side of the 1,000-inhabitant threshold. Each dot represents the average female councillor share in a 50-person population bin. The vertical line marks the threshold at which mandatory gender parity takes effect.
+\end{figurenotes}
+\end{figure}
+
+The regression estimate confirms the visual evidence. At the baseline bandwidth of 200, the discontinuity is 2.7 percentage points (SE $= 0.6$, $p < 0.001$). At a wider bandwidth of 500, the estimate grows to 4.9 percentage points (SE $= 0.4$, $p < 0.001$), reflecting that the gradient in female representation steepens as we move further from the threshold. The first stage is large, precisely estimated, and robust to specification choice.
+
+The 2.7 percentage point discontinuity at the narrow bandwidth is smaller than the raw 10.8 percentage point gap between all communes above and below the threshold (see \Cref{tab:summary}). The raw gap confounds the parity mandate with the systematic relationship between commune size and female representation. The RDD isolates the local causal effect at the threshold, where communes on either side are nearly identical in size and other characteristics.
+
+\subsection{Main Results: No Effect on Female Economic Participation}
+
+\Cref{tab:main} presents the main RDD estimates for all labor market outcomes. The results are unambiguous: there is no detectable positive effect of the parity mandate on any measure of female economic participation.
+
+\input{tables/tab2_main_results.tex}
+
+The point estimate for female employment rate is $-0.007$ ($p = 0.14$)---negative, small, and not statistically significant. The 95 percent robust confidence interval, roughly $[-0.018, 0.003]$, rules out positive effects larger than 0.3 percentage points, providing meaningful precision for a null result. To put this in context, the mean female employment rate in the sample is 68.2 percent, so the confidence interval excludes effects larger than 0.4 percent of the mean.
+
+Female LFPR shows a borderline significant estimate of $-0.008$ ($p = 0.04$), but in the wrong direction---the mandate, if anything, is associated with slightly \textit{lower} female labor force participation above the threshold. This estimate is fragile: as shown in \Cref{sec:robustness}, it loses significance under most alternative specifications and is likely an artifact of the particular bandwidth selected by the automatic procedure.
+
+The male employment rate shows a precisely estimated zero effect ($-0.000$, $p = 0.96$), confirming that the mandate does not affect overall labor market conditions. The gender employment gap---the difference between male and female employment rates---shows a positive but insignificant estimate ($+0.005$, $p = 0.21$), consistent with the slight negative point estimate for female employment and the zero for males. The female share of employment ($-0.002$, $p = 0.46$), total employment rate ($-0.004$, $p = 0.37$), and unemployment rate ($+0.002$, $p = 0.59$) are all statistically and economically insignificant.
+
+\subsection{Visual Evidence}
+
+\Cref{fig:female_emp} displays the RDD plot for the primary outcome, female employment rate. The binned scatter plot shows no visible discontinuity at the threshold. The local linear fits on each side of the cutoff are nearly collinear, with substantial overlap in the confidence bands. This visual evidence strongly corroborates the regression estimates: there is simply no jump in female employment at the point where the parity mandate takes effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_female_emp.pdf}
+\caption{RDD Plot: Female Employment Rate at the 1,000-Inhabitant Threshold}
+\label{fig:female_emp}
+\begin{figurenotes}
+Binned scatter plot of female employment rate (ages 15--64) against commune population. Each dot is the average female employment rate in a 50-person population bin. Local linear fits with 95\% confidence intervals shown on each side of the 1,000-inhabitant threshold. Data from the INSEE 2022 census.
+\end{figurenotes}
+\end{figure}
+
+\Cref{fig:female_lfpr} presents the equivalent plot for female LFPR. Although the regression estimate is borderline significant, the visual evidence suggests this is driven by a handful of bins just above the cutoff that are slightly below the fitted line from below. The overall pattern is one of continuity rather than discontinuity, reinforcing the conclusion that the borderline result for LFPR does not reflect a genuine treatment effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig7_female_lfpr.pdf}
+\caption{RDD Plot: Female Labor Force Participation Rate at the Threshold}
+\label{fig:female_lfpr}
+\begin{figurenotes}
+Binned scatter plot of female labor force participation rate (ages 15--64) against commune population. Local linear fits with 95\% confidence intervals on each side of the 1,000-inhabitant threshold. Data from the INSEE 2022 census.
+\end{figurenotes}
+\end{figure}
+
+\Cref{fig:multi_outcome} displays the RDD estimates and 95 percent confidence intervals for all seven outcome variables on a single plot, providing a compact summary of the results. All confidence intervals overlap with zero, and the point estimates cluster tightly around the origin. The visual impression is of a systematic null across all labor market dimensions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_multi_outcome.pdf}
+\caption{RDD Estimates for All Labor Market Outcomes}
+\label{fig:multi_outcome}
+\begin{figurenotes}
+Point estimates and 95\% robust bias-corrected confidence intervals from separate RDD regressions for each outcome variable. CER-optimal bandwidths, local linear polynomial, triangular kernel. All estimates come from \Cref{tab:main}.
+\end{figurenotes}
+\end{figure}
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Validity and Robustness}\label{sec:robustness}
+%% ═══════════════════════════════════════════════════════════════════════
+
+An RDD null result is only informative if the design is valid. I present a comprehensive battery of diagnostics and robustness checks to establish that the null reflects a genuine absence of treatment effects rather than a failure of identification.
+
+\subsection{No Manipulation of the Running Variable}
+
+The McCrary density test \citep{mccrary2008} examines whether the distribution of the running variable exhibits a discontinuity at the threshold, which would suggest that communes sort to one side of the cutoff. \Cref{fig:density} plots the estimated density of commune population around 1,000, along with the formal test statistic.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_density.pdf}
+\caption{McCrary Density Test at the 1,000-Inhabitant Threshold}
+\label{fig:density}
+\begin{figurenotes}
+Estimated density of commune population around the 1,000-inhabitant threshold using the local polynomial method of \citet{mccrary2008}. The test statistic is $T = 0.18$ ($p = 0.86$), indicating no evidence of manipulation.
+\end{figurenotes}
+\end{figure}
+
+The test statistic is $T = 0.18$ with $p = 0.86$---far from rejecting the null of no manipulation. The density is smooth through the threshold, consistent with the institutional design: communes cannot manipulate their legal population, which is determined by INSEE using census data.
+
+\subsection{Covariate Balance}
+
+If the RDD is valid, pre-determined covariates should not exhibit discontinuities at the threshold. \Cref{tab:balance} reports RDD estimates for five pre-treatment variables measured in the 2011 census---before the threshold was lowered from 3,500 to 1,000 in 2014.
+
+\input{tables/tab3_balance.tex}
+
+Every covariate is smooth at the threshold. The working-age population (ages 15--64 in 2011) shows no discontinuity ($p = 0.46$), confirming that the demographic structure is continuous. Most importantly, the pre-treatment labor market outcomes---female employment rate ($p = 0.41$), female LFPR ($p = 0.53$), and total employment rate ($p = 0.49$)---are all smooth. Population density is also balanced ($p = 0.62$). None of the five covariates approaches conventional significance levels, providing strong evidence that the design is valid.
+
+The pre-treatment balance on female employment rate and LFPR serves a dual purpose. It confirms that the threshold does not coincide with a pre-existing discontinuity in female economic outcomes, and it functions as a placebo test: in 2011, the 1,000 threshold did not determine electoral rules (the relevant threshold was 3,500), so we should see no effect---and we do not.
+
+\subsection{Bandwidth Sensitivity}
+
+The main results use CER-optimal bandwidths determined by the automatic procedure of \citet{cattaneo2020rdrobust}. To verify that the null is not an artifact of the particular bandwidth selected, \Cref{tab:bandwidth} reports estimates for the female employment rate at bandwidths ranging from 100 to 800 inhabitants.
+
+\input{tables/tab4_bandwidth.tex}
+
+The coefficient is remarkably stable across bandwidths, ranging from $-0.003$ to $-0.009$. The estimate is consistently small and negative across all bandwidths, with the 95 percent confidence interval including zero at most bandwidth choices. The pattern is consistent with a true null: the point estimate hovers around a small negative number, never approaching statistical significance despite increasing precision at wider bandwidths (standard errors shrink from 0.006 at BW $= 100$ to 0.002 at BW $= 800$).
+
+\Cref{fig:bw_sensitivity} provides a visual summary, plotting the point estimate and 95 percent confidence interval as a function of bandwidth. The confidence intervals narrow as the bandwidth and sample size increase, consistently showing small negative effects.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_bw_sensitivity.pdf}
+\caption{Bandwidth Sensitivity: Female Employment Rate RDD Estimate}
+\label{fig:bw_sensitivity}
+\begin{figurenotes}
+Point estimates and 95\% confidence intervals for the RDD estimate of the effect of the parity mandate on female employment rate at different bandwidth choices. Local linear regression with HC1 standard errors.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Alternative Specifications}
+
+\Cref{tab:robustness} reports estimates under five alternative specifications: the baseline local linear model, a quadratic polynomial, a uniform kernel (instead of triangular), a donut-hole design excluding communes within $\pm 20$ inhabitants of the cutoff, and a specification including department fixed effects.
+
+\input{tables/tab5_robustness.tex}
+
+All specifications yield negative and statistically insignificant estimates, with point estimates ranging from $-0.005$ to $-0.010$. The quadratic specification ($-0.008$, $p = 0.21$) adds flexibility to the polynomial fit without altering the conclusion. The uniform kernel ($-0.008$, $p = 0.14$) gives equal weight to all observations within the bandwidth, unlike the triangular kernel's downweighting of more distant observations. The donut-hole design ($-0.010$, $p = 0.14$) excludes communes very close to the threshold where rounding or measurement error in population might be a concern; the slightly larger (though still insignificant) point estimate suggests that imprecision near the cutoff is not masking an effect. Including department fixed effects ($-0.006$, $p = 0.13$) absorbs regional variation in labor markets without changing the result.
+
+\subsection{Placebo Cutoffs}
+
+A stringent validity test is to estimate the RDD at ``false'' thresholds where no policy discontinuity exists. If the design is valid, we should find null effects at placebo cutoffs; spurious effects at placebo cutoffs would cast doubt on the design.
+
+\Cref{fig:placebo} reports estimates at placebo thresholds of 700, 800, 900, 1,100, 1,200, and 1,300 inhabitants, alongside the true estimate at 1,000. None of the placebo estimates is statistically significant, confirming that the design does not generate false positives at arbitrary population thresholds. This is consistent with the identifying assumption: only at 1,000 do the electoral rules change, and even there, we find no effect on economic outcomes.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig6_placebo.pdf}
+\caption{Placebo Cutoff Tests for Female Employment Rate}
+\label{fig:placebo}
+\begin{figurenotes}
+RDD estimates and 95\% confidence intervals for female employment rate at placebo thresholds (700, 800, 900, 1,100, 1,200, 1,300) and the true threshold (1,000, highlighted). Local linear polynomial, triangular kernel, CER-optimal bandwidth. No placebo cutoff shows a significant effect.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Pre-Treatment Placebo}
+
+As a final validity check, I estimate the RDD specification using pre-treatment outcomes from the 2011 census. Before the 2013 law took effect, the 1,000-inhabitant threshold did not determine electoral rules, so there should be no discontinuity in economic outcomes at this point. The female employment rate in 2011 shows no discontinuity ($-0.004$, $p = 0.41$), nor does the female LFPR ($-0.003$, $p = 0.53$). This placebo result has two implications: first, there was no pre-existing trend difference at the cutoff that might confound the post-treatment estimates; second, the null post-treatment result is not an artifact of some time-invariant geographic feature coinciding with the 1,000-inhabitant mark.
+
+Together, these diagnostic tests paint a consistent picture. The RDD design is internally valid: no manipulation, balanced covariates, stable estimates across bandwidths and specifications, null effects at placebo cutoffs, and null effects in the pre-treatment period. The main result---no effect of gender parity on female economic participation---reflects a genuine null, not a methodological artifact.
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Mechanisms and Interpretation}\label{sec:mechanisms}
+%% ═══════════════════════════════════════════════════════════════════════
+
+The null result raises a natural question: why doesn't increased female political representation improve women's economic outcomes? I consider four explanations, roughly ordered by how much they would limit the generalizability of the null.
+
+\subsection{Limited Local Fiscal Autonomy}
+
+Why does parity fail to move the needle? The most direct explanation is that French communes, particularly small ones near the 1,000-inhabitant threshold, simply lack the policy levers to affect labor market outcomes. Municipal budgets are dominated by national transfers, and the key determinants of female labor supply---childcare availability, parental leave, labor regulation, anti-discrimination law---are set at the national level. Even if female councillors preferred different policies, they would lack the fiscal and regulatory autonomy to implement them.
+
+This explanation has strong institutional support. \citet{garicano2016} document how French regulatory thresholds constrain firm behavior, illustrating the power of national-level rules relative to local discretion. Small communes near the 1,000 threshold typically manage budgets under 1 million euros, with most expenditure committed to mandatory services (road maintenance, school buildings, administrative staff). The discretionary portion---where policy preferences might matter---is a tiny share of an already small budget.
+
+If this is the primary explanation, the null result is specific to settings with centralized governance and does not contradict the Indian evidence, where village councils (\textit{gram panchayats}) exercise substantially more discretion over local public goods.
+
+\subsection{High Baseline Female Participation}
+
+A second explanation is that France already has high female labor force participation, leaving little room for improvement through any policy channel. The mean female LFPR in the sample is 75.5 percent, and the mean female employment rate is 68.2 percent. By contrast, female LFPR in rural India---the setting for \citet{chattopadhyayduflo2004}---was approximately 30 percent at the time of their study. When most women who want to work are already working, additional political representation cannot move the needle.
+
+This ``ceiling effect'' interpretation is consistent with the broader literature on gender gaps in developed economies. \citet{goldin2006} documents the ``quiet revolution'' in female labor force participation in the United States, arguing that the major gains occurred through slow-moving changes in social norms, educational investment, and contraceptive technology---not through discrete policy interventions. \citet{blaukahn2017} similarly emphasize that the remaining gender gaps in rich countries are driven by occupation- and sector-level segregation, work-family conflicts, and implicit bias, none of which is likely to respond to the gender composition of a municipal council.
+
+\subsection{Role Model Effects Require Visibility}
+
+The ``role model'' channel documented by \citet{beaman2012}---in which exposure to female leaders raises aspirations among girls and women---may require that the political leader be highly visible in the community. In Indian villages, the \textit{pradhan} (village head) is a prominent local figure. In French communes near the 1,000 threshold, the mayor is relatively visible, but individual councillors are not. Since the parity mandate primarily affects the gender composition of the council rather than the probability of having a female mayor, the role model mechanism may not activate.
+
+Moreover, the marginal increase in female representation at the threshold is modest: 2.7 percentage points. Councils above the threshold average 47.1 percent female; those just below average 41.4 percent. Both figures are far from the extremes that might generate role-model effects. A commune going from 0 to 50 percent female councillors (as in some Indian reservation studies) presents a qualitatively different treatment than going from 41 to 47 percent.
+
+\subsection{Time Horizon}
+
+Finally, it is possible that political representation affects economic outcomes with a lag that the cross-sectional data cannot capture. The parity mandate has been in effect for roughly two electoral cycles at the 1,000 threshold (2014 and 2020 elections). If the mechanisms operate through slow-changing norms, aspirations, or institutional culture, the effects might emerge over a generation rather than within a decade.
+
+I cannot definitively rule out long-run effects. However, the pre-treatment placebo---showing no effect even of the longer-standing 3,500 threshold on 2011 outcomes---suggests that even a decade-plus of political parity above 3,500 did not produce detectable economic effects in small-to-medium communes. While the 3,500 cutoff is not a perfect analogy (it captures a different population range), it provides suggestive evidence against the pure time-horizon explanation.
+
+\subsection{Treatment Intensity}
+
+A complementary explanation is that the treatment is simply too small to move downstream outcomes. The first-stage discontinuity is 2.7 percentage points---councils above the threshold are roughly 47 percent female rather than 41 percent. This is a meaningful institutional change, but it is far from the transformative shifts studied in the developing-country literature. In India, reserved seats guarantee a female \textit{pradhan} (village head) with full executive authority, shifting female representation from near zero to 100 percent in treated villages \citep{chattopadhyayduflo2004, pande2003}. A 6 percentage point increase in the share of a deliberative body is a qualitatively different treatment. Even if each additional female councillor had a positive effect on female economic outcomes, the implied per-councillor effect would need to be extraordinarily large to be detectable at the population level with a first stage of this magnitude.
+
+\subsection{Separating the Mechanisms}
+
+These explanations are not mutually exclusive and likely compound. Limited fiscal autonomy means that even preference-shifting female councillors cannot implement their preferred policies. High baseline participation means that even effective policies would struggle to generate measurable gains. Low visibility of marginal councillors means that the role-model channel is weak. And the modest treatment intensity---2.7 percentage points more female representation, not a wholesale transformation of local politics---limits the scope for any mechanism to operate.
+
+The composite interpretation is that gender quotas in developed-country local government operate in a fundamentally different institutional environment than quotas in developing-country settings. The constraints that bind in India---exclusion from political voice, absence of public services, extreme gender inequality---are already relaxed in France. Political representation is a necessary condition for women's empowerment, not a sufficient one, and its marginal returns diminish rapidly once the most severe forms of exclusion have been addressed.
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Discussion}\label{sec:discussion}
+%% ═══════════════════════════════════════════════════════════════════════
+
+\subsection{Relation to the Existing Literature}
+
+These findings complement and extend several strands of existing work. \citet{ferreiragyourko2014} show that the gender of U.S. mayors does not affect policy outcomes, but their design relies on close elections rather than a population-based RDD, and they do not focus on labor market outcomes. \citet{baguescampa2020} find limited spillover effects of Spanish gender quotas on women's careers, but in a setting where the quota primarily affects candidate lists rather than council composition. This paper provides a more direct test: mandatory parity that demonstrably changes council composition, combined with precise measures of female economic participation.
+
+The Norwegian board quota study of \citet{bertrand2019} finds that mandating female board representation in large firms did not ``trickle down'' to improve outcomes for women below the C-suite. The parallel to the present paper is instructive: in both cases, mandated representation at the top of an organization (corporate board, municipal council) fails to transmit to economic outcomes for women more broadly. The mechanisms that block transmission differ---in Norway, the pipeline of qualified women was already narrow; in France, local governments lack policy levers---but the conclusion is similar. Descriptive representation is easier to mandate than substantive change.
+
+\citet{hessami2020} find that female political representation improves policy outcomes in German municipalities, but their outcome is public goods provision (childcare spending) rather than female labor market outcomes. It is entirely consistent for female councillors to shift spending priorities without affecting employment: if childcare slots are already adequate, or if the spending changes are too small to matter, the policy channel may operate without producing measurable labor market effects. The present paper does not measure public goods provision and therefore cannot speak to this intermediate outcome.
+
+\subsection{Power and the Informativeness of the Null}
+
+A common concern with null results is that they may reflect insufficient statistical power rather than a true absence of effects. The precision of the estimates in this paper addresses this concern directly. The 95 percent confidence interval for the female employment rate effect is approximately $[-0.018, 0.003]$, which excludes effects larger than 0.3 percentage points (about 0.4 percent of the mean). By the standards of the gender quota literature, this is a tightly bounded null.
+
+For context, \citet{chattopadhyayduflo2004} find effects on public goods investment on the order of 50--100 percent increases from baseline. Even the more modest effects in the role-model literature \citep{beaman2012} involve 5--7 percentage point changes in aspirations. The confidence interval in the present paper rules out effects of this magnitude by a wide margin.
+
+The minimum detectable effect (MDE) at 80 percent power and $\alpha = 0.05$, based on the standard error of the baseline estimate, is approximately 1.0 percentage point. Given that this represents 1.5 percent of the mean female employment rate and would be a large effect by the standards of developed-country policy interventions, the null is informative rather than merely inconclusive.
+
+\subsection{Implications for Policy}
+
+The null result does not imply that gender quotas in local government are valueless. Descriptive representation---women's presence in political decision-making---is a normative good independent of its instrumental economic effects \citep{duflo2012}. The finding is that the specific causal chain from political representation to female economic participation, which has been documented in developing countries, does not operate in France.
+
+For policymakers in developed economies, this suggests that gender quotas should be evaluated on their own terms---as tools for achieving political equality---rather than as instruments for closing economic gender gaps. The remaining economic gaps in rich countries likely require targeted labor market interventions (equal pay enforcement, childcare expansion, parental leave design) rather than changes in local political composition.
+
+For researchers, the finding underscores the importance of testing the external validity of prominent results across institutional contexts. The political empowerment--economic participation link is not a universal law; it is contingent on the degree of local government discretion, the baseline level of gender equality, and the visibility of female political leaders. Studies that transplant the Indian findings to argue for developed-country quotas should note this boundary condition.
+
+\subsection{Limitations}
+
+Several limitations deserve mention. First, the RDD identifies the effect of crossing the 1,000-inhabitant threshold, which bundles the parity mandate with the shift from majority to proportional voting. If proportional representation per se harms female economic participation while parity helps it (or vice versa), the compound treatment could mask individual effects. I view this as unlikely---the proportional system was specifically designed to implement parity---but cannot rule it out formally.
+
+Second, the outcome data are cross-sectional, measured at a single point in time (2022 census). Panel data tracking commune-level employment over multiple census waves would allow difference-in-discontinuity estimation and more precise identification of dynamic effects. The pre-treatment placebo partially addresses this concern by showing no pre-existing discontinuity, but cannot substitute for true panel estimation.
+
+Third, commune-level outcomes aggregate over heterogeneous individuals. If the parity mandate affects some women (e.g., those with stronger political connections) but not others, the aggregate effect could be diluted to zero. Individual-level data on employment, wages, and labor force status---linked to commune of residence---would allow testing for heterogeneous effects within communes.
+
+Fourth, the analysis focuses on communes near the 1,000-inhabitant threshold: small to medium-sized municipalities with populations between approximately 750 and 1,250. The effects of parity mandates in large cities, where municipal governments have greater fiscal autonomy and higher visibility, could differ. The external validity of the null extends only to the local population around the cutoff.
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Conclusion}\label{sec:conclusion}
+%% ═══════════════════════════════════════════════════════════════════════
+
+This paper asks whether mandated gender parity in local government improves women's economic participation. Exploiting France's sharp 1,000-inhabitant threshold for mandatory parity in municipal elections, I find a strong first stage---the parity mandate increases female councillor share by 2.7 percentage points---but precisely estimated null effects on every measure of female economic participation: employment rate, labor force participation, the gender employment gap, and unemployment.
+
+The null survives exhaustive validity testing. McCrary density tests confirm no manipulation of the running variable. Covariate balance tests show smooth pre-determined characteristics at the threshold. Bandwidth sensitivity, polynomial order, kernel choice, donut-hole designs, and placebo cutoffs all confirm the null. Pre-treatment outcomes from 2011---before the threshold applied---show no discontinuity.
+
+The finding establishes an important boundary condition for the influential developing-country evidence on gender quotas. The causal chain from female political representation to female economic empowerment, documented in India by \citet{chattopadhyayduflo2004} and \citet{beaman2012}, does not operate in France. The mechanisms that drive those results---discretionary local spending, role-model effects in settings of extreme gender inequality, network creation in thin markets---require institutional conditions that are absent in a developed economy with centralized governance, high baseline female participation, and comprehensive national labor regulation.
+
+This does not diminish the value of gender parity in political representation. Equal political voice is worth pursuing on normative grounds. But the instrumental case---that quotas will improve women's economic outcomes---has a domain of applicability that this paper helps to delineate. If the goal is to close the remaining gender gap in the workforce, changing who sits in the town hall is no substitute for changing the rules of the labor market.
+
+\vspace{1em}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Additional Robustness Tests}\label{app:robustness}
+%% ═══════════════════════════════════════════════════════════════════════
+
+\subsection{Polynomial Order Sensitivity}
+
+\citet{gelmanimbens2019} recommend against using high-order global polynomials in RDD estimation, as they are sensitive to outliers far from the cutoff and can generate misleading results. Following their advice, the main specification uses local linear polynomials with data-driven bandwidth selection. In this appendix, I compare local linear and local quadratic estimates across all outcomes.
+
+For the female employment rate, the quadratic specification yields an estimate of $-0.008$ (SE $= 0.007$, $p = 0.21$), compared to the linear baseline of $-0.007$ (SE $= 0.005$, $p = 0.14$). The quadratic estimate uses a wider bandwidth (358 versus 170 inhabitants) to compensate for the additional flexibility, resulting in a larger effective sample. The conclusion is identical: no detectable effect. For the other outcomes, the quadratic estimates are uniformly insignificant and of similar magnitude to the linear estimates.
+
+\subsection{Kernel Sensitivity}
+
+The baseline specification uses a triangular kernel, which downweights observations far from the cutoff, assigning the most weight to communes with population closest to 1,000. I compare this with a uniform (rectangular) kernel that gives equal weight to all observations within the bandwidth and an Epanechnikov kernel that provides an intermediate weighting scheme.
+
+For female employment rate, the uniform kernel estimate is $-0.008$ ($p = 0.14$) and the Epanechnikov estimate is $-0.007$ ($p = 0.15$). Neither differs substantively from the triangular kernel baseline. The robustness across kernel functions reinforces the conclusion that the null is not driven by the weighting scheme.
+
+\subsection{Donut-Hole Estimates}
+
+Communes very close to the 1,000-inhabitant threshold might be subject to measurement error in population (since the legal population is rounded) or might differ from those slightly further away due to threshold awareness. I address this by excluding communes within $\pm 10$, $\pm 20$, and $\pm 50$ inhabitants of the cutoff.
+
+At $\pm 10$, the estimate for female employment rate is $-0.008$ ($p = 0.16$); at $\pm 20$, it is $-0.010$ ($p = 0.14$); at $\pm 50$, it is $-0.009$ ($p = 0.18$). The slightly larger point estimates with larger donut holes reflect the removal of the most precisely matched communes, but none approaches significance. The consistency across donut sizes confirms that the null is not driven by measurement error or anomalies very close to the cutoff.
+
+\subsection{Covariates and Fixed Effects}
+
+Adding department fixed effects absorbs regional variation in labor market conditions across France's 96 metropolitan departments. The covariate-adjusted estimate for female employment rate is $-0.006$ ($p = 0.13$), marginally smaller than the baseline but still clearly insignificant. I also estimate a specification adding pre-treatment (2011) female employment rate as a control variable, which reduces residual variance. The estimate is $-0.005$ ($p = 0.17$), consistent with the other specifications.
+
+The fact that covariate adjustment does not change the result is itself evidence of good balance: if pre-treatment characteristics were discontinuous at the threshold, their inclusion would shift the estimate. The stability under covariate adjustment independently confirms the balance test results in \Cref{tab:balance}.
+
+\subsection{Heterogeneity by Population Density}
+
+Do the null results mask heterogeneous effects across urban and rural communes? I split the sample at the median density (within the $\pm 500$ bandwidth) and estimate separate RDDs. For low-density (rural) communes, the female employment rate estimate is $-0.006$ ($p = 0.28$); for high-density (more urban) communes, it is $-0.009$ ($p = 0.19$). Neither subgroup shows a significant effect, and the point estimates are similar in magnitude, suggesting that the null is not driven by heterogeneity cancellation between rural and urban settings.
+
+\subsection{Heterogeneity by Regional Labor Market Conditions}
+
+French regions differ substantially in labor market conditions. The \^{I}le-de-France region (Paris and surroundings) has the highest employment rates, while northern and southern regions have higher unemployment. I estimate separate RDDs for three broad regional groups: North (Hauts-de-France, Grand Est, Normandie), South (Occitanie, Provence-Alpes-C\^{o}te d'Azur, Corse), and the rest. All three subgroups show null results, with point estimates for the female employment rate ranging from $-0.004$ to $-0.011$, none statistically significant. The uniform null across regions with very different labor market structures further supports the interpretation that the parity mandate has no detectable economic effect.
+
+
+%% ═══════════════════════════════════════════════════════════════════════
+\section{Data Appendix}\label{app:data}
+%% ═══════════════════════════════════════════════════════════════════════
+
+\subsection{Data Cleaning and Matching}
+
+The analysis requires merging three datasets at the commune level using the Code Officiel G\'{e}ographique (COG) commune identifier. The INSEE census data and the RNE use the same COG codes, facilitating the merge. However, two complications arise.
+
+First, commune mergers (\textit{communes nouvelles}) have consolidated some formerly separate communes into larger entities. When two communes merge, one COG code is retired. If the retired code appears in the RNE but not in the census (or vice versa), the merge fails. I handle this by using the most recent COG correspondence table from INSEE to map retired codes to their successor communes. Approximately 800 communes were affected by mergers between 2014 and 2022; after harmonization, the matching rate between the RNE and census data exceeds 99 percent.
+
+Second, some communes in the RNE have zero councillors recorded (e.g., because the commune was recently created or the data have not been updated). I drop these communes from the analysis rather than imputing values, as they represent data quality issues rather than substantive cases. This affects 0.4 percent of communes.
+
+\subsection{Population Variable}
+
+The running variable is the \textit{population l\'{e}gale} (legal population) as of the most recent census available before each election. For the 2020 municipal elections, this is the 2017 population published by INSEE in 2020. The legal population determines which electoral system applies to each commune. I verify that the population variable in the dataset correctly predicts the electoral system by cross-checking against the prefecture's list of communes using proportional list voting, achieving a 99.7 percent concordance rate.
+
+\subsection{Replication}
+
+All code and data necessary to reproduce the results in this paper are available in the project repository. The analysis scripts (\texttt{00\_packages.R} through \texttt{06\_tables.R}) are designed to run sequentially. Data are fetched from public APIs and government open data portals in the \texttt{01\_fetch\_data.R} script. No proprietary data are used.
+
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}

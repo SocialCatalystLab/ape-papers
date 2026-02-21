@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-02-21T13:06:41.012700",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2692,
+    "output_tokens": 2458,
+    "total_tokens": 5150
+  },
+  "ideas_file": "output/apep_0433/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Does Female Political Representation Cause Female Economic Empowerment? Evidence from French Municipal Gender Parity",
+      "score": 80,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "The Price of Exclusion: Welfare Eligibility at Age 25 and Youth Self-Employment in France",
+      "score": 70,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Urban Enterprise Zones and Local Employment: Spatial RDD Evidence from France's ZFU Program",
+      "score": 63,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "Mandatory Safety Committees and Workplace Injuries: RDD Evidence from France's 50-Employee Threshold",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

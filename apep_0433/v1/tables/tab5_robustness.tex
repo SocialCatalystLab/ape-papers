@@ -1,0 +1,22 @@
+\begin{table}[H]
+\centering
+\caption{Robustness: Alternative Specifications for Female Employment Rate}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Specification & Estimate & SE & $p$-value & $N$ \\
+\midrule
+Baseline (linear) & -0.0074 & (0.0052) & 0.143 & 2,782 \\
+Quadratic & -0.0081 & (0.0066) & 0.206 & 3,579 \\
+Uniform kernel & -0.0082 & (0.0057) & 0.144 & 1,880 \\
+Donut (±20) & -0.0103 & (0.0073) & 0.142 & 2,109 \\
++ Department FE & -0.0057 & (0.0037) & 0.126 & 3,295 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: All specifications estimate the discontinuity in female employment rate at the 1,000-inhabitant threshold. Baseline uses local linear regression with triangular kernel and CER-optimal bandwidth. Department FE specification uses bandwidth of 200 with HC1 standard errors.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:robustness}
+\end{table}

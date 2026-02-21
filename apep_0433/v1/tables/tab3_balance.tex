@@ -1,0 +1,22 @@
+\begin{table}[H]
+\centering
+\caption{Covariate Balance at the 1,000-Inhabitant Threshold}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+Pre-determined Covariate & RDD Estimate & SE & $p$-value & BW & $N$ \\
+\midrule
+Pop 15-64 (2011) & 3.2249 & (4.8210) & 0.464 & 238 & 3,983 \\
+Female emp rate (2011) & -0.0042 & (0.0055) & 0.414 & 176 & 2,872 \\
+Female LFPR (2011) & -0.0025 & (0.0045) & 0.533 & 176 & 2,861 \\
+Total emp rate (2011) & -0.0031 & (0.0047) & 0.485 & 188 & 3,087 \\
+Density (hab/km2) & -4.0832 & (8.6916) & 0.624 & 227 & 3,756 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Each row tests whether the pre-determined covariate exhibits a discontinuity at the 1,000 threshold. All covariates are from the 2011 census (before the threshold was lowered from 3,500 to 1,000 in 2014). Local linear regression with robust bias-corrected inference.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:balance}
+\end{table}

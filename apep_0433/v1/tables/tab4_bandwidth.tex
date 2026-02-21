@@ -1,0 +1,25 @@
+\begin{table}[H]
+\centering
+\caption{Bandwidth Sensitivity: Female Employment Rate}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Bandwidth & Estimate & SE & $N$ & 95\% CI \\
+\midrule
+100 & -0.0093 & (0.0060) & 1,600 & [-0.0210, 0.0023] \\
+150 & -0.0068 & (0.0048) & 2,436 & [-0.0162, 0.0027] \\
+200 & -0.0051 & (0.0042) & 3,295 & [-0.0134, 0.0032] \\
+300 & -0.0042 & (0.0034) & 5,111 & [-0.0110, 0.0025] \\
+400 & -0.0032 & (0.0029) & 7,231 & [-0.0089, 0.0026] \\
+500 & -0.0045 & (0.0026) & 9,539 & [-0.0097, 0.0007] \\
+600 & -0.0042 & (0.0024) & 12,119 & [-0.0090, 0.0005] \\
+800 & -0.0053 & (0.0021) & 20,118 & [-0.0094, -0.0012] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item Notes: Local linear regression with HC1 robust standard errors. Outcome: female employment rate (ages 15--64). 95\% confidence intervals constructed as estimate $\pm$ 1.96 $\times$ SE.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:bandwidth}
+\end{table}
