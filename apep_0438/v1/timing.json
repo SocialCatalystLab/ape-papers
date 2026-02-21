@@ -1,0 +1,28 @@
+{
+  "paper_dir": "/Users/dyanag/auto-policy-evals/output/apep_0438/v1",
+  "started_at": "2026-02-21T19:04:34.457748",
+  "finished_at": null,
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-21T19:04:34.457748",
+      "finished_at": "2026-02-21T19:04:34.488143",
+      "duration_seconds": 0.0304
+    },
+    "discovery": {
+      "started_at": "2026-02-21T19:04:34.488143",
+      "finished_at": "2026-02-21T19:08:14.745708",
+      "duration_seconds": 220.257577
+    },
+    "ranking": {
+      "started_at": "2026-02-21T19:08:14.745708",
+      "finished_at": "2026-02-21T19:08:18.174939",
+      "duration_seconds": 3.429238
+    },
+    "execution": {
+      "started_at": "2026-02-21T19:08:18.174939",
+      "finished_at": null,
+      "duration_seconds": null
+    }
+  },
+  "total_seconds": null
+}

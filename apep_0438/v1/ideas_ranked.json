@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-02-21T19:08:00.161717",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3627,
+    "output_tokens": 5495,
+    "total_tokens": 9122
+  },
+  "ideas_file": "output/apep_0438/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "The Patriarchy of the Public Square \u2014 How Open-Air Assembly Voting Shapes Gender Politics",
+      "score": 78,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Mandatory Kindergarten and Maternal Labor Supply \u2014 Spatial Evidence from the HarmoS Concordat",
+      "score": 63,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Tax Marriage Penalty Reform and Female Labor Supply at Canton Borders",
+      "score": 56,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "Domestic Violence Police Removal Powers (Wegweisung) and Women's Safety",
+      "score": 49,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 5,
+      "title": "The Long Shadow of Late Suffrage \u2014 Persistence of Gender Norms at Canton Borders",
+      "score": 44,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}
