@@ -1,0 +1,32 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of MGNREGA on Worker Composition: Phase I vs Phase III Districts}
+\label{tab:main}
+\begin{tabular}{l cccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& Non-Farm & Cultivator & Ag. Laborer & Log \\
+& Share & Share & Share & Population \\
+\midrule
+Phase I $\times$ Post & 0.0111 & -0.0436*** & 0.0326*** & 0.0664** \\
+& (0.0070) & (0.0106) & (0.0105) & (0.0270) \\
+95\% CI & [-0.0026, 0.0247] & [-0.0643, -0.0230] & [0.0121, 0.0531] & [0.0136, 0.1193] \\
+\midrule
+Pre-trend (1991--2001) & -0.0534 & 0.0111 & 0.0424 & --- \\
+Pre-trend $p$-value & 0.001 & 0.398 & 0.000 & --- \\
+\midrule
+Observations & 999 & 999 & 999 & 999 \\
+Districts & 500 & 500 & 500 & 500 \\
+Treated districts & 200 & 200 & 200 & 200 \\
+Clusters (states) & 31 & 31 & 31 & 31 \\
+Estimator & TWFE & TWFE & TWFE & TWFE \\
+Control group & Phase III & Phase III & Phase III & Phase III \\
+District FE & \checkmark & \checkmark & \checkmark & \checkmark \\
+Year FE & \checkmark & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.2cm}
+\footnotesize \textit{Notes:} Difference-in-differences estimates comparing Phase I districts (treated Feb 2006) with Phase III districts (treated Apr 2008), using Census 2001 (pre) and 2011 (post). Standard errors clustered at state level in parentheses. Pre-trend test: same specification on 1991--2001 change. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{minipage}
+\end{table}

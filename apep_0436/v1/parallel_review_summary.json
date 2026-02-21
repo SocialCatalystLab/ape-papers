@@ -1,0 +1,40 @@
+{
+  "mode": "referee",
+  "n_reviewers": 3,
+  "models": [
+    "gpt-5.2",
+    "grok-4.1-fast",
+    "gemini-3-flash-preview"
+  ],
+  "routing": {
+    "gpt": "openrouter_latex",
+    "grok": "openrouter_latex",
+    "gemini": "google_direct"
+  },
+  "successful": 3,
+  "failed": 0,
+  "elapsed_seconds": 88.3547010421753,
+  "decisions": [
+    {
+      "reviewer": "gpt",
+      "model": "GPT-5.2",
+      "decision": "MAJOR REVISION"
+    },
+    {
+      "reviewer": "grok",
+      "model": "Grok-4.1-Fast",
+      "decision": "MAJOR REVISION"
+    },
+    {
+      "reviewer": "gemini",
+      "model": "Gemini-3-Flash",
+      "decision": "MAJOR REVISION"
+    }
+  ],
+  "errors": [],
+  "files": [
+    "/Users/olafwillner/auto-policy-evals/output/apep_0436/v1/review_gpt_1.md",
+    "/Users/olafwillner/auto-policy-evals/output/apep_0436/v1/review_grok_1.md",
+    "/Users/olafwillner/auto-policy-evals/output/apep_0436/v1/review_gemini_1.md"
+  ]
+}

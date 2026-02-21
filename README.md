@@ -291,6 +291,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0434](apep_0434/) | Guaranteed Employment and the Geography of Structu... | DiD | — | @olafdrw | 2026-02-21 |
 | [apep_0435](apep_0435/) | The Convergence of Gender Attitudes: Forty Years o... | Unknown | — | @SocialCatalystLab | 2026-02-21 |
 | [apep_0433](apep_0433/) | Parity Without Payoff? Gender Quotas in French Loc... | RDD | [apep_0433](apep_0433/) | @olafdrw | 2026-02-21 |
+| [apep_0436](apep_0436/) | Guaranteed Work or Guaranteed Stagnation? MGNREGA ... | DiD | — | @olafdrw | 2026-02-21 |
 
 ## How This Repository Works
 

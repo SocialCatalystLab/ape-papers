@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-02-21T17:52:36.432471",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3063,
+    "output_tokens": 4625,
+    "total_tokens": 7688
+  },
+  "ideas_file": "output/apep_0436/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "MGNREGA and Structural Transformation: Did India's Employment Guarantee Accelerate or Retard the Shift from Farm to Non-Farm Work?",
+      "score": 68,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "The Long Shadow of Guaranteed Work: MGNREGA's Effect on Female Labor Force Participation Beyond the Worksite",
+      "score": 48,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "One Nation One Ration Card and Interstate Migration in India",
+      "score": 35,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "Jal Jeevan Mission and Rural Child Health in India",
+      "score": 28,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

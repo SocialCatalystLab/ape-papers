@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of MGNREGA on Nightlights: Callaway-Sant'Anna and Sun-Abraham Estimates}
+\label{tab:nightlights}
+\begin{tabular}{l ccc}
+\toprule
+& (1) & (2) & (3) \\
+& TWFE & CS ATT & Sun-Abraham \\
+\midrule
+ATT & 0.2805** & 0.3484*** & --- \\
+& (0.1168) & (0.0788) & --- \\
+\midrule
+Observations & 20128 & 20128 & 20128 \\
+Districts & 629 & 629 & 629 \\
+Clusters & 30 & --- & 30 \\
+Years & 1994--2013 & 1994--2013 & 1994--2013 \\
+Outcome & Log(light+1) & Log(light+1) & Log(light+1) \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.2cm}
+\footnotesize \textit{Notes:} Dependent variable is log(calibrated DMSP nightlights + 1) at district-year level. Column 1: standard TWFE with district and year FE. Column 2: Callaway \& Sant'Anna (2021) overall ATT using not-yet-treated as control group. Column 3: Sun \& Abraham (2021) interaction-weighted estimator. Standard errors clustered at state level. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{minipage}
+\end{table}
