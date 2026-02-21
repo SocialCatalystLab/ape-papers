@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-02-20T21:58:12.053888",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2855,
+    "output_tokens": 4060,
+    "total_tokens": 6915
+  },
+  "ideas_file": "output/apep_0431/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Roads to Equality? Gender-Differentiated Effects of Rural Infrastructure on Structural Transformation in India",
+      "score": 72,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "verifying habitation\u2194village mapping quality near the cutoff",
+        "showing no heaping/manipulation in 2001 population",
+        "smooth covariates at 500",
+        "pre-trend/placebo checks using pre-2000 nightlights"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "When Infrastructure Meets Education: Dynamic Returns to Rural Roads in India",
+      "score": 64,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "adding road completion dates",
+        "estimating an event-time design",
+        "ideally instrumenting completion with eligibility",
+        "or explicitly interpreting estimates as \u201ccumulative reduced-form eligibility effects\u201d by year",
+        "plus careful DMSP\u2013VIIRS harmonization",
+        "saturation checks"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Does Political Alignment Channel Public Resources? Close Election Evidence from Indian State Assemblies",
+      "score": 56,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "securing constituency-level outcomes or a defensible aggregation scheme",
+        "restricting to post-delimitation periods with stable boundaries",
+        "conducting McCrary density",
+        "covariate balance tests",
+        "clearly defining \u201cruling party\u201d under coalitions",
+        "party-switching"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Competitive Federalism and Local Development: RDD Evidence from India's Aspirational Districts Programme",
+      "score": 45,
+      "recommendation": null,
+      "conditions": []
+    }
+  ],
+  "conditions": [
+    {
+      "idea": "Roads to Equality? Gender-Differentiated Effects of Rural Infrastructure on Structural Transformation in India",
+      "rank": 1,
+      "recommendation": "PURSUE",
+      "conditions": [
+        "verifying habitation\u2194village mapping quality near the cutoff",
+        "showing no heaping/manipulation in 2001 population",
+        "smooth covariates at 500",
+        "pre-trend/placebo checks using pre-2000 nightlights"
+      ]
+    },
+    {
+      "idea": "When Infrastructure Meets Education: Dynamic Returns to Rural Roads in India",
+      "rank": 2,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "adding road completion dates",
+        "estimating an event-time design",
+        "ideally instrumenting completion with eligibility",
+        "or explicitly interpreting estimates as \u201ccumulative reduced-form eligibility effects\u201d by year",
+        "plus careful DMSP\u2013VIIRS harmonization",
+        "saturation checks"
+      ]
+    },
+    {
+      "idea": "Does Political Alignment Channel Public Resources? Close Election Evidence from Indian State Assemblies",
+      "rank": 3,
+      "recommendation": "CONSIDER",
+      "conditions": [
+        "securing constituency-level outcomes or a defensible aggregation scheme",
+        "restricting to post-delimitation periods with stable boundaries",
+        "conducting McCrary density",
+        "covariate balance tests",
+        "clearly defining \u201cruling party\u201d under coalitions",
+        "party-switching"
+      ]
+    }
+  ]
+}

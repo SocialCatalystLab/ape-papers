@@ -1,0 +1,34 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness: Bandwidth and Polynomial Sensitivity}
+\label{tab:robustness}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{4}{c}{Change in Female Non-Agricultural Share} \\
+\cmidrule(lr){2-5}
+Specification & Estimate & Robust SE & $p$-value & Eff. $N$ \\
+\midrule
+\textit{Panel A: Bandwidth} \\[3pt]
+  0.5$\times$ optimal ($h$ = 58) & 0.0102 & (0.0077) & 0.048 & 38,388 \\
+  0.8$\times$ optimal ($h$ = 87) & 0.0048 & (0.0063) & 0.037 & 57,878 \\
+  1.0$\times$ optimal ($h$ = 116) & 0.0021 & (0.0055) & 0.088 & 77,040 \\
+  1.2$\times$ optimal ($h$ = 145) & 0.0008 & (0.0049) & 0.190 & 95,994 \\
+  1.5$\times$ optimal ($h$ = 174) & -0.0002 & (0.0044) & 0.316 & 115,097 \\
+  2.0$\times$ optimal ($h$ = 232) & -0.0002 & (0.0039) & 0.791 & 152,472 \\
+\midrule
+\textit{Panel B: Polynomial order} \\[3pt]
+  Order 1 & 0.0021 & (0.0043) & 0.444 & 77,040 \\
+  Order 2 & 0.0064 & (0.0053) & 0.129 & 95,994 \\
+  Order 3 & 0.0092 & (0.0059) & 0.064 & 130,499 \\
+\midrule
+\textit{Panel C: Donut hole} \\[3pt]
+  Exclude $\pm$5 & -0.0028 & (0.0044) & 0.493 & 91,019 \\
+  Exclude $\pm$10 & -0.0027 & (0.0051) & 0.537 & 84,448 \\
+  Exclude $\pm$20 & -0.0069 & (0.0072) & 0.252 & 63,347 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} All specifications use local polynomial RDD at the 500 threshold for plain-area states. Panel A varies bandwidth around the CCT optimal (fixing $h$ changes the bias-correction bandwidth, so SEs and $p$-values differ from the main table even at $1.0\times$ optimal). Panel B varies polynomial order (all use CCT bandwidth). Panel C excludes observations within the donut radius of the cutoff. Robust bias-corrected $p$-values reported throughout.
+\end{tablenotes}
+\end{table}

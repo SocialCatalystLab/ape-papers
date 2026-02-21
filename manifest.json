@@ -2205,6 +2205,14 @@
       "date": "2026-02-20",
       "pdf": "papers/apep_0430/v1/paper.pdf",
       "promising": false
+    },
+    {
+      "paper_id": "apep_0431_v1",
+      "paper_family_id": "apep_0431",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-21",
+      "pdf": "papers/apep_0431/v1/paper.pdf",
+      "promising": false
     }
   ]
 }

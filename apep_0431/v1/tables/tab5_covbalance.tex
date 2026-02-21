@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\caption{Covariate Balance at PMGSY Threshold}
+\label{tab:covbalance}
+\begin{tabular}{lccc}
+\toprule
+Baseline Covariate (2001) & RDD Estimate & Robust SE & $p$-value \\
+\midrule
+Literacy rate & 0.0011 & (0.0030) & 0.666 \\
+SC share & -0.0042 & (0.0032) & 0.213 \\
+ST share & -0.0012 & (0.0064) & 0.664 \\
+Female share & 0.0004 & (0.0006) & 0.397 \\
+Number of households & 0.0375 & (0.2437) & 0.888 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the RDD estimate at the 500 threshold for a baseline (Census 2001) covariate. Null effects support the identifying assumption that villages just above and below the threshold are comparable. CCT optimal bandwidth and triangular kernel.
+\end{tablenotes}
+\end{table}

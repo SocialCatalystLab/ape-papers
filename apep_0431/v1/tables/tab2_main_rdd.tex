@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering
+\caption{Main RDD Estimates: Effect of PMGSY Eligibility on Structural Transformation}
+\label{tab:main_rdd}
+\begin{tabular}{lccccc}
+\toprule
+Outcome & Estimate & Robust SE & 95\% CI & $p$-value & Eff. $N$ \\
+\midrule
+Change in female non-ag share & $0.0021$ & (0.0043) & [$-$0.006, 0.011] & 0.444 & 77,040 \\
+Change in male non-ag share & $-0.0013$ & (0.0031) & [$-$0.007, 0.005] & 0.713 & 89,155 \\
+Gender gap change (F - M) & $0.0010$ & (0.0035) & [$-$0.006, 0.008] & 0.826 & 119,579 \\
+Change in female WF participation & $0.0019$ & (0.0034) & [$-$0.005, 0.009] & 0.572 & 120,948 \\
+Change in male WF participation & $0.0019$ & (0.0017) & [$-$0.001, 0.005] & 0.180 & 83,784 \\
+Female non-ag share (2011) & $-0.0006$ & (0.0037) & [$-$0.008, 0.007] & 0.956 & 88,982 \\
+Male non-ag share (2011) & $-0.0009$ & (0.0029) & [$-$0.007, 0.005] & 0.731 & 122,885 \\
+\midrule
+Bandwidth & \multicolumn{5}{c}{CCT Optimal (116--184)} \\
+Polynomial & \multicolumn{5}{c}{Local linear} \\
+Kernel & \multicolumn{5}{c}{Triangular} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Local polynomial RDD estimates using \texttt{rdrobust} (Calonico, Cattaneo, Titiunik). Running variable: Census 2001 village population. Cutoff: 500 (plain-area states). Robust bias-corrected standard errors, confidence intervals, and $p$-values reported. Because $p$-values use bias-corrected test statistics, they do not equal $2\Phi(-|\hat{\tau}/\text{SE}|)$; see Calonico, Cattaneo, and Titiunik (2014). $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.10$.
+\end{tablenotes}
+\end{table}
