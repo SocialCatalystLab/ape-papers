@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-02-21T15:00:00.614763",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2953,
+    "output_tokens": 4355,
+    "total_tokens": 7308
+  },
+  "ideas_file": "output/apep_0434/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "MGNREGA and the Geography of Structural Transformation: Village-Level Evidence from 600,000 Indian Villages",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "PMGSY Rural Roads and Non-Farm Employment: Extending the Asher-Novosad RDD",
+      "score": 66,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "India\u2019s Demonetization and Rural Economic Activity: A Village-Level Intensity Design",
+      "score": 52,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "MGNREGA and Female Human Capital Formation: Did Employment Guarantees Promote Girls\u2019 Education?",
+      "score": 45,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

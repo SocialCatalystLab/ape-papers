@@ -1,0 +1,34 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:caste} Caste Heterogeneity: SC/ST Interaction}
+   \centering
+   \begin{tabular}{lcc}
+      \tabularnewline \midrule \midrule
+      Dependent Variable: & \multicolumn{2}{c}{$\Delta$ Non-Farm Share}\\
+                                 & Baseline      & Caste DDD \\   
+      Model:                     & (1)           & (2)\\  
+      \midrule
+      \emph{Variables}\\
+      Early MGNREGA              & -0.0037$^{*}$ & -0.0058$^{**}$\\   
+                                 & (0.0022)      & (0.0024)\\   
+      High SC/ST                 &               & -0.0047$^{***}$\\   
+                                 &               & (0.0017)\\   
+      Early $\times$ High SC/ST  &               & 0.0047$^{**}$\\   
+                                 &               & (0.0021)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      State                      & Yes           & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations               & 587,378       & 587,378\\  
+      R$^2$                      & 0.01453       & 0.01462\\  
+      \midrule \midrule
+      \multicolumn{3}{l}{\emph{Clustered (District) standard-errors in parentheses}}\\
+      \multicolumn{3}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   Column 1 reproduces baseline. Column 2 interacts treatment with an indicator for above-median village-level SC/ST population share in Census 2001. Both include state FE and baseline controls. SEs clustered at district level.
+\end{table}
+
+

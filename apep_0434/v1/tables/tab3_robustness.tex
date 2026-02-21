@@ -1,0 +1,33 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:robustness} Robustness Checks}
+   \centering
+   \begin{tabular}{lcccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variables: & \multicolumn{3}{c}{$\Delta$ Non-Farm Share} & $\Delta$ Log Population\\
+                    & Baseline      & State Cluster & Phase I/II Sep. & Placebo: Pop \\   
+      Model:        & (1)           & (2)           & (3)             & (4)\\  
+      \midrule
+      \emph{Variables}\\
+      Early MGNREGA & -0.0037$^{*}$ & -0.0037       &                 & 0.0149$^{**}$\\   
+                    & (0.0022)      & (0.0028)      &                 & (0.0060)\\   
+      Phase I       &               &               & -0.0055$^{**}$  &   \\   
+                    &               &               & (0.0024)        &   \\   
+      Phase II      &               &               & -0.0021         &   \\   
+                    &               &               & (0.0026)        &   \\   
+      \midrule
+      \emph{Fixed-effects}\\
+      State         & Yes           & Yes           & Yes             & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations  & 587,378       & 587,378       & 587,378         & 587,378\\  
+      R$^2$         & 0.01453       & 0.01453       & 0.01458         & 0.05770\\  
+      \midrule \midrule
+      \multicolumn{5}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   Column 1 reproduces baseline specification. Column 2 clusters SEs at state level. Column 3 separates Phase I and Phase II effects. Column 4 uses log population growth as a placebo outcome. All include state FE and baseline controls.
+\end{table}
+
+

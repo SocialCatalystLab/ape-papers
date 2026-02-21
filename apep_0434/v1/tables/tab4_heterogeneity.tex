@@ -1,0 +1,34 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:heterogeneity} Gender and Caste Heterogeneity}
+   \centering
+   \begin{tabular}{lccccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variables:       & d\_nonfarm\_share   & d\_f\_nonfarm\_share    & d\_f\_aglabor\_share    & d\_f\_lit\_rate    & d\_nonfarm\_share\\    
+                                 & All: NF             & Female: NF              & Female: AL              & Female: Lit        & Caste DDD \\   
+      Model:                     & (1)                 & (2)                     & (3)                     & (4)                & (5)\\  
+      \midrule
+      \emph{Variables}\\
+      Early MGNREGA              & -0.0037$^{*}$       & -0.0342$^{***}$         & 0.0307$^{***}$          & -0.0046$^{***}$    & -0.0058$^{**}$\\   
+                                 & (0.0022)            & (0.0046)                & (0.0079)                & (0.0018)           & (0.0024)\\   
+      High SC/ST                 &                     &                         &                         &                    & -0.0047$^{***}$\\   
+                                 &                     &                         &                         &                    & (0.0017)\\   
+      Early $\times$ High SC/ST  &                     &                         &                         &                    & 0.0047$^{**}$\\   
+                                 &                     &                         &                         &                    & (0.0021)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      pc11\_state\_id            & Yes                 & Yes                     & Yes                     & Yes                & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations               & 587,378             & 587,378                 & 587,378                 & 587,378            & 587,378\\  
+      R$^2$                      & 0.01453             & 0.31781                 & 0.36574                 & 0.22135            & 0.01462\\  
+      \midrule \midrule
+      \multicolumn{6}{l}{\emph{Clustered (dist\_id) standard-errors in parentheses}}\\
+      \multicolumn{6}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   Column 1 reproduces baseline. Columns 2--4 use female-specific outcomes. Column 5 interacts treatment with an indicator for above-median village-level SC/ST population share in Census 2001. All include state FE and baseline controls. SEs clustered at district level.
+\end{table}
+
+

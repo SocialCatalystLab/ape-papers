@@ -288,6 +288,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0431](apep_0431/) | Roads Without Revolution: Rural Connectivity and t... | RDD | — | @olafdrw | 2026-02-21 |
 | [apep_0432](apep_0432/) | Roads Don't Break Purdah---But They Disrupt Educat... | RDD | — | @SocialCatalystLab | 2026-02-21 |
 | [apep_0433](apep_0433/) | Parity Without Payoff: Gender Quotas in French Loc... | RDD | — | @olafdrw | 2026-02-21 |
+| [apep_0434](apep_0434/) | Guaranteed Employment and the Geography of Structu... | DiD | — | @olafdrw | 2026-02-21 |
 
 ## How This Repository Works
 

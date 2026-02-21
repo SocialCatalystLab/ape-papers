@@ -1,0 +1,31 @@
+
+\begin{table}[htbp]
+   \caption{\label{tab:main} Effect of Early MGNREGA on Worker Composition (Census 2001--2011)}
+   \centering
+   \begin{tabular}{lcccccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variables: & \multicolumn{2}{c}{$\Delta$ Non-Farm Share} & $\Delta$ Ag. Labor Share & $\Delta$ Cultivator Share & $\Delta$ HH Industry Share & $\Delta$ WFPR\\
+       & \multicolumn{2}{c}{Non-Farm} & Ag. Labor & Cultivator & HH Ind. & WFPR \\ 
+      Model:                     & (1)      & (2)           & (3)            & (4)      & (5)             & (6)\\  
+      \midrule
+      \emph{Variables}\\
+      Early MGNREGA (Phase I/II) & -0.0021  & -0.0037$^{*}$ & 0.0203$^{***}$ & 0.0008   & -0.0021$^{***}$ & 0.0094$^{***}$\\   
+                                 & (0.0021) & (0.0022)      & (0.0068)       & (0.0069) & (0.0007)        & (0.0035)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      State                      & Yes      & Yes           & Yes            & Yes      & Yes             & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations               & 587,378  & 587,378       & 587,378        & 587,378  & 587,378         & 587,378\\  
+      R$^2$                      & 0.01071  & 0.01453       & 0.29516        & 0.32930  & 0.45461         & 0.37883\\  
+      Dependent variable mean    & 0.00888  & 0.00888       & 0.03007        & -0.07887 & -0.00443        & 0.00202\\  
+      \midrule \midrule
+      \multicolumn{7}{l}{\emph{Clustered (District) standard-errors in parentheses}}\\
+      \multicolumn{7}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+   
+   \par \raggedright 
+   All specifications include state fixed effects. Columns 2--6 include baseline (2001) controls: log population, literacy rate, SC/ST share, and lagged dependent variable. Standard errors clustered at the district level in parentheses. Dependent variables are long differences in village-level worker category shares between Census 2001 and 2011.
+\end{table}
+
+
