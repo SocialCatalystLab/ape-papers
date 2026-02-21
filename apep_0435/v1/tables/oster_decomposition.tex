@@ -1,0 +1,22 @@
+\begin{table}[!h]
+\centering
+\caption{\label{tab:tab:decomposition}Sensitivity: R-Squared Decomposition and Coefficient Stability}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{lrrrr}
+\toprule
+Specification & $\hat{\beta}$ & $R^2$ & Share of $\hat{\beta}_{\text{biv}}$ (\%) & $\Delta R^2$\\
+\midrule
+Bivariate & 0.6581 & 0.3622 & 100.0 & 0.3622\\
++ Language & 0.4245 & 0.6536 & 64.5 & 0.2914\\
++ Religion & 0.3528 & 0.6929 & 53.6 & 0.0392\\
++ Suffrage & 0.3538 & 0.7109 & 53.8 & 0.0181\\
++ Canton FE & 0.3132 & 0.7543 & 47.6 & 0.0434\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item DV: YES share paternity leave 2020. Oster (2019) $delta$ with $R_{max} = 1.3 times R_{text{full}}$: $hat{delta} = 0.71$. $|delta| > 1$ implies robustness to proportional selection on unobservables.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

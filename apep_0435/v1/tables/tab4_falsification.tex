@@ -1,0 +1,33 @@
+\begin{table}[H]
+\centering
+\caption{Falsification: Persistence of 1981 Gender Attitudes on Gender vs.\ Non-Gender Referenda}
+\label{tab:falsification}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+Outcome Referendum & Year & $N$ & $\hat{\tau}$ & SE & $R^2$ \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: Gender-Relevant Referenda}} \\
+\addlinespace
+Maternity Insurance & 2004 & 2,094 & 0.387\sym{***} & (0.103) & 0.777 \\
+Paternity Leave & 2020 & 2,094 & 0.313\sym{***} & (0.100) & 0.754 \\
+Same-Sex Marriage & 2021 & 2,094 & 0.278\sym{***} & (0.055) & 0.329 \\
+\addlinespace
+\midrule
+\multicolumn{6}{l}{\textit{Panel B: Non-Gender Falsification Referenda}} \\
+\addlinespace
+Mass Immigration & 2014 & 2,094 & $-0.356$\sym{***} & (0.065) & 0.568 \\
+Fighter Jets & 2020 & 2,094 & $-0.244$\sym{***} & (0.078) & 0.529 \\
+Corporate Responsibility & 2020 & 2,094 & 0.230\sym{***} & (0.054) & 0.540 \\
+Burqa Ban & 2021 & 2,094 & $-0.276$\sym{***} & (0.025) & 0.272 \\
+\addlinespace
+\midrule
+\multicolumn{6}{l}{Mean $R^2$: Gender = 0.620, Non-Gender = 0.477} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the coefficient on the 1981 equal rights YES share from a separate regression with the indicated referendum outcome. All specifications include cantonal fixed effects. Standard errors clustered at the canton level in parentheses. \sym{*} $p<0.10$, \sym{**} $p<0.05$, \sym{***} $p<0.01$. Gender referenda yield uniformly positive coefficients (more progressive in 1981 $\rightarrow$ more progressive later), while non-gender referenda show mixed signs, supporting domain-specificity.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

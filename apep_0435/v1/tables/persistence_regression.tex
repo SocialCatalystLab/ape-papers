@@ -1,0 +1,33 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Persistence of Gender Progressivism: 1981 Equal Rights $\rightarrow$ 2020 Paternity Leave},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Standard errors clustered at the canton level (26 cantons) in parentheses.},
+note{  }={Columns (4)--(5) include canton fixed effects.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-6}{solid, black, 0.05em},
+hline{12}={1-6}{solid, black, 0.05em},
+hline{1}={1-6}{solid, black, 0.1em},
+hline{15}={1-6}{solid, black, 0.1em},
+column{2-6}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) Bivariate & (2) + Language & (3) + Religion & (4) Canton FE & (5) German Only \\
+1981 Gender Progressivism & \num{0.658}*** & \num{0.425}*** & \num{0.353}*** & \num{0.313}*** & \num{0.488}*** \\
+& (\num{0.097}) & (\num{0.044}) & (\num{0.063}) & (\num{0.100}) & (\num{0.079}) \\
+French-speaking &  & \num{18.478}*** & \num{20.463}*** &  &  \\
+&  & (\num{4.552}) & (\num{3.369}) &  &  \\
+Italian-speaking &  & \num{11.786}*** & \num{17.897}*** &  &  \\
+&  & (\num{0.720}) & (\num{2.903}) &  &  \\
+Protestant &  &  & \num{6.961}** &  &  \\
+&  &  & (\num{3.209}) &  &  \\
+Mixed religion &  &  & \num{6.561}** &  &  \\
+&  &  & (\num{2.394}) &  &  \\
+Observations & \num{2,094} & \num{2,094} & \num{2,094} & \num{2,094} & \num{1,333} \\
+$R^2$ & \num{0.3622} & \num{0.6536} & \num{0.6929} & \num{0.7543} & \num{0.4549} \\
+Adj. $R^2$ & \num{0.3619} & \num{0.6531} & \num{0.6921} & \num{0.7512} & \num{0.4470} \\
+\end{talltblr}
+\end{table}

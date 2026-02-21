@@ -1,0 +1,26 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Falsification: 1981 Gender Baseline Predicting Gender vs.\ Non-Gender Votes},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={All models include canton fixed effects. SEs clustered at canton level.},
+note{  }={Columns (1)--(3): gender-related outcomes. Columns (4)--(7): non-gender outcomes.},
+note{   }={Higher $R^2$ for gender outcomes supports domain-specificity of persistence.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-8}{solid, black, 0.05em},
+hline{4}={1-8}{solid, black, 0.05em},
+hline{1}={1-8}{solid, black, 0.1em},
+hline{7}={1-8}{solid, black, 0.1em},
+column{2-8}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) Paternity 2020 & (2) Marriage 2021 & (3) Maternity 2004 & (4) Immigration 2014 & (5) Fighter Jets 2020 & (6) Corp. Resp. 2020 & (7) Burqa Ban 2021 \\
+1981 Gender Progressivism & \num{0.313}*** & \num{0.278}*** & \num{0.387}*** & \num{-0.356}*** & \num{-0.244}*** & \num{0.230}*** & \num{-0.276}*** \\
+& (\num{0.100}) & (\num{0.055}) & (\num{0.103}) & (\num{0.065}) & (\num{0.078}) & (\num{0.054}) & (\num{0.025}) \\
+Observations & \num{2,094} & \num{2,094} & \num{2,094} & \num{2,094} & \num{2,094} & \num{2,094} & \num{2,094} \\
+$R^2$ & \num{0.7543} & \num{0.3289} & \num{0.7773} & \num{0.5685} & \num{0.5291} & \num{0.5401} & \num{0.2721} \\
+Adj. $R^2$ & \num{0.7512} & \num{0.3205} & \num{0.7745} & \num{0.5631} & \num{0.5232} & \num{0.5344} & \num{0.2630} \\
+\end{talltblr}
+\end{table}

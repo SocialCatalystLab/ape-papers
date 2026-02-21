@@ -1,0 +1,30 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Robustness: German-Speaking Municipalities Only},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Sample restricted to 1357 German-speaking municipalities in 19 cantons.},
+note{  }={Columns (1)--(3): DV = Paternity 2020. Columns (4)--(5): DV = $\Delta_{\text{gender}}$.},
+note{   }={SEs clustered at canton level.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-6}{solid, black, 0.05em},
+hline{8}={1-6}{solid, black, 0.05em},
+hline{1}={1-6}{solid, black, 0.1em},
+hline{11}={1-6}{solid, black, 0.1em},
+column{2-6}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) Bivariate & (2) + Religion & (3) Canton FE & (4) Convergence & (5) Conv. + FE \\
+1981 Gender Progressivism & \num{0.481}*** & \num{0.476}*** & \num{0.488}*** & \num{-0.519}*** & \num{-0.512}*** \\
+& (\num{0.046}) & (\num{0.060}) & (\num{0.079}) & (\num{0.046}) & (\num{0.079}) \\
+Protestant &  & \num{0.757} &  &  &  \\
+&  & (\num{1.767}) &  &  &  \\
+Mixed religion &  & \num{2.518}** &  &  &  \\
+&  & (\num{1.070}) &  &  &  \\
+Observations & \num{1,333} & \num{1,333} & \num{1,333} & \num{1,333} & \num{1,333} \\
+$R^2$ & \num{0.3932} & \num{0.4034} & \num{0.4549} & \num{0.4297} & \num{0.4876} \\
+Adj. $R^2$ & \num{0.3928} & \num{0.4021} & \num{0.4470} & \num{0.4293} & \num{0.4802} \\
+\end{talltblr}
+\end{table}

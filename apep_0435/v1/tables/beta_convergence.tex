@@ -1,0 +1,26 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={$\beta$-Convergence: $\Delta$ Gender Attitudes on Initial Progressivism},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Dependent variable: $\Delta_{\text{gender}}$ = YES share 2020 $-$ YES share 1981.},
+note{  }={Negative coefficient = convergence toward common mean.},
+note{   }={Standard errors clustered at the canton level.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-5}{solid, black, 0.05em},
+hline{4}={1-5}{solid, black, 0.05em},
+hline{1}={1-5}{solid, black, 0.1em},
+hline{7}={1-5}{solid, black, 0.1em},
+column{2-5}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) All & (2) German & (3) French & (4) Canton FE \\
+1981 Gender Progressivism & \num{-0.342}*** & \num{-0.519}*** & \num{-0.627}*** & \num{-0.687}*** \\
+& (\num{0.097}) & (\num{0.046}) & (\num{0.084}) & (\num{0.100}) \\
+Observations & \num{2,094} & \num{1,333} & \num{661} & \num{2,094} \\
+$R^2$ & \num{0.1329} & \num{0.4297} & \num{0.3808} & \num{0.6660} \\
+Adj. $R^2$ & \num{0.1325} & \num{0.4293} & \num{0.3799} & \num{0.6618} \\
+\end{talltblr}
+\end{table}

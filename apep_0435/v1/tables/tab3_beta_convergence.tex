@@ -1,0 +1,41 @@
+\begin{table}[H]
+\centering
+\caption{$\beta$-Convergence of Gender Attitudes}
+\label{tab:beta_conv}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+& (1) & (2) & (3) & (4) & (5) \\
+& Unconditional & + Language & + Religion & + Suffrage & Canton FE \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: Change 1981$\rightarrow$2020 (Paternity Leave)}} \\
+\addlinespace
+1981 YES Share & $-0.342$\sym{***} & $-0.576$\sym{***} & $-0.647$\sym{***} & $-0.646$\sym{***} & $-0.687$\sym{***} \\
+               & (0.097) & (0.044) & (0.063) & (0.064) & (0.100) \\
+\addlinespace
+$R^2$ & 0.133 & 0.529 & 0.582 & 0.607 & 0.666 \\
+$N$ & 2,094 & 2,094 & 2,094 & 2,094 & 2,094 \\
+\addlinespace
+\midrule
+\multicolumn{6}{l}{\textit{Panel B: Convergence at Intermediate Horizons}} \\
+\addlinespace
+$\beta$ (1981$\rightarrow$1999) & $-0.159$ & & & & $-0.680$\sym{***} \\
+                                & (0.135) & & & & (0.091) \\
+$\beta$ (1981$\rightarrow$2004) & $-0.166$ & & & & $-0.613$\sym{***} \\
+                                & (0.114) & & & & (0.103) \\
+$\beta$ (1981$\rightarrow$2021) & $-0.778$\sym{***} & & & & $-0.722$\sym{***} \\
+                                & (0.050) & & & & (0.055) \\
+\addlinespace
+\midrule
+Language controls & & $\checkmark$ & $\checkmark$ & $\checkmark$ & \\
+Religion controls & & & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+Suffrage year & & & & $\checkmark$ & \\
+Canton FE & & & & & $\checkmark$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} OLS regressions of the change in YES share ($\Delta = Y^{t} - Y^{1981}$) on the 1981 equal rights YES share. Negative $\beta$ indicates $\beta$-convergence. Standard errors clustered at the canton level in parentheses. \sym{*} $p<0.10$, \sym{**} $p<0.05$, \sym{***} $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

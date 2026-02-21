@@ -1,0 +1,27 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={$\beta$-Convergence: Change in Gender Attitudes on Initial Progressivism},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Dependent variable: $\Delta_{\text{gender}}$ = YES share paternity leave 2020 $-$ YES share equal rights 1981.},
+note{  }={Negative coefficient $\Rightarrow$ $\beta$-convergence: initially progressive municipalities gain less (or lose ground).},
+note{   }={Standard errors clustered at canton level.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]},
+hline{2}={1-4}{solid, black, 0.05em},
+hline{4}={1-4}{solid, black, 0.05em},
+hline{1}={1-4}{solid, black, 0.1em},
+hline{8}={1-4}{solid, black, 0.1em},
+column{2-4}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) All & (2) German & (3) French \\
+1981 Gender Progressivism & \num{-0.342}*** & \num{-0.519}*** & \num{-0.627}*** \\
+& (\num{0.097}) & (\num{0.046}) & (\num{0.084}) \\
+Observations & \num{2,094} & \num{1,333} & \num{661} \\
+Sample & All & German & French \\
+NA & NA & NA & NA \\
+$R^2$ & \num{0.1329} & \num{0.4297} & \num{0.3808} \\
+\end{talltblr}
+\end{table}

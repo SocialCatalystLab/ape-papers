@@ -1,0 +1,36 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Doubly Robust Estimates of Gender Attitude Persistence},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={Column (1): OLS. Columns (2)--(3): GPS-weighted (stabilized, trimmed 1\%--99\%).},
+note{  }={GPS model: 1981 YES share $\sim$ language + religion + suffrage year.},
+note{   }={Standard errors clustered at the canton level.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]},
+hline{2}={1-4}{solid, black, 0.05em},
+hline{14}={1-4}{solid, black, 0.05em},
+hline{1}={1-4}{solid, black, 0.1em},
+hline{17}={1-4}{solid, black, 0.1em},
+column{2-4}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) OLS Bivariate & (2) AIPW Weighted & (3) AIPW + Controls \\
+1981 Gender Progressivism & \num{0.658}*** & \num{0.372}*** & \num{0.333}*** \\
+& (\num{0.097}) & (\num{0.093}) & (\num{0.063}) \\
+French-speaking &  &  & \num{16.521}*** \\
+&  &  & (\num{2.363}) \\
+Italian-speaking &  &  & \num{15.645}*** \\
+&  &  & (\num{1.882}) \\
+Protestant &  &  & \num{3.349} \\
+&  &  & (\num{2.246}) \\
+Mixed religion &  &  & \num{3.514}** \\
+&  &  & (\num{1.680}) \\
+Suffrage year &  &  & \num{-0.687}** \\
+&  &  & (\num{0.247}) \\
+Observations & \num{2,094} & \num{2,094} & \num{2,094} \\
+$R^2$ & \num{0.3622} & \num{0.1274} & \num{0.6365} \\
+Adj. $R^2$ & \num{0.3619} & \num{0.1270} & \num{0.6355} \\
+\end{talltblr}
+\end{table}

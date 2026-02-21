@@ -1,0 +1,26 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={Persistence Across Gender-Related Referendum Outcomes},
+note{}={* p \num{< 0.1}, ** p \num{< 0.05}, *** p \num{< 0.01}},
+note{ }={All models include canton FE. SEs clustered at canton level.},
+note{  }={Each column uses a different gender referendum as dependent variable.},
+note{   }={The treatment variable is 1981 equal rights YES share in all columns.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-6}{solid, black, 0.05em},
+hline{4}={1-6}{solid, black, 0.05em},
+hline{1}={1-6}{solid, black, 0.1em},
+hline{7}={1-6}{solid, black, 0.1em},
+column{2-6}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& (1) Paternity 2020 & (2) Marriage 2021 & (3) Maternity 2004 & (4) Maternity 1999 & (5) Maternity 1984 \\
+1981 Gender Progressivism & \num{0.313}*** & \num{0.278}*** & \num{0.387}*** & \num{0.320}*** & \num{0.217}*** \\
+& (\num{0.100}) & (\num{0.055}) & (\num{0.103}) & (\num{0.091}) & (\num{0.026}) \\
+Observations & \num{2,094} & \num{2,094} & \num{2,094} & \num{2,095} & \num{2,096} \\
+$R^2$ & \num{0.7543} & \num{0.3289} & \num{0.7773} & \num{0.7741} & \num{0.5320} \\
+Adj. $R^2$ & \num{0.7512} & \num{0.3205} & \num{0.7745} & \num{0.7712} & \num{0.5261} \\
+\end{talltblr}
+\end{table}

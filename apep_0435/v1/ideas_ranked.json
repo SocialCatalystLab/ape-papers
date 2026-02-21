@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-21T16:20:25.409716",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3469,
+    "output_tokens": 1690,
+    "total_tokens": 5159
+  },
+  "ideas_file": "output/apep_0435/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "The Convergence of Gender Attitudes: Forty Years of Swiss Municipal Referenda",
+      "score": 74,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "The R\u00f6stigraben Effect on Gender Policy: Cultural Discontinuity Across Swiss Language Borders",
+      "score": 67,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "Religion, Secularization, and Gender Progressivism in Swiss Municipalities",
+      "score": 54,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}
