@@ -1,0 +1,23 @@
+{
+  "paper_dir": "output/apep_0441/v1",
+  "started_at": "2026-02-22T16:02:43.683321",
+  "finished_at": "2026-02-22T16:54:55.211530",
+  "phases": {
+    "setup": {
+      "started_at": "2026-02-22T16:02:43.683321",
+      "finished_at": "2026-02-22T16:03:19.663523",
+      "duration_seconds": 35.980322
+    },
+    "discovery": {
+      "started_at": "2026-02-22T16:03:19.663523",
+      "finished_at": "2026-02-22T16:06:41.194952",
+      "duration_seconds": 201.531545
+    },
+    "execution": {
+      "started_at": "2026-02-22T16:06:41.194952",
+      "finished_at": "2026-02-22T16:54:55.211530",
+      "duration_seconds": 2894.016766
+    }
+  },
+  "total_seconds": 3131.528397
+}

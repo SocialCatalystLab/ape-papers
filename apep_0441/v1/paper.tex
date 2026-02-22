@@ -1,0 +1,559 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Smaller States, Bigger Growth? Two Decades of Evidence from India's State Bifurcations}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. This paper was generated autonomously using Claude Code. Correspondence: scl@econ.uzh.ch} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Does creating smaller states accelerate economic development? In November 2000, India carved three new states---Uttarakhand, Jharkhand, and Chhattisgarh---from Uttar Pradesh, Bihar, and Madhya Pradesh, affecting 200 million people. Using district-level satellite nightlights from 1994--2013 and heterogeneity-robust difference-in-differences, I find that districts in newly created states experienced 0.29 log points (34 percent) greater nightlight growth than parent state districts. However, this headline estimate must be interpreted cautiously: a formal pre-test rejects parallel trends ($p = 0.005$), and the event study reveals pre-existing convergence. Randomization inference yields a borderline $p$-value of 0.05. Heterogeneity reveals Uttarakhand and Chhattisgarh drove gains while Jharkhand---despite mineral wealth---stagnated. New state capitals captured disproportionate growth. These findings suggest decentralization may accelerate development for some regions while failing others, challenging simple ``smaller states are better'' narratives.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H77, O18, R11, P48 \\
+\noindent\textbf{Keywords:} state creation, decentralization, nightlights, India, difference-in-differences
+
+\newpage
+
+%% ============================================================================
+%% INTRODUCTION
+%% ============================================================================
+
+\section{Introduction}
+
+When India's parliament voted to split three of its largest states in August 2000, proponents promised that smaller administrative units would mean more responsive governance, better-targeted investment, and faster development. Within months, Uttarakhand emerged from the Himalayan foothills of Uttar Pradesh, Jharkhand rose from the mineral-rich plateau of southern Bihar, and Chhattisgarh was carved from the forested heartland of Madhya Pradesh. Overnight, roughly 200 million people---more than the population of Brazil---found themselves citizens of new states. A quarter century later, the central question remains unresolved: did it work?
+
+This question matters far beyond India. The optimal size of subnational government is a foundational issue in fiscal federalism \citep{oates1972fiscal, alesina2003size}. Demands for new administrative units are ubiquitous in developing countries---from Nigeria to Indonesia to Ethiopia---and India itself continues to debate new state proposals for Vidarbha, Gorkhaland, and Bodoland. Yet credible causal evidence on whether state creation drives development remains remarkably thin. Existing studies either rely on state-level aggregates with too few units for statistical inference \citep{vaibhav2024state} or use shorter time horizons that cannot distinguish transitory adjustment from persistent growth effects \citep{dhillon2015smaller}.
+
+This paper exploits the November 2000 trifurcation as a natural experiment, using satellite-measured nightlights at the district level to trace economic trajectories over two decades. Three features make this setting unusually informative. First, the treatment is sharp and large: entire districts were reassigned from parent to new states in a single legislative act. Second, district assignment followed pre-existing regional boundaries rather than contemporaneous economic conditions, providing a degree of exogeneity in the allocation of treatment. Third, satellite nightlights---available annually at the district level from 1994 through 2013 in the DMSP archive and through 2023 via VIIRS---allow me to observe the full dynamic response with far more granularity than any previous study.
+
+The core empirical strategy compares districts assigned to newly created states against districts remaining in parent states, using a two-way fixed effects framework reinforced by Callaway-Sant'Anna heterogeneity-robust estimators. The primary TWFE estimate indicates that districts in new states experienced 0.80 log points greater nightlight growth relative to parent state districts ($p < 0.01$, clustered at the state level). The Callaway-Sant'Anna aggregate ATT is 0.29 log points ($p < 0.05$). However, I emphasize at the outset that this headline number requires substantial qualification.
+
+The event study reveals a troubling pattern: pre-treatment coefficients are statistically significant and negative, indicating that new state districts were on a convergence trajectory \textit{before} state creation occurred. A formal pre-test of the parallel trends assumption rejects decisively ($p = 0.005$). This means the standard DiD identifying assumption is violated in the data, and the estimated treatment effect conflates the causal impact of statehood with pre-existing convergence dynamics. I conduct extensive sensitivity analysis---including randomization inference (RI $p = 0.05$, borderline), wild cluster bootstrap ($p = 0.066$), placebo tests, and leave-one-pair-out analysis---but cannot fully resolve this identification challenge.
+
+The heterogeneity results are perhaps the most substantively important finding. Uttarakhand experienced the largest gains (1.17 log points), consistent with its transformation from a neglected hill region into a state with its own capital, university system, and infrastructure investment. Chhattisgarh also grew substantially (1.06 log points), leveraging its mineral and forest resources under dedicated state management. Jharkhand, however, shows minimal treatment effects (0.14 log points) despite inheriting the Chota Nagpur plateau's vast coal and iron deposits---a pattern consistent with resource curse dynamics under weak governance. Within treated states, capital districts (Dehradun, Ranchi, Raipur) captured disproportionate growth, suggesting that the administrative agglomeration channel dominates the ``smaller states = better governance everywhere'' narrative.
+
+This paper contributes to several literatures. First, it adds to the growing body of work on fiscal decentralization and subnational governance in developing countries \citep{bardhan2002decentralization, faguet2004does, martinez2017fiscal}. While the theoretical predictions of decentralization are ambiguous---smaller units may be more responsive but also more vulnerable to capture---the empirical evidence base remains thin, particularly for the creation of entirely new subnational units rather than incremental devolution. Second, it speaks to the literature on the political economy of India's federal structure \citep{tillin2013remapping, chand2016realpolitik}, providing the first district-level causal analysis of the 2000 trifurcation with modern econometric methods. Third, it contributes methodologically by demonstrating how pre-trend violations in state-level policy evaluations can be diagnosed and bounded \citep{roth2022pretrends, rambachan2023more}, offering a template for honest engagement with identification challenges in settings where the number of treated clusters is small \citep{conleytaber2011}.
+
+Documenting the failure of parallel trends is a contribution in itself. Too many studies present event study plots with borderline pre-trends and proceed as if identification were secure. Here, the pre-trend violation is a first-order feature of the analysis, and the paper's value lies in documenting both the suggestive evidence of positive effects and the precise nature of the identification threat. A reader who believes the pre-existing convergence was unrelated to the political movement for statehood will interpret these estimates as causal; a skeptic may view them as upper bounds.
+
+\Cref{sec:background} provides institutional context. \Cref{sec:data,sec:strategy} describe the data and identification strategy. \Cref{sec:results,sec:robustness,sec:heterogeneity} present results and robustness. \Cref{sec:discussion} discusses implications, and \Cref{sec:conclusion} concludes.
+
+%% ============================================================================
+%% INSTITUTIONAL BACKGROUND
+%% ============================================================================
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsection{The Demand for Smaller States}
+
+India's post-independence political geography was initially organized along linguistic lines through the States Reorganisation Act of 1956, creating large states designed to be administratively coherent. By the 1990s, however, several regions within these states had developed grievances rooted in perceived neglect by distant state capitals. The hill districts of Uttar Pradesh felt marginalized by a government in Lucknow focused on the Gangetic plain. The tribal and mineral-rich areas of southern Bihar argued that their natural resources were being extracted without commensurate investment. The Chhattisgarhi-speaking districts of eastern Madhya Pradesh felt culturally distinct and economically overlooked.
+
+These demands crystallized into organized political movements in the 1990s. The Uttarakhand agitation, which included violent protests in the early 1990s, demanded a separate hill state that could address the unique challenges of mountainous terrain, seasonal migration, and environmental conservation. The Jharkhand movement, led primarily by tribal (adivasi) communities, had roots extending back to the colonial period and centered on self-governance over mineral-rich lands. The Chhattisgarh movement, while less contentious, built on the distinct linguistic and cultural identity of the Chhattisgarhi-speaking population.
+
+\subsection{The 2000 Trifurcation}
+
+In August 2000, India's parliament passed three reorganization acts, and the new states came into existence in rapid succession: Chhattisgarh on November 1, Uttarakhand on November 9, and Jharkhand on November 15. The district assignment followed pre-existing regional and divisional boundaries:
+
+\begin{itemize}
+\item \textbf{Uttarakhand} (13 districts) comprised the Garhwal and Kumaon divisions of northwestern Uttar Pradesh---predominantly mountainous districts in the Himalayas, plus two plains districts (Haridwar and Udham Singh Nagar). Dehradun was designated the interim capital.
+
+\item \textbf{Jharkhand} (24 districts) comprised the Chota Nagpur plateau and Santhal Pargana regions of southern Bihar---geographically distinct from the Gangetic plain, predominantly tribal, and rich in coal, iron ore, and other minerals. Ranchi was designated capital.
+
+\item \textbf{Chhattisgarh} (18 districts) comprised the southeastern districts of Madhya Pradesh---forested, tribal, and mineral-rich, with a distinct Chhattisgarhi cultural identity. Raipur was designated capital.
+\end{itemize}
+
+The parent states---Uttar Pradesh (71 remaining districts), Bihar (38 districts), and Madhya Pradesh (50 districts)---retained their existing capitals (Lucknow, Patna, Bhopal) and the majority of their territory and population.
+
+\subsection{What Changed After Bifurcation}
+
+State creation in India's federal system confers several concrete changes. New states receive their own: (i) state legislature, governor, and chief minister; (ii) share of central government fiscal transfers under the Finance Commission; (iii) state planning commission and development budget; (iv) representation in the Rajya Sabha (upper house); (v) state civil services, police, and judiciary; and (vi) a capital city that becomes the administrative hub.
+
+The fiscal implications are particularly significant. Under India's constitutional framework, state governments control substantial spending on education, health, infrastructure, and welfare. Central transfers (grants and tax devolution) are allocated based on population, area, per capita income, and other criteria. The creation of a new state means that the Finance Commission must reallocate resources to the new entity, and the new state government has direct control over spending priorities---rather than competing for attention within a larger, more heterogeneous state.
+
+Crucially, the assignment of districts to new versus parent states was determined by historical and geographic factors---divisional boundaries, linguistic regions, and topographic features---not by contemporaneous economic performance. This provides the key quasi-experimental variation: districts on either side of the new state boundary share geographic proximity but experience fundamentally different governance structures after 2000.
+
+\subsection{Post-Bifurcation Governance Trajectories}
+
+The three new states followed strikingly different governance trajectories after their creation, a fact that proves central to the empirical analysis.
+
+\textbf{Uttarakhand} established relatively stable governance from the outset. The state benefited from a literate, organized civil society inherited from the hill districts' strong tradition of grassroots activism. The Chipko environmental movement of the 1970s had created networks of civic engagement that translated into effective state institutions. Uttarakhand's first chief minister, Nityanand Swami, was followed by a series of leaders who maintained political stability through regular democratic transitions. The state government pursued an explicit economic strategy centered on tourism, hydropower, and education---establishing the Indian Institute of Technology at Roorkee (already in existence but now under state jurisdiction), developing religious tourism circuits (Char Dham), and investing in mountain road infrastructure. By 2010, Uttarakhand's per capita income had surpassed the national average, a remarkable achievement for a state that had been among UP's poorest regions.
+
+\textbf{Chhattisgarh} similarly benefited from early political stability. Ajit Jogi served as the first chief minister and initiated programs targeting tribal welfare and mineral resource development. From 2003 to 2018, Raman Singh of the BJP governed the state continuously for 15 years---the longest unbroken tenure of any chief minister among the new states. This stability enabled consistent policy implementation. Chhattisgarh became a national model for its innovative public distribution system (PDS), which was widely cited as among the best-functioning food security programs in India. The state leveraged its abundant coal, iron ore, and limestone deposits through a combination of mining royalties and industrial development, transforming Raipur from a mid-sized trading town into a significant industrial and commercial center. However, the state also faced a severe Maoist insurgency in its southern districts (the ``Red Corridor''), which constrained development in the most remote tribal areas.
+
+\textbf{Jharkhand} presents the starkest contrast. Despite inheriting India's richest mineral deposits---containing roughly 40\% of the country's coal, 26\% of iron ore, and significant reserves of copper, mica, and uranium---the state was plagued by chronic political instability from its inception. Between 2000 and 2024, Jharkhand had 14 different chief ministers, with no single government completing a full five-year term until Hemant Soren's tenure from 2019. Several periods of President's Rule (direct central government administration) interrupted democratic governance entirely. The state's mineral wealth attracted intense competition among political factions and mining interests, creating a governance environment characterized by rent-seeking, corruption scandals (including several chief ministers facing criminal charges), and neglect of public services. The Naxalite insurgency remained active across much of the state, further undermining administrative capacity in rural districts. This governance failure despite natural resource abundance represents a textbook example of the ``resource curse'' at the subnational level.
+
+\subsection{Telangana (2014)}
+
+The 2000 trifurcation was followed 14 years later by the creation of Telangana from Andhra Pradesh in June 2014. The Telangana movement, rooted in the historic distinction between the Telugu-speaking Nizam's Dominions and coastal Andhra, had been active since the 1960s. The bifurcation created Telangana (10 districts, including the major city of Hyderabad) and a residual Andhra Pradesh (13 districts). I use this event as a supplementary analysis with VIIRS nightlights (2012--2023).
+
+%% ============================================================================
+%% DATA
+%% ============================================================================
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Satellite Nightlights}
+
+The primary outcome variable is satellite-measured nighttime light emissions at the district level. I use two complementary sources from the SHRUG platform \citep{asher2021shrug}:
+
+\textbf{DMSP-OLS (1994--2013).} The Defense Meteorological Satellite Program's Operational Linescan System provides annual composites of nighttime light intensity. I use the calibrated total light measure (\texttt{dmsp\_total\_light\_cal}) aggregated to Census 2011 district boundaries. DMSP values are integer-coded (0--63) and top-coded in bright urban areas. The calibration corrects for sensor degradation across satellite generations.
+
+\textbf{VIIRS (2012--2023).} The Visible Infrared Imaging Radiometer Suite provides higher-resolution annual composites with continuous (non-integer) values and no top-coding. I use the median-masked annual sum (\texttt{viirs\_annual\_sum}) for the extended analysis. The DMSP-VIIRS overlap in 2012--2013 enables cross-calibration.
+
+Nightlights are a well-established proxy for local economic activity \citep{chen2011luminosity, henderson2012measuring, donaldson2016view}. While the mapping from luminosity to GDP is noisy and nonlinear, nightlights have three advantages for this application: (i) annual availability throughout the study period, (ii) spatial granularity at the district level, and (iii) immunity to the selective reporting that affects Indian administrative statistics.
+
+Administrative statistics in India are often unreliable; state bureaus have both low capacity and high political incentives to overstate growth. India's official state domestic product (SDP) and district domestic product (DDP) statistics are compiled with varying methodologies, coverage gaps, and political incentives. The creation of new states introduced statistical discontinuities: the newly established statistical bureaus of Uttarakhand, Jharkhand, and Chhattisgarh had to build capacity from scratch, producing data series that are difficult to compare with their parent states' historical records. Several scholars have documented systematic overestimation of growth rates in Indian state-level accounts during this period. Satellite-measured nightlights bypass these institutional measurement problems entirely.
+
+However, nightlights also have well-known limitations. The relationship between luminosity and economic output is log-linear on average but varies by sector: manufacturing and services generate more light per unit of value-added than agriculture, creating a bias toward detecting non-agricultural growth. In the context of India's state bifurcation, this means that districts experiencing primarily agricultural growth (or improvements in agricultural productivity without structural transformation) will appear to grow less in nightlights than their actual income gains would suggest. Additionally, DMSP nightlights are integer-valued and top-coded at a digital number of 63, creating censoring in highly urbanized areas. While this is less of a concern for the predominantly rural districts in the treatment sample, it may affect the capital city analysis where urban luminosity can reach saturation.
+
+I use the natural logarithm of nightlights plus one, $\ln(NL_{dt} + 1)$, as the primary outcome variable. The addition of one addresses zero-light observations (primarily found in the most remote districts in early years) and ensures the logarithmic transformation is defined everywhere. This specification means that treatment effect coefficients can be interpreted approximately as proportional changes in nightlight intensity.
+
+\subsection{Census Data}
+
+I use the Census Primary Census Abstract (PCA) from 1991, 2001, and 2011 at the district level, accessed through the SHRUG platform. Key variables include: total population, literacy rate, worker classification (agricultural cultivators, agricultural laborers, household industry workers, other workers), and Scheduled Caste/Tribe population shares. These variables serve primarily as baseline covariates and for mechanism analysis.
+
+\subsection{Sample Construction}
+
+The analysis sample comprises districts in the three state pairs formed by the 2000 bifurcation: Uttarakhand-Uttar Pradesh, Jharkhand-Bihar, and Chhattisgarh-Madhya Pradesh. The total sample is 214 districts observed over 20 years (1994--2013), yielding 4,280 district-year observations for the DMSP panel. Where multiple satellite observations exist for the same district-year (due to overlapping DMSP satellites), I average across sensors. For the extended analysis, I add the 23 districts in the Telangana-Andhra Pradesh pair with VIIRS data from 2012--2023.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} presents pre-treatment (1994--1999) means by treatment status. New state districts have slightly lower average nightlight intensity but substantially higher variance, reflecting the heterogeneity across the three treatment states. Baseline demographics differ significantly: new state districts have lower literacy rates, higher agricultural worker shares, and substantially larger tribal (ST) populations. These baseline imbalances motivate the use of district fixed effects and within-pair comparisons, though they also underscore the identification challenge discussed below.
+
+%% ============================================================================
+%% EMPIRICAL STRATEGY
+%% ============================================================================
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+The core identification strategy exploits the sharp reassignment of districts from parent to new states in November 2000. I estimate the following two-way fixed effects specification:
+
+\begin{equation}
+\ln(NL_{dt} + 1) = \alpha_d + \gamma_t + \beta \cdot \text{NewState}_d \times \text{Post}_t + \varepsilon_{dt}
+\label{eq:twfe}
+\end{equation}
+
+\noindent where $d$ indexes districts and $t$ indexes years. $\alpha_d$ denotes district fixed effects that absorb all time-invariant differences between districts (including baseline luminosity, geography, and demographics). $\gamma_t$ denotes year fixed effects that absorb common shocks (e.g., India-wide growth, satellite sensor changes). $\text{NewState}_d$ equals one for districts assigned to a newly created state. $\text{Post}_t$ equals one for years 2001 and later---the first full calendar year after the November 2000 bifurcations. $\beta$ is the parameter of interest: the average effect of state creation on nightlight intensity.
+
+Standard errors are clustered at the state level (6 clusters for the 2000 cohort). With so few clusters, conventional cluster-robust inference is unreliable \citep{conleytaber2011}, so I supplement with wild cluster bootstrap \citep{cameron2008bootstrap} and randomization inference.
+
+\subsection{Parallel Trends and Pre-Existing Convergence}
+
+The identifying assumption for DiD is that, absent state creation, districts in new and parent states would have followed parallel trajectories. I assess this through an event study specification:
+
+\begin{equation}
+\ln(NL_{dt} + 1) = \alpha_d + \gamma_t + \sum_{k \neq -1} \delta_k \cdot \text{NewState}_d \times \ind[t - 2001 = k] + \varepsilon_{dt}
+\label{eq:eventstudy}
+\end{equation}
+
+\noindent where $k$ indexes event time relative to 2001 (the first full treatment year) and $k = -1$ (year 2000) is the reference period. Under parallel trends, all $\delta_k$ for $k < 0$ should equal zero.
+
+I am transparent at the outset: \textbf{the parallel trends assumption is violated in the data.} The pre-treatment coefficients are negative and statistically significant, ranging from $-0.66$ at $k = -7$ (1994) to $-0.31$ at $k = -2$ (1999). This indicates that new state districts were \textit{growing faster} than parent state districts in the pre-treatment period---converging toward them. A formal pre-test rejects parallel trends at $p = 0.005$ using the Callaway-Sant'Anna framework. As \citet{roth2022pretrends} emphasizes, interpreting event-study estimates after testing for pre-trends requires particular caution; the pre-trend pattern here is clear enough that it cannot be dismissed as a false positive \citep{freyaldenhoven2019}.
+
+This pre-existing convergence is not surprising in context. The very regions that became new states were selected precisely because they had been growing and demanded greater autonomy. The political movements for statehood were strongest where residents perceived the greatest gap between their region's potential and its realized development under distant governance. Whether this convergence reflects the causal effect of the statehood movement itself (anticipation effects), mean reversion, or common trends in India's poorest regions during the late 1990s, the result is the same: the standard DiD estimate overstates the causal effect of state creation.
+
+I address this identification threat through four complementary strategies:
+
+\begin{enumerate}
+\item \textbf{Pair-specific year fixed effects.} By estimating $\alpha_d + \gamma_{p(d),t}$ where $p(d)$ denotes the state pair to which district $d$ belongs, I absorb common shocks within each parent-child pair, isolating the within-pair divergence attributable to state creation.
+
+\item \textbf{Callaway-Sant'Anna heterogeneity-robust estimator.} TWFE specifications can produce biased estimates under treatment effect heterogeneity \citep{goodmanbacon2021}. The Callaway-Sant'Anna estimator uses never-treated districts as the comparison group and aggregates group-time ATTs to produce heterogeneity-robust estimates \citep{callaway2021difference}.
+
+\item \textbf{Randomization inference.} I permute treatment across all $\binom{6}{3} = 20$ possible assignments of 3 treated states from the 6 in the sample. The RI $p$-value accounts for the small number of independent treatment events.
+
+\item \textbf{Wild cluster bootstrap.} With only 6 state-level clusters, conventional cluster-robust standard errors are unreliable. Wild bootstrap using Rademacher weights provides improved finite-sample inference \citep{cameron2008bootstrap}.
+\end{enumerate}
+
+\subsection{Threats to Validity}
+
+Beyond the pre-trend violation discussed above, several additional concerns merit attention:
+
+\textbf{Selection into treatment.} District assignment to new states was not random---it followed regional identity, geography, and ethnicity. However, the specific boundaries were inherited from pre-existing administrative divisions, not drawn based on economic outcomes. The district fixed effects absorb all level differences.
+
+\textbf{Concurrent policies.} The November 2000 period coincided with India's broader economic liberalization, accelerating growth nationwide. The Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA), which targeted India's poorest districts including many in the treatment group, was implemented in phases from 2006. Year fixed effects absorb India-wide trends, and pair-specific year effects absorb within-pair common shocks, but policies targeted differentially at the new states could confound the estimates.
+
+\textbf{Composition effects.} The creation of a new state capital (and associated government employment, construction, and services) generates a localized growth shock that may not represent the treatment effect for the average treated district. I address this through capital-versus-non-capital heterogeneity analysis.
+
+\textbf{Few clusters.} With only 6 state-level clusters (3 treated, 3 control) in the main analysis, inference is inherently challenging. Randomization inference and wild bootstrap partially address this, but the fundamental limitation remains that 3 treatment events provide limited information about the general effect of state creation.
+
+%% ============================================================================
+%% RESULTS
+%% ============================================================================
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Estimates}
+
+\input{tables/tab2_main_results}
+
+Statehood appears to more than double nightlight growth in a na\"ive comparison: the baseline TWFE estimate is 0.80 log points, implying a 123 percent increase relative to counterfactual growth (\Cref{tab:main}, Column 1). But this is an illusion of the pre-trend. Absorbing pair-specific year shocks reduces the estimate to 0.74 (Column 2); population-weighting and levels specifications (Columns 3--4) yield qualitatively similar results.
+
+The heterogeneity-robust Callaway-Sant'Anna ATT, reported at the bottom of the table, tells a more measured story: 0.29 log points, approximately one-third of the TWFE estimate. This gap reflects the TWFE's conflation of pre-existing convergence with the treatment effect---precisely the bias the modern DiD literature warns against \citep{goodmanbacon2021}.
+
+The wild cluster bootstrap yields $p = 0.066$, marginally above conventional significance thresholds. Randomization inference, which permutes treatment across all 20 possible state assignments, yields $p = 0.05$---borderline significant. These results suggest that the estimated effect, while positive, is not robustly distinguishable from chance given the small number of independent treatment events.
+
+\subsection{Event Study}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_event_study.pdf}
+\caption{Event Study: Effect of State Creation on Nightlight Intensity}
+\label{fig:eventstudy}
+\end{figure}
+
+\Cref{fig:eventstudy} plots the TWFE event study coefficients with 95 percent confidence intervals clustered at the state level. The pre-treatment pattern is immediately apparent: coefficients at $k = -7$ through $k = -2$ are negative and significant, indicating that new state districts were growing faster than parent state districts throughout the pre-treatment period. The reference period ($k = -1$, year 2000) normalizes the comparison, and the post-treatment coefficients are positive and growing over time, reaching approximately 0.57--0.59 log points by 2011--2012.
+
+The pattern is consistent with convergence dynamics: new state districts started from a lower base and were catching up even before state creation, with the catch-up potentially accelerating after 2000. Whether the acceleration is caused by statehood or merely reflects the continuation of a pre-existing trend is the central identification challenge of this paper.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_cs_event_study.pdf}
+\caption{Callaway-Sant'Anna Event Study}
+\label{fig:cs_eventstudy}
+\end{figure}
+
+\Cref{fig:cs_eventstudy} shows the Callaway-Sant'Anna dynamic event study. The pattern mirrors the TWFE event study, with negative pre-treatment coefficients and positive, growing post-treatment effects. The CS estimator's simultaneous confidence bands (accounting for multiple testing across event times) are wider, and the post-treatment effects become statistically significant (band excludes zero) only from $k = 8$ (year 2009) onward. The pre-treatment pattern confirms that the parallel trends violation is not an artifact of TWFE specification; it is a fundamental feature of the data.
+
+%% ============================================================================
+%% ROBUSTNESS
+%% ============================================================================
+
+\section{Robustness}
+\label{sec:robustness}
+
+\input{tables/tab4_robustness}
+
+\subsection{Placebo Test}
+
+I assign a fake treatment date of 1997 and estimate the DiD using only pre-treatment data (1994--2000). The placebo coefficient is 0.25 ($p = 0.186$)---positive but not statistically significant. The magnitude (about one-third of the main estimate) is consistent with the pre-existing convergence pattern: even within the pre-treatment window, new state districts were growing faster. The failure to reach significance likely reflects the shorter time horizon (4 post-placebo years versus 13 post-treatment years) rather than the absence of differential pre-trends.
+
+\subsection{Randomization Inference}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/fig5_ri_distribution.pdf}
+\caption{Randomization Inference: Distribution of Placebo Estimates}
+\label{fig:ri}
+\end{figure}
+
+\Cref{fig:ri} shows the distribution of treatment effect estimates across all $\binom{6}{3} = 20$ possible assignments of 3 treated states from the 6 in the sample. The actual estimate (0.80) falls at or near the extreme of this distribution, yielding a two-sided RI $p$-value of 0.05. This provides suggestive---but not definitive---evidence that the actual treatment assignment generates a larger effect than random permutations. The small sample of only 20 permutations limits the precision of this test: the minimum achievable $p$-value is $1/20 = 0.05$.
+
+\subsection{Leave-One-Pair-Out}
+
+Dropping the Uttarakhand-UP pair reduces the estimate to 0.65, dropping Jharkhand-Bihar yields 1.07, and dropping Chhattisgarh-MP gives 0.68. The estimate is robust to the exclusion of any single pair, though sensitivity to the Jharkhand-Bihar pair (whose own treatment effect is small) suggests that the aggregate result is not driven by any single bifurcation.
+
+\subsection{Extended Panel}
+
+Extending the panel through 2023 using calibrated DMSP-VIIRS data yields a treatment effect of comparable magnitude (0.70 log points), suggesting that the initial divergence between new and parent state districts persists over two full decades. This persistence is itself informative: if the estimated effects were driven entirely by pre-existing convergence, one might expect the gap to stabilize as new state districts approached the levels of their parent counterparts. Instead, the gap appears to widen slightly in the VIIRS era (2014--2023), though the DMSP-to-VIIRS sensor transition in 2013--2014 introduces measurement uncertainty that complicates direct comparison across the two satellite eras. I calibrate the two series using district-specific ratios computed during the 2012--2013 overlap period, but residual measurement differences may remain.
+
+The extended panel also reveals an interesting dynamic in the post-2010 period. India's growth acceleration under the Twelfth and Thirteenth Five-Year Plans brought substantial infrastructure investment to both new and parent states. The National Highways Development Project, Pradhan Mantri Gram Sadak Yojana (PMGSY), and rural electrification programs expanded access across the country. The fact that the nightlight gap between new and parent state districts persists despite these nationwide programs suggests that state-level governance continues to shape local development trajectories even when central government programs provide a common floor of infrastructure investment.
+
+\subsection{Telangana}
+
+For the 2014 Telangana bifurcation, the VIIRS panel (2012--2023) provides only two pre-treatment years (2012--2013), severely limiting the power of pre-trend tests. The point estimate ($-0.06$, s.e. $= 0.06$) is essentially zero and statistically insignificant, likely reflecting the short pre-treatment window. Telangana's case is also distinctive because the new state inherited Hyderabad---one of India's largest metropolitan areas and a major IT hub---giving it an enormous initial advantage over the residual Andhra Pradesh. This makes the Telangana bifurcation a poor comparison case for the 2000 cohort, where new states were carved from economically disadvantaged regions. I present the Telangana results as supplementary evidence only and do not pool them with the main analysis.
+
+\subsection{Sun-Abraham Estimator}
+
+As a further robustness check, I implement the \citet{sun2021estimating} interaction-weighted estimator, which addresses the bias in TWFE event study estimates that arises from heterogeneous treatment effects across cohorts. With only a single treatment cohort in the 2000 analysis (all three bifurcations occurred simultaneously), the Sun-Abraham correction should not substantially alter the TWFE estimates---and indeed, the SA aggregate effect is qualitatively similar to the baseline TWFE, confirming that heterogeneity bias from staggered treatment timing is not a major concern in this setting. The more relevant heterogeneity---across state pairs rather than across cohorts---is addressed directly in the pair-specific analysis.
+
+%% ============================================================================
+%% HETEROGENEITY
+%% ============================================================================
+
+\section{Heterogeneity and Mechanisms}
+\label{sec:heterogeneity}
+
+\subsection{Heterogeneity by State Pair}
+
+\input{tables/tab3_heterogeneity}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_pair_trends.pdf}
+\caption{Nightlight Trends by State Pair}
+\label{fig:pair_trends}
+\end{figure}
+
+The aggregate treatment effect masks dramatic heterogeneity across the three bifurcations. \Cref{tab:heterogeneity} and \Cref{fig:pair_trends} reveal three distinct stories:
+
+\textbf{Uttarakhand vs. Uttar Pradesh:} The largest effect (1.17 log points). Uttarakhand's transformation from a neglected hill region into a functioning state with dedicated infrastructure investment, tourism development, and educational institutions appears to have generated substantial growth. The hill districts benefited from policies tailored to their geography---mountain roads, hydropower, and ecotourism---that were unlikely under UP's plains-focused administration.
+
+\textbf{Chhattisgarh vs. Madhya Pradesh:} The second-largest effect (1.06 log points). Chhattisgarh leveraged its mineral and forest resources under dedicated state management, with Raipur emerging as a significant industrial and commercial center. The state's smaller geographic scope allowed more targeted investment in tribal development and resource extraction infrastructure.
+
+\textbf{Jharkhand vs. Bihar:} Minimal effect (0.14 log points). Despite inheriting the richest mineral belt in India---including coal, iron ore, copper, and uranium---Jharkhand's growth barely exceeded its parent state. This pattern is consistent with a ``resource curse'' dynamic: mineral wealth attracted rent-seeking and political instability rather than broad-based development. Jharkhand has experienced persistent Naxalite insurgency, political instability (14 chief ministers in 24 years), and mining-related corruption that may have offset the potential benefits of statehood.
+
+\subsection{Capital City Effects}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_capital_effect.pdf}
+\caption{Capital City Effect: New State Capitals vs. Other Districts}
+\label{fig:capital}
+\end{figure}
+
+\Cref{fig:capital} decomposes the treatment effect by capital status. The three new state capitals---Dehradun, Ranchi, and Raipur---show dramatically higher nightlight growth than non-capital treated districts. This is consistent with the ``administrative agglomeration'' mechanism: the creation of a state capital concentrates government employment, legislative infrastructure, high courts, state universities, and associated private sector activity in a single location.
+
+The capital city concentration raises an important question about the distributional consequences of state creation. If the growth benefits accrue primarily to the new capital and its immediate hinterland, the peripheral districts of the new state may see little improvement---potentially just a change in the geographic location of their administrative neglect from a distant parent-state capital to a slightly-less-distant new-state capital.
+
+\subsection{Long-Run Dynamics}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig7_extended_panel.pdf}
+\caption{Long-Run Trajectories: Two Decades After State Creation}
+\label{fig:extended}
+\end{figure}
+
+\Cref{fig:extended} plots the extended trajectories through 2023, bridging the DMSP and VIIRS sensor eras. The divergence between new and parent state districts appears to persist and potentially widen through the full 23-year post-treatment window. If anything, the gap continues to grow rather than stabilizing, suggesting that the growth effects of state creation may be persistent rather than transitory. However, the sensor transition in 2013--2014 (marked by the vertical dotted line) introduces uncertainty about the comparability of DMSP and VIIRS measurements over time.
+
+\subsection{Mechanisms}
+
+Several channels could generate the observed patterns, and the heterogeneity across state pairs provides indirect evidence on their relative importance.
+
+\textbf{Fiscal decentralization.} New states receive their own share of central transfers under the Finance Commission formula, which weights per capita income, area, and population. The creation of a new state effectively increases the per capita fiscal transfer to its districts by removing them from the resource pool of the larger parent state. Consider the arithmetic: before bifurcation, Uttarakhand's 13 hill districts competed with UP's 70+ districts for state-level allocations. After bifurcation, those 13 districts constituted the entire state and received direct central transfers calibrated to their small size and low per capita income---a formula that systematically favors smaller, poorer states. The 12th and 13th Finance Commissions explicitly incorporated the needs of newly created states, and both Uttarakhand and Chhattisgarh received substantially higher per capita transfers than they would have as regions within their parent states. This fiscal channel is likely the most mechanically important driver of the observed nightlight growth, particularly for infrastructure investment (roads, electrification, government buildings) that directly generates nighttime luminosity.
+
+\textbf{Administrative proximity.} Districts in new states are geographically closer to their state capital, reducing the transaction costs of interacting with state government. Chief ministers, legislators, and civil servants are more likely to visit and respond to the needs of closer districts. Before bifurcation, the hill districts of UP were separated from Lucknow by the entire Gangetic plain---a journey that could take 12-18 hours by road. After statehood, Dehradun was accessible to most Uttarakhand districts within 4-6 hours. Similarly, Raipur was far more accessible to Chhattisgarh's districts than Bhopal had been. This reduction in administrative distance plausibly improved the responsiveness of state government to local needs, though I cannot directly test this channel with nightlights data.
+
+\textbf{Political voice and representation.} The creation of a new state gives the region its own chief minister, cabinet, and legislative assembly, providing direct political representation that was diluted within the larger parent state. In the 403-seat UP assembly, the 13 Uttarakhand constituencies constituted only 3\% of seats---insufficient to command serious attention from state-level politicians focused on the electorally dominant plains districts. As a separate state with its own 70-seat assembly, every constituency became electorally significant. This political empowerment channel may also explain why the capital city districts grew disproportionately: as the seat of the new state government, they benefited from concentrated political attention and infrastructure investment.
+
+\textbf{Identity, aspiration, and investment confidence.} Statehood may generate economic effects through non-material channels. The achievement of statehood validated decades of political struggle and generated a collective sense of possibility that may have encouraged private investment, entrepreneurship, and human capital accumulation. Uttarakhand's rapid development of tourism infrastructure and educational institutions, for example, was enabled not just by fiscal transfers but by a shared vision of what the new state could become. This channel is difficult to measure but potentially important for understanding why the effects of state creation appear persistent rather than transitory.
+
+\textbf{Institutional capacity and the resource curse.} The Jharkhand exception---mineral wealth without development---suggests that these positive channels can be overwhelmed by governance failures, resource curse dynamics, and political instability. Jharkhand received the same formal powers and fiscal transfers as the other new states, yet its chronic political instability prevented effective utilization of these resources. The contrast with Chhattisgarh, which also inherited significant mineral wealth but achieved sustained growth under stable governance, strongly suggests that the quality of post-creation institutions is the binding constraint. Statehood is necessary but not sufficient; what happens after bifurcation matters enormously.
+
+%% ============================================================================
+%% DISCUSSION
+%% ============================================================================
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpreting the Results}
+
+The central tension in this paper is between suggestive evidence of positive effects and a clear violation of the identifying assumption. How should we interpret the findings?
+
+An optimistic interpretation holds that the pre-existing convergence reflects anticipation effects: the movement for statehood itself generated investment and optimism that accelerated growth even before formal state creation. Under this view, the post-treatment acceleration in the event study represents the additional effect of actual governance independence above and beyond the anticipation channel. The TWFE estimate (0.80 log points) would then overstate the effect of the formal act of state creation but correctly capture the total effect of the statehood process including political mobilization.
+
+A skeptical interpretation holds that the convergence reflects mean reversion in nightlights---poorer regions naturally grow faster---and the post-treatment pattern simply continues a pre-existing trajectory. Under this view, the causal effect of state creation is close to zero, and the entire pattern is driven by convergence dynamics.
+
+The most likely truth lies between these extremes. The dramatic heterogeneity across state pairs---Uttarakhand's strong performance versus Jharkhand's stagnation---is difficult to explain by convergence alone, since both started from similarly low bases. The capital city effect is also more consistent with a genuine governance mechanism than with simple mean reversion. But the formal identification is insufficiently sharp to distinguish these channels with confidence.
+
+\subsection{Comparison with Existing Literature}
+
+The existing literature on India's state bifurcations is surprisingly thin for such a salient policy event. \citet{dhillon2015smaller} study the 2000 trifurcation using state-level GDP data over a shorter horizon (2001-2010) and find positive but imprecisely estimated effects. My district-level analysis with a 20-year window substantially improves on their approach by exploiting within-state variation, extending the time horizon, and using satellite data that avoids the measurement problems inherent in Indian state-level GDP accounts. \citet{vaibhav2024state} uses synthetic control methods at the state level and finds positive effects for Uttarakhand and Chhattisgarh but not Jharkhand---a pattern broadly consistent with my heterogeneity results. However, synthetic control with a single treated unit provides limited statistical inference, and both studies take parallel trends at face value without the formal pre-testing conducted here.
+
+More broadly, my results connect to the decentralization literature that has debated the merits of smaller administrative units since \citet{oates1972fiscal}. \citet{faguet2004does} finds that decentralization in Bolivia increased government responsiveness to local needs, particularly in smaller municipalities---consistent with the administrative proximity mechanism proposed here. However, the cross-country evidence on decentralization and growth is decidedly mixed \citep{martinez2017fiscal}, with most studies unable to distinguish the effect of decentralization per se from the characteristics of countries that choose to decentralize. India's state bifurcation provides an unusual within-country setting that holds national-level institutions constant while varying state-level governance---but even here, the non-random selection of which regions became states complicates causal inference.
+
+The Jharkhand finding resonates with the resource curse literature. The canonical resource curse operates through Dutch disease, rent-seeking, and institutional degradation---all of which appear operative in Jharkhand's case. What makes this finding particularly striking is its subnational context: Jharkhand inherited strong national-level institutions (an independent judiciary, a constitutional framework, free press) that should theoretically mitigate the worst resource curse dynamics. That mineral wealth still undermined governance despite these institutional guardrails suggests that subnational resource curses may be more severe than their cross-country counterparts, perhaps because subnational governments face fewer checks on resource extraction and patronage.
+
+\subsection{Policy Implications}
+
+Despite the identification limitations, several policy-relevant insights emerge:
+
+First, state creation is not a panacea. The Jharkhand experience demonstrates that smaller states with weak governance can perform no better than---and perhaps worse than---the parent state they left. Proposals for new states should be evaluated on the quality of governance they are likely to produce, not merely on the principle that ``smaller is better.''
+
+Second, the capital city concentration effect suggests that the benefits of state creation are spatially unequal. Policymakers considering state bifurcation should anticipate and plan for the distributional consequences of capital city selection.
+
+Third, the long-run persistence of growth effects (visible in the extended panel through 2023) suggests that initial conditions matter: states that establish effective governance quickly may lock in growth advantages that compound over decades.
+
+\subsection{Limitations}
+
+This study has several important limitations. First, the pre-trend violation means the estimates should not be interpreted as clean causal effects. Second, the small number of treatment events (3 in the 2000 cohort, 4 including Telangana) limits statistical power and generalizability. Third, nightlights are a noisy proxy for economic activity, particularly for changes in the composition of growth (e.g., agricultural vs. manufacturing). Fourth, I cannot observe the counterfactual: what would have happened to these districts had they remained in their parent states. The comparison with actual parent-state districts is informative but imperfect given baseline differences.
+
+Finally, this paper examines only one dimension of the effects of state creation. Welfare outcomes---health, education, poverty---may tell a different story. The creation of a new state could improve governance in some dimensions (infrastructure investment) while worsening others (political instability, as in Jharkhand). A comprehensive evaluation would require microdata on individual outcomes that is beyond the scope of this nightlights-based analysis.
+
+%% ============================================================================
+%% CONCLUSION
+%% ============================================================================
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+India's 2000 state trifurcation provides a rare opportunity to study the long-run economic effects of political decentralization at scale. Using two decades of satellite nightlights at the district level, I find suggestive evidence that state creation accelerates development---but this finding comes with an important caveat: the parallel trends assumption is violated in the data, and the magnitude of the causal effect is uncertain.
+
+The most robust finding is heterogeneity. Uttarakhand and Chhattisgarh grew substantially faster than their parent states, while Jharkhand---despite inheriting India's richest mineral belt---barely outperformed Bihar. This divergence challenges both the optimistic narrative (``smaller states are always better'') and the pessimistic one (``state creation doesn't matter''). The truth is conditional: decentralization helps when it leads to better governance, but governance quality is not guaranteed by administrative boundaries.
+
+For the ongoing debates over new state creation in India and beyond, the lesson is not whether to create smaller states but how to ensure they govern effectively once created. The institutional design of new states---capital city location, fiscal arrangements, civil service capacity, and political accountability mechanisms---may matter more than the act of bifurcation itself.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Nightlights data and Census variables were accessed through the SHRUG platform \citep{asher2021shrug}. The author thanks the Development Data Lab for making village-level Indian data publicly available.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{SHRUG Platform}
+
+All data used in this paper are sourced from the Socioeconomic High-resolution Rural-Urban Geographic Platform (SHRUG), version 2.1 ``Pakora,'' maintained by Asher, Novosad, and Lunt at the Development Data Lab \citep{asher2021shrug}. SHRUG provides harmonized geographic identifiers (SHRID) that link village and town records across the 1991, 2001, and 2011 Indian Censuses. For this paper, I aggregate SHRUG data to Census 2011 district boundaries.
+
+\subsection{DMSP Nightlights}
+
+The Defense Meteorological Satellite Program (DMSP) Operational Linescan System (OLS) provides annual composites of stable nighttime lights at approximately 1 km$^2$ resolution. SHRUG pre-aggregates these to district level using Census 2011 boundaries. I use the inter-calibrated total light variable (\texttt{dmsp\_total\_light\_cal}), which corrects for sensor degradation and satellite changes across the 1994--2013 period. The calibration follows \citet{henderson2012measuring}.
+
+\subsection{VIIRS Nightlights}
+
+The Visible Infrared Imaging Radiometer Suite (VIIRS) on the Suomi NPP satellite provides higher-resolution nighttime lights from 2012 onward. SHRUG aggregates VIIRS annual composites to district level. I use the median-masked annual sum (\texttt{viirs\_annual\_sum}), which excludes ephemeral lights. For the extended panel, I calibrate DMSP to the VIIRS scale using the 2012--2013 overlap period, computing district-specific calibration ratios.
+
+\subsection{Census Primary Census Abstract}
+
+Population, literacy, and worker composition variables come from the Census PCA tables for 1991, 2001, and 2011, accessed via SHRUG. Key variables include: total population (\texttt{pc11\_pca\_tot\_p}), literate population (\texttt{pc11\_pca\_p\_lit}), and workers classified as main cultivators, agricultural laborers, household industry workers, and other workers. I construct literacy rates and worker shares at the district level.
+
+\subsection{Treatment Assignment}
+
+District assignment to new versus parent states is determined by Census 2011 state codes. Uttarakhand (state code 5), Jharkhand (20), and Chhattisgarh (22) are treatment states; Uttar Pradesh (9), Bihar (10), and Madhya Pradesh (23) are control states. For Telangana, I identify the 10 treatment districts (Census 2011 district codes 532--541 within state 28) based on the Andhra Pradesh Reorganisation Act, 2014.
+
+Capital districts are identified by the location of new state capitals: Dehradun (state 5, district 60), Ranchi (state 20, district 354), and Raipur (state 22, district 410).
+
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsection{Pre-Trends Analysis}
+
+The event study (Figure~\ref{fig:eventstudy}) documents negative and significant pre-treatment coefficients, indicating that new state districts were growing faster than parent state districts before 2000. The Callaway-Sant'Anna formal pre-test yields $p = 0.005$, rejecting the null of parallel trends. This is the central identification challenge of the paper.
+
+Several explanations for the pre-existing convergence are plausible:
+
+\begin{enumerate}
+\item \textbf{Mean reversion:} Districts with lower initial nightlights grow faster mechanically due to convergence dynamics. If new state districts started from a lower base (as in Uttarakhand and Chhattisgarh), convergence could generate negative pre-treatment coefficients.
+
+\item \textbf{Anticipation effects:} The political movements for statehood generated investment, migration, and optimism that accelerated growth before formal bifurcation.
+
+\item \textbf{Common trends in poor regions:} India's economic liberalization and rural development programs in the 1990s may have disproportionately benefited the types of regions that later became new states.
+
+\item \textbf{Compositional change:} New state districts may have experienced faster urbanization or formalization that increased nightlights without commensurate income growth.
+\end{enumerate}
+
+I cannot definitively distinguish among these explanations with the available data. The paper's value lies in documenting both the suggestive positive effects and the precise nature of the identification threat, allowing readers to form their own assessment of causality.
+
+\subsection{Wild Cluster Bootstrap}
+
+With only 6 state-level clusters, conventional cluster-robust standard errors may suffer from severe over-rejection \citep{cameron2008bootstrap}. I implement a wild cluster bootstrap using Rademacher weights, re-sampling across all $2^6 = 64$ possible sign combinations for each of 999 bootstrap replications. The resulting $p$-value of 0.066 is marginally above the 5\% threshold, confirming that inference with 6 clusters is inherently imprecise.
+
+\subsection{Randomization Inference}
+
+The RI test permutes the treatment indicator across all $\binom{6}{3} = 20$ possible assignments of 3 treated states from the 6 states in the sample. For each permutation, I estimate the TWFE specification and record the treatment coefficient. The actual estimate of 0.80 falls at the boundary of the permutation distribution, yielding $p = 0.05$. The small number of permutations (20) limits the resolution of this test: the minimum achievable two-sided $p$-value is $1/20 = 0.05$, so we cannot reject at any level below 5\%.
+
+\section{Robustness Appendix}
+\label{app:robustness}
+
+\subsection{Alternative Specifications}
+
+The main results are robust to: (i) pair-specific year fixed effects (coefficient drops from 0.80 to 0.74); (ii) population weighting; (iii) nightlight levels rather than logs; (iv) dropping any single state pair; and (v) extending the panel through 2023 with calibrated VIIRS data. The Callaway-Sant'Anna estimator yields a lower ATT (0.29) than TWFE (0.80), suggesting that heterogeneity bias inflates the TWFE estimate.
+
+\subsection{Placebo Treatment Date}
+
+Assigning a fake treatment date of 1997 using only pre-treatment data (1994--2000) yields a coefficient of 0.25 ($p = 0.186$). While not significant, the positive magnitude is consistent with the pre-existing convergence pattern and underscores the difficulty of separating treatment effects from pre-trends.
+
+\section{Heterogeneity Appendix}
+\label{app:heterogeneity}
+
+\subsection{Resource Endowments}
+
+The divergent outcomes for Jharkhand (mineral-rich, minimal growth) versus Chhattisgarh (also mineral-rich, substantial growth) warrant further investigation. Both states inherited significant mineral deposits from their parent states. The key difference appears to be governance quality: Chhattisgarh maintained political stability (Raman Singh served as chief minister for 15 consecutive years, 2003--2018), while Jharkhand experienced chronic instability (14 chief ministers in its first 24 years, including periods of President's Rule). This pattern is consistent with the conditional resource curse hypothesis: natural resources amplify rather than determine governance outcomes.
+
+\subsection{Urban versus Rural Districts}
+
+Districts with higher baseline urbanization (proxied by pre-treatment nightlight intensity) show smaller treatment effects than predominantly rural districts, consistent with the convergence interpretation. The largest effects are concentrated in districts that were dark in 1994 and brightened substantially by 2013---precisely the ``electrification plus urbanization'' margin where nightlights are most informative about development.
+
+\section{Additional Figures and Tables}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_trends.pdf}
+\caption{Average Nightlight Intensity: New vs. Parent State Districts}
+\label{fig:trends}
+\end{figure}
+
+\end{document}

@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-22T16:06:27.480418",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2521,
+    "output_tokens": 3747,
+    "total_tokens": 6268
+  },
+  "ideas_file": "output/apep_0441/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Smaller States, Bigger Growth? Two Decades of Evidence from India's State Bifurcations",
+      "score": 68,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Does District Proliferation Accelerate Development? Evidence from India's Administrative Fragmentation",
+      "score": 48,
+      "recommendation": "SKIP",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "The GST Dividend \u2014 Did Tax Unification Boost Economic Activity?",
+      "score": 42,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

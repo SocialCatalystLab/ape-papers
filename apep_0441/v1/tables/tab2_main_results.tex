@@ -1,0 +1,32 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of State Creation on Nightlight Intensity}
+\label{tab:main}
+\begin{tabular}{lcccc}
+\hline\hline
+ & (1) & (2) & (3) & (4) \\
+ & TWFE & Pair$\times$Year FE & Pop-Weighted & Levels \\
+\hline
+\addlinespace
+New State $\times$ Post & 0.7993*** & 0.7415*** & 0.5419*** & 7837.4** \\
+  & (0.1986) & (0.2333) & (0.1690) & (3318.8) \\
+\addlinespace
+CS-DiD ATT & \multicolumn{4}{c}{0.2885 (0.0706)} \\
+\addlinespace
+Wild Bootstrap $p$ & 0.066 & & & \\
+RI $p$-value & 0.050 & & & \\
+\addlinespace
+\hline
+District FE & Yes & Yes & Yes & Yes \\
+Year FE & Yes & & Yes & Yes \\
+Pair$\times$Year FE & & Yes & & \\
+Observations & 4,280 & 4,280 & 4,280 & 4,280 \\
+Districts & 214 & 214 & 214 & 214 \\
+State Clusters & 6 & 6 & 6 & 6 \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.2cm}
+\footnotesize \textit{Notes:} Dependent variable is log(nightlights + 1) in columns (1)--(3) and nightlight levels in column (4). Sample: districts in Uttarakhand, Jharkhand, Chhattisgarh and their parent states (UP, Bihar, MP), 1994--2013 (DMSP). 214 districts $\times$ 20 years = 4,280 observations. ``New State $\times$ Post'' equals one for districts assigned to newly created states after 2000. Standard errors clustered at the state level in parentheses. CS-DiD reports the Callaway-Sant'Anna simple aggregate ATT using never-treated controls. Wild bootstrap uses Rademacher weights with 999 iterations. RI permutes treatment across all $\binom{6}{3}=20$ state assignments. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{minipage}
+\end{table}
