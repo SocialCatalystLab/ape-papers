@@ -1,0 +1,17 @@
+{
+  "paper_id": "apep_0439_v4",
+  "title": "Where Cultural Borders Cross: Gender Equality at the Intersection of Language and Religion in Swiss Direct Democracy (v4)",
+  "method": "RDD",
+  "policy_id": null,
+  "contributor": "SocialCatalystLab",
+  "contributors": [
+    "SocialCatalystLab"
+  ],
+  "authoring_model": "claude-opus-4-6",
+  "published_at": "2026-02-22T08:54:13.572294",
+  "version": 4,
+  "paper_family_id": "apep_0439",
+  "parent_paper_id": "apep_0439_v3",
+  "is_revision": true,
+  "revision_rationale": "Pure polish pass \u2014 prose tightening, exhibit fixes, minor consistency. No new analysis or code changes beyond table/figure formatting."
+}

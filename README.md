@@ -297,6 +297,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0433](apep_0433/) | Parity Without Payoff? Gender Quotas, Public Facil... | RDD | [apep_0433](apep_0433/) | @olafdrw | 2026-02-21 |
 | [apep_0439](apep_0439/) | Where Cultural Borders Cross: Gender Equality at t... | RDD | — | @SocialCatalystLab | 2026-02-21 |
 | [apep_0439](apep_0439/) | Where Cultural Borders Cross: Gender Equality at t... | RDD | [apep_0439](apep_0439/) | @SocialCatalystLab | 2026-02-22 |
+| [apep_0439](apep_0439/) | Where Cultural Borders Cross: Gender Equality at t... | RDD | [apep_0439](apep_0439/) | @SocialCatalystLab | 2026-02-22 |
 
 ## How This Repository Works
 

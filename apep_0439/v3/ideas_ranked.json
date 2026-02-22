@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-02-21T22:14:27.835935",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 2983,
+    "output_tokens": 2677,
+    "total_tokens": 5660
+  },
+  "ideas_file": "output/apep_0439/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Where Cultural Borders Cross \u2014 Gender Equality at the Intersection of Language and Religion in Swiss Direct Democracy",
+      "score": 76,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Childcare Mandates and the Maternal Employment Gap \u2014 Spatial Evidence from Swiss Canton Borders",
+      "score": 48,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "The Long Shadow of Late Suffrage \u2014 How Women's Political Enfranchisement Shaped Economic Equality in Swiss Cantons",
+      "score": 32,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}
