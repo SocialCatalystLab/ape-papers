@@ -1,0 +1,33 @@
+\begin{table}[htbp]
+\centering
+\caption{Robustness of Overqualification RDD Estimate at Age 65}
+\label{tab:robustness}
+\begin{tabular}{lccc}
+\toprule
+Specification & Estimate & SE & $p$-value \\
+\midrule
+\textit{Panel A: Bandwidth} \\
+\quad BW = 3 & -0.04 & 0.05 & 0.497 \\
+\quad BW = 4 & -0.09 & 0.04 & 0.065 \\
+\quad BW = 5 & 0.10 & 0.09 & 0.312 \\
+\quad BW = 7 & 0.55 & 0.21 & 0.023 \\
+\quad BW = 10 & 0.93 & 0.29 & 0.004 \\
+[0.5em]
+\textit{Panel B: Polynomial Order} \\
+\quad Order 1 & 0.10 & 0.09 & 0.312 \\
+\quad Order 2 & 0.00 & 0.07 & 0.977 \\
+[0.5em]
+\textit{Panel C: Kernel} \\
+\quad Triangular & -0.07 & 0.03 & 0.083 \\
+\quad Uniform & 0.10 & 0.09 & 0.312 \\
+[0.5em]
+\textit{Panel D: Donut RDD} \\
+\quad Exclude age 65 & 0.77 & 0.26 & 0.012 \\
+\bottomrule
+\multicolumn{4}{p{0.8\textwidth}}{\footnotesize \textit{Notes:} 
+All estimates (in percentage points) are for overqualification at the age 65 threshold using local linear regression 
+with the \texttt{fixest} package. Standard errors clustered at the age level. 
+The baseline specification uses a bandwidth of 5 age-years, local linear polynomial, 
+and uniform kernel (survey weights only).} \\
+\end{tabular}
+\end{table}

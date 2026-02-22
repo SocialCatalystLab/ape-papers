@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\caption{Covariate Balance at Age 65 and Age 62 Thresholds}
+\label{tab:balance}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{Age 62} & \multicolumn{3}{c}{Age 65} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+Covariate & Estimate & SE & $p$ & Estimate & SE & $p$ \\
+\midrule
+Female & 0.30 & 0.24 & 0.254 & -0.94 & 0.29 & 0.008 \\
+Bachelor's+ & 1.35 & 0.32 & 0.002 & 0.61 & 0.13 & 0.001 \\
+Hispanic & -0.32 & 0.22 & 0.168 & 0.88 & 0.22 & 0.002 \\
+Self-Employed & 0.13 & 0.36 & 0.720 & 1.23 & 0.08 & 0.000 \\
+\bottomrule
+\multicolumn{7}{p{0.9\textwidth}}{\footnotesize \textit{Notes:} 
+Each cell tests whether the indicated covariate is smooth through the age threshold. 
+A significant estimate would suggest compositional changes that threaten the RDD validity.} \\
+\end{tabular}
+\end{table}

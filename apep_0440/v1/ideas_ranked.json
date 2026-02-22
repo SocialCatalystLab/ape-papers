@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-02-22T10:22:46.818568",
+  "model": "openai/gpt-5.2",
+  "reasoning_effort": "high",
+  "response_id": null,
+  "usage": {
+    "input_tokens": 3091,
+    "output_tokens": 2954,
+    "total_tokens": 6045
+  },
+  "ideas_file": "output/apep_0440/v1/ideas.md",
+  "rankings": [
+    {
+      "rank": 1,
+      "title": "Combined Design \u2014 Social Insurance Thresholds and the Quality of Late-Career Employment (RECOMMENDED)",
+      "score": 76,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 2,
+      "title": "Unlocking Better Jobs? Medicare Eligibility at 65 and Late-Career Underemployment",
+      "score": 66,
+      "recommendation": "PURSUE",
+      "conditions": []
+    },
+    {
+      "rank": 3,
+      "title": "From Constraint to Choice: Social Security Early Eligibility at 62 and the Voluntary Part-Time Transition",
+      "score": 54,
+      "recommendation": "CONSIDER",
+      "conditions": []
+    },
+    {
+      "rank": 4,
+      "title": "The Gainful Employment Cliff: Do Accountability Thresholds Reduce Credential Waste at For-Profit Colleges?",
+      "score": 43,
+      "recommendation": "SKIP",
+      "conditions": []
+    }
+  ],
+  "conditions": []
+}

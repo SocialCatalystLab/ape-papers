@@ -1,0 +1,40 @@
+\begin{table}[htbp]
+\centering
+\caption{RDD Estimates at Social Insurance Eligibility Thresholds}
+\label{tab:main}
+\begin{tabular}{lcc}
+\toprule
+ & Age 62 (Social Security) & Age 65 (Medicare) \\
+\midrule
+\textit{Part-Time} & 0.44 & 3.12*** \\
+ & (0.66) & (0.38) \\
+ & [-0.86, 1.74] & [2.37, 3.87] \\
+[0.3em]
+\textit{Overqualified} & 0.25*** & 0.10 \\
+ & (0.07) & (0.09) \\
+ & [0.12, 0.38] & [-0.08, 0.28] \\
+[0.3em]
+\textit{Earnings Mismatch} & -0.25 & 0.48 \\
+ & (0.23) & (0.45) \\
+ & [-0.71, 0.21] & [-0.40, 1.36] \\
+[0.3em]
+\textit{Involuntary PT} & 0.44 & 1.82*** \\
+ & (0.26) & (0.29) \\
+ & [-0.06, 0.95] & [1.25, 2.38] \\
+[0.3em]
+\textit{Composite Index} & 0.47 & 3.01*** \\
+ & (0.45) & (0.41) \\
+ & [-0.40, 1.34] & [2.21, 3.81] \\
+\midrule
+Bandwidth & 5.0 & 5.0 \\
+Observations & 556,121 & 420,705 \\
+Kernel & Uniform & Uniform \\
+\bottomrule
+\multicolumn{3}{p{0.85\textwidth}}{\footnotesize \textit{Notes:} 
+Each cell reports the RDD estimate (in percentage points) from a local linear regression using the 
+\texttt{fixest} package with a bandwidth of 5 age-years. 
+Standard errors (in parentheses) clustered at the age level (11 clusters per threshold). 
+95\% confidence intervals in brackets. 
+* $p < 0.10$, ** $p < 0.05$, *** $p < 0.01$.} \\
+\end{tabular}
+\end{table}

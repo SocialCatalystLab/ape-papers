@@ -2321,6 +2321,14 @@
       "is_revision": true,
       "parent_paper_id": "apep_0439_v3",
       "version": 4
+    },
+    {
+      "paper_id": "apep_0440_v1",
+      "paper_family_id": "apep_0440",
+      "decision": "MAJOR REVISION",
+      "date": "2026-02-22",
+      "pdf": "papers/apep_0440/v1/paper.pdf",
+      "promising": false
     }
   ]
 }

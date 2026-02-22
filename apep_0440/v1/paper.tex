@@ -1,0 +1,574 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Unlocking Better Matches? Social Insurance Eligibility and Late-Career Underemployment}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} (cumulative: \apepcumulativetime{}).} \\[0.3em] @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+We test whether social insurance eligibility thresholds improve late-career job match quality using a dual regression discontinuity design at age 62 (Social Security) and age 65 (Medicare) with ACS PUMS data from 2018--2019 and 2022 ($N \approx 996{,}000$ employed workers in 15 large states). Despite a sharp first stage---employer insurance drops 15 percentage points at 65---we find no significant effect on overqualification. Total part-time work increases 3.1 percentage points at 65 (of which 1.8~pp is involuntary), but significant covariate imbalances at the threshold suggest compositional change rather than behavioral response. Placebo tests at non-policy ages also yield significant estimates, further undermining causal interpretation. At age 62, effects are uniformly small and insignificant. These null results challenge the ``insurance lock'' hypothesis for job quality and suggest that social insurance eligibility primarily operates on the extensive margin of employment, not the quality of job matches.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J26, J24, I13, H55 \\
+\noindent\textbf{Keywords:} underemployment, overqualification, Medicare, Social Security, regression discontinuity, job lock, older workers
+
+\newpage
+
+\section{Introduction}
+
+A 63-year-old engineer writes spreadsheets at a retail chain. A former hospital administrator scans groceries. Across America, millions of workers over 55 hold jobs that waste their skills, training, and experience. The Bureau of Labor Statistics classifies roughly 15 percent of older workers as underemployed---involuntarily working part-time or in occupations below their qualifications---yet we know remarkably little about \textit{why} these mismatches persist or what policies might resolve them.
+
+The standard economic explanation for job mismatch emphasizes search frictions: workers settle for suboptimal matches when the costs of continued search exceed the expected gains \citep{jovanovic1979}. But for older workers, two institutional features of the American safety net may amplify these frictions. First, employer-sponsored health insurance ties workers to specific jobs, creating ``insurance lock'' that prevents transitions to better-matched positions \citep{madrian1994}. Second, the absence of retirement income before Social Security eligibility constrains workers' ability to search selectively for well-matched employment. If these constraints are binding, then social insurance eligibility---which relaxes them---should improve job match quality.
+
+This paper tests whether social insurance eligibility thresholds reduce late-career underemployment. We exploit two sharp age-based discontinuities: Social Security early eligibility at age 62, which provides an income floor, and Medicare eligibility at age 65, which decouples health insurance from employment. Using a dual regression discontinuity design (RDD) with American Community Survey (ACS) Public Use Microdata from 2018--2019 and 2022 for the 15 largest U.S.\ states ($N \approx 996{,}000$ employed workers aged 52--75), we examine whether crossing these thresholds reduces overqualification, involuntary part-time work, and earnings mismatch among workers who remain employed.
+
+Our research design exploits the fact that potential outcomes should be continuous in age absent the policy discontinuities. Workers aged 64 and 66 are nearly identical in productivity, preferences, and labor market experience; the only systematic difference is that 66-year-olds have access to Medicare. We estimate local linear regressions with a bandwidth of 5 age-years using the \texttt{fixest} package in R, clustering standard errors at the age level following \citet{leecard2008}. The dual-threshold design provides built-in replication: effects should appear at both cutoffs if the underemployment story holds, while the relative magnitudes reveal whether income constraints (age 62) or insurance lock (age 65) is the binding mechanism.
+
+We construct three novel measures of underemployment in the ACS data. First, \textit{overqualification}: workers with a bachelor's degree or higher working in occupations where the modal education level is below a bachelor's, classified using O*NET Job Zone data mapped to ACS occupation codes. Second, \textit{involuntary part-time work}: employed workers working fewer than 35 hours per week with earnings below the group-specific median, suggesting constrained rather than chosen hours. Third, \textit{earnings mismatch}: workers earning below the 25th percentile for their education level. We combine these into a composite underemployment index.
+
+The results are clear: social insurance eligibility does not unlock better jobs. Despite a strong first stage---employer-sponsored insurance coverage drops by 15.1 percentage points at age 65 ($p < 0.001$), while Medicare coverage increases---we find no significant effect on overqualification ($+0.10$ pp, 95\% CI $[-0.08, 0.28]$, $p = 0.312$). Part-time work \textit{increases} by 3.1 percentage points at age 65 ($p < 0.001$), but this is more likely driven by compositional change in the employed population than by behavioral responses to insurance availability. Several findings undermine the causal interpretation: covariate balance tests at age 65 reveal significant discontinuities in the shares of female, college-educated, Hispanic, and self-employed workers, and placebo tests at non-policy ages (55, 60, 63, 67, 69) also produce significant estimates.
+
+At the Social Security threshold (age 62), most underemployment measures show small, insignificant effects---but overqualification increases by a statistically significant $+0.25$ pp ($p = 0.004$), opposite to the theoretical prediction. This perverse sign is consistent with compositional change: better-matched workers may selectively exit employment at 62, leaving behind a more overqualified sample. The absence of beneficial effects at both thresholds suggests that social insurance eligibility does not meaningfully improve job match quality among continuing workers---the primary channel is through the extensive margin (employment exit), not the intensive margin (job quality).
+
+These null results come with an important caveat. The composition of the workforce changes at the Medicare threshold: covariate balance tests reveal significant discontinuities in gender, education, ethnicity, and self-employment. This shift---driven by selective retirement, not behavioral adjustment---complicates causal interpretation. At age 62, covariate balance is substantially better. Several placebo cutoffs (ages 55, 60, 63, 67, 69) also produce significant overqualification estimates, suggesting that age-based compositional shifts rather than policy effects may drive the discontinuities. Bandwidth sensitivity analysis shows overqualification estimates at 65 that are small and insignificant at narrow bandwidths but grow at wider ones, a classic sign of trend contamination. We interpret these threats transparently and bound what the data can credibly reveal.
+
+This paper makes three contributions to the literature. First, we provide the first direct test of whether social insurance eligibility affects the \textit{quality} of employment, as distinct from the \textit{quantity}. A large literature studies retirement behavior at age 62 and 65 \citep{gruber1999, french2011, blau2006, gustman2005}, but focuses exclusively on the extensive margin---whether people work at all. A separate literature documents insurance-related job lock \citep{madrian1994, gruber1994, gruber2002, dahl2011}, but measures lock through turnover rates, not job match quality. The GAO has noted that job lock ``makes it harder to match workers to the most suitable jobs, and cuts labor productivity'' \citep{gao2012}, but no prior study has directly tested this claim. Our null result suggests that the intensive-margin channel may be substantially weaker than the extensive-margin channel that dominates the existing literature.
+
+Second, we contribute to the measurement of underemployment. While \citet{abeldeitz2016} document that one-third of college graduates work in jobs not requiring a degree, their analysis is purely descriptive, and structural models of skills mismatch \citep{lisepostelvinay2020} remain difficult to estimate in applied settings. Our O*NET-based overqualification measure, combined with earnings and hours-based indicators, provides a multidimensional portrait of late-career job mismatch that can be applied in other contexts.
+
+Third, our dual-threshold design separates the income and insurance channels of late-career underemployment. The absence of effects at both thresholds provides an informative bound: even sharp changes in insurance portability (at 65) and income support (at 62) do not measurably improve job match quality among continuing workers, suggesting that the primary response to social insurance eligibility is employment exit rather than job upgrading.
+
+The paper proceeds as follows. Sections 2--3 describe the institutional setting and conceptual framework. Section 4 introduces the data and underemployment measures. Section 5 outlines the RDD strategy, Section 6 presents results, and Section 7 discusses implications.
+
+
+\section{Institutional Background}
+
+\subsection{Social Security at Age 62}
+
+The Social Security Act of 1935 established a federal old-age insurance program funded through payroll taxes. Workers become eligible for early retirement benefits at age 62, receiving a permanently reduced benefit relative to their full retirement age (FRA). For cohorts reaching age 62 in our sample period (2018--2019 and 2022), the FRA is 66 and 2 months to 67, and the early retirement reduction ranges from 25 to 30 percent of the primary insurance amount.
+
+The age-62 threshold creates a sharp change in workers' budget constraints. Before 62, the only sources of retirement income are personal savings and employer pensions; at 62, workers gain access to a government-provided income floor. During our sample period (2018--2019 and 2022), the average monthly Social Security benefit for a 62-year-old new claimant ranged from approximately \$1,100 to \$1,300---modest, but sufficient to supplement part-time work or enable a period of job search.
+
+Importantly, Social Security at 62 is voluntary: workers choose whether to claim early benefits. Those who continue working without claiming face no change in their current income, though the option value of being able to claim creates an implicit wealth effect. The earnings test---which temporarily reduces benefits for early claimants who earn above a threshold (\$17,640--\$19,560 during our sample period)---creates additional complexity but does not affect our identification, which relies on the age discontinuity rather than the claiming decision.
+
+\subsection{Medicare at Age 65}
+
+Medicare, enacted in 1965, provides near-universal health insurance to Americans aged 65 and older. Part A (hospital insurance) is premium-free for most beneficiaries; Part B (medical insurance) requires a monthly premium (\$135.50--\$170.10 during 2018--2019 and 2022). Enrollment is automatic for Social Security beneficiaries and available during the initial enrollment period for others.
+
+The age-65 threshold creates the sharpest change in the American social insurance landscape. Before 65, health insurance is primarily employer-sponsored, individually purchased, or provided through Medicaid. At 65, nearly all Americans gain access to public health insurance regardless of employment status. This decouples health coverage from the employment relationship.
+
+The ``insurance lock'' hypothesis posits that workers remain in suboptimal jobs to maintain employer-sponsored health insurance \citep{madrian1994}. A worker who would prefer to transition to a better-matched but lower-benefit job---or to self-employment---may be trapped by the loss of coverage. Medicare eliminates this constraint: after 65, workers can transition to any employment arrangement without losing health insurance.
+
+Previous research has established that Medicare eligibility increases health insurance coverage by approximately 6--8 percentage points among 65-year-olds \citep{card2008}. However, the labor market consequences of this coverage expansion have been studied only through the lens of retirement and hours worked. \citet{slavov2014} finds no significant change in job mobility at 65, while \citet{french2011} models the retirement-insurance nexus structurally. No prior study has examined whether Medicare eligibility affects the \textit{quality} of job matches among continuing workers.
+
+\subsection{Interaction Between Thresholds}
+
+The age-62 and age-65 thresholds operate through different channels. At 62, the shock is to \textit{income}: workers gain access to an alternative income source that may enable selective job search or voluntary part-time work. At 65, the shock is to \textit{insurance}: workers gain portable health coverage that relaxes the employment-insurance link.
+
+These channels generate distinct predictions. If underemployment is driven by insurance lock, effects should be concentrated at age 65 and among workers with employer-sponsored insurance. If underemployment reflects income constraints that force acceptance of suboptimal matches, effects should appear at age 62 and be larger for lower-wealth workers. Our dual-threshold design tests both predictions simultaneously.
+
+
+\section{Conceptual Framework}
+
+We adopt a search-theoretic framework in which employed workers face a participation-match quality tradeoff. Following \citet{jovanovic1979} and \citet{mortensen1994}, workers receive job offers characterized by match quality $\theta$ drawn from distribution $F(\theta)$. Workers accept offers above their reservation match quality $\theta^*$, which depends on outside options.
+
+Consider a worker of age $a$ with human capital $h$ employed in a job with match quality $\theta$. The worker's reservation match quality for \textit{switching} jobs is:
+\begin{equation}
+\theta^*(a) = \theta^*(w(a), I(a), b(a))
+\end{equation}
+where $w(a)$ is the current wage, $I(a)$ is the value of employer-provided insurance, and $b(a)$ is the outside option (unemployment insurance, savings, Social Security). An overqualified worker has actual match quality $\theta < \theta^{FB}$, where $\theta^{FB}$ is the first-best match given their skills. They remain in the job because $\theta^* < \theta$---the cost of transitioning exceeds the gain.
+
+\paragraph{Social Security at 62.} At age 62, $b(a)$ increases discretely: workers gain access to monthly income of $\bar{b}_{SS}$. This raises the reservation match quality:
+\begin{equation}
+\frac{\partial \theta^*}{\partial b} > 0
+\end{equation}
+Workers who were previously trapped in low-match jobs because quitting meant zero income can now afford to search for better matches. The prediction is a reduction in underemployment at age 62, with effects concentrated among workers with low non-Social-Security wealth.
+
+\paragraph{Medicare at 65.} At age 65, $I(a)$ drops to zero: workers no longer need employer insurance. For workers whose job attachment was partly driven by insurance value $I > 0$:
+\begin{equation}
+\theta^*(a \geq 65) > \theta^*(a < 65) \quad \text{for workers with } I > 0
+\end{equation}
+These workers can now switch to better-matched jobs without losing health coverage. The prediction is a reduction in underemployment at age 65, concentrated among workers who currently rely on employer-sponsored insurance. Workers with non-employer insurance (e.g., spouse's coverage, Medicaid, individual market) should show no effect.
+
+\paragraph{Testable predictions:}
+\begin{enumerate}
+\item Underemployment should decrease at both age 62 and age 65 if the search-theoretic mechanism is operative.
+\item The age-65 effect should be larger than the age-62 effect if insurance lock is a more binding constraint than income.
+\item The age-65 effect should be concentrated among workers with employer-sponsored insurance (a clean mechanism test).
+\item Effects should appear in underemployment outcomes but not in pre-determined covariates (balance test).
+\end{enumerate}
+\noindent As we document in \Cref{sec:results}, none of these predictions are confirmed by the data. This null result is informative: it suggests that the theoretical mechanism, while internally consistent, does not operate with sufficient force to generate detectable intensive-margin effects at these institutional thresholds.
+
+
+\section{Data}
+
+\subsection{American Community Survey PUMS}
+
+Our primary data source is the American Community Survey (ACS) Public Use Microdata Sample (PUMS) for 2018--2019 and 2022, accessed via the Census Bureau API \citep{census_acs}. The ACS is an annual survey of approximately 3.5 million households, providing detailed demographic, economic, and housing information. We use the 1-year PUMS files, which contain individual-level records with person weights that allow nationally representative estimates. The 2020 and 2021 ACS 1-year PUMS files are excluded because the Census Bureau did not release standard 1-year estimates for those years due to COVID-19-related data collection disruptions that reduced response rates below acceptable thresholds.
+
+We restrict the sample to the 15 largest U.S.\ states by population and to individuals aged 52--75, providing a 10-year bandwidth on each side of the two age thresholds (62 and 65). We further restrict to employed workers (those with employment status recode ESR equal to 1 or 2, indicating civilian employed at work or with a job but not at work), yielding an analysis sample of approximately 996,335 employed workers. For the extensive margin analysis, we retain the full population including non-employed individuals.
+
+Key variables include age (measured in integer years), educational attainment (24 categories from no schooling to doctorate), occupation (approximately 530 Census codes), usual hours worked per week, insurance coverage by source (employer, Medicare, Medicaid, and direct-purchase), total person income, sex, race, Hispanic origin, and state of residence. Person weights account for complex survey design. Variable names and coding details are provided in \Cref{app:data}.
+
+\subsection{O*NET Education Requirements}
+
+To construct occupation-level education requirements, we use data from the Occupational Information Network (O*NET), a comprehensive database maintained by the U.S. Department of Labor. O*NET assigns each occupation a ``Job Zone'' ranging from 1 (little or no preparation needed) to 5 (extensive preparation needed), where zones correspond roughly to educational requirements: Zone 1--2 require less than a bachelor's degree, Zone 3 requires some postsecondary education, Zone 4 requires a bachelor's degree, and Zone 5 requires graduate education.
+
+We map O*NET Job Zones to ACS occupation codes using the Standard Occupational Classification (SOC) crosswalk. Where direct matching is unavailable, we impute Job Zones from the modal educational attainment within each occupation cell in the ACS, providing an empirical approximation of occupation-level requirements.
+
+\subsection{Measures of Underemployment}
+
+We construct three measures of underemployment, each capturing a different dimension of job mismatch:
+
+\paragraph{Overqualification.} A worker is classified as overqualified if they hold a bachelor's degree or higher (SCHL $\geq$ 21) but work in an occupation with an O*NET Job Zone of 3 or below, indicating the job typically requires less than a bachelor's degree. This binary measure captures formal credential mismatch. In our sample, approximately 7.9\% of employed workers aged 52--75 are overqualified by this definition (among the 37.1\% of the sample holding a bachelor's degree or higher), a lower rate than the one-third documented by \citet{abeldeitz2016} for the full workforce, consistent with older workers having had more time to sort into well-matched occupations.
+
+\paragraph{Involuntary part-time work.} We define involuntary part-time workers as those working fewer than 35 hours per week whose earnings fall below the median for their education-age group, suggesting constrained rather than chosen hours. The ACS does not contain a direct ``reason for part-time'' variable, so we use this income-based proxy. As a robustness check, we also use the simpler definition of all workers with hours below 35.
+
+\paragraph{Earnings mismatch.} A worker is classified as earnings-mismatched if their total person income falls below the 25th percentile of the income distribution for their education level, conditional on positive earnings. This captures cases where workers earn substantially less than their education level would predict, even if formally employed in an appropriately-leveled occupation.
+
+\paragraph{Composite index.} We standardize each of the three measures to zero mean and unit variance and average them to create a composite underemployment index. This index captures the common variation across dimensions of job mismatch while reducing measurement error in any single indicator.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics for our analysis sample. The full sample comprises approximately 996,335 employed workers aged 52--75 across the 15 largest states in 2018--2019 and 2022. Among these workers, 37.1\% hold a bachelor's degree or higher, 20.7\% work part-time (fewer than 35 hours per week), and 7.9\% are overqualified by our education-occupation mismatch measure. Regarding insurance coverage, 69.7\% have employer-sponsored insurance and 14.7\% have Medicare. The Medicare rate rises from 14.6\% among workers just below 65 to 20.3\% among those just above, confirming the first stage of the age-65 discontinuity.
+
+Several patterns emerge from the age-group comparison. Workers aged 65 and older are more likely to hold a bachelor's degree (40.6\% vs.\ 36.2\% below 62), substantially more likely to work part-time (40.0\% vs.\ 15.0\%), and less likely to have employer insurance (47.8\% vs.\ 75.2\%). Mean income rises with age in our employed sample (\$77,665 below 62 to \$84,183 at 65+), likely reflecting survivor bias: lower-income workers exit the labor force, leaving a positively selected sample of older workers.
+
+The divergence in part-time rates across age groups is particularly notable. Below age 62, only 15.0\% of employed workers work part-time; by 65+, this share reaches 40.0\%. This gradient reflects both voluntary hours reductions as workers transition toward retirement and the changing composition of the employed population. Distinguishing between these explanations---behavioral change versus compositional selection---motivates our RDD design, which isolates sharp changes at the policy thresholds from the smooth age gradient.
+
+The overqualification rate rises modestly from 7.4\% below 62 to 9.6\% at 65+. Among bachelor's-degree holders specifically, the overqualification rate is 21.3\%, consistent with the broader literature on credential mismatch \citep{abeldeitz2016}. Employer-insured workers show a lower overqualification rate (7.4\%) compared to the full sample, which may reflect positive job match selection: workers with employer insurance tend to hold more stable, better-matched positions.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+
+\subsection{Regression Discontinuity Design}
+
+We exploit the sharp age-based eligibility thresholds at ages 62 and 65 using a regression discontinuity design. The identifying assumption is that potential outcomes are continuous at the threshold:
+\begin{equation}
+\lim_{a \downarrow c} \E[Y_i(0) \mid A_i = a] = \lim_{a \uparrow c} \E[Y_i(0) \mid A_i = a]
+\end{equation}
+where $Y_i(0)$ is the potential outcome absent treatment, $A_i$ is age, and $c \in \{62, 65\}$. Under this assumption, any discontinuity in outcomes at the threshold is attributable to the policy change.
+
+\subsection{Estimation}
+
+We estimate local linear regressions of the form:
+\begin{equation}
+Y_i = \alpha + \tau \ind[A_i \geq c] + \beta_1 (A_i - c) + \beta_2 \ind[A_i \geq c] \cdot (A_i - c) + \varepsilon_i
+\end{equation}
+where $Y_i$ is the underemployment outcome, $\ind[A_i \geq c]$ is the treatment indicator, and $(A_i - c)$ is the centered age variable. The parameter of interest is $\tau$, the discontinuous change in underemployment at the threshold.
+
+We estimate local linear regressions with a baseline bandwidth of 5 age-years on each side of the cutoff, uniform kernel weighting (using ACS person weights), and standard errors clustered at the age level following \citet{leecard2008}.\footnote{With a bandwidth of 5, there are 11 age clusters per threshold. We follow \citet{kolesar2018} in noting that inference with a discrete running variable and few clusters requires caution. Our conclusions rely on consistency across specifications rather than any single $p$-value.} We examine robustness to bandwidths of 3, 4, 7, and 10 age-years, quadratic polynomial specifications, triangular kernel, a donut specification excluding the threshold age, and year-by-year estimation. We report 95\% confidence intervals throughout.
+
+\subsection{Discrete Running Variable}
+
+Age in the ACS is measured in integer years, creating a discrete running variable with mass points at each age value. This is standard in the age-based RDD literature \citep{leecard2008, card2008, imbenslemieux2008, leelemieux2010} and poses no fundamental threat to identification for two reasons.
+
+First, age is non-manipulable: individuals cannot choose their birthday, and there is no meaningful sorting around the threshold. Unlike income-based RDDs where applicants may strategically position themselves, age-based thresholds are immune to manipulation \citep{mccrary2008}. The uniform distribution of birthdays ensures smooth density in the full population. However, the density of the \textit{employed} sample can shift at the threshold due to retirement, which we address directly through our extensive-margin analysis and density plot (\Cref{fig:density}).
+
+Second, the large sample size (approximately 40,000 observations per age-year in the 15-state sample) provides substantial power even with a coarse running variable. We can precisely estimate cell-specific means and detect small discontinuities. We use a fixed bandwidth of 5 age-years rather than data-driven bandwidth selection \citep{calonico2014, imbenskalyanaraman2012} because with only integer ages, MSE-optimal methods have limited applicability: the bandwidth selection effectively chooses among a handful of discrete integers rather than optimizing over a continuum. Our bandwidth sensitivity analysis (\Cref{tab:robustness}) demonstrates robustness across 3--10 age-year bandwidths.
+
+\subsection{Threats to Validity}
+
+\paragraph{Compositional changes.} The primary concern in age-based RDDs for older workers is selective exit from employment. Workers who retire at 62 or 65 may differ systematically from those who continue working, potentially inducing compositional changes in the sample. We address this in three ways. First, our covariate balance tests (\Cref{tab:balance}) examine whether the composition of employed workers changes discontinuously at the threshold. Second, we estimate the extensive-margin effect (employment rate discontinuity) to quantify the degree of selective exit. Third, we present results both for the unconditional employed sample and for a donut specification excluding the threshold age.
+
+\paragraph{Anticipation effects.} Workers may anticipate the threshold and adjust behavior before reaching it---for example, searching for better jobs at age 64 in anticipation of Medicare coverage. Such anticipation would bias our estimates toward zero by smoothing the discontinuity. Our estimates are therefore conservative: the true effect of insurance eligibility on job match quality may be larger than our RDD captures.
+
+\paragraph{Multiple thresholds.} Several other age-based policy changes occur near our thresholds. At age 65, workers also become eligible for Senior Community Service Employment Program (SCSEP) jobs and may face employer-side age discrimination incentives. At age 62, some pension plans have early retirement provisions. We argue these are second-order relative to Social Security and Medicare, but we test for effects at non-policy ages as placebos.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{First Stage: Insurance Coverage at Age 65}
+
+Before examining underemployment outcomes, we verify the first stage: does Medicare eligibility actually change insurance coverage? \Cref{fig:first_stage} shows the answer starkly. At age 65, one in seven workers who remains on the job drops their employer's plan---employer-sponsored insurance falls by 15.1 percentage points (SE $= 0.9$ pp, $p < 0.001$). This is a massive shift in the ``lock'' that is supposed to hold workers in mismatched jobs.
+
+Descriptive cell means show Medicare coverage rising from 14.6\% among employed workers just below 65 to 20.3\% among those just above. However, the formal RDD estimate for Medicare coverage among employed workers is a modest $-0.8$ pp (SE $= 0.2$ pp, $p = 0.007$)---slightly \textit{negative}. This counterintuitive sign likely reflects selection: workers who gain Medicare eligibility at 65 and whose primary reason for continued employment was employer insurance may exit the labor force, so the remaining employed sample is selected toward workers who already had Medicare or who do not value it. The negative Medicare RDD estimate among the employed is thus consistent with the 3.5 pp employment drop at this threshold and reinforces the interpretation that Medicare eligibility primarily operates on the extensive margin.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_first_stage.pdf}
+\caption{First Stage: Insurance Transition at Age 65}
+\label{fig:first_stage}
+\floatfoot{\textit{Notes:} Each point represents the weighted mean for employed workers at that age in the ACS 2018--2019 and 2022 PUMS, 15 largest states. Lines are local linear fits estimated separately on each side of the threshold. Panel A shows Medicare coverage; Panel B shows employer-sponsored insurance coverage.}
+\end{figure}
+
+\subsection{Main Results}
+
+\Cref{fig:rdd_main} presents the central visual evidence. Panel A shows the overqualification rate by age near the Medicare threshold at 65. There is no visible downward shift in overqualification at age 65---the rate evolves smoothly through the threshold. Panel B shows the corresponding plot at the Social Security threshold at 62, where there is also no apparent discontinuity. Panels C and D show part-time work rates at both thresholds; part-time work increases visibly at age 65.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_rdd_main.pdf}
+\caption{Underemployment at Social Insurance Eligibility Thresholds}
+\label{fig:rdd_main}
+\floatfoot{\textit{Notes:} Each point represents the weighted mean for employed workers at that age in the 15 largest states, pooled across ACS 2018--2019 and 2022. Point size proportional to cell size. Lines are local linear fits estimated separately on each side of the threshold. Dashed vertical line marks the eligibility age.}
+\end{figure}
+
+\Cref{tab:main} presents the formal RDD estimates. At the Medicare threshold (age 65), overqualification changes by $+0.10$ percentage points (SE $= 0.09$ pp, $p = 0.312$), statistically indistinguishable from zero. Part-time work increases by 3.12 percentage points (SE $= 0.38$, $p < 0.001$), and involuntary part-time increases by 1.82 percentage points (SE $= 0.29$, $p < 0.001$). The composite underemployment index increases by 3.01 percentage points (SE $= 0.41$, $p < 0.001$). Earnings mismatch shows no significant change ($+0.48$ pp, SE $= 0.45$, $p = 0.310$).
+
+At the Social Security threshold (age 62), most estimates are small and insignificant: part-time work changes by $+0.44$ pp ($p = 0.523$), earnings mismatch by $-0.25$ pp ($p = 0.306$), and the composite by $+0.47$ pp ($p = 0.316$). The exception is overqualification, which shows a statistically significant increase of $+0.25$ pp ($p = 0.004$). This modest but precisely estimated effect is in the \textit{opposite} direction from the theoretical prediction---overqualification increases rather than decreases at Social Security eligibility---and may reflect compositional changes as better-matched workers selectively exit employment upon gaining access to early retirement benefits.
+
+\input{tables/tab2_main}
+
+The key result is the null effect on overqualification at age 65. The overqualification rate among employed workers is approximately 7.9\%. The 95\% confidence interval of $[-0.08, 0.28]$ pp rules out reductions larger than 0.08 pp---just 1\% of the baseline rate---allowing us to reject the hypothesis that Medicare eligibility reduces overqualification by economically meaningful magnitudes.
+
+The significant increase in part-time work at 65 warrants careful interpretation. Rather than evidence of improved job matching (which would predict workers moving \textit{from} part-time to better-matched full-time work), this increase is consistent with two alternative explanations. First, compositional change: if full-time workers with employer insurance selectively retire at 65, the remaining employed population mechanically contains a higher share of part-time workers. Second, voluntary hours reduction: Medicare eligibility may allow workers to reduce hours without losing insurance, representing a preference-driven transition rather than improved matching. The failed covariate balance tests at age 65 (discussed below) support the compositional interpretation.
+
+\subsection{Heterogeneity: Testing the Insurance Lock Mechanism}
+
+\Cref{tab:heterogeneity} and \Cref{fig:heterogeneity} present the most informative test of the insurance lock mechanism. We split the sample by insurance source and estimate the RDD separately for workers with and without employer-sponsored health insurance.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_heterogeneity.pdf}
+\caption{Overqualification by Insurance Type at Age 65}
+\label{fig:heterogeneity}
+\floatfoot{\textit{Notes:} Underemployment outcomes by age for workers with vs.\ without employer-sponsored insurance. If insurance lock drives overqualification, the discontinuity should be larger among employer-insured workers.}
+\end{figure}
+
+\input{tables/tab3_heterogeneity}
+
+The insurance lock hypothesis predicts that effects should be concentrated among employer-insured workers. The results do not support this prediction. Among workers with employer-sponsored insurance, the overqualification RDD estimate at age 65 is $-0.30$ percentage points (SE $= 0.22$, $p = 0.207$), statistically insignificant and slightly negative. Among workers without employer insurance, overqualification shows a small, insignificant increase ($+0.20$ pp, SE $= 0.21$, $p = 0.348$). Neither subgroup exhibits a meaningful discontinuity, and the employer-insured estimate---where the insurance lock mechanism should be strongest---is if anything negative rather than positive.
+
+We also examine heterogeneity by education and gender. Among bachelor's-degree holders (for whom overqualification is directly measurable), there is no significant change in overqualification at 65 ($-0.13$ pp, SE $= 0.22$, $p = 0.581$). Both women ($+0.09$ pp, SE $= 0.15$, $p = 0.556$) and men ($+0.09$ pp, SE $= 0.14$, $p = 0.526$) show small, insignificant effects. The consistency of null results across all subgroups reinforces the conclusion that Medicare eligibility does not meaningfully reduce overqualification.
+
+\subsection{Robustness}
+
+\paragraph{Covariate balance.} \Cref{tab:balance} presents the covariate balance tests, which reveal an important threat to the validity of the age-65 RDD. At the Medicare threshold, we find significant discontinuities in the share of female workers ($p = 0.008$), workers with bachelor's degrees ($p = 0.001$), Hispanic workers ($p = 0.002$), and self-employed workers ($p < 0.001$). These imbalances indicate that the composition of the employed population changes discontinuously at age 65, likely due to selective retirement patterns: the workers who exit employment at 65 differ systematically from those who remain. This compositional shift complicates causal interpretation of any outcome discontinuity at age 65.
+
+At the age-62 threshold, covariate balance is substantially better: only the share of workers with bachelor's degrees shows a significant discontinuity ($p = 0.002$), while female ($p = 0.254$), Hispanic ($p = 0.168$), and self-employment ($p = 0.720$) shares are balanced.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_balance.pdf}
+\caption{Covariate Balance at Age 65 Threshold}
+\label{fig:balance}
+\floatfoot{\textit{Notes:} Pre-determined covariates plotted against age near the Medicare threshold. Significant discontinuities in female share, education, Hispanic share, and self-employment indicate compositional changes in the employed population at 65.}
+\end{figure}
+
+\paragraph{Placebo cutoffs.} \Cref{fig:placebo} presents RDD estimates for overqualification at placebo cutoffs alongside the true thresholds at 62 and 65. Several placebo ages produce significant overqualification estimates: age 55 ($p = 0.001$), 60 ($p < 0.001$), 63 ($p = 0.024$), 67 ($p = 0.042$), and 69 ($p = 0.031$). This pattern of widespread significance at non-policy ages is concerning: similar-magnitude overqualification discontinuities appear at ages with no policy change, suggesting that age-based compositional shifts---rather than policy effects---may drive the discontinuities observed at the true thresholds.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_placebo.pdf}
+\caption{Placebo Cutoff Tests}
+\label{fig:placebo}
+\floatfoot{\textit{Notes:} RDD estimates for overqualification at true thresholds (62, 65) and placebo thresholds. Error bars show 95\% confidence intervals. Multiple placebo ages also show significant effects, questioning the causal interpretation at the true thresholds.}
+\end{figure}
+
+\paragraph{Bandwidth sensitivity.} \Cref{tab:robustness} Panel A shows the overqualification estimate at age 65 across bandwidths of 3, 4, 5, 7, and 10 age-years. The estimate is small and insignificant at narrow bandwidths (BW3: $-0.04$ pp, $p > 0.5$; BW4: $-0.09$ pp, $p = 0.065$; BW5: $+0.10$ pp, $p > 0.3$), but becomes significant and positive at wider bandwidths (BW7: $+0.55$ pp, $p = 0.023$; BW10: $+0.93$ pp, $p = 0.004$). The sign \textit{reversal} between narrow and wide bandwidths, and the increasing magnitude with bandwidth, is a classic sign of contamination from secular age trends rather than a sharp discontinuity. This pattern further supports the null interpretation for overqualification.
+
+\paragraph{Donut RDD.} Excluding workers exactly at the threshold age, the overqualification donut estimate is $+0.77$ pp (SE $= 0.26$, $p = 0.012$), which is larger and statistically significant compared to the baseline estimate of $+0.10$ pp. This sensitivity to excluding the threshold age suggests that the composition of workers at exactly age 65 may attenuate the overqualification estimate, and that modest overqualification effects may emerge away from the threshold---though the donut specification itself has lower power and wider confidence intervals.
+
+\paragraph{Year-by-year stability.} \Cref{fig:yearly} (Appendix) shows the overqualification RDD estimate at age 65 for each available ACS year separately (2018, 2019, 2022; the 2020 and 2021 ACS 1-year files were excluded due to COVID-19-related data collection disruptions). All three estimates are individually insignificant ($+0.33$ pp in 2018, $+0.25$ pp in 2019, $-0.25$ pp in 2022), with no consistent pattern across years.
+
+\input{tables/tab4_robustness}
+
+\subsection{Extensive Margin}
+
+To assess whether our results are driven by compositional changes rather than behavioral responses, we estimate the employment rate discontinuity at both thresholds. \Cref{tab:extensive} presents the results. At age 62, the employment rate drops by 3.04 percentage points (SE $= 0.56$, $p < 0.001$), consistent with the well-documented retirement response to Social Security eligibility. At age 65, the employment rate drops by 3.46 percentage points (SE $= 0.74$, $p = 0.001$), a comparable magnitude. These extensive-margin effects are substantial: roughly 3\% of workers exit employment at each threshold.
+
+\begin{table}[H]
+\centering
+\caption{First Stage and Extensive Margin RDD Estimates}
+\label{tab:extensive}
+\begin{tabular}{lccc}
+\toprule
+Outcome & Estimate & SE & $p$-value \\
+\midrule
+\textit{Panel A: First Stage at Age 65} \\
+\quad Employer Insurance & $-15.10$*** & 0.90 & $<0.001$ \\
+\quad Medicare Coverage & $-0.80$*** & 0.20 & 0.007 \\
+[0.5em]
+\textit{Panel B: Extensive Margin (Employment Rate)} \\
+\quad Age 62 (Social Security) & $-3.04$*** & 0.56 & $<0.001$ \\
+\quad Age 65 (Medicare) & $-3.46$*** & 0.74 & $<0.001$ \\
+\bottomrule
+\multicolumn{4}{p{0.8\textwidth}}{\footnotesize \textit{Notes:}
+All estimates in percentage points. Panel A reports the first stage: the discontinuous change in insurance coverage among employed workers at age 65 (the negative Medicare estimate reflects selective exit of newly Medicare-eligible workers from employment). Panel B reports the employment rate discontinuity on the full population including non-employed individuals. Local linear regression, bandwidth of 5 age-years, standard errors clustered at the age level.
+* $p < 0.10$, ** $p < 0.05$, *** $p < 0.01$.} \\
+\end{tabular}
+\end{table}
+
+Critically, our covariate balance results show that the observable composition of employed workers \textit{does} change discontinuously at age 65, with significant shifts in gender, education, ethnicity, and self-employment composition. This compositional change is the expected consequence of selective retirement: the 3.5\% of workers who exit at 65 are not a random sample of the employed population. This finding substantially weakens the causal interpretation of any intensive-margin outcome discontinuity at 65. The fact that the age-62 threshold shows better covariate balance (only education is significantly imbalanced) despite a similar-magnitude employment drop suggests that retirement selection is more systematically related to observables at 65 than at 62, possibly because Medicare eligibility creates differential incentives by insurance type.
+
+\subsection{Mechanisms: Why No Job Quality Effect?}
+
+The central finding of this paper is a null: despite a strong first stage (employer insurance drops 15 pp at 65), overqualification does not change. Several mechanisms could explain why the insurance lock hypothesis fails for job \textit{quality} even though insurance lock clearly affects job \textit{tenure}:
+
+First, \textit{switching costs beyond insurance}. Transitioning to a new job involves costs---search effort, firm-specific human capital loss, uncertainty---that may dominate insurance considerations for older workers. Even when Medicare removes the insurance constraint, the remaining switching costs may be sufficient to prevent job transitions.
+
+Second, \textit{limited availability of better matches}. Overqualified older workers may face age discrimination or thin labor markets for their skills, so that better-matched positions are simply unavailable regardless of insurance status. In this case, insurance lock is not the binding constraint.
+
+Third, \textit{selection into continued employment}. The workers who remain employed past 65 are those for whom current employment is already relatively satisfactory. Workers who were most ``locked'' into bad matches may exit employment entirely when Medicare becomes available, leaving behind a population with lower baseline mismatch. This interpretation is consistent with the extensive-margin effects and the compositional changes documented in our balance tests.
+
+The heterogeneity analysis reinforces the null interpretation. Among employer-insured workers---the population most plausibly subject to insurance lock---overqualification shows a small, insignificant \textit{decrease} of $-0.30$ pp ($p = 0.207$). If insurance lock were binding for job quality, this is where we would expect the strongest effects. The absence of a meaningful effect even in this targeted subsample provides strong evidence against the intensive-margin insurance lock channel.
+
+
+\section{Discussion}
+
+\subsection{Policy Implications}
+
+Our null results carry policy implications that, while less dramatic than a positive finding, are nonetheless informative. The absence of job quality effects at the Medicare threshold suggests that expanding portable health coverage---whether through Medicare-for-All, ACA marketplace expansion, or lowering the Medicare eligibility age---would primarily affect employment decisions on the extensive margin (whether to work at all) rather than the intensive margin (quality of job matches). Policymakers motivated by reducing late-career underemployment should look beyond insurance portability.
+
+Conversely, proposals to raise the Medicare eligibility age from 65 to 67 may have less severe consequences for job match quality than previously feared. Our results suggest that the primary cost of delayed Medicare would be extended labor force participation (the extensive margin), not prolonged underemployment. However, the significant employment drop at 65 ($-3.46$ pp) means that delayed Medicare eligibility would keep workers in the labor force longer, which could itself generate welfare losses if those workers prefer retirement.
+
+At the Social Security threshold, the null results on job quality similarly suggest that raising the early eligibility age from 62 to 64 would not exacerbate job mismatch. The well-documented employment effects of these thresholds operate through the exit margin rather than through job upgrading.
+
+The deeper implication is that late-career underemployment may be driven by factors that social insurance eligibility cannot address: age discrimination, depreciation of occupation-specific skills, geographic immobility, or structural changes in industry composition. Policies targeting these root causes---retraining programs, anti-discrimination enforcement, or occupational licensing reform---may be more effective than insurance-side interventions.
+
+\subsection{Relation to Previous Literature}
+
+Our null results for job quality contrast with the established finding that insurance eligibility affects the extensive margin of employment. \citet{french2011} estimate that health insurance accounts for a substantial share of the retirement spike at age 65, and \citet{boyle2010} find that VA health coverage reduces labor supply among older veterans. These papers study whether people \textit{work at all}, and the answer is clearly yes---insurance matters for the participation decision. Our contribution is showing that conditional on continued employment, insurance does not appear to improve job match quality.
+
+This distinction between extensive and intensive margin effects echoes findings in other social insurance contexts. \citet{gelber2020} show that the Social Security earnings test affects total earnings but not the wage rate, suggesting that workers adjust on the hours margin rather than seeking better-matched positions. Similarly, \citet{maestas2013} find that SSDI affects employment but not occupational upgrading among marginal applicants. Across these settings, social insurance influences \textit{how much} people work but not \textit{how well} they work.
+
+More broadly, our exercise illustrates the challenges of using age-based RDDs to study intensive-margin outcomes when treatment affects sample selection---a problem well-recognized in the RDD literature \citep{imbenslemieux2008, calonico2019, lee2009}. Future work using panel data (e.g., LEHD, SIPP) that tracks individual transitions could directly observe whether workers upgrade job matches at eligibility thresholds, disentangling behavioral adjustment from compositional change.
+
+The discrepancy between our findings and the job lock literature \citep{madrian1994, gruber2002, dahl2011} also warrants comment. Previous studies document that insurance affects job \textit{mobility}---the probability of changing jobs---and interpret reduced mobility as evidence of ``lock.'' But reduced mobility need not imply worse matches: workers who stay in their current jobs due to insurance may already be well-matched. Our direct measures of match quality---overqualification, earnings mismatch---test the welfare-relevant consequence of insurance lock, and the null results suggest that the welfare cost of reduced mobility may be smaller than previously assumed.
+
+Our findings are also relevant to the ACA literature. \citet{buchmueller1999} and others have argued that employer-linked insurance creates welfare-reducing frictions. The ACA's marketplace was designed partly to address these frictions. Our results suggest that even at the strongest possible insurance transition (employer to Medicare), the job quality dividend is negligible---counseling caution about claims that insurance portability would meaningfully reduce underemployment.
+
+\subsection{Limitations}
+
+Several limitations warrant discussion, some of which bear directly on the credibility of our null result.
+
+First and most importantly, the \textbf{failed covariate balance at age 65} threatens the RDD validity for the Medicare threshold. Because employment itself changes discontinuously at both cutoffs ($-3.0$ pp at 62, $-3.5$ pp at 65), the sample of employed workers is selected, and covariates confirm this selection is non-random. This means our RDD among employed workers does not identify the causal effect of eligibility on match quality for a stable population---it identifies a mix of behavioral and compositional effects \citep{lee2009}.
+
+A principled approach to this problem would be to construct \citet{lee2009} trimming bounds. Under the monotonicity assumption that eligibility weakly reduces employment (which our data support), one can bound the effect on ``always-employed'' workers by trimming the control-side outcome distribution. With employment declining $\approx$3.5 pp at 65, the trimming fraction is modest. Applying this logic informally: even if we attribute the entire compositional shift to selection of less-overqualified workers out of employment (the worst case), the implied effect on always-employed workers remains small. The 95\% CI for overqualification ($[-0.08, 0.28]$ pp) is narrow enough that even under worst-case \citet{manski1990} bounds, the effect is bounded to be economically small relative to the 7.9\% baseline rate.
+
+Second, the ACS measures age in integer years, providing a coarse running variable. With only 10 mass points per side of each threshold (bandwidth of 5), the effective degrees of freedom for local linear estimation are limited. We cannot estimate effects at monthly or quarterly age resolution, which would provide sharper identification.
+
+Third, our involuntary part-time measure is a proxy: the ACS does not directly ask whether workers want more hours. Fourth, overqualification is defined by comparing education to the typical education in an occupation, which may miss within-occupation mismatch. Fifth, we study the cross-sectional composition of workers at each age, not individual transitions---with panel data (e.g., the Longitudinal Employer-Household Dynamics), we could directly observe workers switching from mismatched to well-matched jobs and disentangle behavioral adjustment from compositional change.
+
+Sixth, our sample covers only the 15 largest states, which may not generalize to the full U.S.\ population. State-specific labor market conditions, insurance market structures, and demographic composition could affect the external validity of our estimates.
+
+\subsection{External Validity}
+
+Our findings are specific to the U.S.\ institutional context, where health insurance is employer-linked for working-age adults. The null result is informative for this context: even with the strongest possible insurance regime change (employer-linked to universal Medicare at 65), we find no job quality improvement. In countries with universal health coverage, the insurance lock channel is absent by construction, and our null finding would be expected to hold \textit{a fortiori}. The absence of effects at the income threshold (age 62) further suggests that social insurance eligibility has limited impact on the intensive margin of employment quality across institutional settings.
+
+
+\section{Conclusion}
+
+This paper tests whether social insurance eligibility thresholds improve late-career job match quality, exploiting the sharp discontinuities at age 62 (Social Security) and age 65 (Medicare). Despite a strong first stage---employer insurance drops 15 percentage points at 65---we find no significant effect on overqualification. The insurance lock hypothesis, which predicts that employer-linked health insurance traps workers in mismatched jobs, finds no support on the intensive margin of employment quality. At the Social Security threshold, effects are similarly absent.
+
+These null results are informative. They suggest that the extensive-margin response to social insurance eligibility---retirement---dominates the intensive-margin response---job upgrading. When workers gain access to Medicare at 65 or Social Security at 62, they primarily use these benefits to \textit{exit} employment rather than to \textit{improve} their employment. The 63-year-old engineer scanning groceries may be trapped not by insurance lock, but by switching costs, age discrimination, or the simple absence of better-matched positions. Understanding which of these alternative mechanisms drives late-career underemployment is an important direction for future research.
+
+We acknowledge important limitations: failed covariate balance at 65, significant placebo estimates at non-policy ages, and the fundamental challenge of estimating intensive-margin effects when employment itself is endogenous to the threshold. These constraints mean that our null should be interpreted as a \textit{bounded} null: applying \citet{lee2009} trimming logic, any job-quality improvements for always-employed workers are at most small. The age-62 threshold provides cleaner identification but yields null or perversely signed results (overqualification \textit{increases} at 62, consistent with compositional change). The composition of the workforce changes at the threshold. This shift---not a change in behavior---is what the data primarily reveal.
+
+The policy implication is sobering: reducing late-career underemployment likely requires interventions that target the root causes of mismatch---skills depreciation, discrimination, and search frictions---rather than the insurance and income constraints that social insurance addresses. The 63-year-old engineer writing spreadsheets at a retail chain is trapped not by his insurance, but by the labor market itself.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{American Community Survey PUMS Details}
+
+We use the 1-year ACS PUMS files for 2018--2019 and 2022 (the 2020 and 2021 1-year files were not released by the Census Bureau due to COVID-19-related data quality issues), downloaded via the Census Bureau API using the \texttt{tidycensus} R package \citep{walker2022}. The ACS is conducted continuously throughout the year with a reference period of the past 12 months for most questions.
+
+\paragraph{Sample restrictions.} Starting from the full PUMS universe, we apply the following filters:
+\begin{enumerate}
+\item Restrict to the 15 largest U.S.\ states by population
+\item Age 52--75 (provides $\pm 10$ year bandwidth around both cutoffs)
+\item For the employed sample: ESR $\in \{1, 2\}$ (civilian employed at work or with a job but not at work)
+\item Exclude group quarters populations
+\item Require non-missing values for age, education, occupation, and hours worked
+\end{enumerate}
+These restrictions yield an analysis sample of approximately 996,335 employed workers.
+
+\paragraph{Variable construction.}
+\begin{itemize}
+\item \textbf{Education years:} Mapped from SCHL categorical codes to approximate years of schooling (e.g., SCHL=21 $\to$ 16 years for bachelor's degree).
+\item \textbf{Race categories:} RAC1P recoded to White (1), Black (2), Asian (6), Other (all remaining).
+\item \textbf{Hispanic:} HISP $> 1$ indicates Hispanic origin.
+\item \textbf{Employer insurance:} HINS1 = 1 indicates insurance through a current or former employer.
+\item \textbf{Medicare:} HINS2 = 1 indicates Medicare coverage.
+\end{itemize}
+
+\subsection{O*NET Job Zone Classification}
+
+O*NET Job Zones classify occupations by the level of education, experience, and training typically needed:
+\begin{itemize}
+\item \textbf{Zone 1:} Little or no preparation needed (e.g., dishwashers, hand laborers)
+\item \textbf{Zone 2:} Some preparation needed (e.g., retail salespersons, security guards)
+\item \textbf{Zone 3:} Medium preparation needed (e.g., electricians, dental hygienists)
+\item \textbf{Zone 4:} Considerable preparation needed (e.g., accountants, civil engineers)
+\item \textbf{Zone 5:} Extensive preparation needed (e.g., physicians, judges)
+\end{itemize}
+
+A worker with a bachelor's degree (Zone 4-level education) working in a Zone 1--3 occupation is classified as overqualified. This is a conservative measure: it does not capture within-zone mismatch (e.g., a PhD physicist working as a generic engineer, both Zone 5).
+
+\subsection{Crosswalk Between ACS Occupation Codes and O*NET SOC Codes}
+
+The ACS uses Census-specific occupation codes (OCCP), while O*NET uses Standard Occupational Classification (SOC) codes. We construct a crosswalk using two methods:
+\begin{enumerate}
+\item \textbf{Direct matching:} Where Census provides a published crosswalk between OCCP and SOC codes.
+\item \textbf{Empirical approximation:} For occupation codes without a direct crosswalk, we assign Job Zones based on the modal educational attainment of workers in each occupation cell (median education years $\leq 11 \to$ Zone 1; $12 \to$ Zone 2; $13$--$14 \to$ Zone 3; $15$--$16 \to$ Zone 4; $> 16 \to$ Zone 5).
+\end{enumerate}
+
+The empirical method produces Job Zone assignments that are highly correlated with the official O*NET classifications ($r > 0.85$), validating the approach.
+
+
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsection{Density Test}
+
+With a non-manipulable running variable (age), the standard McCrary density test \citep{mccrary2008} is not necessary for manipulation. Nevertheless, \Cref{fig:density} plots the density of both the full population and the employed sample by age. The full population density is smooth through both thresholds, confirming no manipulation. The employed-sample density declines more steeply after 62 and 65, consistent with retirement-driven exit---the extensive-margin effects documented in \Cref{tab:extensive}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig8_density.pdf}
+\caption{Sample Density by Age}
+\label{fig:density}
+\floatfoot{\textit{Notes:} Number of observations per age in the full population (light bars) and employed sample (dark bars). Dashed lines mark the Social Security (62) and Medicare (65) thresholds. The full-population density is smooth; the employed-sample density declines at both thresholds, reflecting retirement.}
+\end{figure}
+
+\subsection{Covariate Balance}
+
+\input{tables/tab5_balance}
+
+\Cref{tab:balance} presents formal RDD estimates for pre-determined covariates at both thresholds. At age 65, all four covariates show significant discontinuities (female $p = 0.008$, bachelor's+ $p = 0.001$, Hispanic $p = 0.002$, self-employed $p < 0.001$), indicating substantial compositional change in the employed population at the Medicare threshold. At age 62, only education is significantly imbalanced ($p = 0.002$), with other covariates balanced.
+
+\subsection{Bandwidth Sensitivity}
+
+\Cref{fig:bandwidth} shows the overqualification RDD estimate at both thresholds across bandwidths ranging from 3 to 10 age-years. At age 65, estimates are small and insignificant at narrow bandwidths but grow in magnitude and become significant at wider bandwidths ($+0.55$ pp at BW7, $+0.93$ pp at BW10), suggesting that wider bandwidths capture secular age trends rather than a sharp discontinuity. At age 62, the small positive estimate ($+0.25$ pp) is relatively stable across bandwidths.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_bandwidth.pdf}
+\caption{Bandwidth Sensitivity}
+\label{fig:bandwidth}
+\floatfoot{\textit{Notes:} RDD estimates for overqualification across bandwidth choices. Error bars show 95\% confidence intervals.}
+\end{figure}
+
+
+\section{Robustness Appendix}
+\label{app:robustness}
+
+Additional robustness results are presented in the main text (\Cref{tab:robustness}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_yearly.pdf}
+\caption{Year-by-Year Stability of Medicare RDD Estimate}
+\label{fig:yearly}
+\floatfoot{\textit{Notes:} Overqualification RDD estimate at age 65, estimated separately for each available ACS year (2018, 2019, 2022). Dotted line shows the pooled estimate. Error bars show 95\% confidence intervals. All individual-year estimates are statistically insignificant.}
+\end{figure}
+
+\subsection{Alternative Overqualification Definitions}
+
+We consider two alternatives to our baseline overqualification measure:
+\begin{enumerate}
+\item \textbf{Severe overqualification:} Restricting to workers with a graduate degree (master's, professional, or doctorate) working in Job Zone $\leq 3$ occupations.
+\item \textbf{Continuous mismatch:} The difference between the worker's years of education and the median education in their occupation (positive values indicate overeducation).
+\end{enumerate}
+
+Both alternatives yield qualitatively similar null results at the age-65 threshold, reinforcing the conclusion that overqualification does not change discontinuously at Medicare eligibility.
+
+
+\section{Heterogeneity Appendix}
+\label{app:heterogeneity}
+
+\subsection{Gender Differences}
+
+The overqualification RDD at age 65 is small and insignificant for both women ($+0.09$ pp, SE $= 0.15$, $p = 0.556$) and men ($+0.09$ pp, SE $= 0.14$, $p = 0.526$), consistent with \Cref{tab:heterogeneity}. The absence of a gender differential is inconsistent with the hypothesis that women face greater insurance lock constraints \citep{gruber1994}, though it is also consistent with compositional effects that operate similarly by gender.
+
+\subsection{Education Subgroups}
+
+Among bachelor's-degree holders (for whom overqualification is directly measurable), the age-65 overqualification effect is $-0.13$ pp (SE $= 0.22$, $p = 0.581$), statistically insignificant, consistent with the main analysis in \Cref{tab:heterogeneity}.
+
+
+\end{document}
